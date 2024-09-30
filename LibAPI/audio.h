@@ -33,6 +33,9 @@
 #define _JACK_CLIENT_INPUT 0
 #define _JACK_CLIENT_OUTPUT 1
 
+
+
+
 /**
 *   @brief  Starts the audio service.
 *			Must be called after intializtion.

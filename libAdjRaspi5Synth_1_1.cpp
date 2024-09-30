@@ -361,7 +361,24 @@ int mod_synth_add_module(string ins_name, Instrument *instrument)
 
 int mod_synth_remove_module(string ins_name)
 {
+	int client_number;
+	list<int> connected_to_midi_clients_numbers_list;
+	
 	mod_synthesizer->instruments_manager->remove_instrument(ins_name);
+	/* Disconnect midi in connections */
+	mod_synth_refresh_alsa_clients_data();
+	mod_synth_refresh_jack_clients_data();
+	/* Get module Midi Input connections */
+	client_number = mod_synth_get_midi_client_connection_num(ins_name);
+	connected_to_midi_clients_numbers_list.clear();
+	mod_synth_get_midi_client_connected_to_clients_numbers_list(client_number,
+		&connected_to_midi_clients_numbers_list);
+
+	for (int client_num : connected_to_midi_clients_numbers_list)
+	{
+		mod_synth_connect_midi_clients(ins_name, client_num, 0, false, false); // disconnect, use client num
+	}
+	
 
 	return 0;
 }

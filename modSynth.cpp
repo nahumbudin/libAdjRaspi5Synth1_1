@@ -65,6 +65,8 @@ MidiAlsaQclientIn alsa_midi_in_1(&AlsaMidi::get_instance()->alsa_rx_queue[0], _M
 /* modSynth instance */
 ModSynth* ModSynth::mod_synth = NULL;
 
+
+
 ModSynth::ModSynth()
 {
 	mod_synth = this;

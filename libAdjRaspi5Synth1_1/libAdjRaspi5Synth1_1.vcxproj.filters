@@ -13,5 +13,565 @@
       <UniqueIdentifier>{6717b35b-b8dd-468c-92ea-37584d3a7d46}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav</Extensions>
     </Filter>
+    <Filter Include="Header files\ALSA">
+      <UniqueIdentifier>{87a6452c-2cfa-4039-9bb3-3beab27486b9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\Bluetooth">
+      <UniqueIdentifier>{65fd913c-c656-4fa3-91f8-4876b34d6f0b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\JackAudio">
+      <UniqueIdentifier>{650f47b3-5f2e-43dc-be3f-c1bf433e0fae}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\LibApi">
+      <UniqueIdentifier>{f74ccbe5-8a3b-4a40-8fa7-55be079d1364}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\Midi">
+      <UniqueIdentifier>{abd04956-67b6-4799-b3a7-5184f6d4319d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\Midi File">
+      <UniqueIdentifier>{613d6a7f-1f4b-42d2-8e56-bbc313b150b5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\Misc">
+      <UniqueIdentifier>{1b5f1436-14f7-41d6-b2ff-f6238b91d663}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\Serial Port">
+      <UniqueIdentifier>{2cc4ae63-3a07-439f-930b-32968b2f3e0e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\Synthesizer">
+      <UniqueIdentifier>{c0543f63-09b9-4e74-a3db-ba0ff94c38cd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\Instrument">
+      <UniqueIdentifier>{c153d433-242b-45a5-ac22-2fee24db9102}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\Control Box">
+      <UniqueIdentifier>{ee5da6a9-e539-483f-ba88-547a021a86cb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\Patch">
+      <UniqueIdentifier>{21f7748d-ce73-44c3-a198-ccca907a128c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\Settings">
+      <UniqueIdentifier>{ffe28e3e-931e-43a9-9ceb-98629384438a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\Utils">
+      <UniqueIdentifier>{56dcee61-f9d0-4cce-ad76-d7be0aea1efa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\Instrument\FluidSynth">
+      <UniqueIdentifier>{f6bc6309-74dc-406c-94f1-05eafd19c702}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\Instrument\Hammond Organ">
+      <UniqueIdentifier>{9c0ea4f4-6ff0-4d04-9db4-2ddeaca397f2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\Instrument\Control Box">
+      <UniqueIdentifier>{d593cee7-195b-4f17-8162-7630c5502624}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\Instrument\Midi Mapper">
+      <UniqueIdentifier>{19cbd74f-2be3-458a-b247-a3847c5618fb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\Instrument\Midi Player">
+      <UniqueIdentifier>{8cb4a483-05a5-4fb1-bcf8-d66e9d707197}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source files\ALSA">
+      <UniqueIdentifier>{2b7096a3-1a96-4a0e-a2ef-b9865c09888a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source files\Bluetooth">
+      <UniqueIdentifier>{eaa1a901-2590-4e0c-b287-ec7758bf2c7c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source files\JackAudio">
+      <UniqueIdentifier>{5cc9230d-7173-4ecc-bd12-9ccb78cd7640}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source files\Midi">
+      <UniqueIdentifier>{945d5b58-c461-44ac-bdb8-805f448c30f2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source files\MidiFile">
+      <UniqueIdentifier>{6424b973-06be-4b6b-b650-fb3418eeb607}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source files\Insrtument">
+      <UniqueIdentifier>{df1c1757-e7d3-40ce-9fb0-54286edca9e8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source files\Insrtument\FluidSynth">
+      <UniqueIdentifier>{2d8ca80d-51db-4bc9-88b3-e8bde64a2f31}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source files\Insrtument\Hammond Organ">
+      <UniqueIdentifier>{71014708-8bd6-406e-8e52-3e56ad9e1da9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source files\Insrtument\Midi Mapper">
+      <UniqueIdentifier>{abc1d676-7d0e-41b4-aea2-ff1187aa14a0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source files\Insrtument\Midi Player">
+      <UniqueIdentifier>{7c82dd91-c442-41ce-bd0e-33427379f49b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source files\Insrtument\Control Box">
+      <UniqueIdentifier>{2090f1bb-3456-475f-b6b3-79acf57a60ff}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source files\Control Box">
+      <UniqueIdentifier>{8522cbd2-e4e8-4843-ad6e-3608e60759a6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source files\Serial Por">
+      <UniqueIdentifier>{39b6d4c0-1a73-42ed-826c-3e0986cceada}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source files\Synthesizer">
+      <UniqueIdentifier>{a0b00f33-a559-498d-9e9a-cf57ed73e542}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source files\Settings">
+      <UniqueIdentifier>{d7685d69-d9eb-48bf-8729-bd089516556f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source files\Patch">
+      <UniqueIdentifier>{9fdeec46-73b5-463a-81d9-e92285ed54f5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source files\Utils">
+      <UniqueIdentifier>{cc5a7642-a6e5-4303-927d-e78f9e5eea4d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\DSP">
+      <UniqueIdentifier>{396160e2-7efd-4144-b104-5f4bb4ff1d14}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\Audio">
+      <UniqueIdentifier>{28741065-d042-4df7-af33-5cdb89b66971}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source files\DSP">
+      <UniqueIdentifier>{4035c24e-7ef3-4854-b39c-efc249387ddd}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\libAdjRaspi5Synth_1_1.cpp">
+      <Filter>Source files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ALSA\alsaMidi.cpp">
+      <Filter>Source files\ALSA</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ALSA\alsaMidiSequencerClient.cpp">
+      <Filter>Source files\ALSA</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ALSA\alsaMidiSequencerEventsHandler.cpp">
+      <Filter>Source files\ALSA</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ALSA\alsaMidiSystemControl.cpp">
+      <Filter>Source files\ALSA</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Bluetooth\rspiBluetoothServicesQueuesVer.cpp">
+      <Filter>Source files\Bluetooth</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Jack\jackConnections.cpp">
+      <Filter>Source files\JackAudio</Filter>
+    </ClCompile>
+    <ClCompile Include="..\MIDI\midiAlsaQclient.cpp">
+      <Filter>Source files\Midi</Filter>
+    </ClCompile>
+    <ClCompile Include="..\MIDI\midiConversions.cpp">
+      <Filter>Source files\Midi</Filter>
+    </ClCompile>
+    <ClCompile Include="..\MIDI\midiExtInterface.cpp">
+      <Filter>Source files\Midi</Filter>
+    </ClCompile>
+    <ClCompile Include="..\MIDI\midiFile.cpp">
+      <Filter>Source files\MidiFile</Filter>
+    </ClCompile>
+    <ClCompile Include="..\MIDI\MidiFileEvent.cpp">
+      <Filter>Source files\MidiFile</Filter>
+    </ClCompile>
+    <ClCompile Include="..\MIDI\midiFileException.cpp">
+      <Filter>Source files\MidiFile</Filter>
+    </ClCompile>
+    <ClCompile Include="..\MIDI\midiFileNote.cpp">
+      <Filter>Source files\MidiFile</Filter>
+    </ClCompile>
+    <ClCompile Include="..\MIDI\midiFileReader.cpp">
+      <Filter>Source files\MidiFile</Filter>
+    </ClCompile>
+    <ClCompile Include="..\MIDI\midiFileTimeSignature.cpp">
+      <Filter>Source files\MidiFile</Filter>
+    </ClCompile>
+    <ClCompile Include="..\MIDI\midiFileTrack.cpp">
+      <Filter>Source files\MidiFile</Filter>
+    </ClCompile>
+    <ClCompile Include="..\MIDI\midiHandler.cpp">
+      <Filter>Source files\MidiFile</Filter>
+    </ClCompile>
+    <ClCompile Include="..\MIDI\midiParser.cpp">
+      <Filter>Source files\MidiFile</Filter>
+    </ClCompile>
+    <ClCompile Include="..\MIDI\midiStream.cpp">
+      <Filter>Source files\Midi</Filter>
+    </ClCompile>
+    <ClCompile Include="..\FluidSynth\fluidSynthInterface.cpp">
+      <Filter>Source files\Insrtument\FluidSynth</Filter>
+    </ClCompile>
+    <ClCompile Include="..\FluidSynth\fluidSynthPresets.cpp">
+      <Filter>Source files\Insrtument\FluidSynth</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Instrument\instrumentFluidSynth.cpp">
+      <Filter>Source files\Insrtument\FluidSynth</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Instrument\Instrument.cpp">
+      <Filter>Source files\Insrtument</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Instrument\instrumentsManager.cpp">
+      <Filter>Source files\Insrtument</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Instrument\instrumentHammondOrgan.cpp">
+      <Filter>Source files\Insrtument\Hammond Organ</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Instrument\instrumentMidiMapper.cpp">
+      <Filter>Source files\Insrtument\Midi Mapper</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Instrument\instrumentMidiPlayer.cpp">
+      <Filter>Source files\Insrtument\Midi Player</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Instrument\instrumentControlBoxHandler.cpp">
+      <Filter>Source files\Insrtument\Control Box</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ALSA\controlBoxClientAlsaOutput.cpp">
+      <Filter>Source files\Control Box</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ALSA\controlBoxExtMidiInClientAlsaOutput.cpp">
+      <Filter>Source files\Control Box</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Instrument\instrumentConnectionsControl.cpp">
+      <Filter>Source files\Insrtument</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Instrument\instrumentMidiPlayerPlaybackThread.cpp">
+      <Filter>Source files\Insrtument\Midi Player</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Serial\adjRS232.cpp">
+      <Filter>Source files\Serial Por</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Serial\serialPort.cpp">
+      <Filter>Source files\Serial Por</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ALSA\alsaBtClientOutput.cpp">
+      <Filter>Header files\ALSA</Filter>
+    </ClCompile>
+    <ClCompile Include="..\modSynth.cpp">
+      <Filter>Source files\Synthesizer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Settings\settings.cpp">
+      <Filter>Source files\Settings</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Settings\settingsFiles.cpp">
+      <Filter>Source files\Settings</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Patches\patches.cpp">
+      <Filter>Source files\Patch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\utils\utils.cpp">
+      <Filter>Source files\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\utils\xmlFiles.cpp">
+      <Filter>Source files\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\DSP\dspSquareWaveGenerator.cpp">
+      <Filter>Source files\DSP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\DSP\dspTriangleWaveGenerator.cpp">
+      <Filter>Source files\DSP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\DSP\dspSampleHoldWaveformGenerator.cpp">
+      <Filter>Source files\DSP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\DSP\dspSineWaveGenerator.cpp">
+      <Filter>Source files\DSP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\DSP\dspAdsr.cpp">
+      <Filter>Source files\DSP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\DSP\dspAmp.cpp">
+      <Filter>Source files\DSP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\DSP\dspFilter.cpp">
+      <Filter>Source files\DSP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\DSP\dspVoice.cpp">
+      <Filter>Source files\DSP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\DSP\dspDistortion.cpp">
+      <Filter>Source files\DSP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\DSP\dspWavetable.cpp">
+      <Filter>Source files\DSP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\DSP\dspWaveformTable.cpp">
+      <Filter>Source files\DSP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\DSP\dspNoise.cpp">
+      <Filter>Source files\DSP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\DSP\dspMorphedSineOsc.cpp">
+      <Filter>Source files\DSP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\utils\fftWrapper.cpp">
+      <Filter>Source files\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\DSP\dspKarplusStrong.cpp">
+      <Filter>Source files\DSP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\DSP\dspAdjSynthVoice.cpp">
+      <Filter>Source files\DSP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\DSP\dspAdjSynthVoiceOsc.cpp">
+      <Filter>Source files\DSP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\DSP\dspAdjSynthVoiceNoise.cpp">
+      <Filter>Source files\DSP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\DSP\dspAdjSynthVoiceKarplusStrong.cpp">
+      <Filter>Source files\DSP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\DSP\dspAdjSynthVoiceMso.cpp">
+      <Filter>Source files\DSP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\DSP\dspAdjSynthVoicePad.cpp">
+      <Filter>Source files\DSP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\DSP\dspAdjSynthVoiceFilter.cpp">
+      <Filter>Source files\DSP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\DSP\dspAdjSynthVoiceDistortion.cpp">
+      <Filter>Source files\DSP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\DSP\dspAdjSynthVoiceAmp.cpp">
+      <Filter>Source files\DSP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\DSP\dspAdjSynthVoiceLfos.cpp">
+      <Filter>Source files\DSP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\DSP\dspOsc.cpp">
+      <Filter>Source files\DSP</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\commonDefs.h">
+      <Filter>Header files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\libAdjRaspi5Synth_1_1.h">
+      <Filter>Header files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ALSA\alsaBtClientOutput.h">
+      <Filter>Header files\ALSA</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ALSA\alsaMidi.h">
+      <Filter>Header files\ALSA</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ALSA\alsaMidiSequencerClient.h">
+      <Filter>Header files\ALSA</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ALSA\alsaMidiSequencerEventsHandler.h">
+      <Filter>Header files\ALSA</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ALSA\alsaMidiSystemControl.h">
+      <Filter>Header files\ALSA</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Bluetooth\rspiBluetoothServicesQueuesVer.h">
+      <Filter>Header files\Bluetooth</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Jack\jackConnections.h">
+      <Filter>Header files\JackAudio</Filter>
+    </ClInclude>
+    <ClInclude Include="..\LibAPI\libAdjRaspi5SynthAPI.h">
+      <Filter>Header files\LibApi</Filter>
+    </ClInclude>
+    <ClInclude Include="..\MIDI\midiAlsaQclient.h">
+      <Filter>Header files\Midi</Filter>
+    </ClInclude>
+    <ClInclude Include="..\MIDI\midiConversions.h">
+      <Filter>Header files\Midi</Filter>
+    </ClInclude>
+    <ClInclude Include="..\MIDI\midiExtInterface.h">
+      <Filter>Header files\Midi</Filter>
+    </ClInclude>
+    <ClInclude Include="..\MIDI\midiHandler.h">
+      <Filter>Header files\Midi</Filter>
+    </ClInclude>
+    <ClInclude Include="..\MIDI\midiParser.h">
+      <Filter>Header files\Midi</Filter>
+    </ClInclude>
+    <ClInclude Include="..\MIDI\midiStream.h">
+      <Filter>Header files\Midi</Filter>
+    </ClInclude>
+    <ClInclude Include="..\MIDI\midiFile.h">
+      <Filter>Header files\Midi File</Filter>
+    </ClInclude>
+    <ClInclude Include="..\MIDI\midiFileEvent.h">
+      <Filter>Header files\Midi File</Filter>
+    </ClInclude>
+    <ClInclude Include="..\MIDI\midiFileException.h">
+      <Filter>Header files\Midi File</Filter>
+    </ClInclude>
+    <ClInclude Include="..\MIDI\midiFileNote.h">
+      <Filter>Header files\Midi File</Filter>
+    </ClInclude>
+    <ClInclude Include="..\MIDI\midiFileReader.h">
+      <Filter>Header files\Midi File</Filter>
+    </ClInclude>
+    <ClInclude Include="..\MIDI\midiFileTimeSignature.h">
+      <Filter>Header files\Midi File</Filter>
+    </ClInclude>
+    <ClInclude Include="..\MIDI\midiFileTrack.h">
+      <Filter>Header files\Midi File</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Misc\priorities.h">
+      <Filter>Header files\Misc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Serial\adjRS232.h">
+      <Filter>Header files\Serial Port</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Serial\serialPort.h">
+      <Filter>Header files\Serial Port</Filter>
+    </ClInclude>
+    <ClInclude Include="..\modSynth.h">
+      <Filter>Header files\Synthesizer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Instrument\instrument.h">
+      <Filter>Header files\Instrument</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Instrument\instrumentConnectionsControl.h">
+      <Filter>Header files\Instrument</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Instrument\instrumentsManager.h">
+      <Filter>Header files\Instrument</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ALSA\controlBoxClientAlsaOutput.h">
+      <Filter>Header files\Control Box</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ALSA\controlBoxExtMidiInClientAlsaOutput.h">
+      <Filter>Header files\Control Box</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Patches\patches.h">
+      <Filter>Header files\Patch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Settings\settings.h">
+      <Filter>Header files\Settings</Filter>
+    </ClInclude>
+    <ClInclude Include="..\utils\xmlFiles.h">
+      <Filter>Header files\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\utils\utils.h">
+      <Filter>Header files\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\utils\safeQueues.h">
+      <Filter>Header files\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\utils\log.h">
+      <Filter>Header files\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\utils\json.hpp">
+      <Filter>Header files\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\FluidSynth\fluidSynthInterface.h">
+      <Filter>Header files\Instrument\FluidSynth</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Instrument\instrumentFluidSynth.h">
+      <Filter>Header files\Instrument\FluidSynth</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Instrument\instrumentHammondOrgan.h">
+      <Filter>Header files\Instrument\Hammond Organ</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Instrument\instrumentControlBoxHandler.h">
+      <Filter>Header files\Instrument\Control Box</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Instrument\instrumentMidiMapper.h">
+      <Filter>Header files\Instrument\Midi Mapper</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Instrument\instrumentMidiPlayer.h">
+      <Filter>Header files\Instrument\Midi Player</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Instrument\instrumentMidiPlayerPlaybackThread.h">
+      <Filter>Header files\Instrument\Midi Player</Filter>
+    </ClInclude>
+    <ClInclude Include="..\LibAPI\types.h">
+      <Filter>Header files\LibApi</Filter>
+    </ClInclude>
+    <ClInclude Include="..\LibAPI\defaults.h">
+      <Filter>Header files\LibApi</Filter>
+    </ClInclude>
+    <ClInclude Include="..\LibAPI\gui.h">
+      <Filter>Header files\LibApi</Filter>
+    </ClInclude>
+    <ClInclude Include="..\LibAPI\audio.h">
+      <Filter>Header files\LibApi</Filter>
+    </ClInclude>
+    <ClInclude Include="..\LibAPI\defines.h">
+      <Filter>Header files\LibApi</Filter>
+    </ClInclude>
+    <ClInclude Include="..\LibAPI\midi.h">
+      <Filter>Header files\LibApi</Filter>
+    </ClInclude>
+    <ClInclude Include="..\LibAPI\modSynthAPI.h">
+      <Filter>Header files\LibApi</Filter>
+    </ClInclude>
+    <ClInclude Include="..\LibAPI\controlBox.h">
+      <Filter>Header files\LibApi</Filter>
+    </ClInclude>
+    <ClInclude Include="..\LibAPI\connections.h">
+      <Filter>Header files\LibApi</Filter>
+    </ClInclude>
+    <ClInclude Include="..\LibAPI\fluidSynth.h">
+      <Filter>Header files\LibApi</Filter>
+    </ClInclude>
+    <ClInclude Include="..\LibAPI\settingsApi.h">
+      <Filter>Header files\LibApi</Filter>
+    </ClInclude>
+    <ClInclude Include="..\LibAPI\patch.h">
+      <Filter>Header files\LibApi</Filter>
+    </ClInclude>
+    <ClInclude Include="..\DSP\dspOsc.h">
+      <Filter>Header files\DSP</Filter>
+    </ClInclude>
+    <ClInclude Include="..\DSP\dspSineWaveGenerator.h">
+      <Filter>Header files\DSP</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Audio\audioCommons.h">
+      <Filter>Header files\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="..\DSP\dspSquareWaveGenerator.h">
+      <Filter>Header files\DSP</Filter>
+    </ClInclude>
+    <ClInclude Include="..\DSP\dspTriangleWaveGenerator.h">
+      <Filter>Header files\DSP</Filter>
+    </ClInclude>
+    <ClInclude Include="..\DSP\dspSampleHoldWaveformGenerator.h">
+      <Filter>Header files\DSP</Filter>
+    </ClInclude>
+    <ClInclude Include="..\LibAPI\synthesizer.h">
+      <Filter>Header files\LibApi</Filter>
+    </ClInclude>
+    <ClInclude Include="..\DSP\dspAdsr.h">
+      <Filter>Header files\DSP</Filter>
+    </ClInclude>
+    <ClInclude Include="..\DSP\dspAmp.h">
+      <Filter>Header files\DSP</Filter>
+    </ClInclude>
+    <ClInclude Include="..\DSP\dspFilter.h">
+      <Filter>Header files\DSP</Filter>
+    </ClInclude>
+    <ClInclude Include="..\DSP\dspVoice.h">
+      <Filter>Header files\DSP</Filter>
+    </ClInclude>
+    <ClInclude Include="..\DSP\dspDistortion.h">
+      <Filter>Header files\DSP</Filter>
+    </ClInclude>
+    <ClInclude Include="..\DSP\dspAdjSynthVoice.h">
+      <Filter>Header files\DSP</Filter>
+    </ClInclude>
+    <ClInclude Include="..\DSP\dspWavetable.h">
+      <Filter>Header files\DSP</Filter>
+    </ClInclude>
+    <ClInclude Include="..\DSP\dspWaveformTable.h">
+      <Filter>Header files\DSP</Filter>
+    </ClInclude>
+    <ClInclude Include="..\DSP\dspNoise.h">
+      <Filter>Header files\DSP</Filter>
+    </ClInclude>
+    <ClInclude Include="..\DSP\dspMorphedSineOsc.h">
+      <Filter>Header files\DSP</Filter>
+    </ClInclude>
+    <ClInclude Include="..\utils\FFTwrapper.h">
+      <Filter>Header files\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\DSP\dspKarplusStrong.h">
+      <Filter>Header files\DSP</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="libAdjRaspi5Synth1_1-Debug.vgdbsettings" />
+    <None Include="libAdjRaspi5Synth1_1-Release.vgdbsettings" />
   </ItemGroup>
 </Project>

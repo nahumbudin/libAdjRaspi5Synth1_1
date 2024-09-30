@@ -56,7 +56,7 @@ Instrument::Instrument(std::string name, bool with_midi_in,
 			//		exit(1);
 		}
 		else
-		{
+		{			
 			if ((alsa_control != NULL) && (alsa_client_in_name != NULL))
 			{
 				// Scan for current ALSA In Instrument client

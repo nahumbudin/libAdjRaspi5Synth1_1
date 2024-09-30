@@ -20,7 +20,7 @@
 #include <string>
 #include <stdio.h>
 
-#include <FILE.h>
+//#include <FILE.h>
 
 inline std::string NowTime();
 
