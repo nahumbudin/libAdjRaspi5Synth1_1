@@ -165,7 +165,7 @@ void AlsaMidiSeqencerEventsHandler::update()
 				gettimeofday(&time_val, NULL);
 				
 				fprintf(stderr,
-						"ALSA: Note On event on Channel %2d: %5d   %6d.%6d      \r",
+						"ALSA: Note On  event on Channel %2d: %5d   %6d.%6d      \n",
 						qev->data.control.channel,
 						qev->data.note.note,
 						time_val.tv_sec,
@@ -180,7 +180,7 @@ void AlsaMidiSeqencerEventsHandler::update()
 				gettimeofday(&time_val, NULL);
 
 				fprintf(stderr,
-						"ALSA: Note Off event on Channel %2d: %5d   %6d.%6d      \r",
+						"ALSA: Note Off event on Channel %2d: %5d   %6d.%6d      \n",
 						qev->data.control.channel,
 						qev->data.note.note,
 						time_val.tv_sec,
@@ -194,7 +194,7 @@ void AlsaMidiSeqencerEventsHandler::update()
 
 				/** TODO: callback_midi_program_change_event(qev->data.control.channel, qev->data.control.value); */
 				fprintf(stderr,
-						"ALSA: Change program event on Channel %2d: %5d      \r",
+						"ALSA: Change program event on Channel %2d: %5d      \n",
 						qev->data.control.channel,
 						qev->data.control.value);
 				break;
@@ -203,7 +203,7 @@ void AlsaMidiSeqencerEventsHandler::update()
 				instrument->channel_pressure_handler(qev->data.control.channel, qev->data.control.value);
 
 				fprintf(stderr,
-						"ALSA: Channel pressure event on Channel %2d: %5d      \r",
+						"ALSA: Channel pressure event on Channel %2d: %5d\n",
 						qev->data.control.channel,
 						qev->data.control.value);
 
@@ -214,8 +214,9 @@ void AlsaMidiSeqencerEventsHandler::update()
 				instrument->controller_event_handler(qev->data.control.channel, qev->data.control.param, qev->data.control.value);
 
 				fprintf(stderr,
-						"ALSA: Control event on Channel %2d: %5d       \r",
+					"ALSA: Control event on Channel %2d: %5d  %5d\n",
 						qev->data.control.channel,
+						qev->data.control.param,
 						qev->data.control.value);
 
 				break;
@@ -224,7 +225,7 @@ void AlsaMidiSeqencerEventsHandler::update()
 				instrument->pitch_bend_handler(qev->data.control.channel, qev->data.control.value);
 
 				fprintf(stderr,
-						"ALSA: Pitchbender event on Channel %2d: %5d   \r",
+						"ALSA: Pitchbender event on Channel %2d: %5d   \n",
 						qev->data.control.channel,
 						qev->data.control.value);
 

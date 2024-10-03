@@ -130,6 +130,9 @@
     <Filter Include="Source files\DSP">
       <UniqueIdentifier>{4035c24e-7ef3-4854-b39c-efc249387ddd}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source files\Audio">
+      <UniqueIdentifier>{c44e4fd3-e362-4bee-b2f2-91e36560e8dc}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\libAdjRaspi5Synth_1_1.cpp">
@@ -279,9 +282,6 @@
     <ClCompile Include="..\DSP\dspFilter.cpp">
       <Filter>Source files\DSP</Filter>
     </ClCompile>
-    <ClCompile Include="..\DSP\dspVoice.cpp">
-      <Filter>Source files\DSP</Filter>
-    </ClCompile>
     <ClCompile Include="..\DSP\dspDistortion.cpp">
       <Filter>Source files\DSP</Filter>
     </ClCompile>
@@ -335,6 +335,42 @@
     </ClCompile>
     <ClCompile Include="..\DSP\dspOsc.cpp">
       <Filter>Source files\DSP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Audio\audioBlock.cpp">
+      <Filter>Source files\Audio</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ALSA\alsaAudioHandling.cpp">
+      <Filter>Source files\ALSA</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Audio\audioVoice.cpp">
+      <Filter>Source files\Audio</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Jack\JackConfigurationFile.cpp">
+      <Filter>Source files\JackAudio</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Jack\jackAudioClients.cpp">
+      <Filter>Source files\JackAudio</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Audio\audioManager.cpp">
+      <Filter>Source files\Audio</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Audio\audioOutput.cpp">
+      <Filter>Source files\Audio</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Audio\audioPolyphonyMixer.cpp">
+      <Filter>Source files\Audio</Filter>
+    </ClCompile>
+    <ClCompile Include="..\DSP\dspFreeverb3mod2.cpp">
+      <Filter>Source files\DSP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Audio\audioReverb.cpp">
+      <Filter>Source files\Audio</Filter>
+    </ClCompile>
+    <ClCompile Include="..\DSP\dspBandEqualizer.cpp">
+      <Filter>Source files\DSP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Audio\audioBandEqualizer.cpp">
+      <Filter>Source files\Audio</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -542,9 +578,6 @@
     <ClInclude Include="..\DSP\dspFilter.h">
       <Filter>Header files\DSP</Filter>
     </ClInclude>
-    <ClInclude Include="..\DSP\dspVoice.h">
-      <Filter>Header files\DSP</Filter>
-    </ClInclude>
     <ClInclude Include="..\DSP\dspDistortion.h">
       <Filter>Header files\DSP</Filter>
     </ClInclude>
@@ -567,6 +600,54 @@
       <Filter>Header files\Utils</Filter>
     </ClInclude>
     <ClInclude Include="..\DSP\dspKarplusStrong.h">
+      <Filter>Header files\DSP</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Audio\audioBlock.h">
+      <Filter>Header files\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Audio\audioManager.h">
+      <Filter>Header files\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ALSA\alsaAudioHandling.h">
+      <Filter>Header files\ALSA</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Audio\audioVoice.h">
+      <Filter>Header files\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Jack\JackConfigurationFile.h">
+      <Filter>Header files\JackAudio</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Jack\jackAudioClients.h">
+      <Filter>Header files\JackAudio</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Audio\audioOutput.h">
+      <Filter>Header files\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Audio\audioPolyphonyMixer.h">
+      <Filter>Header files\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Audio\audioReverb.h">
+      <Filter>Header files\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="..\DSP\dspReverbAllpass.h">
+      <Filter>Header files\DSP</Filter>
+    </ClInclude>
+    <ClInclude Include="..\DSP\dspReverbTuning.h">
+      <Filter>Header files\DSP</Filter>
+    </ClInclude>
+    <ClInclude Include="..\DSP\dspReverbComb.h">
+      <Filter>Header files\DSP</Filter>
+    </ClInclude>
+    <ClInclude Include="..\DSP\dspReverbModel.h">
+      <Filter>Header files\DSP</Filter>
+    </ClInclude>
+    <ClInclude Include="..\DSP\dspFreeverb3mod2.h">
+      <Filter>Header files\DSP</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Audio\audioBandEqualizer.h">
+      <Filter>Header files\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="..\DSP\dspBandEqualizer.h">
       <Filter>Header files\DSP</Filter>
     </ClInclude>
   </ItemGroup>

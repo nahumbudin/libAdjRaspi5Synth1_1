@@ -521,7 +521,7 @@ void DSP_AdjSynthVoice::set_voice_waits_for_not_active()
 *	@param	none
 *	@return none
 */
-void DSP_AdjSynthVoice::set_voice_not_waits_for_not_active()
+void DSP_AdjSynthVoice::set_voice_not_waiting_for_not_active()
 {
 	voice_waits_for_not_active = false;
 }

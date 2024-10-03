@@ -1,5 +1,5 @@
 /**
-* @file		libAdjHeartModSynth_1.h
+* @file		libAdjRaspi5Synth_1.h
 *	@author		Nahum Budin
 *	@date		8-May-2024
 *	@version	1.0
@@ -24,8 +24,9 @@
 #pragma once
 
 
-
+#include "libAdjRaspi5Synth_1_1.h"
 #include "modSynth.h"
+#include "./LibAPI/types.h"
 
 #include <cstdint>
 
@@ -48,8 +49,7 @@
 #define _PAD_SHAPE_CUTOFF_LOWER						2
 
 
-
-
+void callback_message_id(int);
 
 
 // #ifdef __cplusplus

@@ -59,6 +59,7 @@
     <None Include="libAdjRaspi5Synth1_1-Release.vgdbsettings" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\ALSA\alsaAudioHandling.h" />
     <ClInclude Include="..\ALSA\alsaBtClientOutput.h" />
     <ClInclude Include="..\ALSA\alsaMidi.h" />
     <ClInclude Include="..\ALSA\alsaMidiSequencerClient.h" />
@@ -66,23 +67,35 @@
     <ClInclude Include="..\ALSA\alsaMidiSystemControl.h" />
     <ClInclude Include="..\ALSA\controlBoxClientAlsaOutput.h" />
     <ClInclude Include="..\ALSA\controlBoxExtMidiInClientAlsaOutput.h" />
+    <ClInclude Include="..\Audio\audioBandEqualizer.h" />
+    <ClInclude Include="..\Audio\audioBlock.h" />
     <ClInclude Include="..\Audio\audioCommons.h" />
+    <ClInclude Include="..\Audio\audioManager.h" />
+    <ClInclude Include="..\Audio\audioOutput.h" />
+    <ClInclude Include="..\Audio\audioPolyphonyMixer.h" />
+    <ClInclude Include="..\Audio\audioReverb.h" />
+    <ClInclude Include="..\Audio\audioVoice.h" />
     <ClInclude Include="..\Bluetooth\rspiBluetoothServicesQueuesVer.h" />
     <ClInclude Include="..\commonDefs.h" />
     <ClInclude Include="..\DSP\dspAdjSynthVoice.h" />
     <ClInclude Include="..\DSP\dspAdsr.h" />
     <ClInclude Include="..\DSP\dspAmp.h" />
+    <ClInclude Include="..\DSP\dspBandEqualizer.h" />
     <ClInclude Include="..\DSP\dspDistortion.h" />
     <ClInclude Include="..\DSP\dspFilter.h" />
+    <ClInclude Include="..\DSP\dspFreeverb3mod2.h" />
     <ClInclude Include="..\DSP\dspKarplusStrong.h" />
     <ClInclude Include="..\DSP\dspMorphedSineOsc.h" />
     <ClInclude Include="..\DSP\dspNoise.h" />
     <ClInclude Include="..\DSP\dspOsc.h" />
+    <ClInclude Include="..\DSP\dspReverbAllpass.h" />
+    <ClInclude Include="..\DSP\dspReverbComb.h" />
+    <ClInclude Include="..\DSP\dspReverbModel.h" />
+    <ClInclude Include="..\DSP\dspReverbTuning.h" />
     <ClInclude Include="..\DSP\dspSampleHoldWaveformGenerator.h" />
     <ClInclude Include="..\DSP\dspSineWaveGenerator.h" />
     <ClInclude Include="..\DSP\dspSquareWaveGenerator.h" />
     <ClInclude Include="..\DSP\dspTriangleWaveGenerator.h" />
-    <ClInclude Include="..\DSP\dspVoice.h" />
     <ClInclude Include="..\DSP\dspWaveformTable.h" />
     <ClInclude Include="..\DSP\dspWavetable.h" />
     <ClInclude Include="..\FluidSynth\fluidSynthInterface.h" />
@@ -95,6 +108,8 @@
     <ClInclude Include="..\Instrument\instrumentMidiPlayer.h" />
     <ClInclude Include="..\Instrument\instrumentMidiPlayerPlaybackThread.h" />
     <ClInclude Include="..\Instrument\instrumentsManager.h" />
+    <ClInclude Include="..\Jack\jackAudioClients.h" />
+    <ClInclude Include="..\Jack\JackConfigurationFile.h" />
     <ClInclude Include="..\Jack\jackConnections.h" />
     <ClInclude Include="..\libAdjRaspi5Synth_1_1.h" />
     <ClInclude Include="..\LibAPI\audio.h" />
@@ -138,6 +153,7 @@
     <ClInclude Include="..\utils\xmlFiles.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\ALSA\alsaAudioHandling.cpp" />
     <ClCompile Include="..\ALSA\alsaBtClientOutput.cpp" />
     <ClCompile Include="..\ALSA\alsaMidi.cpp" />
     <ClCompile Include="..\ALSA\alsaMidiSequencerClient.cpp" />
@@ -145,6 +161,13 @@
     <ClCompile Include="..\ALSA\alsaMidiSystemControl.cpp" />
     <ClCompile Include="..\ALSA\controlBoxClientAlsaOutput.cpp" />
     <ClCompile Include="..\ALSA\controlBoxExtMidiInClientAlsaOutput.cpp" />
+    <ClCompile Include="..\Audio\audioBandEqualizer.cpp" />
+    <ClCompile Include="..\Audio\audioBlock.cpp" />
+    <ClCompile Include="..\Audio\audioManager.cpp" />
+    <ClCompile Include="..\Audio\audioOutput.cpp" />
+    <ClCompile Include="..\Audio\audioPolyphonyMixer.cpp" />
+    <ClCompile Include="..\Audio\audioReverb.cpp" />
+    <ClCompile Include="..\Audio\audioVoice.cpp" />
     <ClCompile Include="..\Bluetooth\rspiBluetoothServicesQueuesVer.cpp" />
     <ClCompile Include="..\DSP\dspAdjSynthVoice.cpp" />
     <ClCompile Include="..\DSP\dspAdjSynthVoiceAmp.cpp" />
@@ -155,8 +178,10 @@
     <ClCompile Include="..\DSP\dspAdjSynthVoicePad.cpp" />
     <ClCompile Include="..\DSP\dspAdsr.cpp" />
     <ClCompile Include="..\DSP\dspAmp.cpp" />
+    <ClCompile Include="..\DSP\dspBandEqualizer.cpp" />
     <ClCompile Include="..\DSP\dspDistortion.cpp" />
     <ClCompile Include="..\DSP\dspFilter.cpp" />
+    <ClCompile Include="..\DSP\dspFreeverb3mod2.cpp" />
     <ClCompile Include="..\DSP\dspKarplusStrong.cpp" />
     <ClCompile Include="..\DSP\dspMorphedSineOsc.cpp" />
     <ClCompile Include="..\DSP\dspNoise.cpp" />
@@ -165,7 +190,6 @@
     <ClCompile Include="..\DSP\dspSineWaveGenerator.cpp" />
     <ClCompile Include="..\DSP\dspSquareWaveGenerator.cpp" />
     <ClCompile Include="..\DSP\dspTriangleWaveGenerator.cpp" />
-    <ClCompile Include="..\DSP\dspVoice.cpp" />
     <ClCompile Include="..\DSP\dspAdjSynthVoiceKarplusStrong.cpp" />
     <ClCompile Include="..\DSP\dspAdjSynthVoiceMso.cpp" />
     <ClCompile Include="..\DSP\dspAdjSynthVoiceNoise.cpp" />
@@ -182,6 +206,8 @@
     <ClCompile Include="..\Instrument\instrumentMidiPlayer.cpp" />
     <ClCompile Include="..\Instrument\instrumentMidiPlayerPlaybackThread.cpp" />
     <ClCompile Include="..\Instrument\instrumentsManager.cpp" />
+    <ClCompile Include="..\Jack\jackAudioClients.cpp" />
+    <ClCompile Include="..\Jack\JackConfigurationFile.cpp" />
     <ClCompile Include="..\Jack\jackConnections.cpp" />
     <ClCompile Include="..\libAdjRaspi5Synth_1_1.cpp" />
     <ClCompile Include="..\MIDI\midiAlsaQclient.cpp" />

@@ -94,7 +94,7 @@ public:
 	void no_activity_detected();
 	
 	void set_voice_waits_for_not_active();
-	void set_voice_not_waits_for_not_active();
+	void set_voice_not_waiting_for_not_active();
 	bool is_voice_waits_for_not_active();
 	void register_voice_end_event_callback(func_ptr_void_int_t func_ptr);
 	

@@ -24,7 +24,7 @@
 
 //#include "libAdjRaspi5Synth_1.h"
 
-#include "./LibAPI/libAdjRaspi5SynthAPI.h"
+
 
 #include "utils\log.h"
 #include <stdio.h>
@@ -43,9 +43,13 @@
 #include "./Instrument/instrumentMidiPlayer.h"
 #include "./Instrument/instrumentMidiMapper.h"
 
+#include "libAdjRaspi5Synth_1_1.h"
+
 /******************************************************************
  *********************** ModSynth Management API **************************
  ******************************************************************/
+
+func_ptr_void_int_t callback_ptr_message_id = NULL;
 
 /** The main modular synthesizer object instance */
 ModSynth* mod_synthesizer;
@@ -939,6 +943,15 @@ int mod_synth_load_patch_file(std::string file_path)
 	mod_synthesizer->patches_handler->disconnect_current_oppened_modules_midi_in_connections();
 	mod_synthesizer->patches_handler->close_current_oppened_modules();
 	return mod_synthesizer->patches_handler->load_patch_file(file_path);
+}
+
+
+void callback_message_id(int mssgid)
+{
+	if (callback_ptr_message_id)
+	{	
+		(*callback_ptr_message_id)(mssgid);
+	}
 }
 
 

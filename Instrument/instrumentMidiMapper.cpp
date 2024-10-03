@@ -209,6 +209,7 @@ void InstrumentMidiMapper::controller_event_handler(uint8_t channel, uint8_t num
 			scaled_volume = (int)((val * 100) / 127);
 			midi_channel_volume_control_command_trap_callback_ptr(channel, scaled_volume);
 		}
+		
 		if (midi_channel_block_channel_volume_commands[channel])
 		{
 			/* Block - drop the command */
