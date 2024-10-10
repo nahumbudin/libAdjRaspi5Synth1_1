@@ -188,6 +188,8 @@ typedef struct _params
 	std::map<std::string, _settings_bool_param_t> bool_parameters_map;
 } _settings_params_t;
 
+typedef int(*func_ptr_int_settings_parms_ptr_int_t)(_settings_params_t*, int);
+
 class Settings
 {
   public:

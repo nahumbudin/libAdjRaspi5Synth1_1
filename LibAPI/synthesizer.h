@@ -186,6 +186,63 @@ Error - must be no more than 64
 #define _PROGRAM_17					17
 #define _PROGRAM_18					18
 	
+#define _SYNTH_MAX_NUM_OF_PROGRAMS		_PROGRAM_18 + 1
+#if (_SYNTH_MAX_NUM_OF_PROGRAMS > _PROGRAM_18 + 1)
+	Error -
+	must be no more than PROGRAM_18 + 1
+#endif
+		
+#define _SYNTH_NUM_OF_PROGRAMS						_SYNTH_MAX_NUM_OF_PROGRAMS
+
+#define _MIDI_MIXER_CHAN_1							_PROGRAM_0
+#define _MIDI_MIXER_CHAN_2							_PROGRAM_1
+#define _MIDI_MIXER_CHAN_3							_PROGRAM_2
+#define _MIDI_MIXER_CHAN_4							_PROGRAM_3
+#define _MIDI_MIXER_CHAN_5							_PROGRAM_4
+#define _MIDI_MIXER_CHAN_6							_PROGRAM_5
+#define _MIDI_MIXER_CHAN_7							_PROGRAM_6
+#define _MIDI_MIXER_CHAN_8							_PROGRAM_7
+#define _MIDI_MIXER_CHAN_9							_PROGRAM_8
+#define _MIDI_MIXER_CHAN_10							_PROGRAM_9
+#define _MIDI_MIXER_CHAN_11							_PROGRAM_10
+#define _MIDI_MIXER_CHAN_12							_PROGRAM_11
+#define _MIDI_MIXER_CHAN_13							_PROGRAM_12
+#define _MIDI_MIXER_CHAN_14							_PROGRAM_13
+#define _MIDI_MIXER_CHAN_15							_PROGRAM_14
+#define _MIDI_MIXER_CHAN_16							_PROGRAM_15
+#define _SKETCH_PROGRAM_1							_PROGRAM_16
+#define _SKETCH_PROGRAM_2							_PROGRAM_17
+#define _SKETCH_PROGRAM_3							_PROGRAM_18
+	
+	
+#define _AMP_LEVEL									500
+#define _AMP_PAN									501
+#define _AMP_ENV_MOD_ENABLE							502
+#define _AMP_PAN_MOD_LFO							503
+#define _AMP_PAN_MOD_LFO_LEVEL						504
+#define _AMP_FIXED_LEVELS							505
+#define _AMP_SEND									506
+	
+#define _AMP_FIXED_LEVELS_DISABLE					0
+#define _AMP_FIXED_LEVELS_ENABLE					1
+	
+	
+#define _KBD_PORTAMENTO_LEVEL						600
+#define _KBD_PORTAMENTO_ENABLE						601
+#define _KBD_SENSITIVITY_LEVEL						602
+#define _KBD_POLY_MODE_LIMIT						603
+#define _KBD_POLY_MODE_FIFO							604
+#define _KBD_POLY_MODE_REUSE						605
+#define _KBD_LOW_SENSITIVITY_LEVEL					606
+#define _KBD_SPLIT_POINT							607
+
+#define _KBD_SPLIT_POINT_NONE						0
+#define _KBD_SPLIT_POINT_C2							1
+#define _KBD_SPLIT_POINT_C3							2
+#define _KBD_SPLIT_POINT_C4							3
+#define _KBD_SPLIT_POINT_C5							4
+	
+	
 #define _KARPLUS_STRONG_EXCITATION_WAVEFORM			800	
 	
 #define _KARPLUS_STRONG_EXCITATION_WHITE_NOISE		0
@@ -211,6 +268,13 @@ Error - must be no more than 64
 #define _KARPLUS_STRONG_EXCITATION_WAVEFORM_VARIATIONS 808
 #define _KARPLUS_STRONG_ENABLE						809	
 	
+#define _SYNTH_VOICE_1								0
+	
+#define _PLAY_MODE									1000
+#define _PLAY_MODE_POLY								0
+#define _PLAY_MODE_SOLO								1
+#define _PLAY_MODE_MIDI								2
+	
 	
 #define _BAND_EQUALIZER_BAND_31_LEVEL				1200
 #define _BAND_EQUALIZER_BAND_62_LEVEL				1201
@@ -225,5 +289,74 @@ Error - must be no more than 64
 
 #define _BAND_EQUALIZER_PRESET						1220		// 0?
 #define _BAND_EQUALIZER_SET_ALL_ZERO				1221		// 1?
+	
+	
+#define _PAD_DETUNE_OCTAVE							1500
+#define _PAD_DETUNE_SEMITONES						1501
+#define _PAD_DETUNE_CENTS							1502
+#define _PAD_FILTER_SEND_1							1503
+#define _PAD_FILTER_SEND_2							1504
+#define _PAD_ENABLE									1505
+
+#define _PAD_FREQ_MOD_LFO							1506
+#define _PAD_FREQ_MOD_LFO_LEVEL						1507
+#define _PAD_FREQ_MOD_ENV							1508
+#define _PAD_FREQ_MOD_ENV_LEVEL						1509
+#define _PAD_AMP_MOD_LFO							1510
+#define _PAD_AMP_MOD_LFO_LEVEL						1511
+#define _PAD_AMP_MOD_ENV							1512
+#define _PAD_AMP_MOD_ENV_LEVEL						1513
+		
+#define _PAD_HARMONY_LEVEL_1						1520
+#define _PAD_HARMONY_LEVEL_2						1521
+#define _PAD_HARMONY_LEVEL_3						1522
+#define _PAD_HARMONY_LEVEL_4						1523
+#define _PAD_HARMONY_LEVEL_5						1524
+#define _PAD_HARMONY_LEVEL_6						1525
+#define _PAD_HARMONY_LEVEL_7						1526
+#define _PAD_HARMONY_LEVEL_8						1527
+#define _PAD_HARMONY_LEVEL_9						1528
+#define _PAD_HARMONY_LEVEL_10						1529
+
+#define _PAD_QUALITY								1530
+
+#define _PAD_QUALITY_32K							0
+#define _PAD_QUALITY_64K							1
+#define _PAD_QUALITY_128K							2
+#define _PAD_QUALITY_256K							3
+#define _PAD_QUALITY_512K							4
+#define _PAD_QUALITY_1024K							5
+
+#define _PAD_SHAPE									1531		
+		
+#define _PAD_SHAPE_RECTANGULAR						0
+#define _PAD_SHAPE_GAUSSIAN							1
+#define _PAD_SHAPE_DOUBLE_EXP						2
+		
+#define _PAD_BASE_NOTE								1532
+
+#define _PAD_BASE_NOTE_C2							0
+#define _PAD_BASE_NOTE_G2							1
+#define _PAD_BASE_NOTE_C3							2
+#define _PAD_BASE_NOTE_G3							3
+#define _PAD_BASE_NOTE_C4							4
+#define _PAD_BASE_NOTE_G4							5
+#define _PAD_BASE_NOTE_C5							6
+#define _PAD_BASE_NOTE_G5							7
+#define _PAD_BASE_NOTE_C6							8
+#define _PAD_BASE_NOTE_G6							9
+		
+#define _PAD_BASE_WIDTH								1533
+#define _PAD_GENERATE								1534
+#define _PAD_DETUNE									1535
+
+#define _PAD_SHAPE_CUTOFF							1540		
+		
+#define _PAD_SHAPE_CUTOFF_FULL						0
+#define _PAD_SHAPE_CUTOFF_UPPER						1
+#define _PAD_SHAPE_CUTOFF_LOWER						2
+		
+#define _SEQUENCER_START_RECORDING					1600
+#define _SEQUENCER_STOP_RECORDING					1601
 
 
