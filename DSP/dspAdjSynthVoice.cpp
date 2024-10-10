@@ -62,21 +62,18 @@
 DSP_AdjSynthVoice::DSP_AdjSynthVoice(int voice,
 									int samp_rate,
 									int block_size,	
-									int num_of_active_siganl_pathes,
 									Wavetable *synth_pad_wavetable,
 									func_ptr_void_int_t voice_end_event_callback_pointer)
 {
 	voice_id = voice;
 	voice_active = false;
 	voice_waits_for_not_active = false;
-	num_of_Active_paths = num_of_active_siganl_pathes; // Only 1 path as default
 	used = false;
 	voice_end_event_callback_ptr = voice_end_event_callback_pointer;
 	
 	used = false;
 	voice_active = false;
 	voice_waits_for_not_active = false;
-	voice_end_event_callback_ptr = NULL;
 	
 	osc_1_active = false;
 	osc_2_active = false;
@@ -205,36 +202,33 @@ DSP_AdjSynthVoice::DSP_AdjSynthVoice(int voice,
 	
 	set_osc_2_not_sync_on_osc_1();
 	
-	if (num_of_Active_paths == 2)
-	{
-		osc_2 = new DSP_Osc(voice + 200,
-			_OSC_WAVEFORM_SINE,
-			50,
-			0,
-			15,
-			0,
-			false,
-			false,
-			false,
-			0,
-			0,
-			_OSC_UNISON_MODE_12345678);
+	osc_2 = new DSP_Osc(voice + 200,
+		_OSC_WAVEFORM_SINE,
+		50,
+		0,
+		15,
+		0,
+		false,
+		false,
+		false,
+		0,
+		0,
+		_OSC_UNISON_MODE_12345678);
 	
-		set_osc_2_send_filter_1_level(0);
-		set_osc_2_send_filter_2_level(0);
-		set_osc_2_freq_mod_lfo(_LFO_NONE);
-		set_osc_2_freq_mod_lfo_level(0);
-		set_osc_2_freq_mod_env(_ENV_NONE);
-		set_osc_2_freq_mod_env_level(0);
-		set_osc_2_pwm_mod_lfo(_LFO_NONE);
-		set_osc_2_pwm_mod_lfo_level(0);
-		set_osc_2_pwm_mod_env(_ENV_NONE);
-		set_osc_2_pwm_mod_env_level(0);
-		set_osc_2_amp_mod_lfo(_LFO_NONE);
-		set_osc_2_amp_mod_lfo_level(0);
-		set_osc_2_amp_mod_env(_ENV_NONE);
-		set_osc_2_amp_mod_env_level(0);
-	}
+	set_osc_2_send_filter_1_level(0);
+	set_osc_2_send_filter_2_level(0);
+	set_osc_2_freq_mod_lfo(_LFO_NONE);
+	set_osc_2_freq_mod_lfo_level(0);
+	set_osc_2_freq_mod_env(_ENV_NONE);
+	set_osc_2_freq_mod_env_level(0);
+	set_osc_2_pwm_mod_lfo(_LFO_NONE);
+	set_osc_2_pwm_mod_lfo_level(0);
+	set_osc_2_pwm_mod_env(_ENV_NONE);
+	set_osc_2_pwm_mod_env_level(0);
+	set_osc_2_amp_mod_lfo(_LFO_NONE);
+	set_osc_2_amp_mod_lfo_level(0);
+	set_osc_2_amp_mod_env(_ENV_NONE);
+	set_osc_2_amp_mod_env_level(0);
 	
 	noise_1 = new DSP_Noise(voice + 300);
 	noise_1->set_amplitude(1.0f);
@@ -494,7 +488,7 @@ bool DSP_AdjSynthVoice::voice_is_active()
 *	@param	none
 *	@return true if voice is active, false otherwise
 */
-void no_activity_detected()
+void DSP_AdjSynthVoice::no_activity_detected(int voice_id)
 {
 	/*   TODO: add a callback void no_activity_detected(int voice_num)
 	AdjSynth::get_instance()->synth_voice[voice]->audio_voice->set_inactive();
@@ -504,6 +498,12 @@ void no_activity_detected()
 	AdjSynth::get_instance()->synth_voice[voice]->pad_wavetable = original_pad_wavetable;
 	AdjSynth::get_instance()->audio_poly_mixer->restore_gain_pan(voice);
 	*/
+	
+	
+	if (voice_end_event_callback_ptr != NULL)
+	{
+		voice_end_event_callback_ptr(voice_id);
+	}
 }
 
 /**
@@ -1578,7 +1578,7 @@ void DSP_AdjSynthVoice::update_voice_modulation(int voice)
 		(karplus_1_send_filter_2_level < 0.05f))) &&
 		voice_waits_for_not_active)
 	{
-		no_activity_detected();
+		no_activity_detected(voice_id);
 	}
 	
 	// Filter freq

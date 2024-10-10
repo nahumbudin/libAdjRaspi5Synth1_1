@@ -80,7 +80,6 @@ public:
 	DSP_AdjSynthVoice(int voice,
 		int samp_rate,
 		int block_size,	
-		int num_of_active_siganl_pathes = 1,
 		Wavetable *synth_pad_wavetable = NULL,
 		func_ptr_void_int_t voice_end_event_callback_pointer = NULL);
 	
@@ -91,7 +90,7 @@ public:
 	void set_voice_active();
 	void set_voice_inactive();
 	bool voice_is_active();
-	void no_activity_detected();
+	void no_activity_detected(int voice_id);
 	
 	void set_voice_waits_for_not_active();
 	void set_voice_not_waiting_for_not_active();
@@ -424,12 +423,33 @@ public:
 	uint32_t filter_1_freq_mod_lfo_delay, filter_2_freq_mod_lfo_delay;
 	uint32_t amp_1_ch_1_pan_mod_lfo_delay, amp_1_ch_2_pan_mod_lfo_delay;
 	
+	bool osc_1_active, osc_2_active;
+	bool noise_1_active;
+	bool karplus_1_active;
+	bool mso_1_active;
+	bool pad_1_active;
+	bool distortion_1_active, distortion_2_active;
+	
+	DSP_Osc *osc_1, *osc_2;	
+	DSP_Noise *noise_1;
+	DSP_KarplusStrong *karplus_1;
+	DSP_MorphingSinusOsc *mso_1;
+	DSP_MorphingSinusOscWTAB *mso_wtab_1, *original_mso_wtab_1;
+	DSP_Filter *filter_1, *filter_2;
+	DSP_Distortion *distortion_1, *distortion_2;
+	DSP_Amp *out_amp_1;
+	DSP_Wavetable *pad_1;
+	Wavetable *pad_1_wavetable, *original_pad_1_wavetable;
+	
+	DSP_Osc *lfo_1, *lfo_2, *lfo_3, *lfo_4, *lfo_5;
+
+	DSP_ADSR *adsr_1, *adsr_2, *adsr_3, *adsr_4, *adsr_5;
+	
 private:
 	
 	int init_lfo_delays();
 	
 	int voice_id;
-	int num_of_Active_paths;
 	
 	bool used;
 	bool voice_active;
@@ -441,12 +461,6 @@ private:
 	int sample_rate;
 	int audio_block_size;
 	
-	bool osc_1_active, osc_2_active;
-	bool noise_1_active;
-	bool karplus_1_active;
-	bool mso_1_active;
-	bool pad_1_active;
-	bool distortion_1_active, distortion_2_active;
 	
 	float osc_1_out;
 	float osc_2_out;
@@ -578,20 +592,7 @@ private:
 	
 	uint32_t lfo_delays[_NUM_OF_LFOS * _NUM_OF_LFO_DELAY_OPTIONS + 1]; // 5 LFOs, 5 states; 1 None
 	
-	DSP_Osc *osc_1, *osc_2;	
-	DSP_Noise *noise_1;
-	DSP_KarplusStrong *karplus_1;
-	DSP_MorphingSinusOsc *mso_1;
-	DSP_MorphingSinusOscWTAB *mso_wtab_1, *original_mso_wtab_1;
-	DSP_Filter *filter_1, *filter_2;
-	DSP_Distortion *distortion_1, *distortion_2;
-	DSP_Amp *out_amp_1;
-	DSP_Wavetable *pad_1;
-	Wavetable *pad_1_wavetable, *original_pad_1_wavetable;
 	
-	DSP_Osc *lfo_1, *lfo_2, *lfo_3, *lfo_4, *lfo_5;
-
-	DSP_ADSR *adsr_1, *adsr_2, *adsr_3, *adsr_4, *adsr_5;
 	
 	
 	
