@@ -33,7 +33,7 @@
 #include "./Instrument/instrumentControlBoxHandler.h"
 
 // Mutex to controll audio memory blocks allocation
-pthread_mutex_t voice_mem_blocks_allocation_control_mutex;
+//pthread_mutex_t voice_mem_blocks_allocation_control_mutex;
 
 
 /*************************** ALSA MIDI *******************************************/

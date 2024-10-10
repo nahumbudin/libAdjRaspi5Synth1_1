@@ -27,6 +27,7 @@ AudioManager *poly_mixer_manager; // = AudioManager::get_instance();
 float master_level_1, master_level_2, master_pan_1, master_pan_2, master_send_1, master_send_2;
 
 AudioPolyMixerFloat* AudioPolyMixerFloat::audio_poly_mixer_instance = NULL;
+int AudioPolyMixerFloat::inputs = 1;
 
 bool AudioPolyMixerFloat::voice_active[_SYNTH_MAX_NUM_OF_VOICES];
 bool AudioPolyMixerFloat::voice_wait_for_not_active[_SYNTH_MAX_NUM_OF_VOICES];
