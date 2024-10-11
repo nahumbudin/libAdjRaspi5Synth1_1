@@ -63,12 +63,14 @@ int set_voice_block_distortion_1_range_cb(int rng, int voice, int prog)
 	float value = ((float)rng / 100.f) * (_DISTORTION_MAX_RANGE - _DISTORTION_MIN_RANGE) + _DISTORTION_MIN_RANGE;
 
 	AdjSynth::get_instance()->synth_voice[voice]->dsp_voice->distortion_1->set_range(value);
+	
 	return 0;
 }
 
 int set_voice_block_distortion_1_blend_cb(int blnd, int voice, int prog)
 {
 	AdjSynth::get_instance()->synth_voice[voice]->dsp_voice->distortion_1->set_blend((float)blnd / 100.f);
+	
 	return 0;
 }
 

@@ -19,11 +19,12 @@
 */
 
 #include "adjSynth.h"
-#include "../jack/jackAudioClients.h"
+#include "../Jack/jackAudioClients.h"
 
 int set_audio_jack_mode_cb(int mode, int prog)
 {
 	set_jack_mode(mode);
+	
 	return 0;
 }
 

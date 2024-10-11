@@ -59,6 +59,13 @@
     <None Include="libAdjRaspi5Synth1_1-Release.vgdbsettings" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\AdjSynth\adjSynth.h" />
+    <ClInclude Include="..\AdjSynth\adjSynthPADcreator.h" />
+    <ClInclude Include="..\AdjSynth\adjSynthPolyphony.h" />
+    <ClInclude Include="..\AdjSynth\adjSynthPolyphonyManager.h" />
+    <ClInclude Include="..\AdjSynth\adjSynthProgram.h" />
+    <ClInclude Include="..\AdjSynth\adjSynthVoice.h" />
+    <ClInclude Include="..\AdjSynth\synthKeyboard.h" />
     <ClInclude Include="..\ALSA\alsaAudioHandling.h" />
     <ClInclude Include="..\ALSA\alsaBtClientOutput.h" />
     <ClInclude Include="..\ALSA\alsaMidi.h" />
@@ -77,6 +84,8 @@
     <ClInclude Include="..\Audio\audioVoice.h" />
     <ClInclude Include="..\Bluetooth\rspiBluetoothServicesQueuesVer.h" />
     <ClInclude Include="..\commonDefs.h" />
+    <ClInclude Include="..\CPU\cpuData.h" />
+    <ClInclude Include="..\CPU\CPUSnapshot.h" />
     <ClInclude Include="..\DSP\dspAdjSynthVoice.h" />
     <ClInclude Include="..\DSP\dspAdsr.h" />
     <ClInclude Include="..\DSP\dspAmp.h" />
@@ -153,6 +162,43 @@
     <ClInclude Include="..\utils\xmlFiles.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\AdjSynth\adjSynth.cpp" />
+    <ClCompile Include="..\AdjSynth\adjSynthDefaultPatchParamsAmp.cpp" />
+    <ClCompile Include="..\AdjSynth\adjSynthDefaultPatchParamsDistortion.cpp" />
+    <ClCompile Include="..\AdjSynth\adjSynthDefaultPatchParamsFilter.cpp" />
+    <ClCompile Include="..\AdjSynth\adjSynthDefaultPatchParamsKPS.cpp" />
+    <ClCompile Include="..\AdjSynth\adjSynthDefaultPatchParamsModulators.cpp" />
+    <ClCompile Include="..\AdjSynth\adjSynthDefaultPatchParamsMSO.cpp" />
+    <ClCompile Include="..\AdjSynth\adjSynthDefaultPatchParamsNoise.cpp" />
+    <ClCompile Include="..\AdjSynth\adjSynthDefaultPatchParamsPAD.cpp" />
+    <ClCompile Include="..\AdjSynth\adjSynthDefaultPatchParamsVCO.cpp" />
+    <ClCompile Include="..\AdjSynth\adjSynthDefaultSettingsEqualizer.cpp" />
+    <ClCompile Include="..\AdjSynth\adjSynthDefaultSettingsKeyboard.cpp" />
+    <ClCompile Include="..\AdjSynth\adjSynthDefaultSettingsMixer.cpp" />
+    <ClCompile Include="..\AdjSynth\adjSynthDefaultSettingsReverb.cpp" />
+    <ClCompile Include="..\AdjSynth\adjSynthPADcreator.cpp" />
+    <ClCompile Include="..\AdjSynth\adjSynthPolyphony.cpp" />
+    <ClCompile Include="..\AdjSynth\adjSynthPolyphonyManager.cpp" />
+    <ClCompile Include="..\AdjSynth\adjSynthProgram.cpp" />
+    <ClCompile Include="..\AdjSynth\adjSynthSetHammondPercussionMode.cpp" />
+    <ClCompile Include="..\AdjSynth\adjSynthSettingsCallbacksAudio.cpp" />
+    <ClCompile Include="..\AdjSynth\adjSynthSettingsCallbacksDistortion.cpp" />
+    <ClCompile Include="..\AdjSynth\adjSynthSettingsCallbacksEqualizer.cpp" />
+    <ClCompile Include="..\AdjSynth\adjSynthSettingsCallbacksKeyboard.cpp" />
+    <ClCompile Include="..\AdjSynth\adjSynthSettingsCallbacksMisc.cpp" />
+    <ClCompile Include="..\AdjSynth\adjSynthSettingsCallbacksMixer.cpp" />
+    <ClCompile Include="..\AdjSynth\adjSynthSettingsCallbacksReverb.cpp" />
+    <ClCompile Include="..\AdjSynth\adjSynthSettingsCallbacksVoiceAmp.cpp" />
+    <ClCompile Include="..\AdjSynth\adjSynthSettingsCallbacksVoiceDistortion.cpp" />
+    <ClCompile Include="..\AdjSynth\adjSynthSettingsCallbacksVoiceFilter.cpp" />
+    <ClCompile Include="..\AdjSynth\adjSynthSettingsCallbacksVoiceKPS.cpp" />
+    <ClCompile Include="..\AdjSynth\adjSynthSettingsCallbacksVoiceModulators.cpp" />
+    <ClCompile Include="..\AdjSynth\adjSynthSettingsCallbacksVoiceMSO.cpp" />
+    <ClCompile Include="..\AdjSynth\adjSynthSettingsCallbacksVoiceNoise.cpp" />
+    <ClCompile Include="..\AdjSynth\adjSynthSettingsCallbacksVoicePAD.cpp" />
+    <ClCompile Include="..\AdjSynth\adjSynthSettingsCallbacksVoiceVCO.cpp" />
+    <ClCompile Include="..\AdjSynth\adjSynthVoice.cpp" />
+    <ClCompile Include="..\AdjSynth\synthKeyboard.cpp" />
     <ClCompile Include="..\ALSA\alsaAudioHandling.cpp" />
     <ClCompile Include="..\ALSA\alsaBtClientOutput.cpp" />
     <ClCompile Include="..\ALSA\alsaMidi.cpp" />
@@ -169,6 +215,8 @@
     <ClCompile Include="..\Audio\audioReverb.cpp" />
     <ClCompile Include="..\Audio\audioVoice.cpp" />
     <ClCompile Include="..\Bluetooth\rspiBluetoothServicesQueuesVer.cpp" />
+    <ClCompile Include="..\CPU\cpuData.cpp" />
+    <ClCompile Include="..\CPU\CPUSnapshot.cpp" />
     <ClCompile Include="..\DSP\dspAdjSynthVoice.cpp" />
     <ClCompile Include="..\DSP\dspAdjSynthVoiceAmp.cpp" />
     <ClCompile Include="..\DSP\dspAdjSynthVoiceDistortion.cpp" />
@@ -186,6 +234,9 @@
     <ClCompile Include="..\DSP\dspMorphedSineOsc.cpp" />
     <ClCompile Include="..\DSP\dspNoise.cpp" />
     <ClCompile Include="..\DSP\dspOsc.cpp" />
+    <ClCompile Include="..\DSP\dspReverbAllpass.cpp" />
+    <ClCompile Include="..\DSP\dspReverbComb.cpp" />
+    <ClCompile Include="..\DSP\dspReverbModel.cpp" />
     <ClCompile Include="..\DSP\dspSampleHoldWaveformGenerator.cpp" />
     <ClCompile Include="..\DSP\dspSineWaveGenerator.cpp" />
     <ClCompile Include="..\DSP\dspSquareWaveGenerator.cpp" />

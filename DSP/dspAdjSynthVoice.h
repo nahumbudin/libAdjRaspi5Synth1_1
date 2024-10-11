@@ -72,6 +72,8 @@
 #include "dspDistortion.h"
 #include "dspAdsr.h"
 
+class DSP_Osc;	
+ 
 
 class DSP_AdjSynthVoice
 {

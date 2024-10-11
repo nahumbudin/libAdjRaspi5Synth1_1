@@ -12,6 +12,8 @@
 
 #pragma once
 
+#include <struct_timeval.h>
+
 #include "../LibAPI/synthesizer.h"
 
 class AdjSynthPolyphony

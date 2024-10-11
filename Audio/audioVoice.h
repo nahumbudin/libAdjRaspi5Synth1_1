@@ -27,6 +27,7 @@
 #define _AMP_AUDIO_OUT_L					LEFT
 #define _AMP_AUDIO_OUT_R					RIGHT
 
+class DSP_AdjSynthVoice;
 class AudioVoiceFloat : public AudioBlockFloat
 {
 public:

@@ -14,7 +14,7 @@
 #pragma once
 
 #include "dspWaveformTable.h"
-#include "../LibAPI/audio (1).h"
+#include "../LibAPI/audio.h"
 
 // Waveform segments
 enum en_segments 

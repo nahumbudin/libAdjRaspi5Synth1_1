@@ -13,8 +13,8 @@
 #include <sys/time.h>
 
 #include "adjSynthPolyphony.h"
-#include "adjSynth.h"
-#include "synthKeyboard.h"
+//#include "adjSynth.h"
+//#include "synthKeyboard.h"
 //#include "adjSynthProgram.h"
 
 #include "../commonDefs.h"

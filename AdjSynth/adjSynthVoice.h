@@ -26,7 +26,9 @@
 
 #include "../DSP/dspMorphedSineOsc.h"
 
-
+class DSP_AdjSynthVoice;
+class AudioVoiceFloat;
+class AudioManager;
 
 
 class SynthVoice

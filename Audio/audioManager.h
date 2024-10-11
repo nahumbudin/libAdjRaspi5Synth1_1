@@ -36,6 +36,8 @@
 
 extern pthread_mutex_t update_mutex[_SYNTH_MAX_NUM_OF_VOICES];
 
+class AudioVoiceFloat;
+
 class AudioManager {
 public:
 		

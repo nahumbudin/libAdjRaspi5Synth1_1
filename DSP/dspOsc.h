@@ -23,6 +23,8 @@
 #include "dspTriangleWaveGenerator.h"
 #include "dspSampleHoldWaveformGenerator.h"
 
+class DSP_SineWaveGenerator;
+
 class DSP_Osc
 {
 public:

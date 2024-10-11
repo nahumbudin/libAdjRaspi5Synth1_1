@@ -33,6 +33,8 @@ extern float program_idle_level_1, program_idle_level_2;
 extern float program_idle_pan_1, program_idle_pan_2;
 extern float program_idle_send_1, program_idle_send_2;
 
+class DSP_Osc;
+
 class AudioPolyMixerFloat : public AudioBlockFloat
 {
 	friend class AudioBlockFloat;

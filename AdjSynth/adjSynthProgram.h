@@ -25,6 +25,8 @@
 #include "../DSP/dspMorphedSineOsc.h"
 #include "../LibAPI/types.h"
 
+class SynthVoice;
+
 class SynthProgram
 {
 public:

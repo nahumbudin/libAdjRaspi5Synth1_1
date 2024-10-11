@@ -41,6 +41,8 @@ AdjPolyphonyManager::AdjPolyphonyManager(int num_of_voic)
 		cores_load[i] = 0;
 	}
 	
+	gettimeofday(&start_time, NULL);
+	
 }
 
 AdjPolyphonyManager *AdjPolyphonyManager::get_poly_manger_instance(int num_of_voic)
@@ -264,3 +266,32 @@ int AdjPolyphonyManager::get_reused_note(int note, int program)
 	return result;
 }
 
+/**
+*   @brief  Activate a voice resource..
+*   @param  res	voice number
+*   @param	note	specified note
+*   @param	program	specified program
+*   @return 0 if done.
+*/
+int AdjPolyphonyManager::activate_resource(int res_num, int note, int program)
+{	
+	struct timeval timestamp;
+	bool reused = false;
+	
+	if ((res_num < 0) || (res_num >= AdjSynth::get_instance()->get_num_of_voices()) ||
+		(note < 0) || (note > 127) || (program < 0) ||
+		(program > AdjSynth::get_instance()->get_num_of_programs())) 
+	{
+		// Illegal parameters range
+		return -1;
+	}
+
+	gettimeofday(&timestamp, NULL);
+	AdjSynth::get_instance()->synth_voice[res_num]->audio_voice->set_timestamp(
+		(timestamp.tv_usec - start_time.tv_usec) / 1000 + (timestamp.tv_sec - start_time.tv_sec) * 1000);
+	AdjSynth::get_instance()->synth_voice[res_num]->audio_voice->set_active();
+	AdjSynth::get_instance()->synth_voice[res_num]->audio_voice->reset_wait_for_not_active();
+	AdjSynth::get_instance()->synth_voice[res_num]->set_allocated_program(program);
+	
+	return 0;
+}

@@ -34,6 +34,8 @@ public:
 	int get_oldest_voice();
 	int get_reused_note(int note = -1, int program = 0);
 	
+	int activate_resource(int res_num = -1, int note = -1, int program = 0);
+	
 	
 private:
 	
@@ -57,4 +59,6 @@ private:
 	const int voice_processing_weight = 1;
 	const int freeverb3mod2_processing_weight = 20;
 	const int reverb_processing_weight = 10;
+	
+	struct timeval start_time;
 };
