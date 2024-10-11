@@ -133,6 +133,27 @@
     <Filter Include="Source files\Audio">
       <UniqueIdentifier>{c44e4fd3-e362-4bee-b2f2-91e36560e8dc}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header files\Synthesizer\AdjSynth">
+      <UniqueIdentifier>{6046d1a0-b386-4e63-9280-03758d1b9ba0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\CPU">
+      <UniqueIdentifier>{54a1b0c9-ce83-429b-b9e2-e76963aa4ace}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source files\Synthesizer\AdjSynth">
+      <UniqueIdentifier>{2edf9512-1db1-431f-9956-c7229d94b337}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source files\Synthesizer\AdjSynth\Settings Callbacks">
+      <UniqueIdentifier>{49a608f2-c0e2-4b9d-b4d7-f10d2b220129}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source files\Synthesizer\AdjSynth\Default Settings">
+      <UniqueIdentifier>{92d5477f-99f1-4a1f-9f61-e257c0aaea7f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source files\CPU">
+      <UniqueIdentifier>{2708cec0-0427-49b7-b944-126941bfe6fb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source files\Synthesizer\AdjSynth\Settings Handlers">
+      <UniqueIdentifier>{d5a85d32-ffeb-4f6e-b9e3-a3a935869b3c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\libAdjRaspi5Synth_1_1.cpp">
@@ -372,11 +393,170 @@
     <ClCompile Include="..\Audio\audioBandEqualizer.cpp">
       <Filter>Source files\Audio</Filter>
     </ClCompile>
+    <ClCompile Include="..\AdjSynth\synthKeyboard.cpp">
+      <Filter>Source files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\AdjSynth\adjSynthSettingsCallbacksVoiceVCO.cpp">
+      <Filter>Source files\Synthesizer\AdjSynth\Settings Callbacks</Filter>
+    </ClCompile>
+    <ClCompile Include="..\AdjSynth\adjSynthSettingsCallbacksAudio.cpp">
+      <Filter>Source files\Synthesizer\AdjSynth\Settings Callbacks</Filter>
+    </ClCompile>
+    <ClCompile Include="..\AdjSynth\adjSynthSettingsCallbacksDistortion.cpp">
+      <Filter>Source files\Synthesizer\AdjSynth\Settings Callbacks</Filter>
+    </ClCompile>
+    <ClCompile Include="..\AdjSynth\adjSynthSettingsCallbacksEqualizer.cpp">
+      <Filter>Source files\Synthesizer\AdjSynth\Settings Callbacks</Filter>
+    </ClCompile>
+    <ClCompile Include="..\AdjSynth\adjSynthSettingsCallbacksKeyboard.cpp">
+      <Filter>Source files\Synthesizer\AdjSynth\Settings Callbacks</Filter>
+    </ClCompile>
+    <ClCompile Include="..\AdjSynth\adjSynthSettingsCallbacksMisc.cpp">
+      <Filter>Source files\Synthesizer\AdjSynth\Settings Callbacks</Filter>
+    </ClCompile>
+    <ClCompile Include="..\AdjSynth\adjSynthSettingsCallbacksMixer.cpp">
+      <Filter>Source files\Synthesizer\AdjSynth\Settings Callbacks</Filter>
+    </ClCompile>
+    <ClCompile Include="..\AdjSynth\adjSynthSettingsCallbacksReverb.cpp">
+      <Filter>Source files\Synthesizer\AdjSynth\Settings Callbacks</Filter>
+    </ClCompile>
+    <ClCompile Include="..\AdjSynth\adjSynthSettingsCallbacksVoiceAmp.cpp">
+      <Filter>Source files\Synthesizer\AdjSynth\Settings Callbacks</Filter>
+    </ClCompile>
+    <ClCompile Include="..\AdjSynth\adjSynthSettingsCallbacksVoiceDistortion.cpp">
+      <Filter>Source files\Synthesizer\AdjSynth\Settings Callbacks</Filter>
+    </ClCompile>
+    <ClCompile Include="..\AdjSynth\adjSynthSettingsCallbacksVoiceFilter.cpp">
+      <Filter>Source files\Synthesizer\AdjSynth\Settings Callbacks</Filter>
+    </ClCompile>
+    <ClCompile Include="..\AdjSynth\adjSynthSettingsCallbacksVoiceKPS.cpp">
+      <Filter>Source files\Synthesizer\AdjSynth\Settings Callbacks</Filter>
+    </ClCompile>
+    <ClCompile Include="..\AdjSynth\adjSynthSettingsCallbacksVoiceModulators.cpp">
+      <Filter>Source files\Synthesizer\AdjSynth\Settings Callbacks</Filter>
+    </ClCompile>
+    <ClCompile Include="..\AdjSynth\adjSynthSettingsCallbacksVoiceMSO.cpp">
+      <Filter>Source files\Synthesizer\AdjSynth\Settings Callbacks</Filter>
+    </ClCompile>
+    <ClCompile Include="..\AdjSynth\adjSynthSettingsCallbacksVoiceNoise.cpp">
+      <Filter>Source files\Synthesizer\AdjSynth\Settings Callbacks</Filter>
+    </ClCompile>
+    <ClCompile Include="..\AdjSynth\adjSynthSettingsCallbacksVoicePAD.cpp">
+      <Filter>Source files\Synthesizer\AdjSynth\Settings Callbacks</Filter>
+    </ClCompile>
+    <ClCompile Include="..\AdjSynth\adjSynthDefaultSettingsReverb.cpp">
+      <Filter>Source files\Synthesizer\AdjSynth\Default Settings</Filter>
+    </ClCompile>
+    <ClCompile Include="..\AdjSynth\adjSynthDefaultPatchParamsAmp.cpp">
+      <Filter>Source files\Synthesizer\AdjSynth\Default Settings</Filter>
+    </ClCompile>
+    <ClCompile Include="..\AdjSynth\adjSynthDefaultPatchParamsDistortion.cpp">
+      <Filter>Source files\Synthesizer\AdjSynth\Default Settings</Filter>
+    </ClCompile>
+    <ClCompile Include="..\AdjSynth\adjSynthDefaultPatchParamsFilter.cpp">
+      <Filter>Source files\Synthesizer\AdjSynth\Default Settings</Filter>
+    </ClCompile>
+    <ClCompile Include="..\AdjSynth\adjSynthDefaultPatchParamsKPS.cpp">
+      <Filter>Source files\Synthesizer\AdjSynth\Default Settings</Filter>
+    </ClCompile>
+    <ClCompile Include="..\AdjSynth\adjSynthDefaultPatchParamsModulators.cpp">
+      <Filter>Source files\Synthesizer\AdjSynth\Default Settings</Filter>
+    </ClCompile>
+    <ClCompile Include="..\AdjSynth\adjSynthDefaultPatchParamsMSO.cpp">
+      <Filter>Source files\Synthesizer\AdjSynth\Default Settings</Filter>
+    </ClCompile>
+    <ClCompile Include="..\AdjSynth\adjSynthDefaultPatchParamsNoise.cpp">
+      <Filter>Source files\Synthesizer\AdjSynth\Default Settings</Filter>
+    </ClCompile>
+    <ClCompile Include="..\AdjSynth\adjSynthDefaultPatchParamsPAD.cpp">
+      <Filter>Source files\Synthesizer\AdjSynth\Default Settings</Filter>
+    </ClCompile>
+    <ClCompile Include="..\AdjSynth\adjSynthDefaultPatchParamsVCO.cpp">
+      <Filter>Source files\Synthesizer\AdjSynth\Default Settings</Filter>
+    </ClCompile>
+    <ClCompile Include="..\AdjSynth\adjSynthDefaultSettingsEqualizer.cpp">
+      <Filter>Source files\Synthesizer\AdjSynth\Default Settings</Filter>
+    </ClCompile>
+    <ClCompile Include="..\AdjSynth\adjSynthDefaultSettingsKeyboard.cpp">
+      <Filter>Source files\Synthesizer\AdjSynth\Default Settings</Filter>
+    </ClCompile>
+    <ClCompile Include="..\AdjSynth\adjSynthDefaultSettingsMixer.cpp">
+      <Filter>Source files\Synthesizer\AdjSynth\Default Settings</Filter>
+    </ClCompile>
+    <ClCompile Include="..\AdjSynth\adjSynth.cpp">
+      <Filter>Source files\Synthesizer\AdjSynth</Filter>
+    </ClCompile>
+    <ClCompile Include="..\AdjSynth\adjSynthPADcreator.cpp">
+      <Filter>Source files\Synthesizer\AdjSynth</Filter>
+    </ClCompile>
+    <ClCompile Include="..\AdjSynth\adjSynthPolyphonyManager.cpp">
+      <Filter>Source files\Synthesizer\AdjSynth</Filter>
+    </ClCompile>
+    <ClCompile Include="..\AdjSynth\adjSynthProgram.cpp">
+      <Filter>Source files\Synthesizer\AdjSynth</Filter>
+    </ClCompile>
+    <ClCompile Include="..\AdjSynth\adjSynthSetHammondPercussionMode.cpp">
+      <Filter>Source files\Synthesizer\AdjSynth</Filter>
+    </ClCompile>
+    <ClCompile Include="..\AdjSynth\adjSynthVoice.cpp">
+      <Filter>Source files\Synthesizer\AdjSynth</Filter>
+    </ClCompile>
+    <ClCompile Include="..\CPU\cpuData.cpp">
+      <Filter>Source files\CPU</Filter>
+    </ClCompile>
+    <ClCompile Include="..\CPU\CPUSnapshot.cpp">
+      <Filter>Source files\CPU</Filter>
+    </ClCompile>
+    <ClCompile Include="..\DSP\dspReverbAllpass.cpp">
+      <Filter>Source files\DSP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\DSP\dspReverbComb.cpp">
+      <Filter>Source files\DSP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\DSP\dspReverbModel.cpp">
+      <Filter>Source files\DSP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\AdjSynth\adjSynthEventsHandlingVCO.cpp">
+      <Filter>Source files\Synthesizer\AdjSynth\Settings Handlers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\AdjSynth\adjSynthEventsHandlingReverb.cpp">
+      <Filter>Source files\Synthesizer\AdjSynth\Settings Handlers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\AdjSynth\adjSynthEventsHandlingPAD.cpp">
+      <Filter>Source files\Synthesizer\AdjSynth\Settings Handlers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\AdjSynth\adjSynthEventsHandlingNoise.cpp">
+      <Filter>Source files\Synthesizer\AdjSynth\Settings Handlers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\AdjSynth\adjSynthEventsHandlingMSO.cpp">
+      <Filter>Source files\Synthesizer\AdjSynth\Settings Handlers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\AdjSynth\adjSynthEventsHandlingModulators.cpp">
+      <Filter>Source files\Synthesizer\AdjSynth\Settings Handlers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\AdjSynth\adjSynthEventsHandlingKPS.cpp">
+      <Filter>Source files\Synthesizer\AdjSynth\Settings Handlers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\AdjSynth\adjSynthEventsHandlingKeyboard.cpp">
+      <Filter>Source files\Synthesizer\AdjSynth\Settings Handlers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\AdjSynth\adjSynthEventsHandlingFilter.cpp">
+      <Filter>Source files\Synthesizer\AdjSynth\Settings Handlers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\AdjSynth\adjSynthEventsHandlingEquilizer.cpp">
+      <Filter>Source files\Synthesizer\AdjSynth\Settings Handlers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\AdjSynth\adjSynthEventsHandlingDistortion.cpp">
+      <Filter>Source files\Synthesizer\AdjSynth\Settings Handlers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\AdjSynth\adjSynthEventsHandlingAudio.cpp">
+      <Filter>Source files\Synthesizer\AdjSynth\Settings Handlers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\AdjSynth\adjSynthEventsHandlingAmp.cpp">
+      <Filter>Source files\Synthesizer\AdjSynth\Settings Handlers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\commonDefs.h">
-      <Filter>Header files</Filter>
-    </ClInclude>
     <ClInclude Include="..\libAdjRaspi5Synth_1_1.h">
       <Filter>Header files</Filter>
     </ClInclude>
@@ -649,6 +829,33 @@
     </ClInclude>
     <ClInclude Include="..\DSP\dspBandEqualizer.h">
       <Filter>Header files\DSP</Filter>
+    </ClInclude>
+    <ClInclude Include="..\AdjSynth\synthKeyboard.h">
+      <Filter>Header files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\AdjSynth\adjSynth.h">
+      <Filter>Header files\Synthesizer\AdjSynth</Filter>
+    </ClInclude>
+    <ClInclude Include="..\AdjSynth\adjSynthPADcreator.h">
+      <Filter>Header files\Synthesizer\AdjSynth</Filter>
+    </ClInclude>
+    <ClInclude Include="..\AdjSynth\adjSynthPolyphonyManager.h">
+      <Filter>Header files\Synthesizer\AdjSynth</Filter>
+    </ClInclude>
+    <ClInclude Include="..\AdjSynth\adjSynthProgram.h">
+      <Filter>Header files\Synthesizer\AdjSynth</Filter>
+    </ClInclude>
+    <ClInclude Include="..\AdjSynth\adjSynthVoice.h">
+      <Filter>Header files\Synthesizer\AdjSynth</Filter>
+    </ClInclude>
+    <ClInclude Include="..\commonDefs.h">
+      <Filter>Header files\Synthesizer\AdjSynth</Filter>
+    </ClInclude>
+    <ClInclude Include="..\CPU\cpuData.h">
+      <Filter>Header files\CPU</Filter>
+    </ClInclude>
+    <ClInclude Include="..\CPU\CPUSnapshot.h">
+      <Filter>Header files\CPU</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

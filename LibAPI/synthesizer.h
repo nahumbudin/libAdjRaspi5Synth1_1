@@ -35,35 +35,31 @@ Error - must be no more than 64
 #define _OSC_MAX_FREQUENCY					12543.8539514160f	// MIDI G11
 #define _OSC_MIN_FREQUENCY					0.1f				// LFO 8.1757989156f	// MIDI C1
 
-#define _OSC_WAVEFORM_SINE					0
-#define _OSC_WAVEFORM_SQUARE				1
-#define _OSC_WAVEFORM_PULSE					2
-#define _OSC_WAVEFORM_TRIANGLE				3
-#define _OSC_WAVEFORM_SAMPHOLD				4
+#define _OSC_WAVEFORM_SINE							0
+#define _OSC_WAVEFORM_SQUARE						1
+#define _OSC_WAVEFORM_PULSE							2
+#define _OSC_WAVEFORM_TRIANGLE						3
+#define _OSC_WAVEFORM_SAMPHOLD						4
 
-#define _OSC_DETUNE_MAX_OCTAVE				6
-#define _OSC_DETUNE_MIN_OCTAVE				-6
-#define _OSC_DETUNE_MAX_SEMITONES			11
-#define _OSC_DETUNE_MIN_SEMITONES			-11
-#define _OSC_DETUNE_MAX_CENTS				7.5f
-#define _OSC_DETUNE_MIN_CENTS				-7.5f
-#define _OSC_DETUNE_CENTS_FACTORIAL			0.25f
+#define _OSC_DETUNE_MAX_OCTAVE						6
+#define _OSC_DETUNE_MIN_OCTAVE						-6
+#define _OSC_DETUNE_MAX_SEMITONES					11
+#define _OSC_DETUNE_MIN_SEMITONES					-11
+#define _OSC_DETUNE_MAX_CENTS						7.5f
+#define _OSC_DETUNE_MIN_CENTS						-7.5f
+#define _OSC_DETUNE_CENTS_FACTORIAL					0.25f
+	
+#define _NUM_OF_VCOS								2
 
-#define	_NUM_OF_HARMONIES					9
+#define	_NUM_OF_HARMONIES							9
 
-#define _OSC_UNISON_MODE_12345678			0
-#define _OSC_UNISON_MODE_HAMMOND			1
-#define _OSC_UNISON_MODE_OCTAVES			2
-#define _OSC_UNISON_MODE_C_CHORD			3
-#define _OSC_UNISON_MODE_Cm_CHORD			4
-#define _OSC_UNISON_MODE_C7_CHORD			5
-#define _OSC_UNISON_MODE_Cm7_CHORD			6
 
-#define _NUM_OF_HARMONIZING_FREQUENCIES		13
-#define _MAX_HARMONIES_DISTORTION_FACTOR	3.0f
-#define _MIN_HARMONIES_DISTORTION_FACTOR	1.0f
-#define _MAX_HARMONIES_DETUNE_FACTOR		0.08f
-#define _MIN_HARMONIES_DETUNE_FACTOR		0.0f
+
+#define _NUM_OF_HARMONIZING_FREQUENCIES				13
+#define _MAX_HARMONIES_DISTORTION_FACTOR			3.0f
+#define _MIN_HARMONIES_DISTORTION_FACTOR			1.0f
+#define _MAX_HARMONIES_DETUNE_FACTOR				0.08f
+#define _MIN_HARMONIES_DETUNE_FACTOR				0.0f
 
 #define _KARPLUS_STRONG_STATE_STEADY_OUTPUT				0
 #define _KARPLUS_STRONG_STATE_STEADY_BEGIN_NEXT			1
@@ -113,6 +109,16 @@ Error - must be no more than 64
 #define _FILTER_BAND_PASS_ALL		3
 
 #define _CONTROL_SUB_SAMPLING		16
+	
+
+		
+#define SYNC_ON										true
+#define SYNC_OFF									false
+#define TRACK_ON									true
+#define TRACK_OFF									false								1
+	
+	
+	
 
 #define _MOD_LFO_MIN_FREQ			0.1f
 #define _MOD_LFO_MAX_FREQ			10.0f
@@ -214,6 +220,113 @@ Error - must be no more than 64
 #define _SKETCH_PROGRAM_2							_PROGRAM_17
 #define _SKETCH_PROGRAM_3							_PROGRAM_18
 	
+#define _OSC_1_EVENT								0
+#define _OSC_2_EVENT								1
+
+#define _LFO_1_EVENT								2
+#define _LFO_2_EVENT								3
+#define _LFO_3_EVENT								4
+#define _LFO_4_EVENT								5
+#define _LFO_5_EVENT								6
+#define _ENV_1_EVENT								7
+#define _ENV_2_EVENT								8
+#define _ENV_3_EVENT								9
+#define _ENV_4_EVENT								10
+#define _ENV_5_EVENT								11
+
+#define _ENABLE										((bool)true)
+#define _DISABLE									((bool)false)
+		
+#define _FILTER_1_EVENT								13
+#define _FILTER_2_EVENT								14
+
+#define _AMP_CH1_EVENT								15
+#define _AMP_CH2_EVENT								16
+
+#define _KBD_1_EVENT								20
+
+#define _NOISE_1_EVENT								25
+
+#define _KARPLUS_1_EVENT							30
+
+#define _REVERB_EVENT								35
+
+#define _DISTORTION_1_EVENT							40
+#define _DISTORTION_2_EVENT							41
+
+#define _BAND_EQUALIZER_EVENT						45
+
+#define _MSO_1_EVENT								50
+
+#define _MIDI_MAPPING_EVENT							55
+
+#define _PAD_1_EVENT								60
+
+#define _SEQUENCER_1_EVENT							65
+
+#define _RECORDER_1_EVENT							70
+
+#define	_MIDI_MIXER_1_EVENT							75
+	
+#define _FLUID_SYNTH_1_EVENT						80
+	
+#define _MOD_SYNTH_EVENT							85
+
+#define _AUDIO_EVENT_1								90
+
+#define _OSC_PARAM_WAVEFORM							110		
+	
+#define _OSC_WAVEFORM_SINE							0
+#define _OSC_WAVEFORM_SQUARE						1
+#define _OSC_WAVEFORM_PULSE							2
+#define _OSC_WAVEFORM_TRIANGLE						3
+#define _OSC_WAVEFORM_SAMPHOLD						4
+		
+#define _OSC_PWM_SYMMETRY							120
+#define _OSC_DETUNE_OCTAVE							130
+#define _OSC_DETUNE_SEMITONES						131
+#define _OSC_DETUNE_CENTS							132
+#define _OSC_FILTER_SEND_1							140
+#define _OSC_FILTER_SEND_2							150
+#define _OSC_UNISON_MODE							160
+	
+#define _OSC_UNISON_MODE_12345678					0
+#define _OSC_UNISON_MODE_HAMMOND					1
+#define _OSC_UNISON_MODE_OCTAVES					2
+#define _OSC_UNISON_MODE_C_CHORD					3
+#define _OSC_UNISON_MODE_Cm_CHORD					4
+#define _OSC_UNISON_MODE_C7_CHORD					5
+#define _OSC_UNISON_MODE_Cm7_CHORD					6
+	
+#define _OSC_UNISON_LEVEL_1							170
+#define _OSC_UNISON_LEVEL_2							171
+#define _OSC_UNISON_LEVEL_3							172
+#define _OSC_UNISON_LEVEL_4							173
+#define _OSC_UNISON_LEVEL_5							174
+#define _OSC_UNISON_LEVEL_6							175
+#define _OSC_UNISON_LEVEL_7							176
+#define _OSC_UNISON_LEVEL_8							177
+#define _OSC_UNISON_LEVEL_9							181
+#define _OSC_UNISON_DISTORTION						178
+#define _OSC_UNISON_DETUNE							179
+#define _OSC_SYNC									180
+#define _OSC_FIX_TONE								190
+#define _OSC_TRACK_KBD								200
+#define _OSC_1_UNISON_SQUARE						210
+#define _OSC_FREQ_MOD_LFO							220
+#define _OSC_FREQ_MOD_LFO_LEVEL						221
+#define _OSC_FREQ_MOD_ENV							222
+#define _OSC_FREQ_MOD_ENV_LEVEL						223
+#define _OSC_PWM_MOD_LFO							224
+#define _OSC_PWM_MOD_LFO_LEVEL						225
+#define _OSC_PWM_MOD_ENV							226
+#define _OSC_PWM_MOD_ENV_LEVEL						227
+#define _OSC_AMP_MOD_LFO							228
+#define _OSC_AMP_MOD_LFO_LEVEL						229
+#define _OSC_AMP_MOD_ENV							230
+#define _OSC_AMP_MOD_ENV_LEVEL						231
+#define _OSC_ENABLE									232
+#define _OSC_HAMMOND_PERCUSION_MODE					240
 	
 #define _HAMMOND_PERCUSION_MODE_OFF					0
 #define _HAMMOND_PERCUSION_MODE_2ND_SOFT_SLOW		1
@@ -224,6 +337,32 @@ Error - must be no more than 64
 #define _HAMMOND_PERCUSION_MODE_3RD_SOFT_FAST		6
 #define _HAMMOND_PERCUSION_MODE_3RD_NORM_SLOW		7
 #define _HAMMOND_PERCUSION_MODE_3RD_NORM_FAST		8
+	
+#define _MOD_ADSR_ATTACK							300
+#define _MOD_ADSR_DECAY								301
+#define _MOD_ADSR_SUSTAIN							302
+#define _MOD_ADSR_RELEASE							303
+#define _MOD_LFO_WAVEFORM							310
+#define _MOD_LFO_RATE								311
+#define _MOD_LFO_SYMMETRY							312	
+	
+#define _FILTER_FREQ								400
+#define _FILTER_OCT									401
+#define _FILTER_Q									402
+#define _FILTER_KBD_FREQ							403
+#define _FILTER_KBD_TRACK							404
+#define _FILTER_BAND								405
+#define _FILTER_2_TRACK_FILT_1						406
+#define _FILTER_FREQ_MOD_LFO						407
+#define _FILTER_FREQ_MOD_LFO_LEVEL					408
+#define _FILTER_FREQ_MOD_ENV						409
+#define _FILTER_FREQ_MOD_ENV_LEVEL					410
+	
+#define _FILTER_BAND_LPF							0
+#define _FILTER_BAND_HPF							1
+#define _FILTER_BAND_BPF							2
+#define _FILTER_BAND_PASS_ALL						3	
+	
 	
 	
 #define _AMP_LEVEL									500
@@ -254,6 +393,21 @@ Error - must be no more than 64
 #define _KBD_SPLIT_POINT_C5							4
 	
 	
+#define _NOISE_COLOR								700		
+	
+#define _WHITE_NOISE								0
+#define _PINK_NOISE									1
+#define _BROWN_NOISE								2
+		
+#define _NOISE_SEND_1								701
+#define _NOISE_SEND_2								702
+#define _NOISE_AMP_MOD_LFO							703
+#define _NOISE_AMP_MOD_LFO_LEVEL					704
+#define _NOISE_AMP_MOD_ENV							705
+#define _NOISE_AMP_MOD_ENV_LEVEL					706
+#define _NOISE_ENABLE								707
+	
+	
 #define _KARPLUS_STRONG_EXCITATION_WAVEFORM			800	
 	
 #define _KARPLUS_STRONG_EXCITATION_WHITE_NOISE		0
@@ -279,12 +433,35 @@ Error - must be no more than 64
 #define _KARPLUS_STRONG_EXCITATION_WAVEFORM_VARIATIONS 808
 #define _KARPLUS_STRONG_ENABLE						809	
 	
+#define _KARPLUS_STRONG_SEND_1						812
+#define _KARPLUS_STRONG_SEND_2						813
+	
 #define _SYNTH_VOICE_1								0
+	
+	
+#define _REVERB_ROOM_SIZE							900
+#define _REVERB_ENABLE								901
+#define _REVERB_DAMP								902
+#define _REVERB_WET									903
+#define _REVERB_DRY									904
+#define _REVERB_WIDTH								905
+#define _REVERB_MODE								906
+#define _REVERB_PRESET								907
+#define _REVERB3M_ENABLE							908
+
+#define _REVERP_PRESET_CUSTOM						0
 	
 #define _PLAY_MODE									1000
 #define _PLAY_MODE_POLY								0
 #define _PLAY_MODE_SOLO								1
 #define _PLAY_MODE_MIDI								2
+	
+#define _ENABLE_DISTORTION							1100
+#define _DISTORTION_AUTO_GAIN						1101
+#define _DISTORTION_DRIVE							1102
+#define _DISTORTION_RANGE							1103
+#define _DISTORTION_BLEND							1104
+
 	
 	
 #define _BAND_EQUALIZER_BAND_31_LEVEL				1200
@@ -300,6 +477,39 @@ Error - must be no more than 64
 
 #define _BAND_EQUALIZER_PRESET						1220		// 0?
 #define _BAND_EQUALIZER_SET_ALL_ZERO				1221		// 1?
+	
+	
+#define _MSO_SEGMENT_A_POSITION						1250
+#define _MSO_SEGMENT_B_POSITION						1251
+#define _MSO_SEGMENT_C_POSITION						1252
+#define _MSO_SEGMENT_D_POSITION						1253
+#define _MSO_SEGMENT_E_POSITION						1254
+#define _MSO_SEGMENT_F_POSITION						1255
+
+#define _MSO_SYMETRY								1260
+
+#define _MSO_CALC_BASE_LUT							1270
+#define _MSO_CALC_MORPHED_LUT						1271
+
+#define _MSO_DETUNE_OCTAVE							1280
+#define _MSO_DETUNE_SEMITONES						1281
+#define _MSO_DETUNE_CENTS							1282
+#define _MSO_FILTER_SEND_1							1283
+#define _MSO_FILTER_SEND_2							1284
+#define _MSO_ENABLE									1285
+
+#define _MSO_FREQ_MOD_LFO							1290
+#define _MSO_FREQ_MOD_LFO_LEVEL						1291
+#define _MSO_FREQ_MOD_ENV							1292
+#define _MSO_FREQ_MOD_ENV_LEVEL						1293
+#define _MSO_PWM_MOD_LFO							1294
+#define _MSO_PWM_MOD_LFO_LEVEL						1295
+#define _MSO_PWM_MOD_ENV							1296
+#define _MSO_PWM_MOD_ENV_LEVEL						1297
+#define _MSO_AMP_MOD_LFO							1298
+#define _MSO_AMP_MOD_LFO_LEVEL						1299
+#define _MSO_AMP_MOD_ENV							1300
+#define _MSO_AMP_MOD_ENV_LEVEL						1301
 	
 	
 #define _PAD_DETUNE_OCTAVE							1500
@@ -371,3 +581,11 @@ Error - must be no more than 64
 #define _SEQUENCER_STOP_RECORDING					1601
 
 
+	
+#define _AUDIO_DRIVER								2110
+#define _AUDIO_SAMPLE_RATE							2120
+#define _AUDIO_BLOCK_SIZE							2130
+
+#define	_AUDIO_JACK_MODE							2200
+#define _AUDIO_JACK_AUTO_START						2130
+#define _AUDIO_JACK_AUTO_CONNECT					2140		

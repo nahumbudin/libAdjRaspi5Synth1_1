@@ -44,3 +44,19 @@ error max num of midi connections cannot be higher than max num off midi devices
 #define _AUDIO_STAGE_5						5 
 #define _AUDIO_STAGE_6						6 
 #define _AUDIO_STAGE_7						7 
+	
+	
+typedef struct voice_resource
+{
+	voice_resource()
+		: id(-1)
+		, used(false)
+		, pending(false)
+		, note(-1)
+		, timestamp(0) {}
+	int id;
+	bool used;
+	bool pending;
+	int note;
+	uint64_t timestamp;
+} voice_resource_t;

@@ -61,7 +61,6 @@
   <ItemGroup>
     <ClInclude Include="..\AdjSynth\adjSynth.h" />
     <ClInclude Include="..\AdjSynth\adjSynthPADcreator.h" />
-    <ClInclude Include="..\AdjSynth\adjSynthPolyphony.h" />
     <ClInclude Include="..\AdjSynth\adjSynthPolyphonyManager.h" />
     <ClInclude Include="..\AdjSynth\adjSynthProgram.h" />
     <ClInclude Include="..\AdjSynth\adjSynthVoice.h" />
@@ -176,8 +175,20 @@
     <ClCompile Include="..\AdjSynth\adjSynthDefaultSettingsKeyboard.cpp" />
     <ClCompile Include="..\AdjSynth\adjSynthDefaultSettingsMixer.cpp" />
     <ClCompile Include="..\AdjSynth\adjSynthDefaultSettingsReverb.cpp" />
+    <ClCompile Include="..\AdjSynth\adjSynthEventsHandlingAmp.cpp" />
+    <ClCompile Include="..\AdjSynth\adjSynthEventsHandlingAudio.cpp" />
+    <ClCompile Include="..\AdjSynth\adjSynthEventsHandlingDistortion.cpp" />
+    <ClCompile Include="..\AdjSynth\adjSynthEventsHandlingEquilizer.cpp" />
+    <ClCompile Include="..\AdjSynth\adjSynthEventsHandlingFilter.cpp" />
+    <ClCompile Include="..\AdjSynth\adjSynthEventsHandlingKeyboard.cpp" />
+    <ClCompile Include="..\AdjSynth\adjSynthEventsHandlingKPS.cpp" />
+    <ClCompile Include="..\AdjSynth\adjSynthEventsHandlingModulators.cpp" />
+    <ClCompile Include="..\AdjSynth\adjSynthEventsHandlingMSO.cpp" />
+    <ClCompile Include="..\AdjSynth\adjSynthEventsHandlingNoise.cpp" />
+    <ClCompile Include="..\AdjSynth\adjSynthEventsHandlingPAD.cpp" />
+    <ClCompile Include="..\AdjSynth\adjSynthEventsHandlingReverb.cpp" />
+    <ClCompile Include="..\AdjSynth\adjSynthEventsHandlingVCO.cpp" />
     <ClCompile Include="..\AdjSynth\adjSynthPADcreator.cpp" />
-    <ClCompile Include="..\AdjSynth\adjSynthPolyphony.cpp" />
     <ClCompile Include="..\AdjSynth\adjSynthPolyphonyManager.cpp" />
     <ClCompile Include="..\AdjSynth\adjSynthProgram.cpp" />
     <ClCompile Include="..\AdjSynth\adjSynthSetHammondPercussionMode.cpp" />

@@ -33,7 +33,7 @@
 
 AdjSynth *AdjSynth::adj_synth = NULL;
 SynthVoice *AdjSynth::synth_voice[_SYNTH_MAX_NUM_OF_VOICES] = { NULL };
-AdjSynthPolyphony *AdjSynth::synth_polyphony = NULL;
+AdjPolyphonyManager *AdjSynth::synth_polyphony_manager = NULL;
 
 
 int AdjSynth::num_of_core_voices = 1;
@@ -124,7 +124,7 @@ AdjSynth::AdjSynth()
 	play_mode = _PLAY_MODE_POLY;
 	midi_mapping_mode = _MIDI_MAPPING_MODE_SKETCH;
 	
-	synth_polyphony = NULL; //AdjSynthPolyphony::get_instance(); // new AdjSynthPolyphony();
+	synth_polyphony_manager = NULL; //AdjSynthPolyphony::get_instance(); // new AdjSynthPolyphony();
 	
 	// Don't change the order (stage - TODO:)
 	audio_manager = AudioManager::get_instance();
@@ -966,6 +966,11 @@ int AdjSynth::get_utilization_callback()
 	return utilization; // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< utilization not set
 }
 
+void AdjSynth::update_ui_callback()
+{
+	
+}
+
 
 /**
 *   @brief  Play note on 
@@ -1016,7 +1021,7 @@ void  AdjSynth::midi_play_note_on(uint8_t channel, uint8_t byte2, uint8_t byte3,
 	{
 		if (poly_mode == _KBD_POLY_MODE_REUSE)
 		{
-			voice = synth_polyphony->get_reused_note((int)byte2, channel); // TODO: program = 0
+			voice = synth_polyphony_manager->get_reused_note((int)byte2, channel); // TODO: program = 0
 			if (voice > -1)
 			{
 				reused = true;
@@ -1027,14 +1032,14 @@ void  AdjSynth::midi_play_note_on(uint8_t channel, uint8_t byte2, uint8_t byte3,
 	if (voice < 0)
 	{
 		// Not found yet
-		core = synth_polyphony->get_less_busy_core();
+		core = synth_polyphony_manager->get_less_busy_core();
 		// Look for a free voice
-		voice = synth_polyphony->get_free_voice(core);
+		voice = synth_polyphony_manager->get_a_free_voice(core);
 
 		if ((voice < 0) && (poly_mode == _KBD_POLY_MODE_FIFO))
 		{
 			// Not found yet - get the oldest active
-			voice = synth_polyphony->get_oldest_voice();
+			voice = synth_polyphony_manager->get_oldest_voice();
 		}
 	}
 
@@ -1088,17 +1093,18 @@ _voice_is_on:
 		{
 			core = voice / num_of_core_voices;
 			pthread_mutex_lock(&voice_busy_mutex);
-			synth_polyphony->inc_busy_core_voices_count(core);
+			synth_polyphony_manager->increase_core_processing_load_weight(core, 
+							AdjPolyphonyManager::voice_processing_weight);
 			pthread_mutex_unlock(&voice_busy_mutex);
 			mark_voice_busy_callback(voice);
 			printf("Bussy %i %i %i %i\n",
-				synth_polyphony->get_busy_core_voices_count(0),
-				synth_polyphony->get_busy_core_voices_count(1),
-				synth_polyphony->get_busy_core_voices_count(2),
-				synth_polyphony->get_busy_core_voices_count(3));
+				synth_polyphony_manager->get_core_processing_load_weight(0),
+				synth_polyphony_manager->get_core_processing_load_weight(1),
+				synth_polyphony_manager->get_core_processing_load_weight(2),
+				synth_polyphony_manager->get_core_processing_load_weight(3));
 		}
 		
-		synth_polyphony->activate_resource(voice, (int)byte2, prog);
+		synth_polyphony_manager->activate_resource(voice, (int)byte2, prog);
 		//		kbd1->voices[voice].note = byte2;
 		synth_voice[voice]->audio_voice->set_note(byte2);
 		fprintf(stderr, "On voice %i\n", voice);
@@ -1178,7 +1184,7 @@ void  AdjSynth::midi_play_note_off(uint8_t channel, uint8_t byte2, uint8_t byte3
 	//	{
 			// look for the voice number of the voice that is part of the
 			// provided program and plays the provided note
-	voice = synth_polyphony->get_voice_note(byte2, program);
+	voice = synth_polyphony_manager->get_reused_note(byte2, program);
 	//		program++;
 	//	}
 
@@ -1190,7 +1196,7 @@ void  AdjSynth::midi_play_note_off(uint8_t channel, uint8_t byte2, uint8_t byte3
 		synth_voice[voice]->dsp_voice->adsr_note_off(synth_voice[voice]->dsp_voice->adsr_4);
 		synth_voice[voice]->dsp_voice->adsr_note_off(synth_voice[voice]->dsp_voice->adsr_5);
 		synth_voice[voice]->dsp_voice->karplus_1->note_off();
-		synth_polyphony->free_voice(voice, true); // go to pending untill env is zero
+		synth_polyphony_manager->free_voice(voice, true); // go to pending untill env is zero
 		fprintf(stderr, "midi_play_note_off  %i voice: %i prog: %i\n", byte2, voice, program);
 
 		//synthVoice[voice]->assignDspVoice(originalMainDspVoices[voice]);

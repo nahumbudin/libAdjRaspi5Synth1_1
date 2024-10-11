@@ -21,10 +21,20 @@
 *   @param  funcPtrVoidVoid ptr  a pointer to the callback function ( void func(uint16_t) )
 *   @return void
 */
+void register_callback_update_ui(func_ptr_void_void_t ptr);
+
+/**
+*   @brief  Register a callback function that initiates a full GUI update.
+*			Following a control box activity.
+*			May handle multiple registrations.
+*   @param  funcPtrVoidVoid ptr  a pointer to the callback function ( void func(uint16_t) )
+*   @return void
+*/
 void mod_synth_register_callback_control_box_event_update_ui(func_ptr_void_int_uint16_t ptr);
 
 /**
 *   @brief  Unregister a callback function that initiates a full GUI update.
+* 			Following a control box activity.
 *			May handle multiple registrations.
 *   @param  funcPtrVoidVoid ptr  a pointer to the callback function ( void func(uint16_t) )
 *   @return void

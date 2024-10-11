@@ -35,6 +35,12 @@ public:
 	int get_reused_note(int note = -1, int program = 0);
 	
 	int activate_resource(int res_num = -1, int note = -1, int program = 0);
+	void free_voice(int voice = -1, bool pend = true);
+	
+	/* Processing weights. TODO: adjust. */
+	static const int voice_processing_weight = 1;
+	static const int freeverb3mod2_processing_weight = 20;
+	static const int reverb_processing_weight = 10;
 	
 	
 private:
@@ -55,10 +61,7 @@ private:
 	 *  by the process wight, and every time a process is terminated and removed from
 	 *  a core, the process wheight is decreasd by the process wight. */
 	int cores_load[_SYNTH_MAX_NUM_OF_CORES];
-	/* Processing weights. TODO: adjust. */
-	const int voice_processing_weight = 1;
-	const int freeverb3mod2_processing_weight = 20;
-	const int reverb_processing_weight = 10;
+	
 	
 	struct timeval start_time;
 };

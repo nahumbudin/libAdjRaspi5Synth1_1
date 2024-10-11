@@ -157,6 +157,7 @@ public:
 	//	void setEventPrevDestCallback(int src, int evntId, int dest);
 	void set_utilization_callback(int util);	
 	int get_utilization_callback();
+	void update_ui_callback();
 
 	AdjPolyphonyManager *polypony_manager;
 	
@@ -177,7 +178,7 @@ public:
 	static SynthVoice *synth_voice[_SYNTH_MAX_NUM_OF_VOICES];
 
 	SynthProgram *synth_program[_SYNTH_MAX_NUM_OF_PROGRAMS];
-	static AdjSynthPolyphony *synth_polyphony;
+	static AdjPolyphonyManager *synth_polyphony_manager;
 
 	SynthPADcreator *synth_pad_creator = NULL;
 	DSP_MorphingSinusOscWTAB *mso_wtab = NULL;

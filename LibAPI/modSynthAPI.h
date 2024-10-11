@@ -103,7 +103,13 @@ int mod_synth_remove_module(string ins_name);
 
 
 
-
+/**
+*   @brief  Register a callback function that initiates a full GUI update.
+*			May handle multiple registrations.
+*   @param  funcPtrVoidVoid ptr  a pointer to the callback function ( void func(void) )
+*   @return void
+*/
+//void mod_synth_register_callback_update_ui(func_ptr_void_void_t ptr);
 
 
 

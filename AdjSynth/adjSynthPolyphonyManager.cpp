@@ -15,6 +15,9 @@
 #include "adjSynthPolyphonyManager.h"
 #include "adjSynth.h"
 #include "../LibAPI/synthesizer.h"
+#include "../commonDefs.h"
+
+extern pthread_mutex_t voice_busy_mutex;
 
 AdjPolyphonyManager *AdjPolyphonyManager::poly_manager_instance = NULL;
 
@@ -224,6 +227,7 @@ int AdjPolyphonyManager::get_oldest_voice()
 
 /**
 *   @brief  Returns a voice num that is already assigned to this note and program.
+*			If more than 1 found, look for the 1st to become used (oldest). 
 *			Used for reactivating a program note that is already playing.
 *   @param  note	requested note
 *   @param	program	requested program
@@ -232,7 +236,11 @@ int AdjPolyphonyManager::get_oldest_voice()
 */
 int AdjPolyphonyManager::get_reused_note(int note, int program)
 {
-	int i, result = -1;
+	int i, result = -1, count = 0; 
+	voice_resource_t duplicate_voices[_SYNTH_MAX_NUM_OF_VOICES]; 
+	int64_t mintime = INT64_MAX;
+	int minvoice = -1;
+
 	
 	if (mod_synth_get_cpu_utilization() > 90)
 		// CPU is too loaded
@@ -257,10 +265,25 @@ int AdjPolyphonyManager::get_reused_note(int note, int program)
 				AdjSynth::get_instance()->synth_voice[i]->audio_voice->get_note() == note &&
 				AdjSynth::get_instance()->synth_voice[i]->get_allocated_program() == program)
 			{
-				result = i;
-				break;
+				duplicate_voices[count].timestamp = AdjSynth::get_instance()->synth_voice[i]->audio_voice->get_timestamp();
+				duplicate_voices[count++].id = AdjSynth::get_instance()->synth_voice[i]->audio_voice->get_voice_num();
 			}
 		}
+	}
+	
+	if (count > 0)
+	{
+		// At least one was found - Look for the 1st to become used
+		for (i = 0; i < count; i++)
+		{
+			if (duplicate_voices[i].timestamp < mintime)
+			{
+				mintime = duplicate_voices[i].timestamp;
+				minvoice = duplicate_voices[i].id;
+			}
+		}
+
+		result = minvoice;
 	}
 
 	return result;
@@ -294,4 +317,56 @@ int AdjPolyphonyManager::activate_resource(int res_num, int note, int program)
 	AdjSynth::get_instance()->synth_voice[res_num]->set_allocated_program(program);
 	
 	return 0;
+}
+
+/**
+*   @brief  Free a voice.
+*   @param  voice	voice number
+*   @param	pending if set true, wait untill envelope is zero
+*   @return tvoid
+*/
+void AdjPolyphonyManager::free_voice(int voice, bool pend)
+{
+	int program = 0, progvoice = 0;
+	
+	if ((voice >= 0) && (voice < AdjSynth::get_instance()->get_num_of_voices()))
+	{
+		int core = voice / AdjSynth::num_of_core_voices;
+
+		if (pend)
+		{
+			// The voice will be free only when voice envelope will decay to zero.
+			AdjSynth::get_instance()->synth_voice[voice]->audio_voice->set_wait_for_not_active();
+			//	fprintf(stderr, "free pend %i ", voice);
+		}
+		else
+		{
+			// Free now
+			program = AdjSynth::get_instance()->synth_voice[voice]->allocated_to_program_num;  
+			progvoice = AdjSynth::get_instance()->synth_voice[voice]->allocated_to_program_voice_num;
+			if (AdjSynth::get_instance()->get_midi_mapping_mode() == _MIDI_MAPPING_MODE_SKETCH)
+			{
+				program = AdjSynth::get_instance()->get_active_sketch();
+			}
+			fprintf(stderr, "free program: %i voice: %i\n", program, progvoice);
+
+			AdjSynth::get_instance()->synth_program[program]->free_voice(progvoice);
+
+			AdjSynth::get_instance()->synth_voice[voice]->audio_voice->reset_wait_for_not_active();
+			AdjSynth::get_instance()->synth_voice[voice]->audio_voice->set_note(-1);
+			AdjSynth::get_instance()->synth_voice[voice]->audio_voice->set_timestamp(0);
+			AdjSynth::get_instance()->synth_voice[voice]->set_allocated_program(-1);
+			//AdjSynth::get_instance()->synthVoice[voice] = NULL;
+			//fprintf(stderr, "free %i ", voice);
+			pthread_mutex_lock(&voice_busy_mutex);
+			decrease_core_processing_load_weight(core, voice_processing_weight);
+			pthread_mutex_unlock(&voice_busy_mutex);
+			AdjSynth::get_instance()->mark_voice_not_busy_callback(voice);
+			printf("Bussy %i %i %i %i\n",
+				cores_load[0],
+				cores_load[1], 
+				cores_load[2],
+				cores_load[3]);
+		}
+	}
 }

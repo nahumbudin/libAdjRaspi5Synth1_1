@@ -403,6 +403,8 @@ int mod_synth_remove_module(string ins_name)
 
 	return 0;
 }
+
+
 void mod_synth_register_callback_wrapper_close_module_pannel_id(func_ptr_void_en_modules_ids_t_t ptr)
 {
 	mod_synthesizer->instruments_manager->register_callback_close_module_pannel_id(ptr);
@@ -416,6 +418,25 @@ void mod_synth_register_callback_wrapper_close_module_pannel_name(func_ptr_void_
 void mod_synth_register_callback_wrapper_open_module_pannel_name(func_ptr_void_string_t ptr)
 {
 	mod_synthesizer->instruments_manager->register_callback_open_module_pannel_name(ptr);
+}
+
+
+/******************************************************************
+ *********************** AdjSynth API **************************
+ ******************************************************************/
+
+
+void mod_synth_activate_callback_update_ui(func_ptr_void_void_t ptr)
+{
+	//if (callback_ptr_update_ui != NULL)
+	//{
+	//	callback_ptr_update_ui();
+	//}
+}
+
+void mod_synth_register_callback_update_ui(func_ptr_void_void_t ptr)
+{
+	//callback_ptr_update_ui = ptr;
 }
 
 /******************************************************************
@@ -870,8 +891,9 @@ void mod_synth_register_midi_player_song_remaining_playing_time_update_callback(
  *********************** Control Box API **************************
  ******************************************************************/
 
+
 /**
-*   @brief  Register a callback function that initiates a full GUI update.
+*   @brief  Register a callback function that initiates a full GUI update based on control box event.
 *   @param  funcPtrVoidVoid ptr  a pointer to the callback function ( void func(void) )
 *   @return void
 */
