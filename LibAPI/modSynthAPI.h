@@ -72,6 +72,21 @@ int mod_synth_init_midi_services();
 int mod_synth_deinit_midi_services();
 
 /**
+*   @brief  Closing and cleanup when application goes down.
+*			Must be called whenever terminating the application.
+*   @param  none
+*   @return void
+*/
+void mod_synth_on_exit();	
+
+/**
+*   @brief  Returns the total (all cores) CPU utilization.
+*   @param  none
+*   @return int	the total (all cores) CPU utilization in precetages (0 to 100).
+*/
+int mod_synth_get_cpu_utilization();
+
+/**
 *   @brief  Adds an active instrument.
 *   @param  string	instrument name string
 *   @param	pointer to the instrument instance
@@ -85,6 +100,12 @@ int mod_synth_add_module(string ins_name, Instrument *instrument=NULL);
 *   @return 0 if done
 */
 int mod_synth_remove_module(string ins_name);
+
+
+
+
+
+
 
 /**
 *   @brief  Register a callback function that closes a module on the main window.

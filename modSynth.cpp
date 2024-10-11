@@ -15,6 +15,8 @@
 #include "modSynth.h"
 #include "commonDefs.h"
 
+#include "./CPU/CPUSnapshot.h"
+
 #include "./MIDI/midiAlsaQclient.h"
 
 #include "./ALSA/controlBoxExtMidiInClientAlsaOutput.h"
@@ -34,6 +36,9 @@
 
 // Mutex to controll audio memory blocks allocation
 //pthread_mutex_t voice_mem_blocks_allocation_control_mutex;
+
+int ModSynth::cpu_utilization = 0;
+volatile bool cheack_cpu_utilization_thread_is_running;
 
 
 /*************************** ALSA MIDI *******************************************/
@@ -74,6 +79,8 @@ ModSynth::ModSynth()
 {
 	mod_synth = this;
 	int i, res, last_input_client_num;
+	
+	adj_synth = AdjSynth::get_instance();
 	
 
 	alsa_midi_system_control = AlsaMidiSysControl::get_instance();
@@ -177,14 +184,15 @@ ModSynth::ModSynth()
 	alsa_midi_system_control->connect_midi_clients(in_dev, 0, out_dev, 0);
 
 	patches_handler = PatchsHandler::get_patchs_handler_instance();
+	
+	// Start the CPU utilization measuring thread.
+	start_cheack_cpu_utilization_thread();
 }
 
 
 ModSynth::~ModSynth()
 {
-	// fluid_synth->deinitialize_fluid_synthesizer();
-
-	// stop_cheack_cpu_utilization_thread();
+	on_exit();
 }
 
 /**
@@ -208,6 +216,37 @@ int ModSynth::init()
 
 
 	return 0;
+}
+
+/**
+*   @brief  Closing and cleanup when application goes down.
+*			Must be called whenever terminating the application.
+*   @param  none
+*   @return void
+*/
+void ModSynth::on_exit()
+{
+	if (fluid_synth != NULL)
+	{
+		fluid_synth->get_fluid_synth_interface()->deinitialize_fluid_synthesizer();
+	}
+	
+	this->stop_cheack_cpu_utilization_thread();
+	//TODO: stop whatever else should be terminated
+}
+
+void ModSynth::start_cheack_cpu_utilization_thread()
+{
+	cheack_cpu_utilization_thread_is_running = true;
+	pthread_create(&cheack_cpu_utilization_thread_id, NULL, cheack_cpu_utilization_thread, NULL);
+	pthread_setname_np(cheack_cpu_utilization_thread_id, "cpuutilthread");
+}
+
+void ModSynth::stop_cheack_cpu_utilization_thread()
+{
+	cheack_cpu_utilization_thread_is_running = false;
+	//	pthread_create(&cheack_cpu_utilization_thread_id, NULL, cheackCpuUtilizationThread, NULL);
+	//	pthread_setname_np(cheack_cpu_utilization_thread_id, "cpuutilthread");
 }
 
 
@@ -290,4 +329,24 @@ void ModSynth::pitch_bend(uint8_t channel, int pitch)
 {
 
 }
+
+
+void *cheack_cpu_utilization_thread(void *arg)
+{
+	sleep(1);
+	while (cheack_cpu_utilization_thread_is_running)
+	{
+		CPUSnapshot previousSnap;
+		std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+		CPUSnapshot curSnap;
+
+		const float ACTIVE_TIME = curSnap.GetActiveTimeTotal() - previousSnap.GetActiveTimeTotal();
+		const float IDLE_TIME = curSnap.GetIdleTimeTotal() - previousSnap.GetIdleTimeTotal();
+		const float TOTAL_TIME = ACTIVE_TIME + IDLE_TIME;
+		ModSynth::cpu_utilization = (int)(100.f * ACTIVE_TIME / TOTAL_TIME);
+	}
+
+	return NULL;
+}
+
 

@@ -131,12 +131,29 @@ int mod_synth_init_midi_services()
 	return 0;
 }
 
+void mod_synth_on_exit()
+{
+	//	jackExit(); ???
+	mod_synth_deinit_bt_services();
+	mod_synth_deinit_midi_services();
+	
+	
+	ModSynth::get_instance()->get_fluid_synth()->get_fluid_synth_interface()->deinitialize_fluid_synthesizer();
+
+	ModSynth::get_instance()->adj_synth->audio_manager->stop_audio_service();
+}
+
 
 int mod_synth_deinit_midi_services()
 {
 	MidiStream::stop_thread();
 
 	return 0;
+}
+
+int mod_synth_get_cpu_utilization() 
+{ 
+	return ModSynth::cpu_utilization; 
 }
 
 std::list<std::string> mod_synth_get_midi_input_client_name_strings()

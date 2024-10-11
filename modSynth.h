@@ -17,6 +17,10 @@
 #include <cstddef>
 #include <cstdint>
 
+#include "./AdjSynth/adjSynth.h"
+
+#include "./AdjSynth/adjSynthPolyphony.h"
+
 #include "./ALSA/alsaBtClientOutput.h"
 #include "./ALSA/controlBoxClientAlsaOutput.h"
 #include "./ALSA/controlBoxExtMidiInClientAlsaOutput.h"
@@ -33,12 +37,16 @@
 //#include "./Instrument/instrumentFluidSynth.h"
 //#include "./Instrument/instrumentHammondOrgan.h"
 
+//#include "./AdjSynth/adjSynth.h"
+
 class InstrumentsManager;
 class InstrumentFluidSynth;
 class InstrumentHammondOrgan;
 class InstrumentMidiPlayer;
 class InstrumentMidiMapper;
 class InstrumentControlBoxEventsHandler;
+
+class AdjSynth;
 
 class ModSynth
 {
@@ -47,6 +55,12 @@ public:
 	static ModSynth *get_instance();
 
 	int init();
+	
+	void on_exit();	
+	
+	void start_cheack_cpu_utilization_thread();
+	void stop_cheack_cpu_utilization_thread();
+	int mod_synth_get_cpu_utilization();
 	
 	int init_midi_ext_interface(int ser_port_num);
 	int deinit_midi_ext_interface();
@@ -78,6 +92,10 @@ public:
 	InstrumentMidiMapper *midi_mapper;
 
 	PatchsHandler *patches_handler;
+	
+	AdjSynth *adj_synth;
+	
+	static int cpu_utilization;
 
   private:
 	
@@ -94,6 +112,10 @@ public:
 	InstrumentFluidSynth *fluid_synth;
 	InstrumentHammondOrgan *hammond_organ;
 
+	pthread_t cheack_cpu_utilization_thread_id;	
 
 };
+
+// Thread checking cpu utilization
+void *cheack_cpu_utilization_thread(void *arg);
 
