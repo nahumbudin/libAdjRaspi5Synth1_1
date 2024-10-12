@@ -56,11 +56,13 @@
 \endverbatim
 *				_KARPLUS_STRONG_EXCITATION_WAVEFORM_VARIATIONS: 0-100\n
 *				_KARPLUS_STRONG_SEND_1, _KARPLUS_STRONG_SEND_2: 0-100\n
+*	
+*	@parm _settings_params_t *params active parameters
 *	@param	int program	program number
 *
-*   @return void
+*   @return 0
 */
-int AdjSynth::karplus_event(int karlplusid, int eventid, int val, _settings_params_t *params, int program)
+int AdjSynth::karplus_event_int(int karlplusid, int eventid, int val, _settings_params_t *params, int program)
 {
 	switch (karlplusid)
 	{
@@ -171,6 +173,21 @@ int AdjSynth::karplus_event(int karlplusid, int eventid, int val, _settings_para
 }
 
 
+
+/**
+*   @brief  Initiates a Karplus-Strong-String generator related event with boolean value (affects all voices).
+*			All available parameters values are defined in LibApi/synthesizer.h
+*   @param  int karpid	target generator: _KARPLUS_1_EVENT
+*	@param	int eventid	specific event code:\n
+*				_KARPLUS_STRONG_ENABLE\n
+*	@param	int val event parameter value (must be used with the relevant event id):\n
+*				true, false\n
+*				
+*	@parm _settings_params_t *params active parameters
+*	@param	int program	program number
+*				
+*   @return 0
+*/
 int AdjSynth::karplus_event_bool(int karplusid, int eventid, bool val, _settings_params_t *params, int program)
 {
 	switch (karplusid)

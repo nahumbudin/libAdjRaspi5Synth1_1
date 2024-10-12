@@ -34,9 +34,7 @@
 *
 *   @return 0
 */
-
-
-int AdjSynth::reverb_event(int revid, int eventid, int val, _settings_params_t *params)
+int AdjSynth::reverb_event_int(int revid, int eventid, int val, _settings_params_t *params)
 {
 	int voice;
 
@@ -126,8 +124,6 @@ int AdjSynth::reverb_event(int revid, int eventid, int val, _settings_params_t *
 *
 *   @return 0
 */
-
-
 int AdjSynth::reverb_event_bool(int revid, int eventid, bool val, _settings_params_t *params)
 {
 	//	int voice;

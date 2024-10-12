@@ -49,11 +49,10 @@
 \endverbatim
 *				_NOISE_AMP_MOD_ENV_LEVEL: 0-100\n		
 *
-*	@param	bool val event parameter value  true or false (enable/disable)
 *	@param	int program	program number
-*   @return void
+*   @return 0
 */
-int AdjSynth::noise_event(int noiseid, int eventid, int val, _settings_params_t *params, int program)
+int AdjSynth::noise_event_int(int noiseid, int eventid, int val, _settings_params_t *params, int program)
 {
 	switch (eventid)
 	{
@@ -131,7 +130,16 @@ int AdjSynth::noise_event(int noiseid, int eventid, int val, _settings_params_t 
 	return 0;
 }
 
-
+/**
+*   @brief  Initiates a Noise generator related event with booleam value (affects all voices).
+*			All available parameters values are defined in LibApi/synthesizer.h
+*   @param  int noiseid	target noise generator: _NOISE_1_EVENT
+*	@param	int eventid	specific event code: _NOISE_ENABLE\n	
+*
+*	@param	bool val event parameter value  true or false (enable/disable)
+*	@param	int program	program number
+*   @return 0
+*/
 int AdjSynth::noise_event_bool(int noiseid, int eventid, bool val, _settings_params_t *params, int program)
 {
 	switch (eventid)

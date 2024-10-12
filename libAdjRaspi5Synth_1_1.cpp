@@ -426,6 +426,187 @@ void mod_synth_register_callback_wrapper_open_module_pannel_name(func_ptr_void_s
  ******************************************************************/
 
 
+
+int mod_synth_amp_event(int ampid, int eventid, int val)
+{
+	return AdjSynth::get_instance()->amp_event(ampid, eventid, val, 
+		AdjSynth::get_instance()->get_active_patch_params(),
+		AdjSynth::get_instance()->get_active_sketch());
+}
+
+int mod_synth_audio_event_int(int audid, int eventid, int val)
+{
+	return AdjSynth::get_instance()->audio_event_int(audid, eventid, val,
+		AdjSynth::get_instance()->get_active_patch_params(),
+		AdjSynth::get_instance()->get_active_sketch());
+}
+
+int mod_synth_audio_event_bool(int audid, int eventid, bool val)
+{
+	return AdjSynth::get_instance()->audio_event_bool(audid, eventid, val, 
+		AdjSynth::get_instance()->get_active_patch_params(),
+		AdjSynth::get_instance()->get_active_sketch());
+}
+
+int mod_synth_distortion_event_int(int distid, int eventid, int val)
+{
+	return AdjSynth::get_instance()->distortion_event_int(distid, eventid, val, 
+		AdjSynth::get_instance()->get_active_patch_params(),
+		AdjSynth::get_instance()->get_active_sketch());
+}
+
+int mod_synth_distortion_event_bool(int distid, int eventid, bool val)
+{
+	return AdjSynth::get_instance()->distortion_event_bool(distid, eventid, val, 
+		AdjSynth::get_instance()->get_active_patch_params(),
+		AdjSynth::get_instance()->get_active_sketch());
+}
+
+int mod_synth_band_equilizer_event(int beqid, int eventid, int val)
+{
+	return AdjSynth::get_instance()->band_equilizer_event(beqid, eventid, val, 
+		AdjSynth::get_instance()->get_active_patch_params());
+}
+
+int mod_synth_filter_event(int filtid, int eventid, int val)
+{
+	return AdjSynth::get_instance()->filter_event(filtid, eventid, val, 
+		AdjSynth::get_instance()->get_active_patch_params(),
+		AdjSynth::get_instance()->get_active_sketch());
+}
+
+int mod_synth_kbd_event_int(int kbid, int eventid, int val)
+{
+	return AdjSynth::get_instance()->kbd_event_int(kbid, eventid, val, 
+		AdjSynth::get_instance()->get_active_patch_params());
+}
+
+int mod_synth_karplus_event_int(int karlplusid, int eventid, int val)
+{
+	return AdjSynth::get_instance()->karplus_event_int(karlplusid,
+		eventid,
+		val, 
+		AdjSynth::get_instance()->get_active_patch_params(),
+		AdjSynth::get_instance()->get_active_sketch());
+}
+
+int mod_synth_karplus_event_bool(int karlplusid, int eventid, bool val)
+{
+	return AdjSynth::get_instance()->karplus_event_bool(karlplusid,
+		eventid,
+		val, 
+		AdjSynth::get_instance()->get_active_patch_params(),
+		AdjSynth::get_instance()->get_active_sketch());
+}
+
+int mod_synth_modulator_event(int modid, int eventid, int val)
+{
+	return AdjSynth::get_instance()->modulator_event_int(modid,
+		eventid,
+		val, 
+		AdjSynth::get_instance()->get_active_patch_params(),
+		AdjSynth::get_instance()->get_active_sketch());
+}
+
+int mod_synthmso_event_int(int msoid, int eventid, int val)
+{
+	return AdjSynth::get_instance()->mso_event_int(msoid,
+		eventid,
+		val, 
+		AdjSynth::get_instance()->get_active_patch_params(),
+		AdjSynth::get_instance()->get_active_sketch());
+}
+
+int mod_synth_mso_event_bool(int msoid, int eventid, bool val)
+{
+	return AdjSynth::get_instance()->mso_event_bool(msoid,
+		eventid,
+		val, 
+		AdjSynth::get_instance()->get_active_patch_params(),
+		AdjSynth::get_instance()->get_active_sketch());
+}
+
+int mod_synth_noise_event_int(int noiseid, int eventid, int val)
+{
+	return AdjSynth::get_instance()->noise_event_int(noiseid,
+		eventid,
+		val, 
+		AdjSynth::get_instance()->get_active_patch_params(),
+		AdjSynth::get_instance()->get_active_sketch());
+}
+
+int mod_synth_noise_event_bool(int noiseid, int eventid, bool val)
+{
+	return AdjSynth::get_instance()->noise_event_bool(noiseid,
+		eventid,
+		val, 
+		AdjSynth::get_instance()->get_active_patch_params(),
+		AdjSynth::get_instance()->get_active_sketch());
+}
+
+int mod_synth_pad_event_int(int padid, int eventid, int val)
+{
+	return AdjSynth::get_instance()->pad_event_int(padid,
+		eventid,
+		val, 
+		AdjSynth::get_instance()->get_active_patch_params(),
+		AdjSynth::get_instance()->get_active_sketch());
+}
+
+int mod_synth_pad_event_bool(int padid, int eventid, bool val)
+{
+	return AdjSynth::get_instance()->pad_event_bool(padid,
+		eventid,
+		val, 
+		AdjSynth::get_instance()->get_active_patch_params(),
+		AdjSynth::get_instance()->get_active_sketch());
+}
+
+int mod_synth_reverb_event_int(int revid, int eventid, int val)
+{
+	return AdjSynth::get_instance()->reverb_event_int(revid,
+		eventid,
+		val, 
+		AdjSynth::get_instance()->get_active_patch_params());
+}
+
+int mod_synth_reverb_event_bool(int revid, int eventid, bool val)
+{
+	return AdjSynth::get_instance()->reverb_event_bool(revid,
+		eventid,
+		val, 
+		AdjSynth::get_instance()->get_active_patch_params());
+}
+
+int mod_synth_vco_event_int(int vcoid, int eventid, int val)
+{
+	return AdjSynth::get_instance()->vco_event_int(vcoid,
+		eventid,
+		val, 
+		AdjSynth::get_instance()->get_active_patch_params(),
+		AdjSynth::get_instance()->get_active_sketch());
+}
+
+int mod_synth_vco_event_bool(int vcoid, int eventid, bool val)
+{
+	return AdjSynth::get_instance()->vco_event_bool(vcoid,
+		eventid,
+		val, 
+		AdjSynth::get_instance()->get_active_patch_params(),
+		AdjSynth::get_instance()->get_active_sketch());
+}
+
+
+
+
+
+
+
+
+
+
+
+
 void mod_synth_activate_callback_update_ui(func_ptr_void_void_t ptr)
 {
 	//if (callback_ptr_update_ui != NULL)
@@ -438,6 +619,10 @@ void mod_synth_register_callback_update_ui(func_ptr_void_void_t ptr)
 {
 	//callback_ptr_update_ui = ptr;
 }
+
+
+
+
 
 /******************************************************************
  *********************** FLUID SYNTH API **************************

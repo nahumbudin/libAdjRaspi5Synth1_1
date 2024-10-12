@@ -73,11 +73,12 @@ _PAD_BASE_NOTE_C6, _PAD_BASE_NOTE_G6
 *				_PAD_GENERATE: (any value)
 *				_PAD_DETUNE: 0-100\n
 *				_PAD_ENABLE: false, true
+*	@param	_settings_params_t params	active settings params
 *	@param int program	program number
 *
-*   @return void
+*   @return 0
 */
-int AdjSynth::pad_event(int padid, int eventid, int val, _settings_params_t *params, int program)
+int AdjSynth::pad_event_int(int padid, int eventid, int val, _settings_params_t *params, int program)
 {
 	int value = val;
 		
@@ -356,6 +357,17 @@ int AdjSynth::pad_event(int padid, int eventid, int val, _settings_params_t *par
 	return 0;
 }
 
+
+/**
+*   @brief  Initiates a PAD related event with bool value (affects all voices).
+*			http://zynaddsubfx.sourceforge.net/doc/PADsynth/PADsynth.htm
+*			All available parameters values are defined in LibApi/synthesizer.h
+*   @param  int padid	target PAD: _PAD_1_EVENT
+*	@param	int eventid	specific event code: _PAD_ENABLE\n 
+*	@param	int val event parameter value true/fale:\n
+*
+*   @return 0
+*/
 int AdjSynth::pad_event_bool(int padid, int eventid, bool val, _settings_params_t *params, int program)
 {
 	if (eventid == _PAD_ENABLE)

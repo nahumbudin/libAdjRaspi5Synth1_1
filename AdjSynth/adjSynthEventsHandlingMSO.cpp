@@ -51,11 +51,11 @@ _ENV_NONE, _ENV_1, _ENV_2, _ENV_3, ENV_4, ENV_5
 \endverbatim
 *				_MSO_AMP_MOD_ENV_LEVEL: 0-100\n
 *
-*	@param	bool val event parameter value  true or false (enable/disable)
+*	@param	_settings_params_t params	active settings params
 *	@param	int program	program number
 *   @return void
 */
-int AdjSynth::mso_event(int msoid, int eventid, int val, _settings_params_t *params, int program)
+int AdjSynth::mso_event_int(int msoid, int eventid, int val, _settings_params_t *params, int program)
 {
 	int voice, i, logLev, j = 0, value = val;
 
@@ -306,6 +306,17 @@ int AdjSynth::mso_event(int msoid, int eventid, int val, _settings_params_t *par
 	return 0;
 }
 
+/**
+*   @brief  Initiates a Morphed Sinus Oscilator related event with boolean value (affects all voices).
+*			All available parameters values are defined in LibApi/synthesizer.h
+*   @param  int msoid	target mso : _MSO_1_EVENT
+*	@param	int eventid	specific event code:\n
+*				_MSO_ENABLE
+*	@param	boolean val event parameter value true / false:\n*
+*	@param	_settings_params_t params	active settings params
+*	@param	int program	program number
+*   @return void
+*/
 int AdjSynth::mso_event_bool(int msoid, int eventid, bool val, _settings_params_t *params, int program)
 {
 	switch (msoid)

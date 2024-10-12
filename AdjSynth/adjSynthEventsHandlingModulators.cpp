@@ -43,7 +43,7 @@
 *
 *   @return 0
 */
-int AdjSynth::modulator_event(int modid, int eventid, int val, _settings_params_t *params, int program)
+int AdjSynth::modulator_event_int(int modid, int eventid, int val, _settings_params_t *params, int program)
 {
 	switch (eventid)
 	{

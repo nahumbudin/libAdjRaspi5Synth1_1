@@ -38,6 +38,8 @@
 	_LFO_3_DELAYED_2000MS, _LFO_4_DELAYED_2000MS, _LFO_5_DELAYED_2000MS
 \endverbatim
 *				_AMP_PAN_MOD_LFO_LEVEL: 0-100\n
+*				
+*	@parm _settings_params_t *params active parameters
 *
 *   @return 0
 */

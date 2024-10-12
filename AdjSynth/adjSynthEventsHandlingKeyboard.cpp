@@ -16,7 +16,24 @@
 
 #include "adjSynth.h"
 
-int AdjSynth::kbd_event(int kbid, int eventid, int val, _settings_params_t *params)
+/**
+*   @brief  Initiates keyboard related event with integer value (affects all voices).
+*			All available parameters values are defined in LibAPI/synthesizer.h
+*   @param  int kbid	target keyboard: _KBD_1_EVENT
+*	@param	int eventid	specific event code:\n
+*				_KBD_PORTAMENTO_LEVEL, _KBD_SENSITIVITY_LEVEL, _KBD_LOW_SENSITIVITY_LEVEL\n
+*				_KBD_SPLIT_POINT\n
+*	@param	int val event parameter value (must be used with the relevant event id):\n
+*				_KBD_PORTAMENTO_LEVEL: 1-100\n
+*				_KBD_SENSITIVITY_LEVEL: 0-100\n
+*				_KBD_LOW_SENSITIVITY_LEVEL: 0-100\n
+*				_KBD_SPLIT_POINT: _KBD_SPLIT_POINT_NONE, _KBD_SPLIT_POINT_C2, _KBD_SPLIT_POINT_C3\n
+*				_KBD_SPLIT_POINT_C4, _KBD_SPLIT_POINT_C5\n
+*	@param	int program	program number
+*
+*   @return 0
+*/
+int AdjSynth::kbd_event_int(int kbid, int eventid, int val, _settings_params_t *params)
 {
 	if (kbid == _KBD_1_EVENT)
 	{

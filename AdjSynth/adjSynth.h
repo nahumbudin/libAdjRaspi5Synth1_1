@@ -118,30 +118,30 @@ public:
 	
 	void set_hammond_percusion_mode(int mod, _settings_params_t *params, int program);
 		
-	int vco_event(int vcoid, int eventid, int val, _settings_params_t *params, int program);
+	int vco_event_int(int vcoid, int eventid, int val, _settings_params_t *params, int program);
 	int vco_event_bool(int vcoid, int eventid, bool val, _settings_params_t *params, int program);
-	int noise_event(int noiseid, int eventid, int val, _settings_params_t *params, int program);
+	int noise_event_int(int noiseid, int eventid, int val, _settings_params_t *params, int program);
 	int noise_event_bool(int noiseid, int eventid, bool val, _settings_params_t *params, int program);
-	int karplus_event(int karlplusid, int eventid, int val, _settings_params_t *params, int program);
+	int karplus_event_int(int karlplusid, int eventid, int val, _settings_params_t *params, int program);
 	int karplus_event_bool(int karlplusid, int eventid, bool val, _settings_params_t *params, int program);
-	int mso_event(int msoid, int eventid, int val, _settings_params_t *params, int program);
+	int mso_event_int(int msoid, int eventid, int val, _settings_params_t *params, int program);
 	int mso_event_bool(int msoid, int eventid, bool val, _settings_params_t *params, int program);
-	int pad_event(int padid, int eventid, int val, _settings_params_t *params, int program);
+	int pad_event_int(int padid, int eventid, int val, _settings_params_t *params, int program);
 	int pad_event_bool(int padid, int eventid, bool val, _settings_params_t *params, int program);
 	int filter_event(int filtid, int eventid, int val, _settings_params_t *params, int program);
 	int audio_event_int(int audid, int eventid, int val, _settings_params_t *params, int program);
 	int audio_event_bool(int audid, int eventid, bool val, _settings_params_t *params, int program);
 	int amp_event(int ampid, int eventid, int val, _settings_params_t *params, int program);
-	int distortion_event(int distid, int eventid, int val, _settings_params_t *params, int program);
+	int distortion_event_int(int distid, int eventid, int val, _settings_params_t *params, int program);
 	int distortion_event_bool(int distid, int eventid, bool val, _settings_params_t *params, int program);
-	int modulator_event(int modid, int eventid, int val, _settings_params_t *params, int program);
+	int modulator_event_int(int modid, int eventid, int val, _settings_params_t *params, int program);
 	
-	int reverb_event(int revid, int eventid, int val, _settings_params_t *params);
+	int reverb_event_int(int revid, int eventid, int val, _settings_params_t *params);
 	int reverb_event_bool(int revid, int eventid, bool val, _settings_params_t *params);
 	int band_equilizer_event(int beqid, int eventid, int val, _settings_params_t *params);
 	int band_equilizer_event_bool(int beqid, int eventid, bool val, _settings_params_t *params);	
 	int midi_mixer_event(int mixid, int eventid, int val, _settings_params_t *params);	
-	int kbd_event(int kbid, int eventid, int val, _settings_params_t *params);
+	int kbd_event_int(int kbid, int eventid, int val, _settings_params_t *params);
 	int kbd_event_bool(int kbid, int eventid, bool val, _settings_params_t *params);
 	int midi_mode_event(int midmodid, int eventid, int val, _settings_params_t *params);
 	int play_mode_event_bool(int pmodid, int eventid, bool val, _settings_params_t *params);

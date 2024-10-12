@@ -30,7 +30,7 @@
 *
 *   @return 0
 */
-int AdjSynth::distortion_event(int distid, int eventid, int val, _settings_params_t *params, int program)
+int AdjSynth::distortion_event_int(int distid, int eventid, int val, _settings_params_t *params, int program)
 {
 	int voice;
 	float value;

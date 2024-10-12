@@ -86,7 +86,7 @@
 *	@param	program	program number
 *   @return 0 is done.
 */
-int AdjSynth::vco_event(int vcoid, int eventid, int val, _settings_params_t *params, int program)
+int AdjSynth::vco_event_int(int vcoid, int eventid, int val, _settings_params_t *params, int program)
 {
 	return_val_if_true(params == NULL || adj_synth_settings_manager == NULL, _SETTINGS_BAD_PARAMETERS);
 	
