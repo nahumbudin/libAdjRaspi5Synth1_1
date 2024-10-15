@@ -154,11 +154,14 @@
     <Filter Include="Source files\Synthesizer\AdjSynth\Settings Handlers">
       <UniqueIdentifier>{d5a85d32-ffeb-4f6e-b9e3-a3a935869b3c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source files\Synthesizer\modSynth">
+      <UniqueIdentifier>{53b00a48-2cfb-4b17-93bb-d1d6b770b644}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source files\LibApi">
+      <UniqueIdentifier>{dd421a34-3bc7-40a0-b836-e21d7400cd07}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\libAdjRaspi5Synth_1_1.cpp">
-      <Filter>Source files</Filter>
-    </ClCompile>
     <ClCompile Include="..\ALSA\alsaMidi.cpp">
       <Filter>Source files\ALSA</Filter>
     </ClCompile>
@@ -263,9 +266,6 @@
     </ClCompile>
     <ClCompile Include="..\ALSA\alsaBtClientOutput.cpp">
       <Filter>Header files\ALSA</Filter>
-    </ClCompile>
-    <ClCompile Include="..\modSynth.cpp">
-      <Filter>Source files\Synthesizer</Filter>
     </ClCompile>
     <ClCompile Include="..\Settings\settings.cpp">
       <Filter>Source files\Settings</Filter>
@@ -554,6 +554,63 @@
     </ClCompile>
     <ClCompile Include="..\AdjSynth\adjSynthEventsHandlingAmp.cpp">
       <Filter>Source files\Synthesizer\AdjSynth\Settings Handlers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\modSynth.cpp">
+      <Filter>Source files\Synthesizer\modSynth</Filter>
+    </ClCompile>
+    <ClCompile Include="..\modSynthDefaultSettingsParams.cpp">
+      <Filter>Source files\Synthesizer\modSynth</Filter>
+    </ClCompile>
+    <ClCompile Include="..\modSynthDefaultSettingsParamsAudio.cpp">
+      <Filter>Source files\Synthesizer\modSynth</Filter>
+    </ClCompile>
+    <ClCompile Include="..\modSynthCollectPresetParams.cpp">
+      <Filter>Source files\Synthesizer\modSynth</Filter>
+    </ClCompile>
+    <ClCompile Include="..\libAdjRaspi5Synth_1_1.cpp">
+      <Filter>Source files\LibApi</Filter>
+    </ClCompile>
+    <ClCompile Include="..\LibAPI_getAmpParams.cpp">
+      <Filter>Source files\LibApi</Filter>
+    </ClCompile>
+    <ClCompile Include="..\LibAPI_getDistortionParams.cpp">
+      <Filter>Source files\LibApi</Filter>
+    </ClCompile>
+    <ClCompile Include="..\LibAPI_getEqualizerParams.cpp">
+      <Filter>Source files\LibApi</Filter>
+    </ClCompile>
+    <ClCompile Include="..\LibAPI_getFiltersParams.cpp">
+      <Filter>Source files\LibApi</Filter>
+    </ClCompile>
+    <ClCompile Include="..\LibAPI_getKarplusParams.cpp">
+      <Filter>Source files\LibApi</Filter>
+    </ClCompile>
+    <ClCompile Include="..\LibAPI_getKeyboardParams.cpp">
+      <Filter>Source files\LibApi</Filter>
+    </ClCompile>
+    <ClCompile Include="..\LibAPI_getMidiMixerParams.cpp">
+      <Filter>Source files\LibApi</Filter>
+    </ClCompile>
+    <ClCompile Include="..\LibAPI_getMinMaxParams.cpp">
+      <Filter>Source files\LibApi</Filter>
+    </ClCompile>
+    <ClCompile Include="..\LibAPI_getModulatorsParams.cpp">
+      <Filter>Source files\LibApi</Filter>
+    </ClCompile>
+    <ClCompile Include="..\LibAPI_getMSOparams.cpp">
+      <Filter>Source files\LibApi</Filter>
+    </ClCompile>
+    <ClCompile Include="..\LibAPI_getNoiseParams.cpp">
+      <Filter>Source files\LibApi</Filter>
+    </ClCompile>
+    <ClCompile Include="..\LibAPI_getVCOsParams.cpp">
+      <Filter>Source files\LibApi</Filter>
+    </ClCompile>
+    <ClCompile Include="..\LibAPI_getPADparams.cpp">
+      <Filter>Source files\LibApi</Filter>
+    </ClCompile>
+    <ClCompile Include="..\LibAPI_getReverbParams.cpp">
+      <Filter>Source files\LibApi</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -848,14 +905,17 @@
     <ClInclude Include="..\AdjSynth\adjSynthVoice.h">
       <Filter>Header files\Synthesizer\AdjSynth</Filter>
     </ClInclude>
-    <ClInclude Include="..\commonDefs.h">
-      <Filter>Header files\Synthesizer\AdjSynth</Filter>
-    </ClInclude>
     <ClInclude Include="..\CPU\cpuData.h">
       <Filter>Header files\CPU</Filter>
     </ClInclude>
     <ClInclude Include="..\CPU\CPUSnapshot.h">
       <Filter>Header files\CPU</Filter>
+    </ClInclude>
+    <ClInclude Include="..\commonDefs.h">
+      <Filter>Header files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\LibAPI_settingsManager.h">
+      <Filter>Header files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -248,6 +248,10 @@ int set_audio_jack_mode_cb(int mode, int prog);
 int set_audio_jack_auto_start_state_cb(bool state, int prog);
 int set_audio_jack_auto_connect_state_cb(bool state, int prog);
 
+int set_audio_sample_rate_cb(int rate, int prog);
+int set_audio_block_size_cb(int size, int prog);
+int set_audio_driver_type_cb(int driver, int prog);
+
 int set_amp_ch_1_send_cb(int lev, int prog);
 int set_amp_ch_2_send_cb(int lev, int prog);
 

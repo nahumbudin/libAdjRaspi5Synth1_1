@@ -1,5 +1,5 @@
 /**
-* @file		libAdjHeartModSynth_1.cpp
+* @file		libAdjRaspi5Synth_1_1.cpp
 *	@author		Nahum Budin
 *	@date		8-May-2024
 *	@version	1.0
@@ -53,6 +53,8 @@ func_ptr_void_int_t callback_ptr_message_id = NULL;
 
 /** The main modular synthesizer object instance */
 ModSynth* mod_synthesizer;
+
+Settings *settings_manager;
 
 
 /**

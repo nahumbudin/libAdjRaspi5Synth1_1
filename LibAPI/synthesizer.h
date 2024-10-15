@@ -85,6 +85,8 @@ Error - must be no more than 64
 
 #define _KARPLUS_STRONG_MAX_DECAY						0.999f
 #define _KARPLUS_STRONG_MIN_DECAY						0.9f
+	
+	
 
 
 
@@ -219,6 +221,8 @@ Error - must be no more than 64
 #define _SKETCH_PROGRAM_1							_PROGRAM_16
 #define _SKETCH_PROGRAM_2							_PROGRAM_17
 #define _SKETCH_PROGRAM_3							_PROGRAM_18
+	
+#define _NUM_OF_UNISON_LEVEL_SLIDERS				9
 	
 #define _OSC_1_EVENT								0
 #define _OSC_2_EVENT								1
@@ -375,6 +379,60 @@ Error - must be no more than 64
 	
 #define _AMP_FIXED_LEVELS_DISABLE					0
 #define _AMP_FIXED_LEVELS_ENABLE					1
+	
+#define _MIXER_CHAN_1_LEVEL							510
+#define _MIXER_CHAN_2_LEVEL							511
+#define _MIXER_CHAN_3_LEVEL							512
+#define _MIXER_CHAN_4_LEVEL							513
+#define _MIXER_CHAN_5_LEVEL							514
+#define _MIXER_CHAN_6_LEVEL							515
+#define _MIXER_CHAN_7_LEVEL							516
+#define _MIXER_CHAN_8_LEVEL							517
+#define _MIXER_CHAN_9_LEVEL							518
+#define _MIXER_CHAN_10_LEVEL						519
+#define _MIXER_CHAN_11_LEVEL						520
+#define _MIXER_CHAN_12_LEVEL						521
+#define _MIXER_CHAN_13_LEVEL						522
+#define _MIXER_CHAN_14_LEVEL						523
+#define _MIXER_CHAN_15_LEVEL						524
+#define _MIXER_CHAN_16_LEVEL						525
+#define _MIXER_ALL_LEVEL							526
+
+#define _MIXER_CHAN_1_PAN							530
+#define _MIXER_CHAN_2_PAN							531
+#define _MIXER_CHAN_3_PAN							532
+#define _MIXER_CHAN_4_PAN							533
+#define _MIXER_CHAN_5_PAN							534
+#define _MIXER_CHAN_6_PAN							535
+#define _MIXER_CHAN_7_PAN							536
+#define _MIXER_CHAN_8_PAN							537
+#define _MIXER_CHAN_9_PAN							538
+#define _MIXER_CHAN_10_PAN							539
+#define _MIXER_CHAN_11_PAN							540
+#define _MIXER_CHAN_12_PAN							541
+#define _MIXER_CHAN_13_PAN							542
+#define _MIXER_CHAN_14_PAN							543
+#define _MIXER_CHAN_15_PAN							544
+#define _MIXER_CHAN_16_PAN							545
+#define _MIXER_ALL_PAN								546
+	
+#define _MIXER_CHAN_1_SEND							550
+#define _MIXER_CHAN_2_SEND							551
+#define _MIXER_CHAN_3_SEND							552
+#define _MIXER_CHAN_4_SEND							553
+#define _MIXER_CHAN_5_SEND							554
+#define _MIXER_CHAN_6_SEND							555
+#define _MIXER_CHAN_7_SEND							556
+#define _MIXER_CHAN_8_SEND							557
+#define _MIXER_CHAN_9_SEND							558
+#define _MIXER_CHAN_10_SEND							559
+#define _MIXER_CHAN_11_SEND							560
+#define _MIXER_CHAN_12_SEND							561
+#define _MIXER_CHAN_13_SEND							562
+#define _MIXER_CHAN_14_SEND							563
+#define _MIXER_CHAN_15_SEND							564
+#define _MIXER_CHAN_16_SEND							565
+#define _MIXER_ALL_SEND								566
 	
 	
 #define _KBD_PORTAMENTO_LEVEL						600

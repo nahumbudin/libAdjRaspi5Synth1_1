@@ -68,6 +68,12 @@ MidiAlsaQclientIn alsa_midi_in_1(&AlsaMidi::get_instance()->alsa_rx_queue[0], _M
 
 #endif
 
+// Callback that is initiated by the AudioManager audio - update thread.
+void callback_audio_update_cycle_start_tasks_wrapper(int param)
+{
+	ModSynth::get_instance()->update_tasks(param);
+}
+
 
 
 /* modSynth instance */
@@ -78,10 +84,7 @@ ModSynth* ModSynth::mod_synth = NULL;
 ModSynth::ModSynth()
 {
 	mod_synth = this;
-	int i, res, last_input_client_num;
-	
-	adj_synth = AdjSynth::get_instance();
-	
+	int i, res, last_input_client_num;	
 
 	alsa_midi_system_control = AlsaMidiSysControl::get_instance();
 
@@ -117,7 +120,7 @@ ModSynth::ModSynth()
 
 	instruments_manager = InstrumentsManager::get_instance();
 	
-	// TODO: create instances only when oppened.
+	// TODO: create instances only when oppened ?.
 
 	fluid_synth = new InstrumentFluidSynth();
 	instruments_manager->add_instrument(_INSTRUMENT_NAME_FLUID_SYNTH_STR_KEY, 
@@ -185,6 +188,28 @@ ModSynth::ModSynth()
 
 	patches_handler = PatchsHandler::get_patchs_handler_instance();
 	
+	for (i = _PROGRAM_0; i < _PROGRAM_15; i++)
+	{
+		// Init all programs to synthersizer not assigned state
+		midi_channel_synth[i] = _MIDI_CHAN_ASSIGNED_SYNTH_NONE;
+	}
+	
+	// TODO: Get the default settings directories from a file - currentlly hard coded below
+	
+	// ModSynth default settings directory
+	mod_synth_general_settings_file_path_name = "/home/pi/AdjRaspi5Synth/ModSynth/Default_Settings";
+	
+	// create the general setting manager(mange audio and midi settings)
+	general_settings_manager = new Settings(&active_general_synth_settings_params);
+	// Create the FLuidSynth settings manager
+	fluid_synth_settings_manager = new Settings(&active_fluid_synth_settings_params);
+	
+	
+	adj_synth = AdjSynth::get_instance();
+	// Init the Adj synthesizers
+	init();
+	
+	
 	// Start the CPU utilization measuring thread.
 	start_cheack_cpu_utilization_thread();
 }
@@ -213,7 +238,23 @@ ModSynth *ModSynth::get_instance()
 
 int ModSynth::init()
 {
-
+	settings_res_t res;	
+	
+	/* Assign the ModSynth general settings manager, active general settings settings parameters.
+	 * Mixer, Keyboard, Eqalizer and reverb */
+	adj_synth->set_settings_params(general_settings_manager, &active_general_synth_settings_params);
+	// Create and initialize the ModSynth default General Settings parameters values.
+	set_default_general_settings_parameters(&active_general_synth_settings_params);
+	
+	// Assign the AdjSynth settings manager, active settings parameters..
+	adj_synth->set_settings_params(adj_synth->adj_synth_settings_manager,
+		adj_synth->get_active_settings_params());
+	// Create and initialize the AdjSynth default Settings parameters values.
+	set_adj_synth_default_settings(adj_synth->get_active_settings_params());
+	
+	// Init programs
+	adj_synth->init_synth_programs(/*&active_adj_synth_patch*/);
+	
 
 	return 0;
 }
@@ -233,6 +274,21 @@ void ModSynth::on_exit()
 	
 	this->stop_cheack_cpu_utilization_thread();
 	//TODO: stop whatever else should be terminated
+}
+
+/**
+*   @brief  performs periodic update tasks - called by the audio processing update cycle process
+*   @param  voc	voice number (na - global)
+*   @return pointer to adjheart synthesizr
+*/
+void ModSynth::update_tasks(int voc)
+{
+	if (adj_synth->kbd1->portamento_is_enabled())
+	{
+		adj_synth->kbd1->update_actual_frequency();
+		AdjSynth::get_instance()->synth_voice[_SYNTH_VOICE_1]->dsp_voice->set_voice_frequency(
+					adj_synth->kbd1->get_note_frequency());
+	}
 }
 
 void ModSynth::start_cheack_cpu_utilization_thread()
@@ -299,6 +355,260 @@ InstrumentMidiPlayer *ModSynth::get_midi_player()
 {
 	return midi_player;
 }
+
+/**
+*   @brief  Set the master volume level.
+*   @param  vol volume level (0-100)
+*   @return none
+*/
+void ModSynth::set_master_volume(int vol)
+{
+	double gain;
+	settings_res_t res;
+
+	// for correct limit testing, synth.master_volume param must be already intialized
+	res = general_settings_manager->set_int_param(
+											&active_general_synth_settings_params,
+		"synth.master_volume",
+		vol,
+		100,
+		0,
+		"adj_synth_settings_param",
+		NULL,
+		_SET_VALUE);
+
+	if (res == _SETTINGS_OK)
+	{
+		master_volume = vol;
+		// Update all other volume levels
+		// Fluid synth - max gain 0.25
+		gain = (float)(fluid_synth_volume*master_volume) / 40000.f;
+		fluid_synth->get_fluid_synth_interface()->set_fluid_synth_gain(gain);
+
+		AdjSynth::get_instance()->set_master_volume(vol);
+	}
+}
+
+/**
+*   @brief  Get the master volume level.
+*   @param  none
+*   @return volume level (0-100)
+*/
+int ModSynth::get_master_volume() 
+{ 
+	return 
+		master_volume; 
+}
+
+/**
+*   @brief  Set the fluid synth volume level.
+*   @param  vol volume level (0-100)
+*   @return none
+*/
+void ModSynth::set_fluid_synth_volume(int vol)
+{
+	// 0-0.25
+	double gain = (float)(vol*master_volume) / 40000.f; // 100 * 100 / 40000 = 0.25
+
+	settings_res_t res = fluid_synth->get_fluid_synth_interface()->set_fluid_synth_gain(gain);
+	// set gain also verifies range
+	if (res == _SETTINGS_OK)
+	{
+		fluid_synth_volume = vol;			
+	}
+} 
+
+/**
+*   @brief  Get the fluid synth volume level.
+*   @param  none
+*   @return volume level (0-100)
+*/
+int ModSynth::get_fluid_synth_volume() 
+{ 
+	return fluid_synth_volume; 
+}
+
+/**
+*	@brief	Sets the sample-rate
+*	@param	sample  rate: _SAMPLE_RATE_44 (44100Hz) or _SAMPLE_RATE_48 (48000Hz)
+*					if non of the above, sample rate is set to _DEFAULT_SAMPLE_RATE (44100).
+*					Also sets WTAB funfemental and maxfrequencies based on sample rate.
+*	@param	restart_audio if true only restart audio
+*					
+*	@return set sample-rate
+*/
+int ModSynth::set_sample_rate(int samp_rate, bool restart_audio)
+{
+	if (!is_valid_sample_rate(samp_rate))
+	{
+		sample_rate = _DEFAULT_SAMPLE_RATE;
+	}
+	else
+	{
+		sample_rate = samp_rate;
+	}
+	
+	//	adj_synth->set_sample_rate(sample_rate);
+		// TODO: fluid_synth
+	
+	if (restart_audio)
+	{
+		stop_audio();
+		usleep(100000);
+		start_audio();
+	}
+	
+	return sample_rate;
+}
+
+/**
+*   @brief  Starts the audio service.
+*			Must be called after setting the audio driver type, 
+*			sample-rate and audio block-size (else, default values will be used)..
+*   @param  none
+*   @return 0 if done
+*/
+int ModSynth::start_audio()
+{
+	int res = 0;
+	// TODO:: res = start FluidSynth audio handling
+	res |= adj_synth->start_audio(audio_driver, sample_rate, audio_block_size);
+	
+	return res;
+}
+
+/**
+*   @brief  Stops the audio service.
+*   @param  none
+*   @return 0 if done
+*/
+int ModSynth::stop_audio()
+{
+	int res = 0;
+	// TODO:: res = stop FluidSynth audio handling
+	res |= adj_synth->stop_audio();
+	
+	return res;
+}
+
+/**
+*	@brief	Sets the sample-rate value only (without restarting audio)
+*			Settings will be effective only after the next call to start_audio().
+*	@param	sample  rate: _SAMPLE_RATE_44 (44100Hz) or _SAMPLE_RATE_48 (48000Hz)
+*					if non of the above, sample rate is set to _DEFAULT_SAMPLE_RATE (44100).
+*					Also sets WTAB funfemental and maxfrequencies based on sample rate.
+*					
+*	@return set sample-rate
+*/
+int ModSynth::set_sample_rate(int samp_rate)
+{
+	return set_sample_rate(samp_rate, false);
+}
+
+/**
+*	@brief	Returns the set sample-rate
+*	@param	none
+*	@return set sample-rate
+*/	
+int ModSynth::get_sample_rate() { return sample_rate; }
+
+/**
+*   @brief  sets the audio block size 
+*			Settings will be effective only after the next call to start_audio().
+*   @param  int size: _AUDIO_BLOCK_SIZE_256, _AUDIO_BLOCK_SIZE_512, _AUDIO_BLOCK_SIZE_1024
+*   @param	restart_audio if true restart audio
+*   @return size if OK; -1 param out of range
+*/
+int ModSynth::set_audio_block_size(int size, bool restart_audio)
+{	
+	if (is_valid_audio_block_size(size))
+	{
+		audio_block_size = size;		
+		
+		//		adj_synth->set_audio_block_size(audio_block_size);
+				// TODO: fluid_synth
+		
+		if (restart_audio)
+		{
+			stop_audio();
+			usleep(100000);
+			start_audio();
+		}
+		
+		return audio_block_size;
+	}
+	else
+	{
+		return -1;
+	}
+}
+
+/**
+*   @brief  sets the audio block size value only (without restarting audio)
+*			Settings will be effective only after the next call to start_audio().
+*   @param  int size: _AUDIO_BLOCK_SIZE_256, _AUDIO_BLOCK_SIZE_512, _AUDIO_BLOCK_SIZE_1024
+*   @return size if OK; -1 param out of range
+*/
+int ModSynth::set_audio_block_size(int size)
+{
+	return set_audio_block_size(size, false);
+}
+
+/**
+*	@brief	Sets the audio driver type
+*	@param	driver  _AUDIO_JACK, _AUDIO_ALSA (default: _DEFAULT_AUDIO)
+*	@param	restart_audio if true set value and restart audio
+*	@return set audio-driver
+*/
+int ModSynth::set_audio_driver_type(int driver, bool restart_audio)
+{
+	if (is_valid_audio_driver(driver))
+	{
+		audio_driver = driver;
+	}
+	else
+	{
+		audio_driver = _DEFAULT_AUDIO_DRIVER;
+	}
+	
+	if (restart_audio)
+	{
+		stop_audio();
+		usleep(100000);
+		start_audio();
+	}
+	
+	return audio_driver;
+}
+
+/**
+*	@brief	Sets the audio driver type  value only (without restarting audio)
+*			Settings will be effective only after the next call to start_audio().
+*	@param	driver  _AUDIO_JACK, _AUDIO_ALSA (default: _DEFAULT_AUDIO)
+*	@param	set_only if true only set value, false - set value and restart audio
+*	@return set audio-driver
+*/
+int ModSynth::set_audio_driver_type(int driver)
+{
+	return set_audio_driver_type(driver, false);
+}
+
+/**
+*	@brief	Returns the audio-driver type
+*	@param	none
+*	@return audio driver type
+*/	
+int ModSynth::get_audio_driver_type() { return audio_driver; }
+
+
+	
+/**
+*   @brief  retruns the audio block size  
+*   @param  none
+*   @return buffer size
+*/	
+int ModSynth::get_audio_block_size() { return audio_block_size; }
+
 
 void ModSynth::note_on(uint8_t channel, uint8_t note, uint8_t velocity)
 {

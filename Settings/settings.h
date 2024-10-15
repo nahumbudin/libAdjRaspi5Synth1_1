@@ -74,7 +74,7 @@ using namespace std;
 /* Indicates that the parameter is a patch settings parameter */
 #define _PARAM_TYPE_PATCH 3
 /* Indicates that the parameter is a general settings parameter */
-#define _PARAM_TYPEGENERAL_SETUP 4
+#define _PARAM_TYPE_GENERAL_SETUP 4
 /* Indicates that the parameter is a preset settings parameter */
 #define _PARAM_TYPE_PRESET 5
 

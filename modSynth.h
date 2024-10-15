@@ -39,6 +39,15 @@
 
 //#include "./AdjSynth/adjSynth.h"
 
+enum mod_synth_type
+{
+	SYNTH_TYPE_FLUID,
+	SYNTH_TYPE_ADDITIVE,
+	SYNTH_TYPE_KARPLUS, // Karplus Strong String
+	SYNTH_TYPE_MSO, // Modified Sinus 
+	SYNTH_TYPE_PAD				// PAD Synth http://zynaddsubfx.sourceforge.net/doc/PADsynth/PADsynth.htm#c_implementation	
+};
+
 class InstrumentsManager;
 class InstrumentFluidSynth;
 class InstrumentHammondOrgan;
@@ -47,6 +56,8 @@ class InstrumentMidiMapper;
 class InstrumentControlBoxEventsHandler;
 
 class AdjSynth;
+
+void callback_audio_update_cycle_start_tasks_wrapper(int param);
 
 class ModSynth
 {
@@ -64,6 +75,8 @@ public:
 	
 	int init_midi_ext_interface(int ser_port_num);
 	int deinit_midi_ext_interface();
+	
+	int collect_mod_synth_preset_parms(_settings_params_t *params);
 
 
 	AlsaBtClientOutput *get_bt_alsa_out();
@@ -71,6 +84,31 @@ public:
 	InstrumentFluidSynth *get_fluid_synth();
 	InstrumentMidiPlayer *get_midi_player();
 	InstrumentMidiMapper *get_midi_mapper();
+	
+	int set_adj_synth_default_settings(_settings_params_t *params);
+	int set_default_general_settings_parameters(_settings_params_t *params);
+	int set_default_settings_parameters_audio(_settings_params_t *params);
+	
+	void set_master_volume(int vol);
+	int get_master_volume();
+
+	void set_fluid_synth_volume(int vol);
+	int get_fluid_synth_volume();
+	
+	int set_sample_rate(int samp_rate, bool restart_audio);
+	int set_sample_rate(int samp_rate);
+	int get_sample_rate();
+	
+	int set_audio_block_size(int size, bool restart_audio);
+	int set_audio_block_size(int size);
+	int get_audio_block_size();
+	
+	int set_audio_driver_type(int driver, bool restart_audio);
+	int set_audio_driver_type(int driver);
+	int get_audio_driver_type();
+	
+	int start_audio();
+	int stop_audio();
 
 	void note_on(uint8_t channel, uint8_t note, uint8_t velocity);
 	void note_off(uint8_t channel, uint8_t note);
@@ -78,6 +116,8 @@ public:
 	void channel_pressure(uint8_t channel, uint8_t val);
 	void controller_event(uint8_t channel, uint8_t num, uint8_t val);
 	void pitch_bend(uint8_t channel, int pitch);
+	
+	void update_tasks(int voc);	
 
 	AlsaMidiSysControl *alsa_midi_system_control;
 
@@ -95,6 +135,9 @@ public:
 	
 	AdjSynth *adj_synth;
 	
+	Settings *general_settings_manager;
+	Settings *fluid_synth_settings_manager;
+	
 	static int cpu_utilization;
 
   private:
@@ -111,8 +154,29 @@ public:
 	
 	InstrumentFluidSynth *fluid_synth;
 	InstrumentHammondOrgan *hammond_organ;
+	
+	/* The modular synthesizer master volume level (0-100) */
+	int master_volume;
+	/* The fluid synthesizer  volume level (0-100) */
+	int fluid_synth_volume;
 
 	pthread_t cheack_cpu_utilization_thread_id;	
+	
+	/* Holds a bit mask for each MIDI channel 0-15, sketc 1-3 (16-18) indicating assigned synthesizer
+	   Channel 0 is the main edditing channel */
+	uint16_t midi_channel_synth[_SKETCH_PROGRAM_3 + 1];
+	
+	// ModSynth default settings directory
+	string mod_synth_general_settings_file_path_name;
+	
+	
+	/* Holds the general (global) settings parameters */
+	_settings_params_t active_general_synth_settings_params;
+	
+	/* Holds the FluidSynth settings parameters */
+	_settings_params_t active_fluid_synth_settings_params;
+	
+	int audio_driver, sample_rate, audio_block_size;
 
 };
 

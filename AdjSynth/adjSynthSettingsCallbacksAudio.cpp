@@ -21,6 +21,24 @@
 #include "adjSynth.h"
 #include "../Jack/jackAudioClients.h"
 
+int set_audio_sample_rate_cb(int rate, int prog)
+{
+	AdjSynth::get_instance()->set_sample_rate(rate);
+	return 0;
+}
+
+int set_audio_block_size_cb(int size, int prog)
+{
+	AdjSynth::get_instance()->set_audio_block_size(size);
+	return 0;
+}
+
+int set_audio_driver_type_cb(int driver, int prog)
+{
+	AdjSynth::get_instance()->set_audio_driver_type(driver);
+	return 0;
+}
+
 int set_audio_jack_mode_cb(int mode, int prog)
 {
 	set_jack_mode(mode);

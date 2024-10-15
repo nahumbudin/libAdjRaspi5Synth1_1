@@ -638,8 +638,1628 @@ int mod_synth_vco_event_int(int vcoid, int eventid, int val);
 int mod_synth_vco_event_bool(int vcoid, int eventid, bool val);
 
 
+/**
+	*   @brief  Returns the value of the active patch AMP 1 level.
+	*   @param  none
+	*   @return int	 the value of the active patch AMP 1 level.
+	*/
+int mod_synth_get_active_ch_1_level();
+/**
+*   @brief  Returns the value of the active patch AMP 1 pan.
+*   @param  none
+*   @return int	 the value of the active patch AMP 1 pan.
+*	[ 0 -> Left  50 -> mid   100 -> Right]
+*/
+int mod_synth_get_active_ch_1_pan();
+/**
+*   @brief  Returns the value of the active patch AMP1 pan modulation LFO number.
+*   @param  none
+*   @return int	 the value of the active patch  AMP1 pan modulation LFO number.
+*/
+int mod_synth_get_active_ch_1_pan_mod_lfo();
+/**
+*   @brief  Returns the value of the active patch AMP 2 pan modulation LFO level.
+*   @param  none
+*   @return int	 the value of the active patch  AMP 2 pan modulation LFO level.
+*/
+int mod_synth_get_active_ch_1_pan_mod_lfo_level();	
+/**
+*   @brief  Returns the value of the active  AMP 1 send.
+*   @param  none
+*   @return int	 the value of the active h AMP 1 sendn. 0-100
+*/
+int mod_synth_get_active_ch_1_send();
+
+/**
+*   @brief  Returns the value of the active patch AMP 2 level.
+*   @param  none
+*   @return int	 the value of the active patch AMP 2 level.
+*/
+int mod_synth_get_active_ch_2_level();
+/**
+*   @brief  Returns the value of the active patch AMP 2 pan.
+*   @param  none
+*   @return int	 the value of the active patch AMP 2 pan.
+*	[ 0 -> Left  50 -> mid   100 -> Right]
+*/
+int mod_synth_get_active_ch_2_pan();
+/**
+*   @brief  Returns the value of the active patch AMP 2 pan modulation LFO number.
+*   @param  none
+*   @return int	 the value of the active patch  AMP 2 pan modulation LFO number.
+*/
+int mod_synth_get_active_ch_2_pan_mod_lfo();
+/**
+*   @brief  Returns the value of the active patch AMP 1 pan modulation LFO level.
+*   @param  none
+*   @return int	 the value of the active patch  AMP 1 pan modulation LFO level.
+*/
+int mod_synth_get_active_ch_2_pan_mod_lfo_level();
+/**
+	*   @brief  Returns the value of the active  AMP 2 send.
+	*   @param  none
+	*   @return int	 the value of the active h AMP 2 send.0-100
+	*/
+int mod_synth_get_active_ch_2_send();
+
+/**
+*   @brief  Returns the value of the active patch distortion enable state.
+*   @param  none
+*   @return bool	 the value of the active patch distortion enable state.
+*/
+bool mod_synth_get_active_distortion_enable_state();
+/**
+*   @brief  Returns the value of the active patch distortion auto gain enable state.
+*   @param  none
+*   @return bool	 the value of the active patch distortion auto gain enable state.
+*/
+bool mod_synth_get_active_distortion_auto_gain_state();
+/**
+*   @brief  Returns the value of the active patch distortion 1 drive level.
+*   @param  none
+*   @return int	 the value of the active patch distortion 1 drive level.
+*/
+int mod_synth_get_active_distortion_1_drive();
+/**
+*   @brief  Returns the value of the active patch distortion 1 range level.
+*   @param  none
+*   @return int	 the value of the active patch distortion 1 range level.
+*/
+int mod_synth_get_active_distortion_1_range();
+/**
+*   @brief  Returns the value of the active patch distortion 1 blend level.
+*   @param  none
+*   @return int	 the value of the active patch distortion 1 blend level.
+*/
+int mod_synth_get_active_distortion_1_blend();
+/**
+*   @brief  Returns the value of the active patch distortion 2 drive level.
+*   @param  none
+*   @return int	 the value of the active patch distortion 2 drive level.
+*/
+int mod_synth_get_active_distortion_2_drive();
+/**
+*   @brief  Returns the value of the active patch distortion 2 range level.
+*   @param  none
+*   @return int	 the value of the active patch distortion 2 range level.
+*/
+int mod_synth_get_active_distortion_2_range();
+/**
+*   @brief  Returns the value of the active patch distortion 2 blend level.
+*   @param  none
+*   @return int	 the value of the active patch distortion 2 blend level.
+*/
+int mod_synth_get_active_distortion_2_blend();
+
+/**
+*   @brief  Returns the value of the active patch band-equilizer 31Hz band level.
+*   @param  none
+*   @return int	 the value of the active patch band-equilizer 31Hz band level.\n
+*	(0 -> -20db    40 -> +20db)
+*/
+int mod_synth_get_active_equilizer_band31_level();
+/**
+*   @brief  Returns the value of the active patch band-equilizer 62Hz band level.
+*   @param  none
+*   @return int	 the value of the active patch band-equilizer 62Hz band level.\n
+*	(0 -> -20db    40 -> +20db)
+*/
+int mod_synth_get_active_equilizer_band62_level();
+/**
+*   @brief  Returns the value of the active patch band-equilizer 125Hz band level.
+*   @param  none
+*   @return int	 the value of the active patch band-equilizer 125Hz band level.\n
+*	(0 -> -20db    40 -> +20db)
+*/
+int mod_synth_get_active_equilizer_band125_level();
+/**
+*   @brief  Returns the value of the active patch band-equilizer 250Hz band level.
+*   @param  none
+*   @return int	 the value of the active patch band-equilizer 250Hz band level.\n
+*	(0 -> -20db    40 -> +20db)
+*/
+int mod_synth_get_active_equilizer_band250_level();
+/**
+*   @brief  Returns the value of the active patch band-equilizer 500Hz band level.
+*   @param  none
+*   @return int	 the value of the active patch band-equilizer 500Hz band level.\n
+*	(0 -> -20db    40 -> +20db)
+*/
+int mod_synth_get_active_equilizer_band500_level();
+/**
+*   @brief  Returns the value of the active patch band-equilizer 1KHz band level.
+*   @param  none
+*   @return int	 the value of the active patch band-equilizer 1KHz band level.\n
+*	(0 -> -20db    40 -> +20db)
+*/
+int mod_synth_get_active_equilizer_band1k_level();
+/**
+*   @brief  Returns the value of the active patch band-equilizer 2KHz band level.
+*   @param  none
+*   @return int	 the value of the active patch band-equilizer 2KHz band level.\n
+*	(0 -> -20db    40 -> +20db)
+*/
+int mod_synth_get_active_equilizer_band2k_level();
+/**
+*   @brief  Returns the value of the active patch band-equilizer 4KHz band level.
+*   @param  none
+*   @return int	 the value of the active patch band-equilizer 4KHz band level.\n
+*	(0 -> -20db    40 -> +20db)
+*/
+int mod_synth_get_active_equilizer_band4k_level();
+/**
+*   @brief  Returns the value of the active patch band-equilizer 8KHz band level.
+*   @param  none
+*   @return int	 the value of the active patch band-equilizer 8KHz band level.\n
+*	(0 -> -20db    40 -> +20db)
+*/
+int mod_synth_get_active_equilizer_band8k_level();
+/**
+*   @brief  Returns the value of the active patch band-equilizer 16KHz band level.
+*   @param  none
+*   @return int	 the value of the active patch band-equilizer 16KHz band level.\n
+*	(0 -> -20db    40 -> +20db)
+*/
+int mod_synth_get_active_equilizer_band16k_level();
+/**
+*   @brief  Returns the value of the active patch band-equilizer selected preset (not implemented).
+*   @param  none
+*   @return int	 the value of the active patch band-equilizer selected preset.
+*/
+int mod_synth_get_active_equilizer_preset();
+
+/**
+*   @brief  Returns the value of the active patch filter 1 frequency.
+*   @param  none
+*   @return int	 the value of the active patch filter 1 frequency.
+*	[freq Hz = getFilterMinCenterFreq() + (getFilterMaxCenterFreq() - getFilterMinCenterFreq()) * ret value / 100.0f]
+*/
+int mod_synth_get_active_filter_1_freq();
+/**
+*   @brief  Returns the value of the active patch filter 1 Octave.
+*   @param  none
+*   @return int	 the value of the active patch filter 1 octave.
+*	[octave = (float)ret value * 6.9999f / 100.0f]
+*/
+int mod_synth_get_active_filter_1_oct();
+/**
+*   @brief  Returns the value of the active patch filter 1 Q.
+*   @param  none
+*   @return int	 the value of the active patch filter 1 Q.
+*	[Q = getFilterMinQ() + (getFilterMaxCenterQ() - getFilterMinCenterQ()) * ret value / 100.0f]
+*/
+int mod_synth_get_active_filter_1_q();
+/**
+*   @brief  Returns the value of the active patch filter 1 keyboard tracking.
+*   @param  none
+*   @return int	 the value of the active patch filter 1 keyboard tracking.
+*/
+int mod_synth_get_active_filter_1_kbd_track();
+/**
+*   @brief  Returns the value of the active patch filter 1  band.
+*   @param  none
+*   @return int	 the value of the active patch filter 1 band (see defs.h).
+*/
+int mod_synth_get_active_filter_1_band();
+
+/**
+*   @brief  Returns the value of the active patch filter 1 frequency modulation LFO number.
+*   @param  none
+*   @return int	 the value of the active patch filter 1 frequency modulation LFO number.
+*/
+int mod_synth_get_active_filter_1_Freq_mod_lfo();
+/**
+*   @brief  Returns the value of the active patch filter 1 frequency modulation LFO level.
+*   @param  none
+*   @return int	 the value of the active patch filter 1 frequency modulation LFO level.
+*/
+int mod_synth_get_active_filter_1_Freq_mod_lfo_level();
+/**
+*   @brief  Returns the value of the active patch filter 1 frequency modulation ENV.
+*   @param  none
+*   @return int	 the value of the active patch filter 1 frequency modulation ENV.
+*/
+int mod_synth_get_active_filter_1_Freq_mod_env();
+/**
+*   @brief  Returns the value of the active patch filter 1 frequency modulation ENV level.
+*   @param  none
+*   @return int	 the value of the active patch filter 1 frequency modulation ENV level.
+*/
+int mod_synth_get_active_filter_1_Freq_mod_env_level();
+
+/**
+*   @brief  Returns the value of the active patch filter 2 frequency.
+*   @param  none
+*   @return int	 the value of the active patch filter 2 frequency.
+*	[freq Hz = getFilterMinCenterFreq() + (getFilterMaxCenterFreq() - getFilterMinCenterFreq()) * ret value / 100.0f]
+*/
+int mod_synth_get_active_filter_2_freq();
+/**
+*   @brief  Returns the value of the active patch filter 2 Octave.
+*   @param  none
+*   @return int	 the value of the active patch filter 2 octave.
+*	[octave = (float)ret value * 6.9999f / 100.0f]
+*/
+int mod_synth_get_active_filter_2_oct();
+/**
+*   @brief  Returns the value of the active patch filter 2 Q.
+*   @param  none
+*   @return int	 the value of the active patch filter 2 Q.
+*	[Q = getFilterMinQ() + (getFilterMaxCenterQ() - getFilterMinCenterQ()) * ret value / 100.0f]
+*/
+int mod_synth_get_active_filter_2_q();
+/**
+*   @brief  Returns the value of the active patch filter 2 keyboard tracking.
+*   @param  none
+*   @return int	 the value of the active patch filter 2 keyboard tracking.
+*/
+int mod_synth_get_active_filter_2_kbd_track();
+/**
+*   @brief  Returns the value of the active patch filter 2  band.
+*   @param  none
+*   @return int	 the value of the active patch filter 2 band (see defs.h).
+*/
+int mod_synth_get_active_filter_2_band();
+/**
+*   @brief  Returns the state of the active patch filter 2  tracking filter 1.
+*   @param  none
+*   @return int	 the state of the active patch filter 2  tracking filter 1.
+*/
+bool mod_synth_get_active_filter_2_Trac_filter_1_state();
+
+/**
+*   @brief  Returns the value of the active patch filter 2 frequency modulation LFO number.
+*   @param  none
+*   @return int	 the value of the active patch filter 2 frequency modulation LFO number.
+*/
+int mod_synth_get_active_filter_2_Freq_mod_lfo();
+/**
+*   @brief  Returns the value of the active patch filter 2 frequency modulation LFO level.
+*   @param  none
+*   @return int	 the value of the active patch filter 2 frequency modulation LFO level.
+*/
+int mod_synth_get_active_filter_2_Freq_mod_lfo_level();
+/**
+*   @brief  Returns the value of the active patch filter 2 frequency modulation ENV.
+*   @param  none
+*   @return int	 the value of the active patch filter 2 frequency modulation ENV.
+*/
+int mod_synth_get_active_filter_2_Freq_mod_env();
+/**
+*   @brief  Returns the value of the active patch filter 2 frequency modulation ENV level.
+*   @param  none
+*   @return int	 the value of the active patch filter 2 frequency modulation ENV level.
+*/
+int mod_synth_get_active_filter_2_Freq_mod_env_level();
+
+/**
+	*   @brief  Returns the value of the active patch Karplus-strong generator excitation waveform.
+	*   @param  none
+	*   @return int	 the value of the active patch Karplus-strong generator excitation waveform (see defs.h).
+	*/
+int mod_synth_get_active_karplus_excitation_waveform_type();
+
+/**
+	*   @brief  Returns the value of the active patch Karplus-strong generator excitation waveform variations level.
+	*   @param  none
+	*   @return int	 the value of the active patch Karplus-strong generator excitation waveform variations level(see defs.h).
+	*/
+int mod_synth_get_active_karplus_excitation_waveform_variations();
+
+/**
+*   @brief  Returns the value of the active patch Karplus-strong generator string damping calculation mode.
+*   @param  none
+*   @return int	 the value of the active patch Karplus-strong generator string damping calculation mode (see defs.h).
+*/
+int mod_synth_get_active_karplus_string_damping_calculation_mode();
+/**
+*   @brief  Returns the value of the active patch Karplus-strong generator string damping.
+*   @param  none
+*   @return int	 the value of the active patch Karplus-strong generator string damping.\n
+*	[damping = getKarplusStrongMinStringDamping()+ret value/100.0f*(getKarplusStrongMinStringDamping()-getKarplusStrongMaxStringDamping())]
+*/
+int mod_synth_get_active_karplus_string_damping();
+/**
+*   @brief  Returns the value of the active patch Karplus-strong generator pluck damping.
+*   @param  none
+*   @return int	 the value of the active patch Karplus-strong generator pluck damping.\n
+*	[damping = getKarplusStrongMinPluckDamping()+ret value/100.0f*(getKarplusStrongMinPluckDamping()-getKarplusStrongMaxPluckDamping())]
+*/
+int mod_synth_get_active_karplus_pluck_damping();
+/**
+*   @brief  Returns the value of the active patch Karplus-strong generator note-on decay factor.
+*   @param  none
+*   @return int	 the value of the active patch Karplus-strong generator note-on decay factor.\n
+*	[decay = getKarplusStrongMinStringDecay()+ret value/100.0f*(getKarplusStrongMinStringDecay()-getKarplusStrongMaxStringDecay())]
+*/
+int mod_synth_get_active_karplus_string_on_decay();
+/**
+*   @brief  Returns the value of the active patch Karplus-strong generator note-off decay factor.
+*   @param  none
+*   @return int	 the value of the active patch Karplus-strong generator note-off decay factor.\n
+*	[decay = getKarplusStrongMinStringDecay()+ret value/100.0f*(getKarplusStrongMinStringDecay()-getKarplusStrongMaxStringDecay())]
+*/
+int mod_synth_get_active_karplus_string_off_decay();
+/**
+*   @brief  Returns the value of the active patch Karplus-strong generator note-on string damping variations factor.
+*   @param  none
+*   @return int	 the value of the active patch Karplus-strong generator note-on string damping variations factor.\n
+*	[string damping variation factor = \n
+*	getKarplusStrongMinStringDampingVariations()+ret value/100.0f*(getKarplusStrongMaxStringDampingVariations()-getKarplusStrongMinStringDampingVariations())]
+*/
+int mod_synth_get_active_karplus_string_damping_variation();
+/**
+*   @brief  Returns the value of the active patch Karplus-strong generator note-on pluck damping variations factor.
+*   @param  none
+*   @return int	 the value of the active patch Karplus-strong generator note-on pluck damping variations factor.\n
+*	[pluckdamping variation factor = \n
+*	getKarplusStrongMinPluckDampingVariations()+ret value/100.0f*(getKarplusStrongMaxPluckDampingVariations()-getKarplusStrongMinPluckDampingVariations())]
+*/
+int mod_synth_get_active_karplus_pluck_damping_variation();
+/**
+*   @brief  Returns the value of the active patch Karplus-strong generator send filter 1 level.
+*   @param  none
+*   @return int	 the value of the active patch Karplus-strong generator send filter 1 level.
+*/
+int mod_synth_get_active_karplus_send_filter_1();
+/**
+*   @brief  Returns the value of the active patch Karplus-strong generator send filter 2 level.
+*   @param  none
+*   @return int	 the value of the active patch Karplus-strong generator send filter 2 level.
+*/
+int mod_synth_get_active_karplus_send_filter_2();
+
+/**
+*   @brief  Returns the value of the active patch portamento time.
+*   @param  none
+*   @return int	 the value of the active patch portamento time.
+*/
+int mod_synth_get_active_keyboard_portamento_level();
+/**
+*   @brief  Returns the value of the active patch portamento enable state.
+*   @param  none
+*   @return bool	 the value of the active patch portamento enable state.
+*/
+bool mod_synth_get_active_keyboard_portamento_enabled_state();
+	
+/**
+*   @brief  Returns the value of the active patch keyboard sensitivity.\n
+*	Affects all keyboard if no keyboard-split is set.\n
+*	Affects only upper keyboard-split when keyboard-split is set.
+*   @param  none
+*   @return int	 the value of the active patch keyboard sensitivity.
+*/
+int mod_synth_get_active_keyboard_sensitivity();
+/**
+*   @brief  Returns the value of the active patch low-keyboard sensitivity.\n
+*	Has no effect when keyboard-split is not set.\n
+*	Affects only lower keyboard-split when keyboard-split is set.
+*   @param  none
+*   @return int	 the value of the active patch lower-keyboard sensitivity.
+*/
+int mod_synth_get_active_keyboard_sensitivity_low();
+/**
+*   @brief  Returns the value of the active patch keyboard split point.\n
+*   @param  none
+*   @return int	 the value of the active patch keyboard split point.
+*/
+int mod_synth_get_active_keyboard_split_point();
+/**
+*   @brief  Returns the value of the active patch keyboard poly mode.
+*   @param  none
+*   @return bool	 the value of the active patch keyboard poly mode (see defs.h).
+*/
+int mod_synth_get_active_keyboard_poly_mode();
+
+/**
+*   @brief  Returns the value of the active Midi mixer setting parameters.
+*   @param  paramid	parameter id: _MIXER_CHAN_n_LEVEL, _MIXER_CHAN_n_PAN, _MIXER_CHAN_n_SEND (n:1-16)
+*   @return int	 the value of the active patch band-equilizer selected preset.
+*/
+int mod_synth_get_active_midi_mixer_setting_param(int paramid);
+
+/**
+	*   @brief  Returns the value of the active patch ADSR 1 attack time.
+	*   @param  none
+	*   @return int	 the value of the active patch ADSR 1 attack time.
+	*	[time = getAdsrMaxAttackTimeSec()*pow(10.0, ret value / 50.0) / 100.0)]
+	*/
+int mod_synth_get_active_env_mod_1_attack();
+/**
+*   @brief  Returns the value of the active patch ADSR 1 decay time.
+*   @param  none
+*   @return int	 the value of the active patch ADSR 1 decay time.
+*	[time = getAdsrMaxDecayTimeSec()*pow(10.0, ret value / 50.0) / 100.0)]
+*/
+int mod_synth_get_active_env_mod_1_decay();
+/**
+*   @brief  Returns the value of the active patch ADSR 1 sustain level.
+*   @param  none
+*   @return int	 the value of the active patch ADSR 1 sustain level.
+*/
+int mod_synth_get_active_env_mod_1_sustain();
+/**
+*   @brief  Returns the value of the active patch ADSR 1 release time.
+*   @param  none
+*   @return int	 the value of the active patch ADSR 1 release time.
+*	[time = getAdsrMaxReleaseTimeSec()*pow(10.0, ret value / 50.0) / 100.0)]
+*/
+int mod_synth_get_active_env_mod_1_release();
+	
+/**
+*   @brief  Returns the value of the active patch ADSR 2 attack time.
+*   @param  none
+*   @return int	 the value of the active patch ADSR 2 attack time.
+*	[time = getAdsrMaxAttackTimeSec()*pow(10.0, ret value / 50.0) / 100.0)]
+*/
+int mod_synth_get_active_env_mod_2_attack();
+/**
+*   @brief  Returns the value of the active patch ADSR 2 decay time.
+*   @param  none
+*   @return int	 the value of the active patch ADSR 2 decay time.
+*	[time = getAdsrMaxDecayTimeSec()*pow(10.0, ret value / 50.0) / 100.0)]
+*/
+int mod_synth_get_active_env_mod_2_decay();
+/**
+*   @brief  Returns the value of the active patch ADSR 2 sustain level.
+*   @param  none
+*   @return int	 the value of the active patch ADSR 2 sustain level.
+*/
+int mod_synth_get_active_env_mod_2_sustain();
+/**
+*   @brief  Returns the value of the active patch ADSR 2 release time.
+*   @param  none
+*   @return int	 the value of the active patch ADSR 2 release time.
+*	[time = getAdsrMaxReleaseTimeSec()*pow(10.0, ret value / 50.0) / 100.0)]
+*/
+int mod_synth_get_active_env_mod_2_release();
+	
+/**
+*   @brief  Returns the value of the active patch ADSR 3 attack time.
+*   @param  none
+*   @return int	 the value of the active patch ADSR 3 attack time.
+*	[time = getAdsrMaxAttackTimeSec()*pow(10.0, ret value / 50.0) / 100.0)]
+*/
+int mod_synth_get_active_env_mod_3_attack();
+/**
+*   @brief  Returns the value of the active patch ADSR 3 decay time.
+*   @param  none
+*   @return int	 the value of the active patch ADSR 3 decay time.
+*	[time = getAdsrMaxDecayTimeSec()*pow(10.0, ret value / 50.0) / 100.0)]
+*/
+int mod_synth_get_active_env_mod_3_decay();
+/**
+*   @brief  Returns the value of the active patch ADSR 3 sustain level.
+*   @param  none
+*   @return int	 the value of the active patch ADSR 3 sustain level.
+*/
+int mod_synth_get_active_env_mod_3_sustain();
+/**
+*   @brief  Returns the value of the active patch ADSR 3 release time.
+*   @param  none
+*   @return int	 the value of the active patch ADSR 3 release time.
+*	[time = getAdsrMaxReleaseTimeSec()*pow(10.0, ret value / 50.0) / 100.0)]
+*/
+int mod_synth_get_active_env_mod_3_release();
+
+/**
+*   @brief  Returns the value of the active patch ADSR 4 attack time.
+*   @param  none
+*   @return int	 the value of the active patch ADSR 4 attack time.
+*	[time = getAdsrMaxAttackTimeSec()*pow(10.0, ret value / 50.0) / 100.0)]
+*/
+int mod_synth_get_active_env_mod_4_attack();
+/**
+*   @brief  Returns the value of the active patch ADSR 4 decay time.
+*   @param  none
+*   @return int	 the value of the active patch ADSR 4 decay time.
+*	[time = getAdsrMaxDecayTimeSec()*pow(10.0, ret value / 50.0) / 100.0)]
+*/
+int mod_synth_get_active_env_mod_4_decay();
+/**
+*   @brief  Returns the value of the active patch ADSR 4 sustain level.
+*   @param  none
+*   @return int	 the value of the active patch ADSR 4 sustain level.
+*/
+int mod_synth_get_active_env_mod_4_sustain();
+/**
+*   @brief  Returns the value of the active patch ADSR 4 release time.
+*   @param  none
+*   @return int	 the value of the active patch ADSR 4 release time.
+*	[time = getAdsrMaxReleaseTimeSec()*pow(10.0, ret value / 50.0) / 100.0)]
+*/
+int mod_synth_get_active_env_mod_4_release();
+
+/**
+*   @brief  Returns the value of the active patch ADSR 5 attack time.
+*   @param  none
+*   @return int	 the value of the active patch ADSR 5 attack time.
+*	[time = getAdsrMaxAttackTimeSec()*pow(10.0, ret value / 50.0) / 100.0)]
+*/
+int mod_synth_get_active_env_mod_5_attack();
+/**
+*   @brief  Returns the value of the active patch ADSR 5 decay time.
+*   @param  none
+*   @return int	 the value of the active patch ADSR 5 decay time.
+*	[time = getAdsrMaxDecayTimeSec()*pow(10.0, ret value / 50.0) / 100.0)]
+*/
+int mod_synth_get_active_env_mod_5_decay();
+/**
+*   @brief  Returns the value of the active patch ADSR 5 sustain level.
+*   @param  none
+*   @return int	 the value of the active patch ADSR 5 sustain level.
+*/
+int mod_synth_get_active_env_mod_5_sustain();
+/**
+*   @brief  Returns the value of the active patch ADSR 5 release time.
+*   @param  none
+*   @return int	 the value of the active patch ADSR 5 release time.
+*	[time = getAdsrMaxReleaseTimeSec()*pow(10.0, ret value / 50.0) / 100.0)]
+*/
+int mod_synth_get_active_env_mod_5_release();
+
+/**
+*   @brief  Returns the value of the active patch LFO 1 waveform.
+*   @param  none
+*   @return int	 the value of the active patch LFO 1 waveform (see defs.h).
+*/
+int mod_synth_get_active_lfo_mod_1_waveform();
+/**
+*   @brief  Returns the value of the active patch LFO 1 symetry in %.
+*   @param  none
+*   @return int	 the value of the active patch LFO 1 symetry in %.
+*/
+int mod_synth_get_active_lfo_mod_1_symmetry();
+/**
+*   @brief  Returns the value of the active patch LFO 1 rate Hz.
+*   @param  none
+*   @return int	 the value of the active patch LFO 1 rate Hz.
+*	[rate Hz = getLFOminFrequency() + (getLFOmaxFrequency() - getLFOminFrequency())*pow(10, (double)ret value / 50.0) / 100.0
+*/
+int mod_synth_get_active_lfo_mod_1_rate();
+	
+/**
+*   @brief  Returns the value of the active patch LFO 2 waveform.
+*   @param  none
+*   @return int	 the value of the active patch LFO 2 waveform (see defs.h).
+*/
+int mod_synth_get_active_lfo_mod_2_waveform();
+/**
+*   @brief  Returns the value of the active patch LFO 2 symetry in %.
+*   @param  none
+*   @return int	 the value of the active patch LFO 2 symetry in %.
+*/
+int mod_synth_get_active_lfo_mod_2_symmetry();
+/**
+*   @brief  Returns the value of the active patch LFO 2 rate Hz.
+*   @param  none
+*   @return int	 the value of the active patch LFO 2 rate Hz.
+*	[rate Hz = getLFOminFrequency() + (getLFOmaxFrequency() - getLFOminFrequency())*pow(10, (double)ret value / 50.0) / 100.0
+*/
+int mod_synth_get_active_lfo_mod_2_rate();
+	
+/**
+*   @brief  Returns the value of the active patch LFO 3 waveform.
+*   @param  none
+*   @return int	 the value of the active patch LFO 1 waveform (see defs.h).
+*/
+int mod_synth_get_active_lfo_mod_3_waveform();
+/**
+*   @brief  Returns the value of the active patch LFO 3 symetry in %.
+*   @param  none
+*   @return int	 the value of the active patch LFO 3 symetry in %.
+*/
+int mod_synth_get_active_lfo_mod_3_symmetry();
+/**
+*   @brief  Returns the value of the active patch LFO 3 rate Hz.
+*   @param  none
+*   @return int	 the value of the active patch LFO 3 rate Hz.
+*	[rate Hz = getLFOminFrequency() + (getLFOmaxFrequency() - getLFOminFrequency())*pow(10, (double)ret value / 50.0) / 100.0
+*/
+int mod_synth_get_active_lfo_mod_3_rate();
+
+/**
+*   @brief  Returns the value of the active patch LFO 4 waveform.
+*   @param  none
+*   @return int	 the value of the active patch LFO 4 waveform (see defs.h).
+*/
+int mod_synth_get_active_lfo_mod_4_waveform();
+/**
+*   @brief  Returns the value of the active patch LFO 4 symetry in %.
+*   @param  none
+*   @return int	 the value of the active patch LFO 4 symetry in %.
+*/
+int mod_synth_get_active_lfo_mod_4_symmetry();
+/**
+*   @brief  Returns the value of the active patch LFO 4 rate Hz.
+*   @param  none
+*   @return int	 the value of the active patch LFO 4 rate Hz.
+*	[rate Hz = getLFOminFrequency() + (getLFOmaxFrequency() - getLFOminFrequency())*pow(10, (double)ret value / 50.0) / 100.0
+*/
+int mod_synth_get_active_lfo_mod_4_rate();
+
+/**
+*   @brief  Returns the value of the active patch LFO 5 waveform.
+*   @param  none
+*   @return int	 the value of the active patch LFO 5 waveform (see defs.h).
+*/
+int mod_synth_get_active_lfo_mod_5_waveform();
+/**
+*   @brief  Returns the value of the active patch LFO 5 symetry in %.
+*   @param  none
+*   @return int	 the value of the active patch LFO 5 symetry in %.
+*/
+int mod_synth_get_active_lfo_mod_5_symmetry();
+/**
+*   @brief  Returns the value of the active patch LFO 5 rate Hz.
+*   @param  none
+*   @return int	 the value of the active patch LFO 5 rate Hz.
+*	[rate Hz = getLFOminFrequency() + (getLFOmaxFrequency() - getLFOminFrequency())*pow(10, (double)ret value / 50.0) / 100.0
+*/
+int mod_synth_get_active_lfo_mod_5_rate();
+
+/**
+*   @brief  Returns an active patch MSO lookup table segment point.
+*   @param  int  requested point (0-5)
+*   @return int	the an active patch MSO lookup table segment point.
+*/
+int mod_synth_get_active_mso_table_segment_point(int point);
+/**
+*   @brief  Returns an active patch MSO symetry value.
+*   @param  none
+*   @return int	the an active patch MSO symetry value.
+*/
+int mod_synth_get_active_mso_symetry();
+/**
+*   @brief  Returns the value of the active patch MSO pwm %.
+*   @param  none
+*   @return int	 the value of the active patch MSO pwm %.
+*/
+int mod_synth_get_active_mso_pwm_percents();
+/**
+*   @brief  Returns the value of the active patch MSO detune octave value.
+*   @param  none
+*   @return int	 the value of the active patch MSO detune octave value\n.
+*	[octave detune = return value + getOscDetuneMinOctave()]
+*/
+int mod_synth_get_active_mso_detune_octave();
+/**
+*   @brief  Returns the value of the active patch MSO detune semitones value.
+*   @param  none
+*   @return int	 the value of the active patch MSO detune semitones value\n.
+*	[semitones detune = return value + getOscDetuneMinSenitone()]
+*/
+int mod_synth_get_active_mso_detune_semitones();
+/**
+*   @brief  Returns the value of the active patch MSO detune cents value.
+*   @param  none
+*   @return int	 the value of the active patch MSO detune cents value\n.
+*	[cents detune = (return value + getOscDetuneMinCents()) * 0.25]
+*/
+int mod_synth_get_active_mso_detune_cents();
+/**
+*   @brief  Returns the value of the active patch MSO send level to filter 1.
+*   @param  none
+*   @return int	 the value of the active patch MSO send level to filter 1.
+*/
+int mod_synth_get_active_mso_send_filter_1();
+/**
+*   @brief  Returns the value of the active patch MSO send level to filter 2.
+*   @param  none
+*   @return int	 the value of the active patch MSO send level to filter 2.
+*/
+int mod_synth_get_active_mso_send_filter_2();
+/**
+*   @brief  Returns the value of the active patch MSO sync on OSC1 state.
+*   @param  none
+*   @return bool	 the value of the active patch MSO sync on OSC1 state.
+*/
+//bool getActiveMso1SyncIsOnState();
+/**
+*   @brief  Returns the value of the active patch MSO frequency modulation LFO number.
+*   @param  none
+*   @return int	 the value of the active patch MSO frequency modulation LFO number.
+*/
+int mod_synth_get_active_mso_freq_mod_lfo();
+/**
+*   @brief  Returns the value of the active patch MSO frequency modulation LFO level.
+*   @param  none
+*   @return int	 the value of the active patch MSO frequency modulation LFO level.
+*/
+int mod_synth_get_active_mso_freq_mod_lfo_level();
+/**
+*   @brief  Returns the value of the active patch MSO frequency modulation ENV number.
+*   @param  none
+*   @return int	 the value of the active patch MSO frequency modulation ENV number.
+*/
+int mod_synth_get_active_mso_freq_mod_env();
+/**
+*   @brief  Returns the value of the active patch MSO frequency modulation ENV level.
+*   @param  none
+*   @return int	 the value of the active patch MSO frequency modulation ENV level.
+*/
+int mod_synth_get_active_mso_freq_mod_env_level();
+/**
+*   @brief  Returns the value of the active patch MSO pwm modulation LFO number.
+*   @param  none
+*   @return int	 the value of the active patch MSO pwm modulation LFO number.
+*/
+int mod_synth_get_active_mso_pwm_mod_lfo();
+/**
+*   @brief  Returns the value of the active patch MSO pwm modulation LFO level.
+*   @param  none
+*   @return int	 the value of the active patch MSO pwm modulation LFO level.
+*/
+int mod_synth_get_active_mso_pwm_mod_lfo_level();
+/**
+*   @brief  Returns the value of the active patch MSO pwm modulation ENV number.
+*   @param  none
+*   @return int	 the value of the active patch MSO pwm modulation ENV number.
+*/
+int mod_synth_get_active_mso_pwm_mod_env();
+/**
+*   @brief  Returns the value of the active patch MSO pwm modulation ENV level.
+*   @param  none
+*   @return int	 the value of the active patch MSO pwm modulation ENV level.
+*/
+int mod_synth_get_active_mso_pwm_mod_env_level();
+/**
+*   @brief  Returns the value of the active patch MSO amplitude modulation LFO number.
+*   @param  none
+*   @return int	 the value of the active patch MSO amplitude modulation LFO number.
+*/
+int mod_synth_get_active_mso_amp_mod_lfo();
+/**
+*   @brief  Returns the value of the active patch MSO amplitude modulation LFO level.
+*   @param  none
+*   @return int	 the value of the active patch MSO amplitude modulation LFO level.
+*/
+int mod_synth_get_active_mso_amp_mod_lfo_level();
+/**
+*   @brief  Returns the value of the active patch MSO amplitude modulation ENV number.
+*   @param  none
+*   @return int	 the value of the active patch MSO amplitude modulation ENV number.
+*/
+int mod_synth_get_active_mso_amp_mod_env();
+/**
+*   @brief  Returns the value of the active patch MSO amplitude modulation ENV level.
+*   @param  none
+*   @return int	 the value of the active patch MSO amplitude modulation ENV level.
+*/
+int mod_synth_get_active_mso_amp_mod_env_level();
+
+/**
+*   @brief  Returns the value of the active patch Noise color.
+*   @param  none
+*   @return int	 the value of the active patch  Noise color (see defs.h).
+*/
+int mod_synth_get_active_noise_color();
+/**
+*   @brief  Returns the value of the active patch Noise send filter 1 level.
+*   @param  none
+*   @return int	 the value of the active patch  Noise send filter 1 level.
+*/
+int mod_synth_get_active_noise_send_filter_1();
+/**
+*   @brief  Returns the value of the active patch Noise send filter 2 level.
+*   @param  none
+*   @return int	 the value of the active patch  Noise send filter 2 level.
+*/
+int mod_synth_get_active_noise_send_filter_2();
+
+/**
+*   @brief  Returns the value of the active patch Noise amp modulation LFO number.
+*   @param  none
+*   @return int	 the value of the active patch  Noise amp modulation LFO number.
+*/
+int mod_synth_get_active_noise_amp_mod_lfo();
+/**
+*   @brief  Returns the value of the active patch Noise amp modulation LFO level.
+*   @param  none
+*   @return int	 the value of the active patch  Noise amp modulation LFO level.
+*/
+int mod_synth_get_active_noise_amp_mod_lfo_level();
+/**
+*   @brief  Returns the value of the active patch Noise amp modulation ENV number.
+*   @param  none
+*   @return int	 the value of the active patch  Noise amp modulation ENV number.
+*/
+int mod_synth_get_active_noise_amp_mod_env();
+/**
+*   @brief  Returns the value of the active patch Noise amp modulation ENV level.
+*   @param  none
+*   @return int	 the value of the active patch  Noise amp modulation ENV level.
+*/
+int mod_synth_get_active_noise_amp_mod_env_level();
+
+/**
+	*   @brief  Returns the value of the active patch PAD detune octave value.
+	*   @param  none
+	*   @return int	 the value of the active patch PAD detune octave value\n.
+	*	[octave detune = return value + getOscDetuneMinOctave()]
+	*/
+int mod_synth_get_active_pad_detune_octave();
+/**
+*   @brief  Returns the value of the active patch PAD detune semitones value.
+*   @param  none
+*   @return int	 the value of the active patch PAD detune semitones value\n.
+*	[semitones detune = return value + getOscDetuneMinSenitone()]
+*/
+int mod_synth_get_active_pad_detune_semitones();
+/**
+*   @brief  Returns the value of the active patch PAD detune cents value.
+*   @param  none
+*   @return int	 the value of the active patch PAD detune cents value\n.
+*	[cents detune = (return value + getOscDetuneMinCents()) * 0.25]
+*/
+int mod_synth_get_active_pad_detune_cents();
+/**
+*   @brief  Returns the value of the active patch PAD send level to filter 1.
+*   @param  none
+*   @return int	 the value of the active patch PAD send level to filter 1.
+*/
+int mod_synth_get_active_pad_send_filter_1();
+/**
+*   @brief  Returns the value of the active patch PAD send level to filter 2.
+*   @param  none
+*   @return int	 the value of the active patch PAD send level to filter 2.
+*/
+int mod_synth_get_active_pad_send_filter_2();
+/**
+*   @brief  Returns the value of the active patch PAD frequency modulation LFO number.
+*   @param  none
+*   @return int	 the value of the active patch PAD frequency modulation LFO number.
+*/
+int mod_synth_get_active_pad_freq_mod_lfo();
+/**
+*   @brief  Returns the value of the active patch PAD frequency modulation LFO level.
+*   @param  none
+*   @return int	 the value of the active patch PAD frequency modulation LFO level.
+*/
+int mod_synth_get_active_pad_freq_mod_lfo_level();
+/**
+*   @brief  Returns the value of the active patch PAD frequency modulation ENV number.
+*   @param  none
+*   @return int	 the value of the active patch PAD frequency modulation ENV number.
+*/
+int mod_synth_get_active_pad_freq_mod_env();
+/**
+*   @brief  Returns the value of the active patch PAD frequency modulation ENV level.
+*   @param  none
+*   @return int	 the value of the active patch PAD frequency modulation ENV level.
+*/
+int mod_synth_get_active_pad_freq_mod_env_level();
+/**
+*   @brief  Returns the value of the active patch PAD amplitude modulation LFO number.
+*   @param  none
+*   @return int	 the value of the active patch PAD amplitude modulation LFO number.
+*/
+int mod_synth_get_active_pad_amp_mod_lfo();
+/**
+*   @brief  Returns the value of the active patch PAD amplitude modulation LFO level.
+*   @param  none
+*   @return int	 the value of the active patch PAD amplitude modulation LFO level.
+*/
+int mod_synth_get_active_pad_amp_mod_lfo_level();
+/**
+*   @brief  Returns the value of the active patch PAD amplitude modulation ENV number.
+*   @param  none
+*   @return int	 the value of the active patch PAD amplitude modulation ENV number.
+*/
+int mod_synth_get_active_pad_amp_mod_env();
+/**
+*   @brief  Returns the value of the active patch PAD amplitude modulation ENV level.
+*   @param  none
+*   @return int	 the value of the active patch PAD amplitude modulation ENV level.
+*/
+int mod_synth_get_active_pad_amp_mod_env_level();
+/**
+*   @brief  Returns the value of the active patch PAD quality factor.
+*   @param  none
+*   @return int	 the value of the active patch PAD quality factor.
+*/
+int mod_synth_get_active_pad_quality();
+/**
+*   @brief  Returns the value of the active patch PAD shape.
+*   @param  none
+*   @return int	 the value of the active patch PAD shape.
+*/
+int mod_synth_get_active_pad_shape();
+/**
+*   @brief  Returns the value of the active patch PAD shape-cutoff mode.
+*   @param  none
+*   @return int	 the value of the active patch PAD shape-cutoff mode.
+*/
+int mod_synth_get_active_pad_shape_cutoff();
+/**
+*   @brief  Returns the value of the active patch PAD base note.
+*   @param  none
+*   @return int	 the value of the active patch PAD base note.
+*/
+int mod_synth_get_active_pad_base_note();
+/**
+*   @brief  Returns the value of the active patch PAD base width.
+*   @param  none
+*   @return int	 the value of the active patch PAD abase width.
+*/
+int mod_synth_get_active_pad_base_width();
+/**
+*   @brief  Returns the value of the active patch PAD harmony level.
+*   @param  int harmony: 0-7
+*   @return int	 the value of the active patch PAD harmony level.
+*/
+int mod_synth_get_active_pad_harmony_level(int harmony);
+/**
+*   @brief  Returns the value of the active PAD harmonic-detune level.
+*   @param  none
+*   @return int	 the value of the active patch PAD harmonic-detune level.
+*/
+int mod_synth_get_active_pad_harmony_detune();
+
+/**
+*   @brief  Returns the value of the active patch reverbration enable state.
+*   @param  none
+*   @return bool	 the value of the active patch reverbration enable state.
+*/
+bool mod_synth_get_active_reverb_enable_state();
+/**
+*   @brief  Returns the value of the active patch reverbration room size value.
+*   @param  none
+*   @return int	 the value of the active patch reverbration room size value.
+*/
+int mod_synth_get_active_reverb_room_size();
+/**
+*   @brief  Returns the value of the active patch reverbration damp value.
+*   @param  none
+*   @return int	 the value of the active patch reverbration damp value.
+*/
+int mod_synth_get_active_reverb_damp();
+/**
+*   @brief  Returns the value of the active patch reverbration wet value.
+*   @param  none
+*   @return int	 the value of the active patch reverbration wet value.
+*/
+int mod_synth_get_active_reverb_wet();
+/**
+*   @brief  Returns the value of the active patch reverbration dry value.
+*   @param  none
+*   @return int	 the value of the active patch reverbration dry value.
+*/
+int mod_synth_get_active_reverb_dry();
+/**
+*   @brief  Returns the value of the active patch reverbration width value.
+*   @param  none
+*   @return int	 the value of the active patch reverbration width value.
+*/
+int mod_synth_get_active_reverb_width();
+/**
+*   @brief  Returns the value of the active patch reverbration mode value.
+*   @param  none
+*   @return int	 the value of the active patch reverbration mode value.
+*/
+int mod_synth_get_active_reverb_mode();
+
+/**
+*   @brief  Returns the value of the active patch 3M reverbration enable state.
+*   @param  none
+*   @return bool	 the value of the active patch 3M reverbration enable state.
+*/
+bool mod_synth_get_active_reverb_3m_enable_state();
+/**
+*   @brief  Returns the value of the active patch 3M reverbration preset.
+*   @param  none
+*   @return int	 the value of the active patch 3M reverbration preset (see defs.h).
+*/
+int mod_synth_get_active_reverb_3m_preset();
+/**
+*   @brief  Returns the value of the active patch distortion selected preset (not implemented).
+*   @param  none
+*   @return int	 the value of the active patch distortion preset.
+*/
+int mod_synth_get_active_reverb_3m_preset();
+
+/**
+*   @brief  Returns the the active patch OSC1 enable state.
+*   @param  none
+*   @return bool	 the active patch OSC1 enable state.
+*/
+bool mod_synth_get_active_osc1_enable_state();
+/**
+*   @brief  Returns the the active patch OSC2 enable state.
+*   @param  none
+*   @return bool	 the active patch OSC2 enable state.
+*/
+bool mod_synth_get_active_osc2_enable_state();
+/**
+*   @brief  Returns the the active patch Noise enable state.
+*   @param  none
+*   @return bool	 the active patch Noise enable state.
+*/
+bool mod_synth_get_active_noise_enable_state();
+/**
+*   @brief  Returns the the active patch Karplus enable state.
+*   @param  none
+*   @return bool	 the active patch Karplus enable state.
+*/
+bool mod_synth_get_active_karplus_enable_state();
+/**
+*   @brief  Returns the the active patch MSO enable state.
+*   @param  none
+*   @return bool	 the active patch MSO enable state.
+*/
+bool mod_synth_get_active_mso_enable_state();
+/**
+*   @brief  Returns the the active patch PAD enable state.
+*   @param  none
+*   @return bool	 the active patch PAD enable state.
+*/
+bool mod_synth_get_active_pad_enable_state();
+
+/**
+*   @brief  Returns the value of the active patch OSC1 waveform.
+*   @param  none
+*   @return int	 the value of the active patch OSC1 waveform (see defs.h).
+*/
+int mod_synth_get_active_osc1_waveform();
+/**
+*   @brief  Returns the value of the active patch OSC1 pwm %.
+*   @param  none
+*   @return int	 the value of the active patch OSC1 pwm %.
+*/
+int mod_synth_get_active_osc1_pwm_percents();
+/**
+*   @brief  Returns the value of the active patch OSC1 detune octave value.
+*   @param  none
+*   @return int	 the value of the active patch OSC1 detune octave value\n.
+*	[octave detune = return value + getOscDetuneMinOctave()]
+*/
+int mod_synth_get_active_osc1_detune_octave();
+/**
+*   @brief  Returns the value of the active patch OSC1 detune semitones value.
+*   @param  none
+*   @return int	 the value of the active patch OSC1 detune semitones value\n.
+*	[semitones detune = return value + getOscDetuneMinSenitone()]
+*/
+int mod_synth_get_active_osc1_detune_semitones();
+/**
+*   @brief  Returns the value of the active patch OSC1 detune cents value.
+*   @param  none
+*   @return int	 the value of the active patch OSC1 detune cents value\n.
+*	[cents detune = (return value + getOscDetuneMinCents()) * 0.25]
+*/
+int mod_synth_get_active_osc1_detune_cents();
+/**
+*   @brief  Returns the value of the active patch OSC1 send level to filter 1.
+*   @param  none
+*   @return int	 the value of the active patch OSC1 send level to filter 1.
+*/
+int mod_synth_get_active_osc1_send_filter_1();
+/**
+*   @brief  Returns the value of the active patch OSC1 send level to filter 2.
+*   @param  none
+*   @return int	 the value of the active patch OSC1 send level to filter 2.
+*/
+int mod_synth_get_active_osc1_send_filter_2();
+/**
+*   @brief  Returns the value of the active patch OSC1 unison mode.
+*   @param  none
+*   @return int	 the value of the active patch OSC1 unison mode (see defs.h).
+*/
+int mod_synth_get_active_osc1_unison_mode();
+/**
+*   @brief  Returns the value of the active patch OSC1 hammond-organ mode.
+*   @param  none
+*   @return int	 the value of the active patch OSC1 hammond-organ mode (see defs.h).
+*/
+int mod_synth_get_active_osc1_hammond_mode();
+/**
+*   @brief  Returns the value of the active patch OSC1 unison harmony level.
+*   @param  int harnum		0-7 (0-8 in Hamond unisom mode)
+*   @return int	 the value of the active patch OSC1 hammond-organ mode (see defs.h).
+*/
+int mod_synth_get_active_osc1_harmonies_levels(int harnum);
+/**
+*   @brief  Returns the value of the active patch OSC1 harmonies detune level.
+*   @param  none
+*   @return int	 the value of the active patch OSC1 harmonies detune level.
+*/
+int mod_synth_get_active_osc1_harmonies_detune_factor();
+/**
+*   @brief  Returns the value of the active patch OSC1 harmonies distortion level.
+*   @param  none
+*   @return int	 the value of the active patch OSC1 harmonies distortion level.
+*/
+int mod_synth_get_active_osc1_harmonies_dist_factor();
+
+/**
+*   @brief  Returns the value of the active patch OSC1 frequency modulation LFO number.
+*   @param  none
+*   @return int	 the value of the active patch OSC1 frequency modulation LFO number.
+*/
+int mod_synth_get_active_osc1_freq_mod_lfo();
+/**
+*   @brief  Returns the value of the active patch OSC1 frequency modulation LFO level.
+*   @param  none
+*   @return int	 the value of the active patch OSC1 frequency modulation LFO level.
+*/
+int mod_synth_get_active_osc1_freq_mod_lfo_level();
+/**
+*   @brief  Returns the value of the active patch OSC1 frequency modulation ENV number.
+*   @param  none
+*   @return int	 the value of the active patch OSC1 frequency modulation ENV number.
+*/
+int mod_synth_get_active_osc1_freq_mod_env();
+/**
+*   @brief  Returns the value of the active patch OSC1 frequency modulation ENV level.
+*   @param  none
+*   @return int	 the value of the active patch OSC1 frequency modulation ENV level.
+*/
+int mod_synth_get_active_osc1_freq_mod_env_level();
+/**
+*   @brief  Returns the value of the active patch OSC1 pwm modulation LFO number.
+*   @param  none
+*   @return int	 the value of the active patch OSC1 pwm modulation LFO number.
+*/
+int mod_synth_get_active_osc1_pwm_mod_lfo();
+/**
+*   @brief  Returns the value of the active patch OSC1 pwm modulation LFO level.
+*   @param  none
+*   @return int	 the value of the active patch OSC1 pwm modulation LFO level.
+*/
+int mod_synth_get_active_osc1_pwm_mod_lfo_level();
+/**
+*   @brief  Returns the value of the active patch OSC1 pwm modulation ENV number.
+*   @param  none
+*   @return int	 the value of the active patch OSC1 pwm modulation ENV number.
+*/
+int mod_synth_get_active_osc1_pwm_mod_env();
+/**
+*   @brief  Returns the value of the active patch OSC1 pwm modulation ENV level.
+*   @param  none
+*   @return int	 the value of the active patch OSC1 pwm modulation ENV level.
+*/
+int mod_synth_get_active_osc1_pwm_mod_env_level();
+/**
+*   @brief  Returns the value of the active patch OSC1 amplitude modulation LFO number.
+*   @param  none
+*   @return int	 the value of the active patch OSC1 amplitude modulation LFO number.
+*/
+int mod_synth_get_active_osc1_amp_mod_lfo();
+/**
+*   @brief  Returns the value of the active patch OSC1 amplitude modulation LFO level.
+*   @param  none
+*   @return int	 the value of the active patch OSC1 amplitude modulation LFO level.
+*/
+int mod_synth_get_active_osc1_amp_mod_lfo_level();
+/**
+*   @brief  Returns the value of the active patch OSC1 amplitude modulation ENV number.
+*   @param  none
+*   @return int	 the value of the active patch OSC1 amplitude modulation ENV number.
+*/
+int mod_synth_get_active_osc1_amp_mod_env();
+/**
+*   @brief  Returns the value of the active patch OSC1 amplitude modulation ENV level.
+*   @param  none
+*   @return int	 the value of the active patch OSC1 amplitude modulation ENV level.
+*/
+int mod_synth_get_active_osc1_amp_mod_env_level();
+
+/**
+*   @brief  Returns the value of the active patch OSC2 waveform.
+*   @param  none
+*   @return int	 the value of the active patch OSC2 waveform (see defs.h).
+*/
+int mod_synth_get_active_osc2_waveform();
+/**
+*   @brief  Returns the value of the active patch OSC2 pwm %.
+*   @param  none
+*   @return int	 the value of the active patch OSC2 pwm %.
+*/
+int mod_synth_get_active_osc2_pwm_percents();
+/**
+*   @brief  Returns the value of the active patch OSC2 detune octave value.
+*   @param  none
+*   @return int	 the value of the active patch OSC2 detune octave value\n.
+*	[octave detune = return value + getOscDetuneMinOctave()]
+*/
+int mod_synth_get_active_osc2_detune_octave();
+/**
+*   @brief  Returns the value of the active patch OSC2 detune semitones value.
+*   @param  none
+*   @return int	 the value of the active patch OSC2 detune semitones value\n.
+*	[semitones detune = return value + getOscDetuneMinSenitone()]
+*/
+int mod_synth_get_active_osc2_detune_semitones();
+/**
+*   @brief  Returns the value of the active patch OSC2 detune cents value.
+*   @param  none
+*   @return int	 the value of the active patch OSC2 detune cents value\n.
+*	[cents detune = (return value + getOscDetuneMinCents()) * 0.25]
+*/
+int mod_synth_get_active_osc2_detune_cents();
+/**
+*   @brief  Returns the value of the active patch OSC2 send level to filter 1.
+*   @param  none
+*   @return int	 the value of the active patch OSC2 send level to filter 1.
+*/
+int mod_synth_get_active_osc2_send_filter_1();
+/**
+*   @brief  Returns the value of the active patch OSC2 send level to filter 2.
+*   @param  none
+*   @return int	 the value of the active patch OSC2 send level to filter 2.
+*/
+int mod_synth_get_active_osc2_send_filter_2();
+/**
+*   @brief  Returns the value of the active patch OSC2 sync on OSC1 state.
+*   @param  none
+*   @return bool	 the value of the active patch OSC2 sync on OSC1 state.
+*/
+bool mod_synth_get_active_osc2_sync_is_on_state();
+/**
+*   @brief  Returns the value of the active patch OSC2 fixed tone state (Not implemented).
+*   @param  none
+*   @return bool	 the value of the active patch OSC2 ixed tone state.
+*/
+bool mod_synth_get_active_osc2_fix_tone_is_on_state();
+
+/**
+*   @brief  Returns the value of the active patch OSC2 frequency modulation LFO number.
+*   @param  none
+*   @return int	 the value of the active patch OSC2 frequency modulation LFO number.
+*/
+int mod_synth_get_active_osc2_freq_mod_lfo();
+/**
+*   @brief  Returns the value of the active patch OSC1 frequency modulation LFO level.
+*   @param  none
+*   @return int	 the value of the active patch OSC1 frequency modulation LFO level.
+*/
+int mod_synth_get_active_osc2_freq_mod_lfo_level();
+/**
+*   @brief  Returns the value of the active patch OSC2 frequency modulation ENV number.
+*   @param  none
+*   @return int	 the value of the active patch OSC2 frequency modulation ENV number.
+*/
+int mod_synth_get_active_osc2_freq_mod_env();
+/**
+*   @brief  Returns the value of the active patch OSC2 frequency modulation ENV level.
+*   @param  none
+*   @return int	 the value of the active patch OSC2 frequency modulation ENV level.
+*/
+int mod_synth_get_active_osc2_freq_mod_env_level();
+/**
+*   @brief  Returns the value of the active patch OSC2 pwm modulation LFO number.
+*   @param  none
+*   @return int	 the value of the active patch OSC2 pwm modulation LFO number.
+*/
+int mod_synth_get_active_osc2_pwm_mod_lfo();
+/**
+*   @brief  Returns the value of the active patch OSC2 pwm modulation LFO level.
+*   @param  none
+*   @return int	 the value of the active patch OSC2 pwm modulation LFO level.
+*/
+int mod_synth_get_active_osc2_pwm_mod_lfo_level();
+/**
+*   @brief  Returns the value of the active patch OSC2 pwm modulation ENV number.
+*   @param  none
+*   @return int	 the value of the active patch OSC2 pwm modulation ENV number.
+*/
+int mod_synth_get_active_osc2_pwm_mod_env();
+/**
+*   @brief  Returns the value of the active patch OSC2 pwm modulation ENV level.
+*   @param  none
+*   @return int	 the value of the active patch OSC2 pwm modulation ENV level.
+*/
+int mod_synth_get_active_osc2_pwm_mod_env_level();
+/**
+*   @brief  Returns the value of the active patch OSC2 amplitude modulation LFO number.
+*   @param  none
+*   @return int	 the value of the active patch OSC2 amplitude modulation LFO number.
+*/
+int mod_synth_get_active_osc2_amp_mod_lfo();
+/**
+*   @brief  Returns the value of the active patch OSC2 amplitude modulation LFO level.
+*   @param  none
+*   @return int	 the value of the active patch OSC2 amplitude modulation LFO level.
+*/
+int mod_synth_get_active_osc2_amp_mod_lfo_level();
+/**
+*   @brief  Returns the value of the active patch OSC2 amplitude modulation ENV number.
+*   @param  none
+*   @return int	 the value of the active patch OSC2 amplitude modulation ENV number.
+*/
+int mod_synth_get_active_osc2_amp_mod_env();
+/**
+*   @brief  Returns the value of the active patch OSC2 amplitude modulation ENV level.
+*   @param  none
+*   @return int	 the value of the active patch OSC2 amplitude modulation ENV level.
+*/
+int mod_synth_get_active_osc2_amp_mod_env_level();
 
 
+
+
+
+/**
+*   @brief  Returns the maximum value of oscilator octave detune.
+*   @param  none
+*   @return int	the maximum value of oscilator octave detune.
+*/
+int mod_synth_get_osc_detune_max_octave();
+/**
+*   @brief  Returns the minimum value of oscilator octave detune.
+*   @param  none
+*   @return int	the minimum value of oscilator octave detune.
+*/
+int mod_synth_get_osc_detune_min_octave();
+/**
+*   @brief  Returns the maximum value of oscilator semitones detune.
+*   @param  none
+*   @return int	the maximum value of oscilator semitones detune.
+*/
+int mod_synth_get_osc_detune_max_semitones();
+/**
+*   @brief  Returns the minimum value of oscilator semitones detune.
+*   @param  none
+*   @return int	the maximum value of oscilator Semitones detune.
+*/
+int mod_synth_get_osc_detune_min_semitones();
+/**
+*   @brief  Returns the maximum value of oscilator cents detune.
+*   @param  none
+*   @return float	the maximum value of oscilator cents detune.
+*/
+float mod_synth_get_osc_detune_max_cents();
+/**
+*   @brief  Returns the minimum value of oscilator cents detune.
+*   @param  none
+*   @return float	the minimum value of oscilator cents detune.
+*/
+float mod_synth_get_osc_detune_min_cents();
+/**
+*   @brief  Returns the number of OSC1 drawbars.
+*   @param  none
+*   @return int	 the number of OSC1 drawbars.
+*/
+int mod_synth_get_osc1_num_of_drawbars();
+/**
+*   @brief  Returns the maximum value of ADSR attack time in seconds.
+*   @param  none
+*   @return float	the maximum value of ADSR attack time in seconds.
+*/
+float mod_synth_get_adsr_max_attack_time_sec();
+/**
+*   @brief  Returns the maximum value of ADSR fecay time in seconds.
+*   @param  none
+*   @return float	the maximum value of ADSR decay time in seconds.
+*/
+float mod_synth_get_adsr_max_decay_time_sec();
+/**
+*   @brief  Returns the maximum value of ADSR release time in seconds.
+*   @param  none
+*   @return float	the maximum value of ADSR release time in seconds.
+*/
+float mod_synth_get_adsr_max_release_time_sec();
+/**
+*   @brief  Returns the maximum value of ADSR forced-release time in seconds.
+*   @param  none
+*   @return float	the maximum value of ADSR forced-release time in seconds.
+*/
+float mod_synth_get_adsr_max_forced_release_time_sec();
+
+/**
+*   @brief  Returns the minimum value of filter frequency in Hz.
+*   @param  none
+*   @return float	the minimum value of filter frequency in Hz.
+*/
+float mod_synth_get_filter_min_center_freq();
+/**
+*   @brief  Returns the maximum value of filter frequency in Hz.
+*   @param  none
+*   @return float	the maximum value of filter frequency in Hz.
+*/
+float mod_synth_get_filter_max_center_freq();
+/**
+*   @brief  Returns the minimum value of filter Q.
+*   @param  none
+*   @return float	the minimum value of filter Q.
+*/
+float mod_synth_get_filter_min_Q();
+/**
+*   @brief  Returns the maximum value of filter Q.
+*   @param  none
+*   @return float	the maximum value of filter Q.
+*/
+float mod_synth_get_filter_max_Q();
+/**
+*   @brief  Returns the maximum value of the Karplus-Strong generator String Damping factor.
+*   @param  none
+*   @return float	the maximum value of the Karplus-Strong generator String Damping factor.
+*/
+float mod_synth_get_karplus_strong_max_string_damping();
+/**
+*   @brief  Returns the minimum value of the Karplus-Strong generator String Damping factor.
+*   @param  none
+*   @return float	the minimum value of the Karplus-Strong generator String Damping factor.
+*/
+float mod_synth_get_karplus_strong_min_string_damping();
+/**
+*   @brief  Returns the maximum value of the Karplus-Strong generator Pluck Damping factor.
+*   @param  none
+*   @return float	the maximum value of the Karplus-Strong generator Pluck Damping factor.
+*/
+float mod_synth_get_karplus_strong_max_pluck_damping();
+/**
+*   @brief  Returns the minimum value of the Karplus-Strong generator Pluck Damping factor.
+*   @param  none
+*   @return float	the minimum value of the Karplus-Strong generator Pluck Damping factor.
+*/
+float mod_synth_get_karplus_strong_min_pluck_damping();
+/**
+*   @brief  Returns the maximum value of the Karplus-Strong generator decay time.
+*   @param  none
+*   @return float	the maximum value of the Karplus-Strong generator decay time.
+*/
+float mod_synth_get_karplus_strong_max_decay();
+/**
+*   @brief  Returns the minimum value of the Karplus-Strong generator decay time.
+*   @param  none
+*   @return float	the minimum value of the Karplus-Strong generator decay time.
+*/
+float mod_synth_get_karplus_strong_min_decay();
+/**
+*   @brief  Returns the maximum value of the Karplus-Strong String damping variations factor.
+*   @param  none
+*   @return float	the maximum value of the Karplus-Strong String damping variations factor.
+*/
+float mod_synth_get_karplus_strong_max_pluck_damping_variations();
+/**
+*   @brief  Returns the minimum value of the Karplus-Strong Pluck damping variations factor.
+*   @param  none
+*   @return float	the minimum value of the Karplus-Strong Pluck damping variations factor.
+*/
+float mod_synth_get_karplus_strong_min_pluck_damping_variations();
+
+/**
+*   @brief  Returns the maximum value of the Karplus-Strong Pluck damping variations factor.
+*   @param  none
+*   @return float	the maximum value of the Karplus-Strong Pluck damping variations factor.
+*/
+float mod_synth_get_karplus_strong_max_string_damping_variations();
+/**
+*   @brief  Returns the minimum value of the Karplus-Strong String damping variations factor.
+*   @param  none
+*   @return float	the minimum value of the Karplus-Strong String damping variations factor.
+*/
+float mod_synth_get_karplus_strong_min_string_damping_variations();
+
+/**
+*   @brief  Returns the synthesizer maximum number of polyiphonic voices.
+*   @param  none
+*   @return int	maximum number of polyiphonic voices.
+*/
+int mod_synth_get_synthesizer_max_num_of_polyphonic_voices();
+
+/**
+*   @brief  Returns the synthesizer enabled number of programs.
+*   @param  none
+*   @return int	enabled number of programs.
+*/
+int mod_synth_get_synthesizer_max_num_of_programs();
+
+/**
+	*   @brief  Returns the minimum value of filter frequency in Hz.
+	*   @param  none
+	*   @return float	the minimum value of filter frequency in Hz.
+	*/
+float mod_synth_get_filter_min_center_freq();
+/**
+*   @brief  Returns the maximum value of filter frequency in Hz.
+*   @param  none
+*   @return float	the maximum value of filter frequency in Hz.
+*/
+float mod_synth_get_filter_max_center_freq();
+/**
+*   @brief  Returns the minimum value of filter Q.
+*   @param  none
+*   @return float	the minimum value of filter Q.
+*/
+float mod_synth_get_filter_min_Q();
+/**
+*   @brief  Returns the maximum value of filter Q.
+*   @param  none
+*   @return float	the maximum value of filter Q.
+*/
+float mod_synth_get_filter_max_Q();
+/**
+	*   @brief  Returns the maximum value of ADSR attack time in seconds.
+	*   @param  none
+	*   @return float	the maximum value of ADSR attack time in seconds.
+	*/
+float mod_synth_get_adsr_max_attack_time_sec();
+/**
+*   @brief  Returns the maximum value of ADSR fecay time in seconds.
+*   @param  none
+*   @return float	the maximum value of ADSR decay time in seconds.
+*/
+float mod_synth_get_adsr_max_decay_time_sec();
+/**
+*   @brief  Returns the maximum value of ADSR release time in seconds.
+*   @param  none
+*   @return float	the maximum value of ADSR release time in seconds.
+*/
+float mod_synth_get_adsr_max_release_time_sec();
+/**
+*   @brief  Returns the maximum value of ADSR forced-release time in seconds.
+*   @param  none
+*   @return float	the maximum value of ADSR forced-release time in seconds.
+*/
+float mod_synth_get_adsr_max_forced_release_time_sec();
+
+/**
+*   @brief  Returns the minimum value of the LFO freequency in Hz.
+*   @param  none
+*   @return float	the minimum value of the LFO freequency in Hz.
+*/
+float mod_synth_get_lfo_min_frequency();
+/**
+*   @brief  Returns the maximum value of the LFO freequency in Hz.
+*   @param  none
+*   @return float	the maximum value of the LFO freequency in Hz.
+*/
+float mod_synth_get_lfo_max_frequency();
+
+/**
+*   @brief  Returns the MSO lookup table length.
+*   @param  none
+*   @return int	the the MSO lokkup table length.
+*/
+int mod_synth_get_mso_table_length();
+/**
+*   @brief  Returns a pointer to the the MSO lookup table.
+*   @param  none
+*   @return float*	ta pointer to the the MSO lookup table.
+*/
+float *mod_synth_get_mso_morphed_lookup_table();
+
+/**
+*   @brief  Returns the maximum value of the keyboard portamento time in seconds.
+*   @param  none
+*   @return float	the minimum value of the keyboard portamento time in seconds.
+*/
+float mod_synth_get_portamento_max_time_sec();
+
+/**
+*   @brief  Returns the minimum value of the LFO freequency in Hz.
+*   @param  none
+*   @return float	the minimum value of the LFO freequency in Hz.
+*/
+float mod_synth_get_lfo_min_frequency();
+/**
+*   @brief  Returns the maximum value of the LFO freequency in Hz.
+*   @param  none
+*   @return float	the maximum value of the LFO freequency in Hz.
+*/
+float mod_synth_get_lfo_max_frequency();
 
 
 

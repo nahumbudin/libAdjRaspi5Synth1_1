@@ -36,14 +36,18 @@ error max num of midi connections cannot be higher than max num off midi devices
 	Error : Must be no more than 8
 #endif
 
-#define _AUDIO_STAGE_0						0 
-#define _AUDIO_STAGE_1						1 
-#define _AUDIO_STAGE_2						2 
-#define _AUDIO_STAGE_3						3 
-#define _AUDIO_STAGE_4						4 
-#define _AUDIO_STAGE_5						5 
-#define _AUDIO_STAGE_6						6 
-#define _AUDIO_STAGE_7						7 
+#define _AUDIO_STAGE_0									0 
+#define _AUDIO_STAGE_1									1 
+#define _AUDIO_STAGE_2									2 
+#define _AUDIO_STAGE_3									3 
+#define _AUDIO_STAGE_4									4 
+#define _AUDIO_STAGE_5									5 
+#define _AUDIO_STAGE_6									6 
+#define _AUDIO_STAGE_7									7 
+	
+#define _MIDI_CHAN_ASSIGNED_SYNTH_NONE					0
+#define _MIDI_CHAN_ASSIGNED_SYNTH_FLUID					1
+#define _MIDI_CHAN_ASSIGNED_SYNTH_ADJ					2
 	
 	
 typedef struct voice_resource
