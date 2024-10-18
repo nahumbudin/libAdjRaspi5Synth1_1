@@ -38,7 +38,7 @@ AudioVoiceFloat::AudioVoiceFloat(
 	int block_size,
 	int voice,
 	int outs,
-	DSP_AdjSynthVoice *dsp_voc, 
+	DSP_Voice *dsp_voc, 
 	AudioBlockFloat **audio_first_update_ptr,
 	func_ptr_void_int_t set_voice_active_clbk_ptr,
 	func_ptr_void_int_t set_voice_not_active_clbk_ptr,
@@ -147,7 +147,7 @@ void AudioVoiceFloat::init_poly()
 	note = -1;
 	if (dsp_voice)
 	{
-		dsp_voice->set_voice_not_waiting_for_not_active();
+		dsp_voice->reset_wait_for_not_active();
 	}
 }
 
@@ -269,7 +269,7 @@ void AudioVoiceFloat::reset_wait_for_not_active()
 	wait_for_not_active = false; 
 	if (dsp_voice)
 	{
-		dsp_voice->set_voice_not_waiting_for_not_active();
+		dsp_voice->reset_wait_for_not_active();
 	}
 
 	//AudioPolyMixerFloat::reset_voice_wait_for_not_active(voice_num);
@@ -334,7 +334,7 @@ int AudioVoiceFloat::get_note()
 *   @param  none	
 *   @return a pointer to the voice DSP_Voice object
 */
-DSP_AdjSynthVoice *AudioVoiceFloat::get_dsp_voice() 
+DSP_Voice *AudioVoiceFloat::get_dsp_voice() 
 { 
 	return dsp_voice; 
 }

@@ -77,6 +77,7 @@ public:
 	int deinit_midi_ext_interface();
 	
 	int collect_mod_synth_preset_parms(_settings_params_t *params);
+	int set_default_preset_parameters(_settings_params_t *params);
 
 
 	AlsaBtClientOutput *get_bt_alsa_out();
@@ -88,6 +89,17 @@ public:
 	int set_adj_synth_default_settings(_settings_params_t *params);
 	int set_default_general_settings_parameters(_settings_params_t *params);
 	int set_default_settings_parameters_audio(_settings_params_t *params);
+	
+	
+	int save_adj_synth_patch_file(string path, Settings *settings, _settings_params_t *params);
+	int open_adj_synth_patch_file(string path, Settings *settings, _settings_params_t *params, int channel);
+	int save_adj_synth_patch_file(string path);
+	int open_adj_synth_patch_file(string path, int channel);
+	
+	int save_adj_synth_settings_file(string path, Settings *settings, _settings_params_t *params);
+	int open_adj_synth_settings_file(string path, Settings *settings, _settings_params_t *params);
+	int save_mod_synth_general_settings_file(string path);
+	int open_mod_synth_general_settings_file(string path);
 	
 	void set_master_volume(int vol);
 	int get_master_volume();
@@ -109,6 +121,9 @@ public:
 	
 	int start_audio();
 	int stop_audio();
+	
+	int get_midi_channel_synth(int chan);
+	void set_midi_channel_synth(int chan, int synth);
 
 	void note_on(uint8_t channel, uint8_t note, uint8_t velocity);
 	void note_off(uint8_t channel, uint8_t note);
@@ -139,6 +154,9 @@ public:
 	Settings *fluid_synth_settings_manager;
 	
 	static int cpu_utilization;
+	
+	_settings_params_t preset_temp;
+	std::string preset_temp_summary_text;
 
   private:
 	

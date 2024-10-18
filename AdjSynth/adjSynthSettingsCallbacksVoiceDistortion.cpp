@@ -22,11 +22,13 @@ int set_voice_block_distortion_enabled_cb(bool enable, int voice, int prog)
 {
 	if (enable)
 	{
-		AdjSynth::get_instance()->synth_program[prog]->synth_voices[voice]->dsp_voice->enable_distortion();
+		AdjSynth::get_instance()->synth_program[prog]->synth_voices[voice]->dsp_voice->enable_distortion_1();
+		AdjSynth::get_instance()->synth_program[prog]->synth_voices[voice]->dsp_voice->enable_distortion_2();
 	}
 	else
 	{
-		AdjSynth::get_instance()->synth_program[prog]->synth_voices[voice]->dsp_voice->disable_distortion();
+		AdjSynth::get_instance()->synth_program[prog]->synth_voices[voice]->dsp_voice->disable_distortion_1();
+		AdjSynth::get_instance()->synth_program[prog]->synth_voices[voice]->dsp_voice->enable_distortion_2();
 	}
 
 	return 0;

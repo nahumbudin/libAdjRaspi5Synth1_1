@@ -15,7 +15,7 @@
 #pragma once
 
 #include "audioBlock.h"
-#include "../DSP/dspAdjSynthVoice.h"
+#include "../DSP/dspVoice.h"
 #include "../LibAPI/types.h"
 
 #define _SYNTH_VOICE_OUT_1					0
@@ -27,7 +27,7 @@
 #define _AMP_AUDIO_OUT_L					LEFT
 #define _AMP_AUDIO_OUT_R					RIGHT
 
-class DSP_AdjSynthVoice;
+class DSP_Voice;
 class AudioVoiceFloat : public AudioBlockFloat
 {
 public:
@@ -37,7 +37,7 @@ public:
 		int block_size = _DEFAULT_BLOCK_SIZE,
 		int voice = 0, 
 		int outs = 2, 
-		DSP_AdjSynthVoice *dsp_voc = NULL,
+		DSP_Voice *dsp_voc = NULL,
 		AudioBlockFloat **audio_first_update_ptr = NULL,
 		func_ptr_void_int_t set_voice_active_clbk_ptr = NULL,
 		func_ptr_void_int_t set_voice_not_active_clbk_ptr = NULL,
@@ -70,9 +70,9 @@ public:
 	void set_note(int nt);
 	int get_note();
 	
-	DSP_AdjSynthVoice *get_dsp_voice();
+	DSP_Voice *get_dsp_voice();
 
-	DSP_AdjSynthVoice *dsp_voice = NULL;
+	DSP_Voice *dsp_voice = NULL;
 	
 	void set_magnitude(float mag);
 	float get_magnitude();

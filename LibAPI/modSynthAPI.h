@@ -102,6 +102,20 @@ int mod_synth_add_module(string ins_name, Instrument *instrument=NULL);
 */
 int mod_synth_remove_module(string ins_name);
 
+/**
+*   @brief  Sets the active sketch num
+*   @param  ask	the active sketch num _SKETCH_1 to _SKETCH_3
+*   @return void
+*/
+void mod_synth_set_active_sketch(int ask);
+
+/**
+*   @brief  Retruns the active sketch num
+*   @param  none
+*   @return the active sketch num _SKETCH_1 to _SKETCH_3
+*/
+int mod_synth_get_active_sketch();
+
 
 /**
 *   @brief  Initiates an amplifier-mixer related event with integer value (affects all voices).

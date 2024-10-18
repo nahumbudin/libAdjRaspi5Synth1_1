@@ -14,6 +14,7 @@
 
 #include "modSynth.h"
 #include "commonDefs.h"
+#include "modSynthPreset.h"
 
 #include "./CPU/CPUSnapshot.h"
 
@@ -33,6 +34,9 @@
 #include "./Instrument/instrumentMidiMapper.h"
 
 #include "./Instrument/instrumentControlBoxHandler.h"
+
+#include "./utils/xmlFiles.h"
+#include "./Settings/settings.h"
 
 // Mutex to controll audio memory blocks allocation
 //pthread_mutex_t voice_mem_blocks_allocation_control_mutex;
@@ -183,7 +187,8 @@ ModSynth::ModSynth()
 	}
 
 	int in_dev = alsa_midi_system_control->get_midi_input_client_id(removed_name);
-	int out_dev = alsa_midi_system_control->get_midi_output_client_id(_INSTRUMENT_NAME_CONTROL_BOX_HANDLER_STR_KEY);
+	int out_dev = alsa_midi_system_control->get_midi_output_client_id(
+		_INSTRUMENT_NAME_CONTROL_BOX_HANDLER_STR_KEY);
 	alsa_midi_system_control->connect_midi_clients(in_dev, 0, out_dev, 0);
 
 	patches_handler = PatchsHandler::get_patchs_handler_instance();
@@ -194,10 +199,15 @@ ModSynth::ModSynth()
 		midi_channel_synth[i] = _MIDI_CHAN_ASSIGNED_SYNTH_NONE;
 	}
 	
+	// Init sketc-programs state to assigned to AdjSynth (this will never change)
+	midi_channel_synth[_SKETCH_PROGRAM_1] = _MIDI_CHAN_ASSIGNED_SYNTH_ADJ;
+	midi_channel_synth[_SKETCH_PROGRAM_2] = _MIDI_CHAN_ASSIGNED_SYNTH_ADJ;
+	midi_channel_synth[_SKETCH_PROGRAM_3] = _MIDI_CHAN_ASSIGNED_SYNTH_ADJ;
+	
 	// TODO: Get the default settings directories from a file - currentlly hard coded below
 	
 	// ModSynth default settings directory
-	mod_synth_general_settings_file_path_name = "/home/pi/AdjRaspi5Synth/ModSynth/Default_Settings";
+	mod_synth_general_settings_file_path_name = "/home/pi/AdjRaspi5Synth/Settings/ModSynth/Default_Settings";
 	
 	// create the general setting manager(mange audio and midi settings)
 	general_settings_manager = new Settings(&active_general_synth_settings_params);
@@ -206,8 +216,32 @@ ModSynth::ModSynth()
 	
 	
 	adj_synth = AdjSynth::get_instance();
+	
+	set_audio_driver_type(_DEFAULT_AUDIO_DRIVER);
+	set_audio_block_size(_DEFAULT_BLOCK_SIZE);
+	set_sample_rate(_DEFAULT_SAMPLE_RATE);
+	
 	// Init the Adj synthesizers
 	init();
+	
+	adj_synth->audio_manager->register_callback_audio_update_cycle_start_tasks
+		(&callback_audio_update_cycle_start_tasks_wrapper);
+	
+	res = open_mod_synth_general_settings_file(mod_synth_general_settings_file_path_name + 
+												"/ModSynth_general_settings_1");
+	if (res != 0)
+	{
+		// File read failed - set to default settings parameters
+		set_default_general_settings_parameters(&active_general_synth_settings_params);
+	}
+	
+	// Init temp presets
+	preset_temp.name = "Preset_Temp";
+	preset_temp.settings_type = _MOD_SYNTH_PRESET_PARAMS;
+	preset_temp.version = general_settings_manager->get_settings_version();
+	set_default_preset_parameters(&preset_temp);
+	
+	ModSynthPresets::init();
 	
 	
 	// Start the CPU utilization measuring thread.
@@ -252,9 +286,33 @@ int ModSynth::init()
 	// Create and initialize the AdjSynth default Settings parameters values.
 	set_adj_synth_default_settings(adj_synth->get_active_settings_params());
 	
-	// Init programs
-	adj_synth->init_synth_programs(/*&active_adj_synth_patch*/);
 	
+	// Init programs - must be called before init voices.
+	adj_synth->init_synth_programs(/*&active_adj_synth_patch*/);
+	// Init voices
+	adj_synth->init_synth_voices();
+	
+	// Init polyphony manager
+	adj_synth->init_poly();
+	// Init JACK audio
+	adj_synth->init_jack();
+	
+	res = general_settings_manager->set_int_param(
+											&active_general_synth_settings_params,
+		"synth.master_volume",
+		_DEFAULT_MASTER_VOLUME,
+		100,
+		0,
+		_ADJ_SYNTH_PATCH_PARAMS,
+		NULL,	// no callbacks,
+		0,
+		0,
+		NULL,
+		_SET_VALUE | _SET_MAX_VAL | _SET_MIN_VAL | _SET_TYPE,
+		-1);
+	
+	set_fluid_synth_volume(_DEFAULT_FLUID_SYNTH_VOLUME);
+	set_master_volume(_DEFAULT_MASTER_VOLUME);
 
 	return 0;
 }
@@ -373,7 +431,7 @@ void ModSynth::set_master_volume(int vol)
 		vol,
 		100,
 		0,
-		"adj_synth_settings_param",
+		_ADJ_SYNTH_PATCH_PARAMS,
 		NULL,
 		_SET_VALUE);
 
@@ -489,6 +547,32 @@ int ModSynth::stop_audio()
 	res |= adj_synth->stop_audio();
 	
 	return res;
+}
+
+int ModSynth::get_midi_channel_synth(int chan)
+{
+	if ((chan >= 0) && (chan <= 15))
+	{
+		return midi_channel_synth[chan];
+	}
+	else
+	{
+		return 0;
+	}
+}
+
+/**
+*   @brief  Set the midi channel assigned synthesizer.
+*   @param  chan	midi channel number 0-15
+*	@parm	synth	synthesizer id
+*   @return void
+*/
+void ModSynth::set_midi_channel_synth(int chan, int synth)
+{
+	if ((chan >= 0) && (chan <= 15))
+	{
+		midi_channel_synth[chan] = synth;
+	}
 }
 
 /**
@@ -608,6 +692,169 @@ int ModSynth::get_audio_driver_type() { return audio_driver; }
 *   @return buffer size
 */	
 int ModSynth::get_audio_block_size() { return audio_block_size; }
+
+/**
+*   @brief  Save AdjSynth Patch parameters as XML file
+*   @param  path settings XML file full path
+*   @param	settings a pointer to a ModSynthSettings settings handling object
+*   @param	param	a pointer to a _setting_params_t params structure
+*	@param save_mask bit map to set saved params type #_SAVE_FLUID_SETTINGS, #_SAVE_ADJ_SYNTH_PATCH, _SAVE_ADJ_SYNTH_SETTINGS
+*   @return 0 if done
+*/
+int ModSynth::save_adj_synth_patch_file(string path, Settings *settings, _settings_params_t *params)
+{
+	int res;
+	XML_files *xml_files = new XML_files();
+	
+	return_val_if_true(params == NULL || settings == NULL, _SETTINGS_BAD_PARAMETERS);
+
+	res = settings->write_settings_file(
+		params,
+		settings->get_settings_version(),
+		xml_files->get_xml_file_name(path),
+		path,
+		_ADJ_SYNTH_PATCH_PARAMS);
+	
+	//	printf("Save settings to  %s\n", path.c_str());
+
+	return res;
+}
+
+/**
+*   @brief  Open an AdjSynth Patch parameters XML file and set it parameters
+*   @param  path settings XML file full path
+*   @param	settings a pointer to a ModSynthSettings settings handling object
+*   @param	param	a pointer to a _setting_params_t params structure
+*   @return 0 if done
+*/
+int ModSynth::open_adj_synth_patch_file(string path, Settings *settings, _settings_params_t *params, int channel)
+{
+	settings_res_t res;
+	
+	return_val_if_true(params == NULL || settings == NULL, _SETTINGS_BAD_PARAMETERS);
+	
+	res = settings->read_settings_file(params, path, _ADJ_SYNTH_PATCH_PARAMS, channel);
+
+	if (res == _SETTINGS_OK)
+	{
+		//		adj_synth->synth_program[channel]->set_program_patch_params(params);
+		
+		adj_synth->synth_program[channel]->synth_pad_creator->generate_wavetable(
+			adj_synth->synth_program[channel]->program_wavetable);
+
+		adj_synth->synth_program[channel]->mso_wtab->calc_segments_lengths(
+			&adj_synth->synth_program[channel]->mso_wtab->morphed_segment_lengths, 
+			&adj_synth->synth_program[channel]->mso_wtab->morphed_segment_positions);
+		
+		adj_synth->synth_program[channel]->mso_wtab->calc_wtab(
+			adj_synth->synth_program[channel]->mso_wtab->morphed_waveform_tab, 
+			&adj_synth->synth_program[channel]->mso_wtab->morphed_segment_lengths, 
+			&adj_synth->synth_program[channel]->mso_wtab->morphed_segment_positions);
+		
+		//	printf("Open settings  %s\n", path.c_str());
+		return 0;
+	}
+	else
+	{
+		return -1;
+	}	
+
+	return res;
+}
+
+/**
+*   @brief  Save the active AdjSynth patch parameters as XML file
+*   @param  path settings XML file full path
+*   @return 0 if done
+*/
+int ModSynth::save_adj_synth_patch_file(string path)
+{
+	return save_adj_synth_patch_file(path,
+		adj_synth->adj_synth_settings_manager, 
+		&adj_synth->synth_program[mod_synth_get_active_sketch()]->active_patch_params);
+}
+
+/**
+*   @brief  Open settings parameters XML file and set it as the AdjSynth active patch parameters
+*   @param  path settings XML file full path
+*	@param	channel	midi channel (0-15, 16-18 for active patch).
+*   @return 0 if done
+*/
+int ModSynth::open_adj_synth_patch_file(string path, int channel)
+{
+	return open_adj_synth_patch_file(path,
+		adj_synth->adj_synth_settings_manager, 
+		&adj_synth->synth_program[channel]->active_patch_params,
+		channel);
+}
+
+/**
+*   @brief  Save the active AdjSynth settings parameters as XML file
+*   @param  path settings XML file full path
+*   @param	settings a pointer to a ModSynthSettings settings handling object
+*   @param	param	a pointer to a _setting_params_t params structure
+*	@param save_mask bit map to set saved params type #_SAVE_FLUID_SETTINGS, #_SAVE_ADJ_SYNTH_PATCH, _SAVE_ADJ_SYNTH_SETTINGS
+*   @return 0 if done
+*/
+int ModSynth::save_adj_synth_settings_file(string path, Settings *settings, _settings_params_t *params)
+{
+	XML_files *xml_files = new XML_files();
+	int res;
+	
+	return_val_if_true(params == NULL || settings == NULL, _SETTINGS_BAD_PARAMETERS);
+
+	res = settings->write_settings_file(
+		params, 
+		settings->get_settings_version(),
+		xml_files->get_xml_file_name(path),
+		path,
+		_ADJ_SYNTH_SETTINGS_PARAMS);
+	return res;
+}
+
+/**
+*   @brief  Open an AdjSynth settings parameters XML file and set it as the active settings
+*   @param  path settings XML file full path
+*   @param	settings a pointer to a ModSynthSettings settings handling object
+*   @param	param	a pointer to a _setting_params_t params structure
+*   @return 0 if done
+*/
+int ModSynth::open_adj_synth_settings_file(string path, Settings *settings, _settings_params_t *params)
+{
+	int res;
+	
+	return_val_if_true(params == NULL || settings == NULL, _SETTINGS_BAD_PARAMETERS);
+	
+	res = settings->read_settings_file(params, path, _ADJ_SYNTH_SETTINGS_PARAMS);
+	
+	//	printf("Open settings  %s\n", path.c_str());
+
+	return res;
+}
+
+/**
+*   @brief  Save the active ModSynth general settings parameters as XML file
+*   @param  path general settings XML file full path
+*   @return 0 if done
+*/
+int ModSynth::save_mod_synth_general_settings_file(string path)
+{
+	return save_adj_synth_settings_file(path,
+		general_settings_manager,
+		&active_general_synth_settings_params);
+}
+
+/**
+*   @brief  Open general settings parameters XML file and set it as the AdjSynth active settings parameters
+*   @param  path settings XML file full path
+*   @return 0 if done
+*/
+int ModSynth::open_mod_synth_general_settings_file(string path)
+{
+	return open_adj_synth_settings_file(path,
+		general_settings_manager, 
+		&active_general_synth_settings_params);
+}
 
 
 void ModSynth::note_on(uint8_t channel, uint8_t note, uint8_t velocity)

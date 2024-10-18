@@ -428,6 +428,15 @@ void mod_synth_register_callback_wrapper_open_module_pannel_name(func_ptr_void_s
  ******************************************************************/
 
 
+void mod_synth_set_active_sketch(int ask)
+{
+	AdjSynth::get_instance()->set_active_sketch(ask);
+}
+
+int mod_synth_get_active_sketch()
+{
+	return AdjSynth::get_instance()->get_active_sketch();
+}
 
 int mod_synth_amp_event(int ampid, int eventid, int val)
 {
@@ -982,6 +991,8 @@ std::string mod_synth_get_fluid_synth_channel_preset_soundfont_name(int chan)
 	return mod_synthesizer->get_fluid_synth()->get_fluid_synth_interface()->get_fluid_synth_channel_preset_soundfont_name(chan);
 }
 
+/* Settings Files Handling */
+
 int mod_synth_save_fluid_synth_settings_file(string path)
 {
 	return mod_synthesizer->get_fluid_synth()->save_fluid_synth_settings_file(path);
@@ -990,6 +1001,67 @@ int mod_synth_save_fluid_synth_settings_file(string path)
 int mod_synth_open_fluid_synth_settings_file(string path)
 {
 	return mod_synthesizer->get_fluid_synth()->open_fluid_synth_settings_file(path);
+}
+
+int mod_synth_save_adj_synth_patch_file(string path)
+{
+	
+}
+
+int mod_synth_open_adj_synth_patch_file(std::string path, int channel)
+{
+	return mod_synthesizer->open_adj_synth_patch_file(path, channel);
+}
+
+
+std::string mod_synth_get_program_patch_name(int prog)
+{
+	
+}
+
+int mod_synth_save_adj_synth_settings_file(string path)
+{
+	
+}
+
+int mod_synth_open_adj_synth_settings_file(std::string path)
+{
+	
+}
+
+int mod_synth_save_mod_synth_general_settings_file(string path)
+{
+	
+}
+
+int mod_synth_open_mod_synth_general_settings_file(std::string path)
+{
+	
+}
+
+int mod_synth_save_mod_synth_preset_file(string path)
+{
+	
+}
+
+int mod_synth_open_mod_synth_preset_file(std::string path, int presetNum)
+{
+	
+}
+
+void mod_synth_set_mod_synth_active_preset_num(int presetNum)
+{
+	
+}
+
+int mod_synth_get_mod_synth_active_preset_num()
+{
+	
+}
+
+string *mod_synth_get_preset_summary_string(int presetNum)
+{
+	
 }
 
 /* UI Callback Functions Registration */

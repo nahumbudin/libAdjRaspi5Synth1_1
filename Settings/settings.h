@@ -65,6 +65,27 @@ using namespace std;
 
 #define _CHECK_MASK(mask, bit) (mask & bit)
 
+#define	_SAVE_FLUID_SETTINGS			(1 << 1)
+#define	_SAVE_ADJ_SYNTH_PATCH			(1 << 2)
+#define	_SAVE_ADJ_SYNTH_SETTINGS		 (1 << 3)
+#define	_SAVE_MOD_SYNTH_SETTINGS		 (1 << 4)
+#define	_SAVE_MOD_SYNTH_PRESET			(1 << 5)
+#define _SAVE_MOD_SYNTH_KBD_MAP			(1 << 6)
+
+#define	_READ_FLUID_SETTINGS			_SAVE_FLUID_SETTINGS
+#define	_READ_ADJ_SYNTH_PATCH			_SAVE_ADJ_SYNTH_PATCH
+#define	_READ_ADJ_SYNTH_SETTINGS		_SAVE_ADJ_SYNTH_SETTINGS
+#define	_READ_MOD_SYNTH_SETTINGS		_SAVE_MOD_SYNTH_SETTINGS
+#define	_READ_MOD_SYNTH_PRESET			_SAVE_MOD_SYNTH_PRESET
+#define _READ_MOD_SYNTH_KBD_MAP			_SAVE_MOD_SYNTH_KBD_MAP
+
+#define	_FLUID_SETTINGS_PARAMS			"fluid_settings_params"
+#define	_ADJ_SYNTH_PATCH_PARAMS			"adj_synth_patch_params"
+#define	_ADJ_SYNTH_SETTINGS_PARAMS		"adj_synth_settings_params"
+#define	_MOD_SYNTH_SETTINGS_PARAMS		"mod_synth_settings_params"
+#define	_MOD_SYNTH_PRESET_PARAMS		"mod_synth_preset_params"
+#define _MOD_SYNTH_KBD_MAP_PARAMS		"mod_synth_kbd_map_params"
+
 /* Not in use!? */
 #define _PARAM_TYPE_NONE 0
 /* Indicates that the parameter is a global settings parameter */

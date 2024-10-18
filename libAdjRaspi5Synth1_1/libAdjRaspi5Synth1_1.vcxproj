@@ -85,7 +85,6 @@
     <ClInclude Include="..\commonDefs.h" />
     <ClInclude Include="..\CPU\cpuData.h" />
     <ClInclude Include="..\CPU\CPUSnapshot.h" />
-    <ClInclude Include="..\DSP\dspAdjSynthVoice.h" />
     <ClInclude Include="..\DSP\dspAdsr.h" />
     <ClInclude Include="..\DSP\dspAmp.h" />
     <ClInclude Include="..\DSP\dspBandEqualizer.h" />
@@ -104,6 +103,7 @@
     <ClInclude Include="..\DSP\dspSineWaveGenerator.h" />
     <ClInclude Include="..\DSP\dspSquareWaveGenerator.h" />
     <ClInclude Include="..\DSP\dspTriangleWaveGenerator.h" />
+    <ClInclude Include="..\DSP\dspVoice.h" />
     <ClInclude Include="..\DSP\dspWaveformTable.h" />
     <ClInclude Include="..\DSP\dspWavetable.h" />
     <ClInclude Include="..\FluidSynth\fluidSynthInterface.h" />
@@ -150,6 +150,7 @@
     <ClInclude Include="..\MIDI\midiStream.h" />
     <ClInclude Include="..\Misc\priorities.h" />
     <ClInclude Include="..\modSynth.h" />
+    <ClInclude Include="..\modSynthPreset.h" />
     <ClInclude Include="..\Patches\patches.h" />
     <ClInclude Include="..\Serial\adjRS232.h" />
     <ClInclude Include="..\Serial\serialPort.h" />
@@ -183,6 +184,7 @@
     <ClCompile Include="..\AdjSynth\adjSynthEventsHandlingFilter.cpp" />
     <ClCompile Include="..\AdjSynth\adjSynthEventsHandlingKeyboard.cpp" />
     <ClCompile Include="..\AdjSynth\adjSynthEventsHandlingKPS.cpp" />
+    <ClCompile Include="..\AdjSynth\adjSynthEventsHandlingMixer.cpp" />
     <ClCompile Include="..\AdjSynth\adjSynthEventsHandlingModulators.cpp" />
     <ClCompile Include="..\AdjSynth\adjSynthEventsHandlingMSO.cpp" />
     <ClCompile Include="..\AdjSynth\adjSynthEventsHandlingNoise.cpp" />
@@ -229,13 +231,6 @@
     <ClCompile Include="..\Bluetooth\rspiBluetoothServicesQueuesVer.cpp" />
     <ClCompile Include="..\CPU\cpuData.cpp" />
     <ClCompile Include="..\CPU\CPUSnapshot.cpp" />
-    <ClCompile Include="..\DSP\dspAdjSynthVoice.cpp" />
-    <ClCompile Include="..\DSP\dspAdjSynthVoiceAmp.cpp" />
-    <ClCompile Include="..\DSP\dspAdjSynthVoiceDistortion.cpp" />
-    <ClCompile Include="..\DSP\dspAdjSynthVoiceFilter.cpp" />
-    <ClCompile Include="..\DSP\dspAdjSynthVoiceLfos.cpp" />
-    <ClCompile Include="..\DSP\dspAdjSynthVoiceOsc.cpp" />
-    <ClCompile Include="..\DSP\dspAdjSynthVoicePad.cpp" />
     <ClCompile Include="..\DSP\dspAdsr.cpp" />
     <ClCompile Include="..\DSP\dspAmp.cpp" />
     <ClCompile Include="..\DSP\dspBandEqualizer.cpp" />
@@ -253,9 +248,16 @@
     <ClCompile Include="..\DSP\dspSineWaveGenerator.cpp" />
     <ClCompile Include="..\DSP\dspSquareWaveGenerator.cpp" />
     <ClCompile Include="..\DSP\dspTriangleWaveGenerator.cpp" />
-    <ClCompile Include="..\DSP\dspAdjSynthVoiceKarplusStrong.cpp" />
-    <ClCompile Include="..\DSP\dspAdjSynthVoiceMso.cpp" />
-    <ClCompile Include="..\DSP\dspAdjSynthVoiceNoise.cpp" />
+    <ClCompile Include="..\DSP\dspVoice.cpp" />
+    <ClCompile Include="..\DSP\dspVoiceAmp.cpp" />
+    <ClCompile Include="..\DSP\dspVoiceDistortion.cpp" />
+    <ClCompile Include="..\DSP\dspVoiceFilter.cpp" />
+    <ClCompile Include="..\DSP\dspVoiceKarplusStrong.cpp" />
+    <ClCompile Include="..\DSP\dspVoiceLfos.cpp" />
+    <ClCompile Include="..\DSP\dspVoiceMso.cpp" />
+    <ClCompile Include="..\DSP\dspVoiceNoise.cpp" />
+    <ClCompile Include="..\DSP\dspVoiceOscilators.cpp" />
+    <ClCompile Include="..\DSP\dspVoicePad.cpp" />
     <ClCompile Include="..\DSP\dspWaveformTable.cpp" />
     <ClCompile Include="..\DSP\dspWavetable.cpp" />
     <ClCompile Include="..\FluidSynth\fluidSynthInterface.cpp" />
@@ -302,8 +304,11 @@
     <ClCompile Include="..\MIDI\midiStream.cpp" />
     <ClCompile Include="..\modSynth.cpp" />
     <ClCompile Include="..\modSynthCollectPresetParams.cpp" />
+    <ClCompile Include="..\modSynthDefaultPresetParams.cpp" />
     <ClCompile Include="..\modSynthDefaultSettingsParams.cpp" />
     <ClCompile Include="..\modSynthDefaultSettingsParamsAudio.cpp" />
+    <ClCompile Include="..\modSynthPreset.cpp" />
+    <ClCompile Include="..\modSynthPresetsCallbacks.cpp" />
     <ClCompile Include="..\Patches\patches.cpp" />
     <ClCompile Include="..\Serial\adjRS232.cpp" />
     <ClCompile Include="..\Serial\serialPort.cpp" />

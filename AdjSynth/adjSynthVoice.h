@@ -26,7 +26,7 @@
 
 #include "../DSP/dspMorphedSineOsc.h"
 
-class DSP_AdjSynthVoice;
+class DSP_Voice;
 class AudioVoiceFloat;
 class AudioManager;
 
@@ -54,7 +54,7 @@ public:
 	void set_voice_params(_settings_params_t *params);
 	_settings_params_t *get_voice_params();
 
-	void assign_dsp_voice(DSP_AdjSynthVoice *dspv = NULL);
+	void assign_dsp_voice(DSP_Voice *dspv = NULL);
 
 	void set_allocated_program(int prg);
 	int get_allocated_program();
@@ -63,7 +63,7 @@ public:
 
 	AudioVoiceFloat *audio_voice = NULL;
 
-	DSP_AdjSynthVoice *dsp_voice = NULL;
+	DSP_Voice *dsp_voice = NULL;
 
 	int voice_num;
 	int allocated_to_program_num;

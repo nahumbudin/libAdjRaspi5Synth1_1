@@ -31,7 +31,7 @@
 #include "../Audio/audioReverb.h"
 #include "../Audio/audioPolyphonyMixer.h"
 
-class DSP_AdjSynthVoice;
+class DSP_Voice;
 class AudioManager;
 class SynthVoice;
 class AudioOutputFloat;
@@ -63,7 +63,7 @@ public:
 	int start_audio(int driver, int samp_rate, int block_size);
 	int stop_audio();
 	
-	DSP_AdjSynthVoice *get_original_main_dsp_voices(int voice);
+	DSP_Voice *get_original_main_dsp_voices(int voice);
 	
 	int init_synth_settings_params(_settings_params_t *settings_params);
 	
@@ -212,7 +212,7 @@ private:
 	bool hammond_percussion_on, hammond_percussion_slow, hammond_percussion_soft, hammond_ercussion_3_rd;
 	
 	// Used to hold original voice settings to be reproduced when a dsp voice is disallocated by a voice program.
-	DSP_AdjSynthVoice *original_main_dsp_voices[_SYNTH_MAX_NUM_OF_VOICES] = { NULL };
+	DSP_Voice *original_main_dsp_voices[_SYNTH_MAX_NUM_OF_VOICES] = { NULL };
 	
 	int sample_rate, audio_block_size, audio_driver_type;
 	

@@ -322,7 +322,7 @@ SynthVoice *SynthProgram::get_free_voice()
 
 	if (voice < num_of_voices)
 	{
-		synth_voices[voice]->dsp_voice->set_in_use();
+		synth_voices[voice]->dsp_voice->in_use();
 		return synth_voices[voice];
 	}
 	else
@@ -340,7 +340,7 @@ void SynthProgram::free_voice(int voice)
 {
 	if ((voice >= 0) && (voice < num_of_voices))
 	{
-		synth_voices[voice]->dsp_voice->set_not_in_use();
+		synth_voices[voice]->dsp_voice->not_in_use();
 		printf("program: %i free voice: %i\n", prog_num, voice);
 	}
 		

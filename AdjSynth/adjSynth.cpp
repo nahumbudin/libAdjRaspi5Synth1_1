@@ -29,6 +29,9 @@
 #include "../Audio/audioPolyphonyMixer.h"
 #include "../MIDI/midiStream.h"
 #include "../Settings/settings.h"
+#include "../DSP/dspVoice.h"
+
+class DSP_Voice;
 
 
 AdjSynth *AdjSynth::adj_synth = NULL;
@@ -388,7 +391,7 @@ int AdjSynth::stop_audio()
 *   @param  voice voice number
 *   @return  pointer to an original main dsp voice if OK; NULL if param out of range
 */	
-DSP_AdjSynthVoice *AdjSynth::get_original_main_dsp_voices(int voice)
+DSP_Voice *AdjSynth::get_original_main_dsp_voices(int voice)
 {
 	if ((voice >= 0) && (voice < num_of_voices))
 	{	
@@ -418,11 +421,6 @@ void AdjSynth::init_synth_voices()
 			program_wavetable,
 			audio_manager);
 		
-		//		originalMainDspVoices[voice] = synth_voice[voice]->dspVoice;
-				
-//		synth_voice[voice] = synth_program[0]->synth_voices[voice];		
-		
-		
 		// Assign the program voice to the original voice
 		synth_voice[voice]->assign_dsp_voice(synth_program[active_sketch]->synth_voices[voice]->dsp_voice);
 		// Assingn LUTs
@@ -449,13 +447,6 @@ void AdjSynth::init_synth_programs()
 			0,						// 1st voice num'
 			_PAD_DEFAULT_WAVETABLE_SIZE,
 			audio_manager);
-		
-		//		set_default_patch_parameters(&synth_program[program]->active_patch_params, program);
-
-		//		synth_program[program]->register_set_patch_settings_default_params_callback_ptr(&set_patch_settings_default_params_callback_wrapper);
-		//		synth_program[program]->activate_set_patch_settings_default_params_callback(
-		//			&synth_program[program]->active_patch_params,
-		//			program);
 	}
 }
 
@@ -717,16 +708,16 @@ void AdjSynth::init_poly()
 		}
 		mark_voice_not_busy_callback(voice);
 
-		//for (int core = 0; core < mod_synth_get_number_of_cores(); core++)
-		//{	
-		//	synth_polyphony->clear_busy_core_voices_count(core);
-		//}
+		for (int core = 0; core < polypony_manager->get_number_of_cores() ; core++)
+		{	
+			polypony_manager->clear_core_processing_load_weight(core);
+		}
 
 		for (int program = 0; program < _SYNTH_MAX_NUM_OF_PROGRAMS; program++)
 		{
 			if (synth_program[program]->synth_voices[voice] != NULL)
 			{	
-				synth_program[program]->synth_voices[voice]->dsp_voice->set_not_in_use();
+				synth_program[program]->synth_voices[voice]->dsp_voice->not_in_use();
 			}
 		}
 	}

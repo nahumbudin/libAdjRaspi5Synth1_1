@@ -15,6 +15,7 @@
 */
 
 #include "adjSynthVoice.h"
+#include "../DSP/dspVoice.h"
 
 /**
 *	@brief	Creates a SynthVoice instance
@@ -50,7 +51,7 @@ SynthVoice::SynthVoice(
 	allocated_to_program_voice_num = -1;
 	settings_manager->settings_params_deep_copy(&active_params, params);
 		
-	dsp_voice = new DSP_AdjSynthVoice(voice_num, sample_rate, audio_block_size, pad_wavetable, NULL); //<<<<<< 
+	dsp_voice = new DSP_Voice(voice_num, sample_rate, audio_block_size, mso_wtab, pad_wavetable, NULL); //<<<<<< 
 	audio_voice = new AudioVoiceFloat(
 			_AUDIO_STAGE_2,			// process stage 2
 		sample_rate,
@@ -237,7 +238,7 @@ void SynthVoice::update_all()
 *   @param  dspv	a pointer to a DSP_Voice object instance
 *   @return void
 */
-void SynthVoice::assign_dsp_voice(DSP_AdjSynthVoice *dspv)
+void SynthVoice::assign_dsp_voice(DSP_Voice *dspv)
 {
 	if (dspv)
 	{
@@ -898,7 +899,7 @@ void SynthVoice::set_voice_params(_settings_params_t *params)
 	res = settings_manager->get_bool_param(params, "adjsynth.pad_synth.enabled", &bool_param);
 	if (res == _SETTINGS_KEY_FOUND)
 	{
-		dsp_voice->pad_1_active = bool_param.value;
+		dsp_voice->wavetable_1_active = bool_param.value;
 	}
 
 	res = settings_manager->get_int_param(params, "adjsynth.pad_synth.send_filter_1", &int_param);
@@ -916,19 +917,19 @@ void SynthVoice::set_voice_params(_settings_params_t *params)
 	res = settings_manager->get_int_param(params, "adjsynth.pad_synth.tune_offset_octave", &int_param);
 	if (res == _SETTINGS_KEY_FOUND)
 	{
-		dsp_voice->pad_1->set_freq_detune_oct(int_param.value);
+		dsp_voice->wavetable_1->set_freq_detune_oct(int_param.value);
 	}
 	
 	res = settings_manager->get_int_param(params, "adjsynth.pad_synth.tune_offset_semitones", &int_param);
 	if (res == _SETTINGS_KEY_FOUND)
 	{
-		dsp_voice->pad_1->set_freq_detune_semitones(int_param.value);
+		dsp_voice->wavetable_1->set_freq_detune_semitones(int_param.value);
 	}
 
 	res = settings_manager->get_int_param(params, "adjsynth.pad_synth.tune_offset_cents", &int_param);
 	if (res == _SETTINGS_KEY_FOUND)
 	{
-		dsp_voice->pad_1->set_freq_detune_cents(int_param.value);
+		dsp_voice->wavetable_1->set_freq_detune_cents(int_param.value);
 	}
 	
 	res = settings_manager->get_int_param(params, "adjsynth.pad_synth.freq_modulation_lfo_num", &int_param);

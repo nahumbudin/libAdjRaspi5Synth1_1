@@ -324,36 +324,6 @@
     <ClCompile Include="..\DSP\dspKarplusStrong.cpp">
       <Filter>Source files\DSP</Filter>
     </ClCompile>
-    <ClCompile Include="..\DSP\dspAdjSynthVoice.cpp">
-      <Filter>Source files\DSP</Filter>
-    </ClCompile>
-    <ClCompile Include="..\DSP\dspAdjSynthVoiceOsc.cpp">
-      <Filter>Source files\DSP</Filter>
-    </ClCompile>
-    <ClCompile Include="..\DSP\dspAdjSynthVoiceNoise.cpp">
-      <Filter>Source files\DSP</Filter>
-    </ClCompile>
-    <ClCompile Include="..\DSP\dspAdjSynthVoiceKarplusStrong.cpp">
-      <Filter>Source files\DSP</Filter>
-    </ClCompile>
-    <ClCompile Include="..\DSP\dspAdjSynthVoiceMso.cpp">
-      <Filter>Source files\DSP</Filter>
-    </ClCompile>
-    <ClCompile Include="..\DSP\dspAdjSynthVoicePad.cpp">
-      <Filter>Source files\DSP</Filter>
-    </ClCompile>
-    <ClCompile Include="..\DSP\dspAdjSynthVoiceFilter.cpp">
-      <Filter>Source files\DSP</Filter>
-    </ClCompile>
-    <ClCompile Include="..\DSP\dspAdjSynthVoiceDistortion.cpp">
-      <Filter>Source files\DSP</Filter>
-    </ClCompile>
-    <ClCompile Include="..\DSP\dspAdjSynthVoiceAmp.cpp">
-      <Filter>Source files\DSP</Filter>
-    </ClCompile>
-    <ClCompile Include="..\DSP\dspAdjSynthVoiceLfos.cpp">
-      <Filter>Source files\DSP</Filter>
-    </ClCompile>
     <ClCompile Include="..\DSP\dspOsc.cpp">
       <Filter>Source files\DSP</Filter>
     </ClCompile>
@@ -612,6 +582,48 @@
     <ClCompile Include="..\LibAPI_getReverbParams.cpp">
       <Filter>Source files\LibApi</Filter>
     </ClCompile>
+    <ClCompile Include="..\DSP\dspVoice.cpp">
+      <Filter>Source files\DSP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\DSP\dspVoiceAmp.cpp">
+      <Filter>Source files\DSP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\DSP\dspVoiceDistortion.cpp">
+      <Filter>Source files\DSP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\DSP\dspVoiceFilter.cpp">
+      <Filter>Source files\DSP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\DSP\dspVoiceKarplusStrong.cpp">
+      <Filter>Source files\DSP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\DSP\dspVoiceLfos.cpp">
+      <Filter>Source files\DSP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\DSP\dspVoiceMso.cpp">
+      <Filter>Source files\DSP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\DSP\dspVoiceNoise.cpp">
+      <Filter>Source files\DSP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\DSP\dspVoiceOscilators.cpp">
+      <Filter>Source files\DSP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\DSP\dspVoicePad.cpp">
+      <Filter>Source files\DSP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\modSynthPreset.cpp">
+      <Filter>Source files\Synthesizer\modSynth</Filter>
+    </ClCompile>
+    <ClCompile Include="..\modSynthPresetsCallbacks.cpp">
+      <Filter>Source files\Synthesizer\modSynth</Filter>
+    </ClCompile>
+    <ClCompile Include="..\modSynthDefaultPresetParams.cpp">
+      <Filter>Source files\Synthesizer\modSynth</Filter>
+    </ClCompile>
+    <ClCompile Include="..\AdjSynth\adjSynthEventsHandlingMixer.cpp">
+      <Filter>Source files\Synthesizer\AdjSynth\Settings Handlers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\libAdjRaspi5Synth_1_1.h">
@@ -818,9 +830,6 @@
     <ClInclude Include="..\DSP\dspDistortion.h">
       <Filter>Header files\DSP</Filter>
     </ClInclude>
-    <ClInclude Include="..\DSP\dspAdjSynthVoice.h">
-      <Filter>Header files\DSP</Filter>
-    </ClInclude>
     <ClInclude Include="..\DSP\dspWavetable.h">
       <Filter>Header files\DSP</Filter>
     </ClInclude>
@@ -916,6 +925,12 @@
     </ClInclude>
     <ClInclude Include="..\LibAPI_settingsManager.h">
       <Filter>Header files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\DSP\dspVoice.h">
+      <Filter>Header files\DSP</Filter>
+    </ClInclude>
+    <ClInclude Include="..\modSynthPreset.h">
+      <Filter>Header files\Synthesizer</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

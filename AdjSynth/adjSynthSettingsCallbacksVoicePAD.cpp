@@ -35,21 +35,21 @@ int set_voice_block_pad_synth_enabled_cb(bool enable, int voice, int prog)
 
 int set_voice_block_pad_synth_detune_octave_cb(int oct, int voice, int prog)
 {
-	AdjSynth::get_instance()->synth_program[prog]->synth_voices[voice]->dsp_voice->pad_1->
+	AdjSynth::get_instance()->synth_program[prog]->synth_voices[voice]->dsp_voice->wavetable_1->
 					set_freq_detune_oct(oct);
 	return 0;
 }
 
 int set_voice_block_pad_synth_detune_semitones_cb(int semt, int voice, int prog)
 {
-	AdjSynth::get_instance()->synth_program[prog]->synth_voices[voice]->dsp_voice->pad_1->
+	AdjSynth::get_instance()->synth_program[prog]->synth_voices[voice]->dsp_voice->wavetable_1->
 					set_freq_detune_semitones(semt);
 	return 0;
 }
 
 int set_voice_block_pad_synth_detune_cents_cb(int cnts, int voice, int prog)
 {
-	AdjSynth::get_instance()->synth_program[prog]->synth_voices[voice]->dsp_voice->pad_1->
+	AdjSynth::get_instance()->synth_program[prog]->synth_voices[voice]->dsp_voice->wavetable_1->
 					set_freq_detune_cents(cnts);
 	return 0;
 }

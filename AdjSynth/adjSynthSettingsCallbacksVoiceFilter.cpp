@@ -18,6 +18,7 @@
 
 #include "adjSynth.h"
 
+
 int set_voice_block_filter_1_frequency_cb(int freq, int voice, int prog)
 {
 	AdjSynth::get_instance()->synth_program[prog]->synth_voices[voice]->dsp_voice->filter_1->
