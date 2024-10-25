@@ -38,6 +38,8 @@ public:
 	static int calc_log_scale_100_int(int min, int max, int base, int val);
 
 	static std::string execute_system_command_getstd_out(std::string cmd);
+	
+	static pid_t get_process_id(char *process_name);
 };
 
 

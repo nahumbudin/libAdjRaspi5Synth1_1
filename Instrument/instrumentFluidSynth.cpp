@@ -14,6 +14,7 @@
 
 #include "instrumentFluidSynth.h"
 #include "../utils/xmlFiles.h"
+#include "../LibAPI/synthesizer.h"
 
 //FluidSynthInterface *InstrumentFluidSynth::fluid_synth_int_instance = NULL;
 
@@ -484,25 +485,113 @@ int InstrumentFluidSynth::get_fluid_synth_channel_bank(int chan)
 
 int InstrumentFluidSynth::events_handler(int moduleid, int paramid, int val, _settings_params_t *params, int program)
 {
-
-	return 0;
+	if (moduleid == _FLUID_SYNTH_1_EVENT)
+	{
+		if (paramid == _FLUID_SYNTH_VOLUME)
+		{
+			set_volume(val);
+		}
+		else if (paramid == _FLUID_SYNTH_REVERB_ROOM_SIZE)
+		{
+			set_reverb_room_size(val);
+		}
+		else if (paramid == _FLUID_SYNTH_REVERB_DAMP)
+		{
+			set_reverb_damp(val);
+		}
+		else if (paramid == _FLUID_SYNTH_REVERB_WIDTH)
+		{
+			set_reverb_width(val);
+		}
+		else if (paramid == _FLUID_SYNTH_REVERB_LEVEL)
+		{
+			set_reverb_level(val);
+		}
+		else if (paramid == _FLUID_SYNTH_CHORUS_NUMBER)
+		{
+			set_chorus_number(val);
+		}
+		else if (paramid == _FLUID_SYNTH_CHORUS_LEVEL)
+		{
+			set_chorus_level(val);
+		}
+		else if (paramid == _FLUID_SYNTH_CHORUS_SPEED)
+		{
+			set_chorus_speed(val);
+		}
+		else if (paramid == _FLUID_SYNTH_CHORUS_DEPTH)
+		{
+			set_chorus_depth(val);
+		}
+		else if (paramid == _FLUID_SYNTH_CHORUS_WAVEFORM)
+		{
+			set_chorus_waveform(val);
+		}
+		else
+		{
+			return -2;
+		}		
+		
+		return 0;
+	}
+	
+	return -1;
 }
 
-int InstrumentFluidSynth::events_handler(int moduleid, int paramid, double val, _settings_params_t *params, int program)
+int InstrumentFluidSynth::events_handler(int moduleid, int paramid, float val, _settings_params_t *params, int program)
 {
-
-	return 0;
+	if (moduleid == _FLUID_SYNTH_1_EVENT)
+	{
+		return 0;
+	}
+	
+	return -1;
 }
 
 int InstrumentFluidSynth::events_handler(int moduleid, int paramid, bool val, _settings_params_t *params, int program)
 {
-
-	return 0;
+	if (moduleid == _FLUID_SYNTH_1_EVENT)
+	{
+		if (paramid == _FLUID_SYNTH_REVERB_ENABLE)
+		{
+			if (val)
+			{
+				enable_reverb();
+			}
+			else
+			{
+				disable_reverb();
+			}
+		}
+		else if (paramid == _FLUID_SYNTH_CHORUS_ENABLE)
+		{
+			if (val)
+			{
+				enable_chorus();
+			}
+			else
+			{
+				disable_chorus();
+			}
+		}
+		else
+		{
+			return -2;
+		}
+		
+		return 0;
+	}
+	
+	return -1;
 }
 
 int InstrumentFluidSynth::events_handler(int moduleid, int paramid, string val, _settings_params_t *params, int program)
 {
-
-	return 0;
+	if (moduleid == _FLUID_SYNTH_1_EVENT)
+	{
+		return 0;
+	}
+	
+	return -1;
 }
 

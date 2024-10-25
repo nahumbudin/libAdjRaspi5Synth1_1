@@ -103,7 +103,7 @@ AudioManager::AudioManager(int mseed)
 		pthread_mutex_init(&update_mutex[i], NULL);
 	}
 	
-	config_file = new JackConfigurationFile("/home/pi/AdjHeartModSynth_2/JackConfig.txt"); // TODO: get path from configuration
+	config_file = new JackConfigurationFile("/home/pi/AdjRaspi5Synth/JackConfig.txt"); // TODO: get path from configuration
 }
 
 
@@ -311,10 +311,18 @@ int AudioManager::start_jack_service(int mode, bool auto_start, bool auto_connec
 		disable_jack_auto_connect_audio();
 	}
 	
+	char process_name[] = "qjackctl"; 
+	
+	pid_t pid = Utils::get_process_id(process_name);
+	
 	if (get_jack_auto_start_state())
 	{
 		// start jack server
-		system("qjackctl &"); // Run qjackctl in the background and return (&)
+		if (pid == 0)
+		{
+			// QjackCtl is not already running
+			system("qjackctl &"); // Run qjackctl in the background and return (&)
+		}
 		system("pactl unload-module module-jack-sink"); // clean previous run
 		system("pactl unload-module module-jack-source");
 		system("pactl load-module module-jack-sink channels=2");
@@ -337,7 +345,8 @@ int AudioManager::start_jack_service(int mode, bool auto_start, bool auto_connec
 		else
 		{
 			// Add more gaddgets and auto connect base on configuration file.
-			config_file->execute_configuration();
+			
+			//config_file->execute_configuration(); <<<<<<<<<<<<<<<<<<
 		}
 			
 	}
@@ -378,9 +387,10 @@ int AudioManager::start_audio_service(int driver, int samp_rate, int block_size)
 	else if (driver == _AUDIO_JACK)
 	{
 		stop_alsa_main_thread();
-		//		start_jack_main_thread();
+		//start_jack_main_thread();
 		
-		start_jack_service(_JACK_MODE_APP_CONTROL, _DEFAULT_JACK_AUTO_START, _DEFAULT_JACK_AUTO_CONNECT_AUDIO); // TODO:
+		//start_jack_service(_JACK_MODE_APP_CONTROL, _DEFAULT_JACK_AUTO_START, _DEFAULT_JACK_AUTO_CONNECT_AUDIO); // TODO:
+		start_jack_service(get_jack_mode(), get_jack_auto_start_state(), get_jack_auto_connect_audio_state());
 	}
 	
 	// Start anyhow for fluidsynth until handling fluid will be added

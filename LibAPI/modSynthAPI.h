@@ -88,7 +88,7 @@ void mod_synth_on_exit();
 int mod_synth_get_cpu_utilization();
 
 /**
-*   @brief  Adds an active instrument.
+*   @brief  Adds an instrument.
 *   @param  string	instrument name string
 *   @param	pointer to the instrument instance
 *   @return 0 if done
@@ -96,11 +96,43 @@ int mod_synth_get_cpu_utilization();
 int mod_synth_add_module(string ins_name, Instrument *instrument=NULL);
 
 /**
-*   @brief  Removes an active instrument.
+*   @brief  Removes an instrument.
 *   @param  string	instrument name string
 *   @return 0 if done
 */
 int mod_synth_remove_module(string ins_name);
+
+/**
+*   @brief  Adds an active instrument.
+*   en_modules_ids_t instrument module id
+*   @return 0 if done
+*/
+int mod_synth_add_active_module(en_modules_ids_t mod);
+
+/**
+*   @brief  Removes an active instrument.
+*   @param  en_modules_ids_t instrument module id
+*   @return 0 if done
+*/
+int mod_synth_remove_active_module(en_modules_ids_t mod);
+
+/**
+*   @brief  Allocates an instrument to a midi channel.
+*   @param	int midi channel 0-15
+*   @param  en_modules_ids_t instrument module id
+*   @return 0 if done
+*/
+int mod_synth_allocate_midi_channel_synth(int ch, en_modules_ids_t synth);
+
+/**
+*   @brief  Return the allocated midi channel instrument.
+*   @param	int midi channel 0-15
+*   @return en_modules_ids_t instrument module id
+*/
+en_modules_ids_t mod_synth_get_allocated_midi_channel_synth(int ch);
+
+
+
 
 /**
 *   @brief  Sets the active sketch num
@@ -2274,6 +2306,14 @@ float mod_synth_get_lfo_min_frequency();
 *   @return float	the maximum value of the LFO freequency in Hz.
 */
 float mod_synth_get_lfo_max_frequency();
+
+/**
+*   @brief  Returns the instrument type.
+*   @param  en_modules_ids_t  instrument id enum  LibAPI/types.h
+*   @return en_modules_types instrument type en_modules_types::none_module_type if key string not found.
+*/
+en_modules_types_t mod_synth_get_instrument_type(en_modules_ids_t inst_id);
+
 
 
 

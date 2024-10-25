@@ -78,14 +78,12 @@ int mod_synth_init()
 
 int mod_synth_start_audio()
 {
-
-	return 0;
+	return mod_synthesizer->start_audio();
 }
 
 int mod_synth_stop_audio()
 {
-
-	return 0;
+	return mod_synthesizer->stop_audio();
 }
 
 int mod_synth_init_bt_services()
@@ -102,6 +100,15 @@ int mod_synth_deinit_bt_services()
 	Raspi3BluetoothQ::stop_bt_main_thread();
 	mod_synthesizer->get_bt_alsa_out()->stop_bt_alsa_out_thread();
 	return 0;
+}
+
+/******************************************************************
+ *********************** Instrumants API **************************
+ ******************************************************************/
+
+en_modules_types_t mod_synth_get_instrument_type(en_modules_ids_t inst_id)
+{
+	return mod_synthesizer->instruments_manager->get_instrument_type(inst_id);
 }
 
 /******************************************************************
@@ -406,6 +413,33 @@ int mod_synth_remove_module(string ins_name)
 	return 0;
 }
 
+int mod_synth_add_active_module(en_modules_ids_t mod)
+{
+	mod_synthesizer->instruments_manager->add_active_instrument(mod);
+	
+	return 0;
+}
+
+int mod_synth_remove_active_module(en_modules_ids_t mod)
+{
+	mod_synthesizer->instruments_manager->remove_active_instrument(mod);
+	
+	return 0;
+}
+
+int mod_synth_allocate_midi_channel_synth(int ch, en_modules_ids_t synth)
+{
+	return mod_synthesizer->instruments_manager->allocate_midi_channel_synth(ch, synth);
+}
+
+en_modules_ids_t mod_synth_get_allocated_midi_channel_synth(int ch)
+{
+	return mod_synthesizer->instruments_manager->get_allocated_midi_channel_synth(ch);
+}
+
+
+
+
 
 void mod_synth_register_callback_wrapper_close_module_pannel_id(func_ptr_void_en_modules_ids_t_t ptr)
 {
@@ -641,72 +675,142 @@ void mod_synth_register_callback_update_ui(func_ptr_void_void_t ptr)
 
 void mod_synth_set_fluid_synth_volume(int vol)
 {
-	mod_synthesizer->get_fluid_synth()->set_volume(vol);
+	//mod_synthesizer->get_fluid_synth()->set_volume(vol);
+	mod_synthesizer->get_fluid_synth()->events_handler(
+		_FLUID_SYNTH_1_EVENT,
+		_FLUID_SYNTH_VOLUME,
+		vol,
+		mod_synthesizer->get_fluid_synth()->instrument_settings->get_active_settings_parameters());
 }
 
 void mod_synth_set_fluid_synth_reverb_room_size(int val)
 {
-	mod_synthesizer->get_fluid_synth()->set_reverb_room_size(val);
+	//mod_synthesizer->get_fluid_synth()->set_reverb_room_size(val);
+	mod_synthesizer->get_fluid_synth()->events_handler(
+		_FLUID_SYNTH_1_EVENT,
+		_FLUID_SYNTH_REVERB_ROOM_SIZE,
+		val,
+		mod_synthesizer->get_fluid_synth()->instrument_settings->get_active_settings_parameters());
 }
 
 void mod_synth_set_fluid_synth_reverb_damp(int val)
 {
-	mod_synthesizer->get_fluid_synth()->set_reverb_damp(val);
+	//mod_synthesizer->get_fluid_synth()->set_reverb_damp(val);
+	mod_synthesizer->get_fluid_synth()->events_handler(
+		_FLUID_SYNTH_1_EVENT,
+		_FLUID_SYNTH_REVERB_DAMP,
+		val,
+		mod_synthesizer->get_fluid_synth()->instrument_settings->get_active_settings_parameters());
 }
 
 void mod_synth_set_fluid_synth_reverb_width(int val)
 {
-	mod_synthesizer->get_fluid_synth()->set_reverb_width(val);
+	//mod_synthesizer->get_fluid_synth()->set_reverb_width(val);
+	mod_synthesizer->get_fluid_synth()->events_handler(
+		_FLUID_SYNTH_1_EVENT,
+		_FLUID_SYNTH_REVERB_WIDTH,
+		val,
+		mod_synthesizer->get_fluid_synth()->instrument_settings->get_active_settings_parameters());
 }
 
 void mod_synth_set_fluid_synth_reverb_level(int val)
 {
-	mod_synthesizer->get_fluid_synth()->set_reverb_level(val);
+	//mod_synthesizer->get_fluid_synth()->set_reverb_level(val);
+	mod_synthesizer->get_fluid_synth()->events_handler(
+		_FLUID_SYNTH_1_EVENT,
+		_FLUID_SYNTH_REVERB_LEVEL,
+		val,
+		mod_synthesizer->get_fluid_synth()->instrument_settings->get_active_settings_parameters());
 }
 
 void mod_synth_set_fluid_synth_chorus_number(int val)
 {
-	mod_synthesizer->get_fluid_synth()->set_chorus_number(val);
+	//mod_synthesizer->get_fluid_synth()->set_chorus_number(val);
+	mod_synthesizer->get_fluid_synth()->events_handler(
+		_FLUID_SYNTH_1_EVENT,
+		_FLUID_SYNTH_CHORUS_NUMBER,
+		val,
+		mod_synthesizer->get_fluid_synth()->instrument_settings->get_active_settings_parameters());
 }
 
 void mod_synth_set_fluid_synth_chorus_level(int val)
 {
-	mod_synthesizer->get_fluid_synth()->set_chorus_level(val);
+	//mod_synthesizer->get_fluid_synth()->set_chorus_level(val);
+	mod_synthesizer->get_fluid_synth()->events_handler(
+		_FLUID_SYNTH_1_EVENT,
+		_FLUID_SYNTH_CHORUS_LEVEL,
+		val,
+		mod_synthesizer->get_fluid_synth()->instrument_settings->get_active_settings_parameters());
 }
 
 void mod_synth_set_fluid_synth_chorus_speed(int val)
 {
-	mod_synthesizer->get_fluid_synth()->set_chorus_speed(val);
+	//mod_synthesizer->get_fluid_synth()->set_chorus_speed(val);
+	mod_synthesizer->get_fluid_synth()->events_handler(
+		_FLUID_SYNTH_1_EVENT,
+		_FLUID_SYNTH_CHORUS_SPEED,
+		val,
+		mod_synthesizer->get_fluid_synth()->instrument_settings->get_active_settings_parameters());
 }
 
 void mod_synth_set_fluid_synth_chorus_depth(int val)
 {
-	mod_synthesizer->get_fluid_synth()->set_chorus_depth(val);
+	//mod_synthesizer->get_fluid_synth()->set_chorus_depth(val);
+	mod_synthesizer->get_fluid_synth()->events_handler(
+		_FLUID_SYNTH_1_EVENT,
+		_FLUID_SYNTH_CHORUS_DEPTH,
+		val,
+		mod_synthesizer->get_fluid_synth()->instrument_settings->get_active_settings_parameters());
 }
 
 void mod_synth_set_fluid_synth_chorus_waveform(int val)
 {
-	mod_synthesizer->get_fluid_synth()->set_chorus_waveform(val);
+	//mod_synthesizer->get_fluid_synth()->set_chorus_waveform(val);
+	mod_synthesizer->get_fluid_synth()->events_handler(
+		_FLUID_SYNTH_1_EVENT,
+		_FLUID_SYNTH_CHORUS_WAVEFORM,
+		val,
+		mod_synthesizer->get_fluid_synth()->instrument_settings->get_active_settings_parameters());
 }
 
 void mod_synth_set_fluid_synth_enable_reverb()
 {
-	mod_synthesizer->get_fluid_synth()->enable_reverb();
+	//mod_synthesizer->get_fluid_synth()->enable_reverb();
+	mod_synthesizer->get_fluid_synth()->events_handler(
+		_FLUID_SYNTH_1_EVENT,
+		_FLUID_SYNTH_REVERB_ENABLE,
+		true,
+		mod_synthesizer->get_fluid_synth()->instrument_settings->get_active_settings_parameters());
 }
 
 void mod_synth_set_fluid_synth_disable_reverb()
 {
-	mod_synthesizer->get_fluid_synth()->disable_reverb();
+	//mod_synthesizer->get_fluid_synth()->disable_reverb();
+	mod_synthesizer->get_fluid_synth()->events_handler(
+		_FLUID_SYNTH_1_EVENT,
+		_FLUID_SYNTH_REVERB_ENABLE,
+		false,
+		mod_synthesizer->get_fluid_synth()->instrument_settings->get_active_settings_parameters());
 }
 
 void mod_synth_set_fluid_synth_enable_chorus()
 {
-	mod_synthesizer->get_fluid_synth()->enable_chorus();
+	//mod_synthesizer->get_fluid_synth()->enable_chorus();
+	mod_synthesizer->get_fluid_synth()->events_handler(
+		_FLUID_SYNTH_1_EVENT,
+		_FLUID_SYNTH_CHORUS_ENABLE,
+		true,
+		mod_synthesizer->get_fluid_synth()->instrument_settings->get_active_settings_parameters());
 }
 
 void mod_synth_set_fluid_synth_disable_chorus()
 {
-	mod_synthesizer->get_fluid_synth()->disable_chorus();
+	//mod_synthesizer->get_fluid_synth()->disable_chorus();
+	mod_synthesizer->get_fluid_synth()->events_handler(
+		_FLUID_SYNTH_1_EVENT,
+		_FLUID_SYNTH_CHORUS_ENABLE,
+		false,
+		mod_synthesizer->get_fluid_synth()->instrument_settings->get_active_settings_parameters());
 }
 
 int mod_synth_get_active_fluid_synth_volume()

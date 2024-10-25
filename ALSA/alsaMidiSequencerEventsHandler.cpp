@@ -121,7 +121,7 @@ AlsaMidiSeqencerEventsHandler::AlsaMidiSeqencerEventsHandler(uint8_t stage, Safe
 {
 	alsa_seq_client_rx_queue = rxq;
 	// Enable all midi channels as default.
-	active_midi_channels = 0xffff;
+	active_midi_channels = 0x0;
 
 	// Not connected, so must active here
 	this->active = true;

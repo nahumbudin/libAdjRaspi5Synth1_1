@@ -57,7 +57,6 @@ float mod_synth_get_adsr_max_forced_release_time_sec() { return ADSR_FORCED_RELE
 
 float mod_synth_get_lfo_min_frequency() { return _MOD_LFO_MIN_FREQ; }
 float mod_synth_get_lfo_max_frequency() { return _MOD_LFO_MAX_FREQ; }
-
 float mod_synth_get_portamento_max_time_sec() { return _PORTAMENTO_MAX_TIME_SEC; }
 
 

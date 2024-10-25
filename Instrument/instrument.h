@@ -45,7 +45,7 @@ public:
 	void activate_ui_update_callback();
 
 	virtual int api_settings_events_handler(int moduleid, int paramid, int val, _settings_params_t *params, int program = -1);
-	virtual int api_settings_events_handler(int moduleid, int paramid, double val, _settings_params_t *params, int program = -1);
+	virtual int api_settings_events_handler(int moduleid, int paramid, float val, _settings_params_t *params, int program = -1);
 	virtual int api_settings_events_handler(int moduleid, int paramid, bool val, _settings_params_t *params, int program = -1);
 	virtual int api_settings_events_handler(int moduleid, int paramid, string val, _settings_params_t *params, int program = -1);
 

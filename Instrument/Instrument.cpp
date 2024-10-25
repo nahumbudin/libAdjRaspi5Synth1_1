@@ -183,7 +183,7 @@ int Instrument::api_settings_events_handler(int moduleid, int paramid, int val, 
 }
 
 /**
-*   @brief  Initiates an instrument parameter change event with integer value (affects all voices).
+*   @brief  Initiates an instrument parameter change event with float value (affects all voices).
 *			All available parameters values are defined in defs.h
 *   @param  int moduleid instrument submofule. for example VCO1 VCO2
 *	@param	int paramid	specific settings parameter  id: for example _AMP_LEVEL, _AMP_PAN, 
@@ -191,14 +191,14 @@ int Instrument::api_settings_events_handler(int moduleid, int paramid, int val, 
 *	@param	*_settings_params_t params a pointer to the relevant settings structure			
 *	@param	int prog program num 
 */
-int Instrument::api_settings_events_handler(int moduleid, int paramid, double val, _settings_params_t *params, int program)
+int Instrument::api_settings_events_handler(int moduleid, int paramid, float val, _settings_params_t *params, int program)
 {
 
 	return 0;
 }
 
 /**
-*   @brief  Initiates an instrument parameter change event with integer value (affects all voices).
+*   @brief  Initiates an instrument parameter change event with bool value (affects all voices).
 *			All available parameters values are defined in defs.h
 *   @param  int moduleid instrument submofule. for example VCO1 VCO2
 *	@param	int paramid	specific settings parameter  id: for example _AMP_LEVEL, _AMP_PAN, 
@@ -213,7 +213,7 @@ int Instrument::api_settings_events_handler(int moduleid, int paramid, bool val,
 }
 
 /**
-*   @brief  Initiates an instrument parameter change event with integer value (affects all voices).
+*   @brief  Initiates an instrument parameter change event with string value (affects all voices).
 *			All available parameters values are defined in defs.h
 *   @param  int moduleid instrument submofule. for example VCO1 VCO2
 *	@param	int paramid	specific settings parameter  id: for example _AMP_LEVEL, _AMP_PAN, 

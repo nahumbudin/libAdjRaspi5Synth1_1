@@ -121,6 +121,24 @@ std::string Utils::execute_system_command_getstd_out(std::string cmd)
 	return data;
 }
 
+pid_t Utils::get_process_id(char* process_name)
+{
+	char buf[512];
+	char command[128];
+	pid_t pid;
+	
+	sprintf(command, "pidof - s %s", process_name);
+	
+	FILE *cmd_pipe = popen(command, "r");
+
+	fgets(buf, 512, cmd_pipe);
+	pid = strtoul(buf, NULL, 10);
+
+	pclose(cmd_pipe);
+	
+	return pid;
+}
+
 /**
 *	@brief	returns true if the given audio driver type value is a valid type
 *	@param	int driver driver-type
@@ -269,3 +287,5 @@ int read_text_file(string full_path, vector<char> *file_data)
 	
 	return 0;
 }
+
+

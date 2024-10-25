@@ -61,7 +61,15 @@ volatile bool cheack_cpu_utilization_thread_is_running;
 
 #if (_MAX_NUM_OF_MIDI_CONNECTIONS > 0)
 /* MIDI ALSA input client - waits for data in the alsa_rx_queue */
-MidiAlsaQclientIn alsa_midi_in_1(&AlsaMidi::get_instance()->alsa_rx_queue[0], _MIDI_STAGE_0);
+
+
+
+
+//MidiAlsaQclientIn alsa_midi_in_1(&AlsaMidi::get_instance()->alsa_rx_queue[0], _MIDI_STAGE_0);
+
+
+
+
 //MidiParser midi_parser_alsa_1(_MIDI_STAGE_1);
 //MidiHandler midi_handler_alsa_1(_MIDI_STAGE_2);
 
@@ -402,6 +410,16 @@ AlsaBtClientOutput* ModSynth::get_bt_alsa_out()
 InstrumentFluidSynth *ModSynth::get_fluid_synth()
 {
 	return fluid_synth;
+}
+
+/**
+*   @brief  retruns a pointer to the FluidSynth instrument object
+*   @param  none
+*   @return a pointer to the InstrumentHammondOrgan instrument object
+*/
+InstrumentHammondOrgan *ModSynth::get_hammond_organ()
+{
+	return hammond_organ;
 }
 
 /**

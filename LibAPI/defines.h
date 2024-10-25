@@ -11,12 +11,12 @@
 
 #pragma once
 
-#define _INSTRUMENT_NAME_FLUID_SYNTH_STR_KEY			"Adj-Fluid-Synth"
-#define _INSTRUMENT_NAME_HAMMON_ORGAN_STR_KEY			"Adj-Hammond-Organ"
-#define _INSTRUMENT_NAME_ANALOG_SYNTH_STR_KEY			"Adj-Analog-Synth"
-#define _INSTRUMENT_NAME_KARPULS_STRONG_STRING_SYNTH_STR_KEY "Karplus-Strong-Strings-Synth"
-#define _INSTRUMENT_NAME_MORPHED_SINUS_SYNTH_STR_KEY	"Morphed-Sinus-Synth"
-#define _INSTRUMENT_NAME_PADSYNTH_SYNTH_STR_KEY			"PADsynth-Synth"
+#define _INSTRUMENT_NAME_FLUID_SYNTH_STR_KEY					"Adj-Fluid-Synth"
+#define _INSTRUMENT_NAME_HAMMON_ORGAN_STR_KEY					"Adj-Hammond-Organ"
+#define _INSTRUMENT_NAME_ANALOG_SYNTH_STR_KEY					"Adj-Analog-Synth"
+#define _INSTRUMENT_NAME_KARPLUS_STRONG_STRING_SYNTH_STR_KEY	"Karplus-Strong-Strings-Synth"
+#define _INSTRUMENT_NAME_MORPHED_SINUS_SYNTH_STR_KEY			"Morphed-Sinus-Synth"
+#define _INSTRUMENT_NAME_PADSYNTH_SYNTH_STR_KEY					"Adj-PAD-Synth"
 
 
 #define _INSTRUMENT_NAME_MIDI_PLAYER_STR_KEY			"Adj-Midi-Player"
@@ -25,7 +25,7 @@
 
 #define _INSTRUMENT_NAME_REVERB_STR_KEY					"Adj-Reverb"
 #define _INSTRUMENT_NAME_DISTORTION_STR_KEY				"Adj-Distortion"
-#define _INSTRUMENT_NAME_GRAPHIC_EQULIZER_STR_KEY		"Graphic-Equilizer"
+#define _INSTRUMENT_NAME_GRAPHIC_EQUALIZER_STR_KEY		"Graphic-Equilizer"
 
 #define _INSTRUMENT_NAME_CONTROL_BOX_HANDLER_STR_KEY	"Control-Box-Handler"
 #define _INSTRUMENT_NAME_EXT_MIDI_INT_CONTROL_STR_KEY	"External-MIDI-Interface-Control"

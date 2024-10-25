@@ -52,24 +52,6 @@ public:
 	void pitch_bend_handler(uint8_t channel, int pitch);
 	void sysex_handler(uint8_t *message, int len);
 
-	void set_volume(int vol);
-	void set_reverb_room_size(int val);
-	void set_reverb_damp(int val);
-	void set_reverb_width(int val);
-	void set_reverb_level(int val);
-
-	void set_chorus_number(int val);
-	void set_chorus_level(int val);
-	void set_chorus_speed(int val);
-	void set_chorus_depth(int val);
-	void set_chorus_waveform(int val);
-
-	void enable_reverb();
-	void disable_reverb();
-
-	void enable_chorus();
-	void disable_chorus();
-
 	int set_fluid_synth_program_select(int chan, unsigned int sfid,
 									   unsigned int bank, unsigned int program);
 
@@ -120,7 +102,7 @@ public:
 	void set_active_preset(int preset_num);
 
 	int events_handler(int moduleid, int paramid, int val, _settings_params_t *params, int program = -1);
-	int events_handler(int moduleid, int paramid, double val, _settings_params_t *params, int program = -1);
+	int events_handler(int moduleid, int paramid, float val, _settings_params_t *params, int program = -1);
 	int events_handler(int moduleid, int paramid, bool val, _settings_params_t *params, int program = -1);
 	int events_handler(int moduleid, int paramid, string val, _settings_params_t *params, int program = -1);
 
@@ -134,5 +116,23 @@ public:
 	FluidSynthInterface *fluid_synth_int_instance;
 
 	func_ptr_void_string_t callback_ptr_update_fluid_synth_preset_text;
+	
+	void set_volume(int vol);
+	void set_reverb_room_size(int val);
+	void set_reverb_damp(int val);
+	void set_reverb_width(int val);
+	void set_reverb_level(int val);
+
+	void set_chorus_number(int val);
+	void set_chorus_level(int val);
+	void set_chorus_speed(int val);
+	void set_chorus_depth(int val);
+	void set_chorus_waveform(int val);
+
+	void enable_reverb();
+	void disable_reverb();
+
+	void enable_chorus();
+	void disable_chorus();
 };
 

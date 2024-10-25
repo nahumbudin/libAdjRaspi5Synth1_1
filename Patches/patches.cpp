@@ -380,7 +380,7 @@ int PatchsHandler::create_active_modules_settings_files(vector<string> mod_names
 		else if (module_name == _INSTRUMENT_NAME_ANALOG_SYNTH_STR_KEY)
 		{
 		}
-		else if (module_name == _INSTRUMENT_NAME_KARPULS_STRONG_STRING_SYNTH_STR_KEY)
+		else if (module_name == _INSTRUMENT_NAME_KARPLUS_STRONG_STRING_SYNTH_STR_KEY)
 		{
 		}
 		else if (module_name == _INSTRUMENT_NAME_MORPHED_SINUS_SYNTH_STR_KEY)
@@ -404,7 +404,7 @@ int PatchsHandler::create_active_modules_settings_files(vector<string> mod_names
 		else if (module_name == _INSTRUMENT_NAME_DISTORTION_STR_KEY)
 		{
 		}
-		else if (module_name == _INSTRUMENT_NAME_GRAPHIC_EQULIZER_STR_KEY)
+		else if (module_name == _INSTRUMENT_NAME_GRAPHIC_EQUALIZER_STR_KEY)
 		{
 		}
 		else if (module_name == _INSTRUMENT_NAME_CONTROL_BOX_HANDLER_STR_KEY)

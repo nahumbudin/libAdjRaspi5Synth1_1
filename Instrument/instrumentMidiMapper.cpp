@@ -45,6 +45,8 @@ InstrumentMidiMapper::InstrumentMidiMapper(AlsaMidiSysControl *alsa_control,
 	}
 
 	instrument_midi_mapper_instance = this;
+	/* Midi mapper input handles all channels */
+	this->alsa_midi_sequencer_events_handler->set_active_midi_channels(0xffff);
 };
 
 /**

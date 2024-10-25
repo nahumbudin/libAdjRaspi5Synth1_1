@@ -32,7 +32,7 @@ typedef struct _soundfont_presets_data
 /* Holds moduls IDs */
 typedef enum
 {
-	none = -1,
+	none_module_id = -1,
 	fluid_synth,
 	adj_hammond_organ,
 	adj_analog_synth,
@@ -46,9 +46,22 @@ typedef enum
 	midi_mixer,
 	adj_midi_mapper,
 	adj_ext_midi_interface,
-	adj_keyboard_control,
+	adj_keyboard_control
 
 } en_modules_ids_t;
+
+/* Holds modules types */
+typedef enum
+{
+	none_module_type = -1,
+	synth,
+	effect,
+	player,
+	control,
+	interface,
+	keyboard
+	
+} en_modules_types_t;
 
 typedef enum 
 {

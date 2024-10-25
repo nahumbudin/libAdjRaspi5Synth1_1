@@ -83,6 +83,7 @@ public:
 	AlsaBtClientOutput *get_bt_alsa_out();
 
 	InstrumentFluidSynth *get_fluid_synth();
+	InstrumentHammondOrgan *get_hammond_organ();
 	InstrumentMidiPlayer *get_midi_player();
 	InstrumentMidiMapper *get_midi_mapper();
 	

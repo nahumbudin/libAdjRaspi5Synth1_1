@@ -25,6 +25,9 @@ InstrumentControlBoxEventsHandler::InstrumentControlBoxEventsHandler()
 		sliders_input_value_max[s] = 2000;
 		sliders_input_value_min[s] = 100;
 	}
+	
+	/* Control box input handles all channels */
+	this->alsa_midi_sequencer_events_handler->set_active_midi_channels(0xffff);
 }
 
 InstrumentControlBoxEventsHandler::~InstrumentControlBoxEventsHandler()
