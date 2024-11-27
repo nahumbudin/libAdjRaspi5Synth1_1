@@ -33,4 +33,5 @@
 #include "fluidSynth.h"
 #include "settingsApi.h"
 #include "patch.h"
-
+#include "synthesizer.h"
+#include "utils.h"

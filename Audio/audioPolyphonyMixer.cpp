@@ -1447,12 +1447,12 @@ void AudioPolyMixerFloat::set_amp_2_pan_lfo_modulation_value(float mod_factor, f
 
 /**
 *   @brief  Set amp 1 modulation LFO number.
-*	@param	Lfo		LFO number _LFO_NONE to  _LFO_5
+*	@param	Lfo		LFO number _LFO_NONE to  _LFO_6
 *   @return void
 */
 void AudioPolyMixerFloat::set_amp_1_pan_mod_lfo(int lfo) 
 {
-	if ((lfo >= _LFO_NONE) && (lfo <= _LFO_5))
+	if ((lfo >= _LFO_NONE) && (lfo <= _LFO_6))
 	{
 		amp_1_pan_mod_lfo = lfo;
 	}

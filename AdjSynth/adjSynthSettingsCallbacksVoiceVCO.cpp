@@ -16,6 +16,7 @@
 */
 
 #include "adjSynth.h"
+#include "../LibAPI/gui.h"
 
 int set_voice_block_osc_1_enabled_cb(bool enable, int voice, int prog)
 {
@@ -171,7 +172,7 @@ int set_voice_block_osc_1_unison_mod_cb(int unimod, int voice, int prog)
 					osc_1->set_unison_mode(unimod);
 	if (voice == 0)
 	{
-//		callback_set_osc_1_unison_mode(unimod); //TODO:
+		mod_synth_callback_set_osc_1_unison_mode(unimod); //TODO:
 	}
 	return 0;
 }

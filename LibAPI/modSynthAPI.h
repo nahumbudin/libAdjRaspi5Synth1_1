@@ -173,7 +173,7 @@ int mod_synth_get_active_sketch();
 *
 *   @return 0
 */
-int mod_synth_amp_event(int ampid, int eventid, int val);
+int mod_synth_amp_event_int(int ampid, int eventid, int val);
 
 /**
 *   @brief Initiates an audio related event with integer value.
@@ -287,7 +287,7 @@ _FILTER_BAND_LPF, _FILTER_BAND_HPF, _FILTER_BAND_BPF, _FILTER_BAND_PASS_ALL\n
 *
 *   @return 0
 */
-int mod_synth_filter_event(int filtid, int eventid, int val);
+int mod_synth_filter_event_int(int filtid, int eventid, int val);
 
 /**
 *   @brief  Initiates keyboard related event with integer value (affects all voices).
@@ -364,7 +364,7 @@ int mod_synth_karplus_event_int(int karlplusid, int eventid, int val);
 *				
 *   @return 0
 */
-int mod_synth_karplus_event_bool(int karlplusid, int eventid, int val);
+int mod_synth_karplus_event_bool(int karlplusid, int eventid, bool val);
 
 /**
 *   @brief  Initiates a modulator (LFO/ADSR) related event with integer value (affects all voices).
@@ -429,7 +429,7 @@ _ENV_NONE, _ENV_1, _ENV_2, _ENV_3, ENV_4, ENV_5
 *
 *   @return void
 */
-int mod_synthmso_event_int(int msoid, int eventid, int val);
+int mod_synth_mso_event_int(int msoid, int eventid, int val);
 
 /**
 *   @brief  Initiates a Morphed Sinus Oscilator related event with boolean value (affects all voices).
@@ -682,6 +682,97 @@ int mod_synth_vco_event_int(int vcoid, int eventid, int val);
 *   @return void
 */
 int mod_synth_vco_event_bool(int vcoid, int eventid, bool val);
+
+
+/**
+	*   @brief  Enables OSC1.
+	*   @param  none
+	*   @return void
+	*/
+void mod_synth_enable_osc1();
+
+/**
+*   @brief  Disables OSC1.
+*   @param  none
+*   @return void
+*/
+void mod_synth_disable_osc1();
+
+/**
+*   @brief  Enables OSC2.
+*   @param  none
+*   @return void
+*/
+void mod_synth_enable_osc2();
+
+/**
+*   @brief  Disables OSC2.
+*   @param  none
+*   @return void
+*/
+void mod_synth_disable_osc2();
+
+/**
+	*   @brief  Enables Noise.
+	*   @param  none
+	*   @return void
+	*/
+void mod_synth_enable_noise();
+
+/**
+*   @brief  Disables Noise.
+*   @param  none
+*   @return void
+*/
+void mod_synth_disable_noise();
+
+/**
+*   @brief  Enables Karplus.
+*   @param  none
+*   @return void
+*/
+void mod_synth_enable_karplus();
+
+/**
+*   @brief  Disables Karplus.
+*   @param  none
+*   @return void
+*/
+void mod_synth_disable_karplus();
+
+
+/**
+*   @brief  Enables Morphed Sinus Osc.
+*   @param  none
+*   @return void
+*/
+void mod_synth_enable_mso();
+
+/**
+*   @brief  Disables Morphed Sinus Osc.
+*   @param  none
+*   @return void
+*/
+void mod_synth_disable_mso();
+
+/**
+*   @brief  Enables PDAsynthesizer.
+*   @param  none
+*   @return void
+*/
+void mod_synth_enable_pad_synth();
+
+/**
+*   @brief  Disables PDAsynthesizer.
+*   @param  none
+*   @return void
+*/
+void mod_synth_disable_pad_synth();
+
+
+
+
+
 
 
 /**
@@ -1074,6 +1165,12 @@ int mod_synth_get_active_karplus_send_filter_1();
 *   @return int	 the value of the active patch Karplus-strong generator send filter 2 level.
 */
 int mod_synth_get_active_karplus_send_filter_2();
+
+
+
+
+
+
 
 /**
 *   @brief  Returns the value of the active patch portamento time.
@@ -2197,6 +2294,38 @@ float mod_synth_get_karplus_strong_max_string_damping_variations();
 *   @return float	the minimum value of the Karplus-Strong String damping variations factor.
 */
 float mod_synth_get_karplus_strong_min_string_damping_variations();
+
+
+/**
+*   @brief  Returns a pointer to the PAD synth base harmony shape vector.
+*   @param  None.
+*   @return float*  a pointer to the PAD synth base harmony shape vector
+*/
+float *mod_synth_get_pad_base_harmony_profile();
+/**
+*   @brief  Returns the PAD synth base harmony shape vector number of elements.
+*   @param  None.
+*   @return int  the PAD synth base harmony shape vector  number of elements.
+*/
+int mod_synth_get_pad_base_harmony_profile_size();
+/**
+*   @brief  Returns a pointer to the PAD synth spectrum vector.
+*   @param  None.
+*   @return float*  a pointer to the PAD synth spectrum vector
+*/
+float *mod_synth_get_pad_spectrum();
+/**
+*   @brief  Returns the PAD synth spectrum vector number of elements.
+*   @param  None.
+*   @return int  the PAD synth spectrum vector  number of elements.
+*/
+int mod_synth_get_pad_spectrum_size();
+
+
+
+
+
+
 
 /**
 *   @brief  Returns the synthesizer maximum number of polyiphonic voices.

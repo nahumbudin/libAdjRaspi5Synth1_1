@@ -89,12 +89,12 @@ float DSP_Voice::get_pad_1_send_filter_2_level() { return wavetable_1_send_filte
 
 /**
 *	@brief	Set PAD_1 active LFO frequency modulator and mode (delayed or not)
-*	@param	lfo PAD_1 active LFO frequency modulator and mode _LFO_NONE to LFO_5_DELAYED_2000MS
+*	@param	lfo PAD_1 active LFO frequency modulator and mode _LFO_NONE to LFO_6_DELAYED_2000MS
 *	@return none
 */
 void DSP_Voice::set_pad_1_freq_mod_lfo(int lfo)
 {
-	if ((lfo >= _LFO_NONE) && (lfo <= _LFO_5_DELAYED_2000MS))
+	if ((lfo >= _LFO_NONE) && (lfo <= _LFO_6_DELAYED_2000MS))
 	{
 		wavetable_1_freq_mod_lfo = ((lfo - 1) % _NUM_OF_LFOS) + 1;
 		wavetable_1_freq_mod_lfo_delay = lfo_delays[lfo];
@@ -142,12 +142,12 @@ void DSP_Voice::set_pad_1_freq_mod_env_level(int lev)
 
 /**
 *	@brief	Set PAD_1 active LFO amplitude modulator and mode (delayed or not)
-*	@param	lfo PAD_1 active LFO amplitude modulator and mode _LFO_NONE to LFO_5_DELAYED_2000MS
+*	@param	lfo PAD_1 active LFO amplitude modulator and mode _LFO_NONE to LFO_6_DELAYED_2000MS
 *	@return none
 */
 void DSP_Voice::set_pad_1_amp_mod_lfo(int lfo)
 {
-	if ((lfo >= _LFO_NONE) && (lfo <= _LFO_5_DELAYED_2000MS))
+	if ((lfo >= _LFO_NONE) && (lfo <= _LFO_6_DELAYED_2000MS))
 	{
 		wavetable_1_amp_mod_lfo = ((lfo - 1) % _NUM_OF_LFOS) + 1;
 		wavetable_1_amp_mod_lfo_delay = lfo_delays[lfo];

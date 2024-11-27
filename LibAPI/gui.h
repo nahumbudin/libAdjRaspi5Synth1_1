@@ -91,3 +91,13 @@ void mod_synth_register_midi_mixer_channel_pan_update_callback(func_ptr_void_int
 void mod_synth_register_midi_mixer_channel_static_volume_update_callback(func_ptr_void_int_bool_t ptr);
 
 
+/**
+*   @brief  Register a callback function that initiates a GUI update of the OSC1 Unison mode.
+*   @param  funcPtrVoidInt ptr  a pointer to the callback function ( void func(int) )\n
+*	Callback int parameter indicates the unison mode, that provides this mode labels.
+*   @return void
+*/
+void mod_synth_register_set_osc_1_unison_mode_callback(func_ptr_void_int_t ptr);
+
+/* Activation function */
+void mod_synth_callback_set_osc_1_unison_mode(int mode);

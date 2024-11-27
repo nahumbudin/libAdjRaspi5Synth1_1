@@ -932,6 +932,9 @@
     <ClInclude Include="..\modSynthPreset.h">
       <Filter>Header files\Synthesizer</Filter>
     </ClInclude>
+    <ClInclude Include="..\LibAPI\utils.h">
+      <Filter>Header files\LibApi</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="libAdjRaspi5Synth1_1-Debug.vgdbsettings" />

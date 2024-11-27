@@ -114,10 +114,10 @@ Error - must be no more than 64
 	
 
 		
-#define SYNC_ON										true
-#define SYNC_OFF									false
-#define TRACK_ON									true
-#define TRACK_OFF									false								1
+#define SYNC_ON						true
+#define SYNC_OFF					false
+#define TRACK_ON					true
+#define TRACK_OFF					false								1
 	
 	
 	
@@ -125,7 +125,7 @@ Error - must be no more than 64
 #define _MOD_LFO_MIN_FREQ			0.1f
 #define _MOD_LFO_MAX_FREQ			10.0f
 
-#define _NUM_OF_LFOS				5
+#define _NUM_OF_LFOS				6
 #define _NUM_OF_LFO_DELAY_OPTIONS	5
 #define _LFO_NONE					0
 #define _LFO_1						1
@@ -133,38 +133,45 @@ Error - must be no more than 64
 #define _LFO_3						3
 #define _LFO_4						4
 #define _LFO_5						5
-#define _LFO_1_DELAYED_500MS		10
-#define _LFO_2_DELAYED_500MS		11
-#define _LFO_3_DELAYED_500MS		12
-#define _LFO_4_DELAYED_500MS		13
-#define _LFO_5_DELAYED_500MS		14
+#define _LFO_6						6
+	
+#define _LFO_1_DELAYED_500MS		7
+#define _LFO_2_DELAYED_500MS		8
+#define _LFO_3_DELAYED_500MS		9
+#define _LFO_4_DELAYED_500MS		10
+#define _LFO_5_DELAYED_500MS		11
+#define _LFO_6_DELAYED_500MS		12
 
-#define _LFO_1_DELAYED_1000MS		20
-#define _LFO_2_DELAYED_1000MS		21
-#define _LFO_3_DELAYED_1000MS		22
-#define _LFO_4_DELAYED_1000MS		23
-#define _LFO_5_DELAYED_1000MS		24
+#define _LFO_1_DELAYED_1000MS		13
+#define _LFO_2_DELAYED_1000MS		14
+#define _LFO_3_DELAYED_1000MS		15
+#define _LFO_4_DELAYED_1000MS		16
+#define _LFO_5_DELAYED_1000MS		17
+#define _LFO_6_DELAYED_1000MS		18
 
-#define _LFO_1_DELAYED_1500MS		30
-#define _LFO_2_DELAYED_1500MS		31
-#define _LFO_3_DELAYED_1500MS		32
-#define _LFO_4_DELAYED_1500MS		33
-#define _LFO_5_DELAYED_1500MS		34
+#define _LFO_1_DELAYED_1500MS		19
+#define _LFO_2_DELAYED_1500MS		20
+#define _LFO_3_DELAYED_1500MS		21
+#define _LFO_4_DELAYED_1500MS		22
+#define _LFO_5_DELAYED_1500MS		23
+#define _LFO_6_DELAYED_1500MS		24
 
-#define _LFO_1_DELAYED_2000MS		40
-#define _LFO_2_DELAYED_2000MS		41
-#define _LFO_3_DELAYED_2000MS		42
-#define _LFO_4_DELAYED_2000MS		43
-#define _LFO_5_DELAYED_2000MS		44
+#define _LFO_1_DELAYED_2000MS		25
+#define _LFO_2_DELAYED_2000MS		26
+#define _LFO_3_DELAYED_2000MS		27
+#define _LFO_4_DELAYED_2000MS		28
+#define _LFO_5_DELAYED_2000MS		29
+#define _LFO_6_DELAYED_2000MS		30
 
 
-#define _NUM_OF_ADSRS				5
+#define _NUM_OF_ADSRS				6
 #define _ENV_NONE					0
 #define _ENV_1						1
 #define _ENV_2						2
 #define _ENV_3						3
 #define _ENV_4						4
 #define _ENV_5						5
+#define _ENV_6						6
 
 
 // Maximum Attack time in seconds
@@ -173,6 +180,11 @@ Error - must be no more than 64
 #define ADSR_MAX_DECAY_TIME_SEC		5.0f	
 // Maximum Release time in seconds
 #define ADSR_MAX_RELEASE_TIME_SEC	10.0f
+	
+#define _MSO_POINT_MAX_VALUE		2046
+#define _MSO_POINT_MIN_VALUE		1
+#define _MSO_MAX_SYMETRY			95
+#define _MSO_MIN_SYMETRY			5
 	
 #define _PROGRAM_0					0
 #define _PROGRAM_1					1
@@ -232,11 +244,13 @@ Error - must be no more than 64
 #define _LFO_3_EVENT								4
 #define _LFO_4_EVENT								5
 #define _LFO_5_EVENT								6
-#define _ENV_1_EVENT								7
-#define _ENV_2_EVENT								8
-#define _ENV_3_EVENT								9
-#define _ENV_4_EVENT								10
-#define _ENV_5_EVENT								11
+#define _LFO_6_EVENT								7
+	
+#define _ENV_1_EVENT								8
+#define _ENV_2_EVENT								9
+#define _ENV_3_EVENT								10
+#define _ENV_4_EVENT								11
+#define _ENV_5_EVENT								12
 
 #define _ENABLE										((bool)true)
 #define _DISABLE									((bool)false)

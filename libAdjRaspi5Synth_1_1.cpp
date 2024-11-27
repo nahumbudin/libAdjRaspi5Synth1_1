@@ -45,6 +45,9 @@
 
 #include "libAdjRaspi5Synth_1_1.h"
 
+
+
+
 /******************************************************************
  *********************** ModSynth Management API **************************
  ******************************************************************/
@@ -462,6 +465,9 @@ void mod_synth_register_callback_wrapper_open_module_pannel_name(func_ptr_void_s
  ******************************************************************/
 
 
+func_ptr_void_int_t callback_ptr_set_osc1_unison_labales_callback = NULL;
+
+
 void mod_synth_set_active_sketch(int ask)
 {
 	AdjSynth::get_instance()->set_active_sketch(ask);
@@ -472,7 +478,7 @@ int mod_synth_get_active_sketch()
 	return AdjSynth::get_instance()->get_active_sketch();
 }
 
-int mod_synth_amp_event(int ampid, int eventid, int val)
+int mod_synth_amp_event_int(int ampid, int eventid, int val)
 {
 	return AdjSynth::get_instance()->amp_event(ampid, eventid, val, 
 		AdjSynth::get_instance()->get_active_patch_params(),
@@ -513,7 +519,7 @@ int mod_synth_band_equilizer_event(int beqid, int eventid, int val)
 		AdjSynth::get_instance()->get_active_patch_params());
 }
 
-int mod_synth_filter_event(int filtid, int eventid, int val)
+int mod_synth_filter_event_int(int filtid, int eventid, int val)
 {
 	return AdjSynth::get_instance()->filter_event(filtid, eventid, val, 
 		AdjSynth::get_instance()->get_active_patch_params(),
@@ -553,7 +559,7 @@ int mod_synth_modulator_event(int modid, int eventid, int val)
 		AdjSynth::get_instance()->get_active_sketch());
 }
 
-int mod_synthmso_event_int(int msoid, int eventid, int val)
+int mod_synth_mso_event_int(int msoid, int eventid, int val)
 {
 	return AdjSynth::get_instance()->mso_event_int(msoid,
 		eventid,
@@ -641,14 +647,173 @@ int mod_synth_vco_event_bool(int vcoid, int eventid, bool val)
 		AdjSynth::get_instance()->get_active_sketch());
 }
 
+void mod_synth_enable_osc1() 
+{ 
+	AdjSynth::get_instance()->vco_event_bool(_OSC_1_EVENT,
+		_OSC_ENABLE,
+		_ENABLE, 
+		AdjSynth::get_instance()->get_active_patch_params(),
+		AdjSynth::get_instance()->get_active_sketch());
+	
+	//mod_synth->synth_event_mapping(_OSC_1_EVENT, _OSC_ENABLE, 127);
+}
+
+void mod_synth_disable_osc1() 
+{ 
+	AdjSynth::get_instance()->vco_event_bool(_OSC_1_EVENT,
+		_OSC_ENABLE,
+		_DISABLE, 
+		AdjSynth::get_instance()->get_active_patch_params(),
+		AdjSynth::get_instance()->get_active_sketch()); 
+	
+	//mod_synth->synth_event_mapping(_OSC_1_EVENT, _OSC_ENABLE, 0);
+}
+
+void mod_synth_enable_osc2() 
+{ 
+	AdjSynth::get_instance()->vco_event_bool(_OSC_2_EVENT,
+		_OSC_ENABLE,
+		_ENABLE, 
+		AdjSynth::get_instance()->get_active_patch_params(),
+		AdjSynth::get_instance()->get_active_sketch()); 
+	
+	//mod_synth->synth_event_mapping(_OSC_2_EVENT, _OSC_ENABLE, 127);
+}
+
+void mod_synth_disable_osc2() 
+{ 
+	AdjSynth::get_instance()->vco_event_bool(_OSC_2_EVENT,
+		_OSC_ENABLE,
+		_DISABLE, 
+		AdjSynth::get_instance()->get_active_patch_params(),
+		AdjSynth::get_instance()->get_active_sketch());
+	
+	//mod_synth->synth_event_mapping(_OSC_1_EVENT, _OSC_ENABLE, 0);
+}
+
+void mod_synth_enable_noise() 
+{ 
+	AdjSynth::get_instance()->noise_event_bool(_NOISE_1_EVENT,
+		_NOISE_ENABLE,
+		_ENABLE, 
+		AdjSynth::get_instance()->get_active_patch_params(),
+		AdjSynth::get_instance()->get_active_sketch());
+
+	//mod_synth->synth_event_mapping(_NOISE_1_EVENT, _NOISE_ENABLE, 127);
+}
+
+void mod_synth_disable_noise() 
+{ 
+	AdjSynth::get_instance()->noise_event_bool(_NOISE_1_EVENT,
+		_NOISE_ENABLE,
+		_DISABLE, 
+		AdjSynth::get_instance()->get_active_patch_params(),
+		AdjSynth::get_instance()->get_active_sketch());
+
+	//mod_synth->synth_event_mapping(_NOISE_1_EVENT, _NOISE_ENABLE, 0);
+}
+
+void mod_synth_enable_karplus() 
+{
+	AdjSynth::get_instance()->karplus_event_bool(_KARPLUS_1_EVENT,
+		_KARPLUS_STRONG_ENABLE,
+		_ENABLE,
+		AdjSynth::get_instance()->get_active_patch_params(),
+		AdjSynth::get_instance()->get_active_sketch());
+
+	//mod_synth->synth_event_mapping(_KARPLUS_1_EVENT, _KARPLUS_STRONG_ENABLE, 127);
+}
+
+void mod_synth_disable_karplus() 
+{ 
+	AdjSynth::get_instance()->karplus_event_bool(_KARPLUS_1_EVENT,
+		_KARPLUS_STRONG_ENABLE,
+		_DISABLE,
+		AdjSynth::get_instance()->get_active_patch_params(),
+		AdjSynth::get_instance()->get_active_sketch());
+
+	//mod_synth->synth_event_mapping(_KARPLUS_1_EVENT, _KARPLUS_STRONG_ENABLE, 0);
+
+}
+
+void mod_synth_enable_mso() 
+{ 
+	AdjSynth::get_instance()->mso_event_bool(_MSO_1_EVENT,
+		_MSO_ENABLE,
+		_ENABLE, 
+		AdjSynth::get_instance()->get_active_patch_params(),
+		AdjSynth::get_instance()->get_active_sketch());
+
+	//mod_synth->synth_event_mapping(_MSO_1_EVENT, _MSO_ENABLE, 127);
+}
+
+void mod_synth_disable_mso() 
+{ 
+	AdjSynth::get_instance()->mso_event_bool(_MSO_1_EVENT,
+		_MSO_ENABLE,
+		_DISABLE, 
+		AdjSynth::get_instance()->get_active_patch_params(),
+		AdjSynth::get_instance()->get_active_sketch());
+
+	//mod_synth->synth_event_mapping(_MSO_1_EVENT, _MSO_ENABLE, 0);
+}
+
+void mod_synth_enable_pad_synth() 
+{ 
+	AdjSynth::get_instance()->pad_event_bool(_PAD_1_EVENT,
+		_PAD_ENABLE,
+		_ENABLE, 
+		AdjSynth::get_instance()->get_active_patch_params(),
+		AdjSynth::get_instance()->get_active_sketch());
+
+	//mod_synth->synth_event_mapping(_PAD_1_EVENT, _PAD_ENABLE, 127);
+}
+
+void mod_synth_disable_pad_synth() 
+{ 
+	AdjSynth::get_instance()->pad_event_bool(_PAD_1_EVENT,
+		_PAD_ENABLE,
+		_DISABLE, 
+		AdjSynth::get_instance()->get_active_patch_params(),
+		AdjSynth::get_instance()->get_active_sketch());
+
+	//mod_synth->synth_event_mapping(_PAD_1_EVENT, _PAD_ENABLE, 0);
+}
 
 
 
+void mod_synth_register_set_osc_1_unison_mode_callback(func_ptr_void_int_t ptr)
+{
+	callback_ptr_set_osc1_unison_labales_callback = ptr;
+}
 
+void mod_synth_callback_set_osc_1_unison_mode(int mode)
+{
+	if (callback_ptr_set_osc1_unison_labales_callback)
+	{
+		(*callback_ptr_set_osc1_unison_labales_callback)(mode);
+	}
+}
 
+float *mod_synth_get_pad_base_harmony_profile() 
+{ 
+	return AdjSynth::get_instance()->synth_program[mod_synth_get_active_sketch()]->synth_pad_creator->get_profile_data(); 
+}
 
+int mod_synth_get_pad_base_harmony_profile_size() 
+{
+	return AdjSynth::get_instance()->synth_program[mod_synth_get_active_sketch()]->synth_pad_creator->get_profile_size();
+}
 
+float *mod_synth_get_pad_spectrum()  
+{ 
+	return AdjSynth::get_instance()->synth_program[mod_synth_get_active_sketch()]->synth_pad_creator->get_spectrum_data();
+}
 
+int mod_synth_get_pad_spectrum_size() 
+{ 
+	return AdjSynth::get_instance()->synth_program[mod_synth_get_active_sketch()]->synth_pad_creator->get_spectrum_size();
+}
 
 
 
@@ -1167,6 +1332,19 @@ string *mod_synth_get_preset_summary_string(int presetNum)
 {
 	
 }
+
+/* Utils */
+float mod_synth_log_scale_100_float(float min, float max, float base, int val)
+{
+	return Utils::calc_log_scale_100_float(min, max, base, val);
+}
+
+int mod_synth_log_scale_100_int(int min, int max, int base, int val)
+{
+	return Utils::calc_log_scale_100_float(min, max, base, val);
+}
+
+
 
 /* UI Callback Functions Registration */
 

@@ -17,12 +17,12 @@
 
 /**
 *	@brief	Set Filter_1 active LFO frequency modulator and mode (delayed or not)
-*	@param	lfo Filter_1 active LFO frequency modulator and mode _LFO_NONE to LFO_5_DELAYED_2000MS
+*	@param	lfo Filter_1 active LFO frequency modulator and mode _LFO_NONE to LFO_6_DELAYED_2000MS
 *	@return none
 */
 void DSP_Voice::set_filter_1_freq_mod_lfo(int lfo) 
 {
-	if ((lfo >= _LFO_NONE) && (lfo <= _LFO_5_DELAYED_2000MS))
+	if ((lfo >= _LFO_NONE) && (lfo <= _LFO_6_DELAYED_2000MS))
 	{
 		filter_1_freq_mod_lfo = ((lfo - 1) % _NUM_OF_LFOS) + 1;
 		filter_1_freq_mod_lfo_delay = lfo_delays[lfo];
@@ -44,12 +44,12 @@ void DSP_Voice::set_filter_1_freq_mod_lfo_level(int lev)
 
 /**
 *	@brief	Set Filter1_1 active ENV frequency modulator
-*	@param	env Filter1_1 active ENV frequency modulator _ENV_NONE to _ENV_5
+*	@param	env Filter1_1 active ENV frequency modulator _ENV_NONE to _ENV_6
 *	@return none
 */
 void DSP_Voice::set_filter_1_freq_mod_env(int env) 
 { 
-	if ((env >= _ENV_NONE) && (env <= _ENV_5))
+	if ((env >= _ENV_NONE) && (env <= _ENV_6))
 	{
 		filter_1_freq_mod_env = env;
 	}
@@ -179,11 +179,11 @@ void DSP_Voice::set_filter_1_freq_env_modulation(float mod_factor, float mod_val
 
 /**
 *	@brief	Set Filter_2 active LFO frequency modulator and mode (delayed or not)
-*	@param	lfo Filter_2 active LFO frequency modulator and mode _LFO_NONE to LFO_5_DELAYED_2000MS
+*	@param	lfo Filter_2 active LFO frequency modulator and mode _LFO_NONE to LFO_6_DELAYED_2000MS
 *	@return none
 */
 void DSP_Voice::set_filter_2_freq_mod_lfo(int lfo) {
-	if ((lfo >= _LFO_NONE) && (lfo <= _LFO_5_DELAYED_2000MS))
+	if ((lfo >= _LFO_NONE) && (lfo <= _LFO_6_DELAYED_2000MS))
 	{
 		filter_2_freq_mod_lfo = ((lfo - 1) % _NUM_OF_LFOS) + 1;
 		filter_2_freq_lfo_modulation = lfo_delays[lfo];
@@ -205,12 +205,12 @@ void DSP_Voice::set_filter_2_freq_mod_lfo_level(int lev)
 
 /**
 *	@brief	Set Filter_2 active ENV frequency modulator
-*	@param	env Filter_2 active ENV frequency modulator _ENV_NONE to _ENV_5
+*	@param	env Filter_2 active ENV frequency modulator _ENV_NONE to _ENV_6
 *	@return none
 */
 void DSP_Voice::set_filter_2_freq_mod_env(int env) 
 { 
-	if ((env >= _ENV_NONE) && (env <= _ENV_5))
+	if ((env >= _ENV_NONE) && (env <= _ENV_6))
 	{
 		filter_2_freq_mod_env = env;
 	}

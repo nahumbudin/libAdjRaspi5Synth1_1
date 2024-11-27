@@ -85,12 +85,12 @@ float DSP_Voice::get_mso_1_send_filter_2_level() { return mso_1_send_filter_2_le
 
 /**
 *	@brief	Set MSO_1 active LFO frequency modulator and mode (delayed or not)
-*	@param	lfo MSO_1 active LFO frequency modulator and mode _LFO_NONE to LFO_5_DELAYED_2000MS
+*	@param	lfo MSO_1 active LFO frequency modulator and mode _LFO_NONE to LFO_6_DELAYED_2000MS
 *	@return none
 */
 void DSP_Voice::set_mso_1_freq_mod_lfo(int lfo)
 {
-	if ((lfo >= _LFO_NONE) && (lfo <= _LFO_5_DELAYED_2000MS))
+	if ((lfo >= _LFO_NONE) && (lfo <= _LFO_6_DELAYED_2000MS))
 	{
 		mso_1_freq_mod_lfo = ((lfo - 1) % _NUM_OF_LFOS) + 1;
 		mso_1_freq_mod_lfo_delay = lfo_delays[lfo];
@@ -112,12 +112,12 @@ void DSP_Voice::set_mso_1_freq_mod_lfo_level(int lev)
 
 /**
 *	@brief	Set MSO_1 active ENV frequency modulator
-*	@param	env MSO_1 active ENV frequency modulator _ENV_NONE to _ENV_5
+*	@param	env MSO_1 active ENV frequency modulator _ENV_NONE to _ENV_6
 *	@return none
 */
 void DSP_Voice::set_mso_1_freq_mod_env(int env) 
 { 
-	if ((env >= _ENV_NONE) && (env <= _ENV_5))
+	if ((env >= _ENV_NONE) && (env <= _ENV_6))
 	{
 		mso_1_freq_mod_env = env;
 	}
@@ -138,12 +138,12 @@ void DSP_Voice::set_mso_1_freq_mod_env_level(int lev)
 
 /**
 *	@brief	Set MSO_1 active LFO PWM modulator and mode (delayed or not)
-*	@param	lfo MSO_1 active LFO PWM modulator and mode _LFO_NONE to LFO_5_DELAYED_2000MS
+*	@param	lfo MSO_1 active LFO PWM modulator and mode _LFO_NONE to LFO_6_DELAYED_2000MS
 *	@return none
 */
 void DSP_Voice::set_mso_1_pwm_mod_lfo(int lfo)
 {
-	if ((lfo >= _LFO_NONE) && (lfo <= _LFO_5_DELAYED_2000MS))
+	if ((lfo >= _LFO_NONE) && (lfo <= _LFO_6_DELAYED_2000MS))
 	{
 		mso_1_pwm_mod_lfo = ((lfo - 1) % _NUM_OF_LFOS) + 1;
 		mso_1_pwm_mod_lfo_delay = lfo_delays[lfo];
@@ -165,12 +165,12 @@ void DSP_Voice::set_mso_1_pwm_mod_lfo_level(int lev)
 
 /**
 *	@brief	Set MSO_1 active ENV PWM modulator
-*	@param	env MSO_1 active ENV PWM modulator _ENV_NONE to _ENV_5
+*	@param	env MSO_1 active ENV PWM modulator _ENV_NONE to _ENV_6
 *	@return none
 */
 void DSP_Voice::set_mso_1_pwm_mod_env(int env) 
 { 
-	if ((env >= _ENV_NONE) && (env <= _ENV_5))
+	if ((env >= _ENV_NONE) && (env <= _ENV_6))
 	{
 		mso_1_pwm_mod_env = env;
 	}
@@ -191,12 +191,12 @@ void DSP_Voice::set_mso_1_pwm_mod_env_level(int lev)
 
 /**
 *	@brief	Set MSO_1 active LFO amplitude modulator and mode (delayed or not)
-*	@param	lfo MSO_1 active LFO amplitude modulator and mode _LFO_NONE to LFO_5_DELAYED_2000MS
+*	@param	lfo MSO_1 active LFO amplitude modulator and mode _LFO_NONE to LFO_6_DELAYED_2000MS
 *	@return none
 */
 void DSP_Voice::set_mso_1_amp_mod_lfo(int lfo)
 {
-	if ((lfo >= _LFO_NONE) && (lfo <= _LFO_5_DELAYED_2000MS))
+	if ((lfo >= _LFO_NONE) && (lfo <= _LFO_6_DELAYED_2000MS))
 	{
 		mso_1_amp_mod_lfo = ((lfo - 1) % _NUM_OF_LFOS) + 1;
 		mso_1_amp_mod_lfo_delay = lfo_delays[lfo];
@@ -218,12 +218,12 @@ void DSP_Voice::set_mso_1_amp_mod_lfo_level(int lev)
 
 /**
 *	@brief	Set MSO_1 active ENV amplitude modulator
-*	@param	env MSO_1 active ENV amplitude modulator _ENV_NONE to _ENV_5
+*	@param	env MSO_1 active ENV amplitude modulator _ENV_NONE to _ENV_6
 *	@return none
 */
 void DSP_Voice::set_mso_1_amp_mod_env(int env) 
 { 
-	if ((env >= _ENV_NONE) && (env <= _ENV_5))
+	if ((env >= _ENV_NONE) && (env <= _ENV_6))
 	{
 		mso_1_amp_mod_env = env;
 	}

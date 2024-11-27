@@ -17,11 +17,11 @@
 
 /**
 *	@brief	Set Amp1 ch1 active LFO pan modulator and mode (delayed or not)
-*	@param	lfo Amp1 ch1 active LFO pan modulator and mode _LFO_NONE to LFO_5_DELAYED_2000MS
+*	@param	lfo Amp1 ch1 active LFO pan modulator and mode _LFO_NONE to LFO_6_DELAYED_2000MS
 *	@return none
 */
 void DSP_Voice::set_amp_1_ch_1_pan_mod_lfo(int lfo) {
-	if ((lfo >= _LFO_NONE) && (lfo <= _LFO_5_DELAYED_2000MS))
+	if ((lfo >= _LFO_NONE) && (lfo <= _LFO_6_DELAYED_2000MS))
 	{
 		amp_1_pan_mod_lfo = ((lfo - 1) % _NUM_OF_LFOS) + 1;
 		amp_1_pan_mod_lfo_delay = lfo_delays[lfo];
@@ -43,12 +43,12 @@ void DSP_Voice::set_amp_1_ch_1_pan_mod_lfo_level(int lev)
 
 /**
 *	@brief	Set Amp1 ch2 active LFO pan modulator and mode (delayed or not)
-*	@param	lfo Amp1 ch2 active LFO pan modulator and mode _LFO_NONE to LFO_5_DELAYED_2000MS
+*	@param	lfo Amp1 ch2 active LFO pan modulator and mode _LFO_NONE to LFO_6_DELAYED_2000MS
 *	@return none
 */
 void DSP_Voice::set_amp_1_ch_2_pan_mod_lfo(int lfo) 
 { 
-	if ((lfo >= _LFO_NONE) && (lfo <= _LFO_5_DELAYED_2000MS))
+	if ((lfo >= _LFO_NONE) && (lfo <= _LFO_6_DELAYED_2000MS))
 	{
 		amp_2_pan_mod_lfo = ((lfo - 1) % _NUM_OF_LFOS) + 1;
 		amp_2_pan_mod_lfo_delay = lfo_delays[lfo];

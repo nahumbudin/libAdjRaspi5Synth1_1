@@ -173,6 +173,7 @@ public:
 	
 	InstrumentFluidSynth *fluid_synth;
 	InstrumentHammondOrgan *hammond_organ;
+	//InstrumentAnalofSynth
 	
 	/* The modular synthesizer master volume level (0-100) */
 	int master_volume;

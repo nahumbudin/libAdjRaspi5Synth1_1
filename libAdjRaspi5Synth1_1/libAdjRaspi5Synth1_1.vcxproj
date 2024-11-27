@@ -134,6 +134,7 @@
     <ClInclude Include="..\LibAPI\patch.h" />
     <ClInclude Include="..\LibAPI\settingsApi.h" />
     <ClInclude Include="..\LibAPI\types.h" />
+    <ClInclude Include="..\LibAPI\utils.h" />
     <ClInclude Include="..\LibAPI_settingsManager.h" />
     <ClInclude Include="..\MIDI\midiAlsaQclient.h" />
     <ClInclude Include="..\MIDI\midiConversions.h" />
