@@ -6,14 +6,6 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libAdjRaspi5Synth1_1", "libAdjRaspi5Synth1_1\libAdjRaspi5Synth1_1.vcxproj", "{C3245410-BC7B-4A91-86F8-7096BE677597}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{0B95E6EC-CC82-4FF7-B535-5C420205258E}"
-	ProjectSection(SolutionItems) = preProject
-		README.md = README.md
-	EndProjectSection
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "images", "images", "{E5AA73D4-C489-4457-84D5-DEBE727AF565}"
-	ProjectSection(SolutionItems) = preProject
-		images\Raspi5Synth_TopAssemblyv148.jpg = images\Raspi5Synth_TopAssemblyv148.jpg
-	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -28,9 +20,6 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(NestedProjects) = preSolution
-		{E5AA73D4-C489-4457-84D5-DEBE727AF565} = {0B95E6EC-CC82-4FF7-B535-5C420205258E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {6FAB0051-CF23-455E-BC02-CF461FF8CA9D}

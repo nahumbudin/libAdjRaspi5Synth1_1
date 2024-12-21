@@ -55,6 +55,7 @@
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <None Include="..\README.md" />
     <None Include="libAdjRaspi5Synth1_1-Debug.vgdbsettings" />
     <None Include="libAdjRaspi5Synth1_1-Release.vgdbsettings" />
   </ItemGroup>
@@ -320,6 +321,9 @@
     <ClCompile Include="..\utils\fftWrapper.cpp" />
     <ClCompile Include="..\utils\utils.cpp" />
     <ClCompile Include="..\utils\xmlFiles.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="..\images\Raspi5Synth_TopAssemblyv148.jpg" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
