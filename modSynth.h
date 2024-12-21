@@ -51,6 +51,7 @@ enum mod_synth_type
 class InstrumentsManager;
 class InstrumentFluidSynth;
 class InstrumentHammondOrgan;
+class InstrumentAnalogSynth;
 class InstrumentMidiPlayer;
 class InstrumentMidiMapper;
 class InstrumentControlBoxEventsHandler;
@@ -68,6 +69,8 @@ public:
 	int init();
 	
 	void on_exit();	
+
+	void synth_panic_action();
 	
 	void start_cheack_cpu_utilization_thread();
 	void stop_cheack_cpu_utilization_thread();
@@ -83,6 +86,7 @@ public:
 	AlsaBtClientOutput *get_bt_alsa_out();
 
 	InstrumentFluidSynth *get_fluid_synth();
+	InstrumentAnalogSynth *get_analog_synth();
 	InstrumentHammondOrgan *get_hammond_organ();
 	InstrumentMidiPlayer *get_midi_player();
 	InstrumentMidiMapper *get_midi_mapper();
@@ -173,7 +177,7 @@ public:
 	
 	InstrumentFluidSynth *fluid_synth;
 	InstrumentHammondOrgan *hammond_organ;
-	//InstrumentAnalofSynth
+	InstrumentAnalogSynth *analog_synth;
 	
 	/* The modular synthesizer master volume level (0-100) */
 	int master_volume;

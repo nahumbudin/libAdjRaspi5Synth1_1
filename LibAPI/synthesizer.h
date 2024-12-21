@@ -31,6 +31,8 @@ Error - must be no more than 64
 #define _NUM_OF_PRESETS						5
 	
 #define	_NUM_OF_HARMONIES					9
+	
+#define	_NUM_OF_SKETCHES					3
 
 #define _OSC_MAX_FREQUENCY					12543.8539514160f	// MIDI G11
 #define _OSC_MIN_FREQUENCY					0.1f				// LFO 8.1757989156f	// MIDI C1
@@ -251,6 +253,7 @@ Error - must be no more than 64
 #define _ENV_3_EVENT								10
 #define _ENV_4_EVENT								11
 #define _ENV_5_EVENT								12
+#define _ENV_6_EVENT								13
 
 #define _ENABLE										((bool)true)
 #define _DISABLE									((bool)false)

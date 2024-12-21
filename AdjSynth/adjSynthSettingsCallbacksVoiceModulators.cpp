@@ -130,6 +130,28 @@ int set_voice_block_lfo_5_symmetry_cb(int sym, int voice, int prog)
 	return 0;
 }
 
+int set_voice_block_lfo_6_waveform_cb(int wavf, int voice, int prog)
+{
+	AdjSynth::get_instance()->synth_program[prog]->synth_voices[voice]->dsp_voice->lfo_6->
+		set_waveform(wavf);
+	return 0;
+}
+
+int set_voice_block_lfo_6_rate_cb(int rate, int voice, int prog)
+{
+	AdjSynth::get_instance()->synth_program[prog]->synth_voices[voice]->dsp_voice->
+		set_lfo_6_frequency(rate);
+	//	AdjSynth::get_instance()->audioPolyMixer->setLfo5Frequency(rate);
+	return 0;
+}
+
+int set_voice_block_lfo_6_symmetry_cb(int sym, int voice, int prog)
+{
+	AdjSynth::get_instance()->synth_program[prog]->synth_voices[voice]->dsp_voice->lfo_6->
+		set_pwm_dcycle(sym);
+	return 0;
+}
+
 
 int set_voice_block_env_1_attack_cb(int attck, int voice, int prog)
 {
@@ -272,5 +294,33 @@ int set_voice_block_env_5_release_cb(int rel, int voice, int prog)
 {
 	AdjSynth::get_instance()->synth_program[prog]->synth_voices[voice]->dsp_voice->adsr_5->
 					set_release_time_sec(rel);
+	return 0;
+}
+
+int set_voice_block_env_6_attack_cb(int attck, int voice, int prog)
+{
+	AdjSynth::get_instance()->synth_program[prog]->synth_voices[voice]->dsp_voice->
+		adsr_6->set_attack_time_sec(attck);
+	return 0;
+}
+
+int set_voice_block_env_6_decay_cb(int dec, int voice, int prog)
+{
+	AdjSynth::get_instance()->synth_program[prog]->synth_voices[voice]->dsp_voice->adsr_6->
+		set_decay_time_sec(dec);
+	return 0;
+}
+
+int set_voice_block_env_6_sustain_cb(int sus, int voice, int prog)
+{
+	AdjSynth::get_instance()->synth_program[prog]->synth_voices[voice]->dsp_voice->adsr_6->
+		set_sustain_level(sus);
+	return 0;
+}
+
+int set_voice_block_env_6_release_cb(int rel, int voice, int prog)
+{
+	AdjSynth::get_instance()->synth_program[prog]->synth_voices[voice]->dsp_voice->adsr_6->
+		set_release_time_sec(rel);
 	return 0;
 }

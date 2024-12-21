@@ -148,6 +148,14 @@ void mod_synth_set_active_sketch(int ask);
 */
 int mod_synth_get_active_sketch();
 
+/**
+*   @brief  Copy source sketch params to a destination sketch params
+*   @param  int srcsk	sorce sketch num _SKETCH_PROGRAM_1 to _SKETCH_PROGRAM_3
+*   @param  int destsk	destination sketch num _SKETCH_PROGRAM_1 to _SKETCH_PROGRAM_3
+*   @return 0 if done
+*/
+int mod_synth_copy_sketch(int srcsk, int destsk);
+
 
 /**
 *   @brief  Initiates an amplifier-mixer related event with integer value (affects all voices).
@@ -770,7 +778,12 @@ void mod_synth_enable_pad_synth();
 void mod_synth_disable_pad_synth();
 
 
-
+/**
+*   @brief  Activate FluidSynth panic cleanup
+*   @param  none
+*   @return none
+*/
+void mod_synth_panic_action();
 
 
 
@@ -1362,6 +1375,34 @@ int mod_synth_get_active_env_mod_5_sustain();
 int mod_synth_get_active_env_mod_5_release();
 
 /**
+*   @brief  Returns the value of the active patch ADSR 6 attack time.
+*   @param  none
+*   @return int	 the value of the active patch ADSR 6 attack time.
+*	[time = getAdsrMaxAttackTimeSec()*pow(10.0, ret value / 50.0) / 100.0)]
+*/
+int mod_synth_get_active_env_mod_6_attack();
+/**
+*   @brief  Returns the value of the active patch ADSR 6 decay time.
+*   @param  none
+*   @return int	 the value of the active patch ADSR 6 decay time.
+*	[time = getAdsrMaxDecayTimeSec()*pow(10.0, ret value / 50.0) / 100.0)]
+*/
+int mod_synth_get_active_env_mod_6_decay();
+/**
+*   @brief  Returns the value of the active patch ADSR 6 sustain level.
+*   @param  none
+*   @return int	 the value of the active patch ADSR 6 sustain level.
+*/
+int mod_synth_get_active_env_mod_6_sustain();
+/**
+*   @brief  Returns the value of the active patch ADSR 6 release time.
+*   @param  none
+*   @return int	 the value of the active patch ADSR 6 release time.
+*	[time = getAdsrMaxReleaseTimeSec()*pow(10.0, ret value / 50.0) / 100.0)]
+*/
+int mod_synth_get_active_env_mod_6_release();
+
+/**
 *   @brief  Returns the value of the active patch LFO 1 waveform.
 *   @param  none
 *   @return int	 the value of the active patch LFO 1 waveform (see defs.h).
@@ -1460,6 +1501,26 @@ int mod_synth_get_active_lfo_mod_5_symmetry();
 *	[rate Hz = getLFOminFrequency() + (getLFOmaxFrequency() - getLFOminFrequency())*pow(10, (double)ret value / 50.0) / 100.0
 */
 int mod_synth_get_active_lfo_mod_5_rate();
+
+/**
+*   @brief  Returns the value of the active patch LFO 6 waveform.
+*   @param  none
+*   @return int	 the value of the active patch LFO 6 waveform (see defs.h).
+*/
+int mod_synth_get_active_lfo_mod_6_waveform();
+/**
+*   @brief  Returns the value of the active patch LFO 6 symetry in %.
+*   @param  none
+*   @return int	 the value of the active patch LFO 6 symetry in %.
+*/
+int mod_synth_get_active_lfo_mod_6_symmetry();
+/**
+*   @brief  Returns the value of the active patch LFO 6 rate Hz.
+*   @param  none
+*   @return int	 the value of the active patch LFO 6 rate Hz.
+*	[rate Hz = getLFOminFrequency() + (getLFOmaxFrequency() - getLFOminFrequency())*pow(10, (double)ret value / 50.0) / 100.0
+*/
+int mod_synth_get_active_lfo_mod_6_rate();
 
 /**
 *   @brief  Returns an active patch MSO lookup table segment point.

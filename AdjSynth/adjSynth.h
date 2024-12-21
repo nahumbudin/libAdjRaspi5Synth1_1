@@ -282,12 +282,14 @@ int set_mixer_lfo_2_waveform_cb(int wavf, int prog);
 int set_mixer_lfo_3_waveform_cb(int wavf, int prog);
 int set_mixer_lfo_4_waveform_cb(int wavf, int prog);
 int set_mixer_lfo_5_waveform_cb(int wavf, int prog);
+int set_mixer_lfo_6_waveform_cb(int wavf, int prog);
 
 int set_mixer_lfo_1_rate_cb(int rate, int prog);
 int set_mixer_lfo_2_rate_cb(int rate, int prog);
 int set_mixer_lfo_3_rate_cb(int rate, int prog);
 int set_mixer_lfo_4_rate_cb(int rate, int prog);
 int set_mixer_lfo_5_rate_cb(int rate, int prog);
+int set_mixer_lfo_6_rate_cb(int rate, int prog);
 
 
 int setmixer_lfo_1_symmetry_cb(int sym, int prog);
@@ -295,6 +297,7 @@ int setmixer_lfo_2_symmetry_cb(int sym, int prog);
 int setmixer_lfo_3_symmetry_cb(int sym, int prog);
 int setmixer_lfo_4_symmetry_cb(int sym, int prog);
 int setmixer_lfo_5_symmetry_cb(int sym, int prog);
+int setmixer_lfo_6_symmetry_cb(int sym, int prog);
 
 int set_keyboard_portamento_cb(int port, int prog);
 int set_keyboard_sensetivity_cb(int sens, int prog);
@@ -514,6 +517,10 @@ int set_voice_block_lfo_5_waveform_cb(int wavf, int voice, int prog);
 int set_voice_block_lfo_5_rate_cb(int rate, int voice, int prog);
 int set_voice_block_lfo_5_symmetry_cb(int sym, int voice, int prog);
 
+int set_voice_block_lfo_6_waveform_cb(int wavf, int voice, int prog);
+int set_voice_block_lfo_6_rate_cb(int rate, int voice, int prog);
+int set_voice_block_lfo_6_symmetry_cb(int sym, int voice, int prog);
+
 int set_voice_block_env_1_attack_cb(int attck, int voice, int prog);
 int set_voice_block_env_1_decay_cb(int dec, int voice, int prog);
 int set_voice_block_env_1_sustain_cb(int sus, int voice, int prog);
@@ -538,3 +545,8 @@ int set_voice_block_env_5_attack_cb(int attck, int voice, int prog);
 int set_voice_block_env_5_decay_cb(int dec, int voice, int prog);
 int set_voice_block_env_5_sustain_cb(int sus, int voice, int prog);
 int set_voice_block_env_5_release_cb(int rel, int voice, int prog);
+
+int set_voice_block_env_6_attack_cb(int attck, int voice, int prog);
+int set_voice_block_env_6_decay_cb(int dec, int voice, int prog);
+int set_voice_block_env_6_sustain_cb(int sus, int voice, int prog);
+int set_voice_block_env_6_release_cb(int rel, int voice, int prog);

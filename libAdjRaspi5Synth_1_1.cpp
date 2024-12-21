@@ -478,6 +478,11 @@ int mod_synth_get_active_sketch()
 	return AdjSynth::get_instance()->get_active_sketch();
 }
 
+int mod_synth_copy_sketch(int srcsk, int destsk)
+{
+	return AdjSynth::get_instance()->copy_sketch(srcsk, destsk);
+}
+
 int mod_synth_amp_event_int(int ampid, int eventid, int val)
 {
 	return AdjSynth::get_instance()->amp_event(ampid, eventid, val, 
@@ -550,7 +555,7 @@ int mod_synth_karplus_event_bool(int karlplusid, int eventid, bool val)
 		AdjSynth::get_instance()->get_active_sketch());
 }
 
-int mod_synth_modulator_event(int modid, int eventid, int val)
+int mod_synth_modulator_event_int(int modid, int eventid, int val)
 {
 	return AdjSynth::get_instance()->modulator_event_int(modid,
 		eventid,
@@ -778,6 +783,13 @@ void mod_synth_disable_pad_synth()
 		AdjSynth::get_instance()->get_active_sketch());
 
 	//mod_synth->synth_event_mapping(_PAD_1_EVENT, _PAD_ENABLE, 0);
+}
+
+void mod_synth_panic_action()
+{
+	mod_synthesizer->synth_panic_action();
+
+	mod_synthesizer->adj_synth->init_poly();
 }
 
 

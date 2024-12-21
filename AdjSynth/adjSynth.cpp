@@ -5,7 +5,7 @@
 *	@version	1.3 
 *					1. Code refactoring and notaion.
 *					
-*	@brief		A collection of 4 synthesizers: Additive, Karplus String, PAD and Morphed Sine Oscilator (MSO)
+*	@brief		A collection of 5 synthesizers: Additive, Noise Karplus String, PAD and Morphed Sine Oscilator (MSO)
 *	
 *	History:\n
 *	

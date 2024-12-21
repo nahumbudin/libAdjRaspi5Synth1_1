@@ -408,6 +408,20 @@ DSP_Voice::DSP_Voice(
 		_OSC_UNISON_MODE_12345678);
 	set_lfo_5_frequency((float)10);
 
+	lfo_6 = new DSP_Osc(voice + 2500,
+		_OSC_WAVEFORM_SINE,
+		50,
+		0,
+		0,
+		0,
+		false,
+		false,
+		false,
+		0.0f,
+		0.0f,
+		_OSC_UNISON_MODE_12345678);
+	set_lfo_6_frequency((float)10);
+
 	adsr_1 = new DSP_ADSR(voice + 3000, (float)_CONTROL_SUB_SAMPLING / samp_rate);
 	adsr_1->set_attack_time_sec(10);
 	adsr_1->set_decay_time_sec(10);
@@ -437,6 +451,12 @@ DSP_Voice::DSP_Voice(
 	adsr_5->set_decay_time_sec(10);
 	adsr_5->set_sustain_level(100);
 	adsr_5->set_release_time_sec(10);
+
+	adsr_6 = new DSP_ADSR(voice + 3500, (float)_CONTROL_SUB_SAMPLING / samp_rate);
+	adsr_6->set_attack_time_sec(10);
+	adsr_6->set_decay_time_sec(10);
+	adsr_6->set_sustain_level(100);
+	adsr_6->set_release_time_sec(10);
 	
 	set_sample_rate(samp_rate);
 	set_audio_block_size(block_size);

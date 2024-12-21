@@ -14,6 +14,7 @@
 
 #include "instrumentsManager.h"
 #include "instrumentFluidSynth.h"
+#include "instrumentAnalogSynth.h"
 #include "instrumentHammondOrgan.h"
 #include "../modSynth.h"
 
@@ -232,9 +233,6 @@ void InstrumentsManager::remove_active_instrument(en_modules_ids_t inst)
 			
 		}
 	}
-	
-	
-	
 }
 
 int InstrumentsManager::allocate_midi_channel_synth(int ch, en_modules_ids_t synth)
@@ -267,6 +265,17 @@ int InstrumentsManager::allocate_midi_channel_synth(int ch, en_modules_ids_t syn
 				alsa_midi_sequencer_events_handler->set_active_midi_channels(channels);
 		}
 	}
+	else if (last_connected == en_modules_ids_t::adj_analog_synth)
+	{
+		if (ModSynth::get_instance()->get_analog_synth() != NULL)
+		{
+			channels = ModSynth::get_instance()->get_analog_synth()->
+				alsa_midi_sequencer_events_handler->get_active_midi_channels() & channels_off_mask;
+			
+			ModSynth::get_instance()->get_analog_synth()->
+				alsa_midi_sequencer_events_handler->set_active_midi_channels(channels);
+		}
+	}
 	else if (last_connected == en_modules_ids_t::adj_hammond_organ)
 	{
 		if (ModSynth::get_instance()->get_hammond_organ() != NULL)
@@ -288,6 +297,18 @@ int InstrumentsManager::allocate_midi_channel_synth(int ch, en_modules_ids_t syn
 				alsa_midi_sequencer_events_handler->get_active_midi_channels() | channels_on_mask;
 			
 			ModSynth::get_instance()->get_fluid_synth()->
+				alsa_midi_sequencer_events_handler->set_active_midi_channels(channels);
+			midi_channels_allocated_synth[ch] = synth;
+		}
+	}
+	if (synth == en_modules_ids_t::adj_analog_synth)
+	{
+		if (ModSynth::get_instance()->get_analog_synth() != NULL)
+		{
+			channels = ModSynth::get_instance()->get_analog_synth()->
+				alsa_midi_sequencer_events_handler->get_active_midi_channels() | channels_on_mask;
+			
+			ModSynth::get_instance()->get_analog_synth()->
 				alsa_midi_sequencer_events_handler->set_active_midi_channels(channels);
 			midi_channels_allocated_synth[ch] = synth;
 		}

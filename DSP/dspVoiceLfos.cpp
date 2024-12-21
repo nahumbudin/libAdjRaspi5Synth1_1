@@ -106,3 +106,21 @@ void DSP_Voice::set_lfo_5_frequency(float freq)
 	}
 }
 
+/**
+*	@brief	Set LFO_6 frequency
+*	@param	freq	LFO_6 frequncy 0-100
+*		(converted into a logaritmic scale _MOD_LFO_MIN_FREQ to _MOD_LFO_MAX_FREQ)
+*	@return void
+*/
+void DSP_Voice::set_lfo_6_frequency(float freq)
+{
+	float logf = (Utils::calc_log_scale_100_float(_MOD_LFO_MIN_FREQ, _MOD_LFO_MAX_FREQ, 10.0, freq));
+
+	// Set lfo frequencies due to subsampling rate
+	lfo_6_actual_freq = logf * _CONTROL_SUB_SAMPLING;
+	if (lfo_6_actual_freq > (float)_OSC_MAX_FREQUENCY)
+	{
+		lfo_6_actual_freq = (float)_OSC_MAX_FREQUENCY;
+	}
+}
+

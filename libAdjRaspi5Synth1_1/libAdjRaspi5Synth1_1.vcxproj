@@ -108,6 +108,7 @@
     <ClInclude Include="..\DSP\dspWavetable.h" />
     <ClInclude Include="..\FluidSynth\fluidSynthInterface.h" />
     <ClInclude Include="..\Instrument\instrument.h" />
+    <ClInclude Include="..\Instrument\instrumentAnalogSynth.h" />
     <ClInclude Include="..\Instrument\instrumentConnectionsControl.h" />
     <ClInclude Include="..\Instrument\instrumentControlBoxHandler.h" />
     <ClInclude Include="..\Instrument\instrumentFluidSynth.h" />
@@ -264,6 +265,7 @@
     <ClCompile Include="..\FluidSynth\fluidSynthInterface.cpp" />
     <ClCompile Include="..\FluidSynth\fluidSynthPresets.cpp" />
     <ClCompile Include="..\Instrument\Instrument.cpp" />
+    <ClCompile Include="..\Instrument\instrumentAnalogSynth.cpp" />
     <ClCompile Include="..\Instrument\instrumentConnectionsControl.cpp" />
     <ClCompile Include="..\Instrument\instrumentControlBoxHandler.cpp" />
     <ClCompile Include="..\Instrument\instrumentFluidSynth.cpp" />

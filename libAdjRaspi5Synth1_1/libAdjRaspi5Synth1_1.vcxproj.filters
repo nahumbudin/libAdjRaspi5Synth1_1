@@ -160,6 +160,12 @@
     <Filter Include="Source files\LibApi">
       <UniqueIdentifier>{dd421a34-3bc7-40a0-b836-e21d7400cd07}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header files\Instrument\Analog Synth">
+      <UniqueIdentifier>{9816593a-f510-4710-858b-c04f5055e4e2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source files\Insrtument\Analog Synth">
+      <UniqueIdentifier>{eaba0d90-cfeb-4740-8ff6-a7cc5b2fcc6c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\ALSA\alsaMidi.cpp">
@@ -624,6 +630,9 @@
     <ClCompile Include="..\AdjSynth\adjSynthEventsHandlingMixer.cpp">
       <Filter>Source files\Synthesizer\AdjSynth\Settings Handlers</Filter>
     </ClCompile>
+    <ClCompile Include="..\Instrument\instrumentAnalogSynth.cpp">
+      <Filter>Source files\Insrtument\Analog Synth</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\libAdjRaspi5Synth_1_1.h">
@@ -934,6 +943,9 @@
     </ClInclude>
     <ClInclude Include="..\LibAPI\utils.h">
       <Filter>Header files\LibApi</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Instrument\instrumentAnalogSynth.h">
+      <Filter>Header files\Instrument\Analog Synth</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

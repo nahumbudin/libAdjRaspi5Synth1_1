@@ -70,6 +70,12 @@ int set_mixer_lfo_5_waveform_cb(int wavf, int chan)
 	return 0;
 }
 
+int set_mixer_lfo_6_waveform_cb(int wavf, int chan)
+{
+	AdjSynth::get_instance()->audio_poly_mixer->set_lfo_6_waveform(wavf);
+	return 0;
+}
+
 
 int set_mixer_lfo_1_rate_cb(int rate, int chan)
 {
@@ -101,6 +107,12 @@ int set_mixer_lfo_5_rate_cb(int rate, int chan)
 	return 0;
 }
 
+int set_mixer_lfo_6_rate_cb(int rate, int chan)
+{
+	AdjSynth::get_instance()->audio_poly_mixer->set_lfo_6_frequency(rate);
+	return 0;
+}
+
 
 int setmixer_lfo_1_symmetry_cb(int sym, int chan)
 {
@@ -129,6 +141,12 @@ int setmixer_lfo_4_symmetry_cb(int sym, int chan)
 int setmixer_lfo_5_symmetry_cb(int sym, int chan)
 {
 	AdjSynth::get_instance()->audio_poly_mixer->set_lfo_5_stmmetry(sym);
+	return 0;
+}
+
+int setmixer_lfo_6_symmetry_cb(int sym, int chan)
+{
+	AdjSynth::get_instance()->audio_poly_mixer->set_lfo_6_stmmetry(sym);
 	return 0;
 }
 

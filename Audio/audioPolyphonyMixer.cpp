@@ -180,6 +180,20 @@ AudioPolyMixerFloat::AudioPolyMixerFloat(int stage,
 		0.0f,
 		_OSC_UNISON_MODE_12345678);
 	set_lfo_5_frequency((float)10);
+	
+	lfo6 = new DSP_Osc(5005,
+		_OSC_WAVEFORM_SINE,
+		50,
+		0,
+		0,
+		0,
+		false,
+		false,
+		false,
+		0.0f,
+		0.0f,
+		_OSC_UNISON_MODE_12345678);
+	set_lfo_6_frequency((float)10);
 }
 
 AudioPolyMixerFloat* AudioPolyMixerFloat::get_instance(
@@ -1130,6 +1144,24 @@ void AudioPolyMixerFloat::set_lfo_5_frequency(float freq)
 }
 
 /**
+*   @brief  Set LFO 6 frequency 0-100
+*			(will be set to _MOD_LFO_MIN_FREQ to _MOD_LFO_MX_FREQ in a log10 scale)
+*	@param	freq	frequency 0-100
+*   @return void
+*/
+void AudioPolyMixerFloat::set_lfo_6_frequency(float freq)
+{
+	float logf = (Utils::calc_log_scale_100_float(_MOD_LFO_MIN_FREQ, _MOD_LFO_MAX_FREQ, 10.0, freq));
+
+	// Set lfo frequencies due to subsampling rate
+	lfo_6_actual_freq = logf * _CONTROL_SUB_SAMPLING;
+	if (lfo_6_actual_freq > (float)_OSC_MAX_FREQUENCY)
+	{
+		lfo_6_actual_freq = (float)_OSC_MAX_FREQUENCY;
+	}
+}
+
+/**
 *	@brief	Set LFO 1 waveform
 *	@param wform waveform
 *	@return void
@@ -1191,6 +1223,19 @@ void AudioPolyMixerFloat::set_lfo_5_waveform(float wf)
 	if ((wf >= _OSC_WAVEFORM_SINE) && (wf <= _OSC_WAVEFORM_SAMPHOLD))
 	{
 		lfo5->set_waveform(wf);
+	}
+}
+
+/**
+*	@brief	Set LFO 6 waveform
+*	@param wform waveform
+*	@return void
+*/
+void AudioPolyMixerFloat::set_lfo_6_waveform(float wf)
+{
+	if ((wf >= _OSC_WAVEFORM_SINE) && (wf <= _OSC_WAVEFORM_SAMPHOLD))
+	{
+		lfo6->set_waveform(wf);
 	}
 }
 
@@ -1297,6 +1342,26 @@ void AudioPolyMixerFloat::set_lfo_5_stmmetry(float sym)
 	}
 	
 	lfo5->set_pwm_dcycle(symmetry);
+}
+/**
+*	@brief	Set LFO 6 symmetry
+*	@param sym	symmetry
+*	@return void
+*/
+void AudioPolyMixerFloat::set_lfo_6_stmmetry(float sym)
+{
+	int symmetry = sym;
+
+	if (symmetry < 5)
+	{
+		symmetry = 5;
+	}
+	else if (symmetry > 95)
+	{
+		symmetry = 95;
+	}
+
+	lfo6->set_pwm_dcycle(symmetry);
 }
 
 /**

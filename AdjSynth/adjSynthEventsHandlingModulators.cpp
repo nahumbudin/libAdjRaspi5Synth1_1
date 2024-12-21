@@ -21,8 +21,8 @@
 *			All available parameters values are defined in LibApi/synthesizer.h
 *   @param  int beqid	target modulator:
 \verbatim
-	_LFO_1_EVENT, _LFO_2_EVENT, _LFO_3_EVENT, _LFO_4_EVENT, _LFO_5_EVENT
-	_ENV_1_EVENT, _ENV_2_EVENT, _ENV_3_EVENT, _ENV_4_EVENT, _ENV_5_EVENT
+	_LFO_1_EVENT, _LFO_2_EVENT, _LFO_3_EVENT, _LFO_4_EVENT, _LFO_5_EVENT, _LFO_6_EVENT
+	_ENV_1_EVENT, _ENV_2_EVENT, _ENV_3_EVENT, _ENV_4_EVENT, _ENV_5_EVENT, _ENV_6_EVENT
 \endverbatim
 *	@param	int modid	specific event code:\n
 *				_MOD_ADSR_ATTACK, _MOD_ADSR_DECAY, _MOD_ADSR_SUSTAIN, _MOD_ADSR_RELEASE\n
@@ -93,6 +93,15 @@ int AdjSynth::modulator_event_int(int modid, int eventid, int val, _settings_par
 				_EXEC_BLOCK_CALLBACK,
 				program);
 		}
+		else if (modid == _ENV_6_EVENT)
+		{
+			adj_synth_settings_manager->set_int_param_value
+			(params,
+				"adjsynth.env_6.attack",
+				val,
+				_EXEC_BLOCK_CALLBACK,
+				program);
+		}
 		break;
 
 	case _MOD_ADSR_DECAY:
@@ -137,6 +146,15 @@ int AdjSynth::modulator_event_int(int modid, int eventid, int val, _settings_par
 			adj_synth_settings_manager->set_int_param_value
 				(params,
 				"adjsynth.env_5.decay",
+				val,
+				_EXEC_BLOCK_CALLBACK,
+				program);
+		}
+		else if (modid == _ENV_6_EVENT)
+		{
+			adj_synth_settings_manager->set_int_param_value
+			(params,
+				"adjsynth.env_6.decay",
 				val,
 				_EXEC_BLOCK_CALLBACK,
 				program);
@@ -189,6 +207,15 @@ int AdjSynth::modulator_event_int(int modid, int eventid, int val, _settings_par
 				_EXEC_BLOCK_CALLBACK,
 				program);
 		}
+		else if (modid == _ENV_6_EVENT)
+		{
+			adj_synth_settings_manager->set_int_param_value
+			(params,
+				"adjsynth.env_6.sustain",
+				val,
+				_EXEC_BLOCK_CALLBACK,
+				program);
+		}
 		break;
 
 	case _MOD_ADSR_RELEASE:
@@ -237,6 +264,15 @@ int AdjSynth::modulator_event_int(int modid, int eventid, int val, _settings_par
 				_EXEC_BLOCK_CALLBACK,
 				program);
 		}
+		else if (modid == _ENV_6_EVENT)
+		{
+			adj_synth_settings_manager->set_int_param_value
+			(params,
+				"adjsynth.env_6.release",
+				val,
+				_EXEC_BLOCK_CALLBACK,
+				program);
+		}
 		break;
 
 	case _MOD_LFO_WAVEFORM:
@@ -281,6 +317,15 @@ int AdjSynth::modulator_event_int(int modid, int eventid, int val, _settings_par
 			adj_synth_settings_manager->set_int_param_value
 				(params,
 				"adjsynth.lfo_5.waveform",
+				val,
+				_EXEC_CALLBACK | _EXEC_BLOCK_CALLBACK,
+				program);
+		}
+		else if (modid == _LFO_6_EVENT)
+		{
+			adj_synth_settings_manager->set_int_param_value
+			(params,
+				"adjsynth.lfo_6.waveform",
 				val,
 				_EXEC_CALLBACK | _EXEC_BLOCK_CALLBACK,
 				program);
@@ -334,6 +379,15 @@ int AdjSynth::modulator_event_int(int modid, int eventid, int val, _settings_par
 				_EXEC_CALLBACK | _EXEC_BLOCK_CALLBACK,
 				program);
 		}
+		else if (modid == _LFO_6_EVENT)
+		{
+			adj_synth_settings_manager->set_int_param_value
+			(params,
+				"adjsynth.lfo_6.rate",
+				val,
+				_EXEC_CALLBACK | _EXEC_BLOCK_CALLBACK,
+				program);
+		}
 		break;
 
 	case _MOD_LFO_SYMMETRY:
@@ -378,6 +432,15 @@ int AdjSynth::modulator_event_int(int modid, int eventid, int val, _settings_par
 			adj_synth_settings_manager->set_int_param_value
 				(params,
 				"adjsynth.lfo_5.symmetry",
+				val,
+				_EXEC_CALLBACK | _EXEC_BLOCK_CALLBACK,
+				program);
+		}
+		else if (modid == _LFO_6_EVENT)
+		{
+			adj_synth_settings_manager->set_int_param_value
+			(params,
+				"adjsynth.lfo_6.symmetry",
 				val,
 				_EXEC_CALLBACK | _EXEC_BLOCK_CALLBACK,
 				program);

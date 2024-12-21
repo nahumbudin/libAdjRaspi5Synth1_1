@@ -120,18 +120,21 @@ public:
 	void set_lfo_3_frequency(float freq);
 	void set_lfo_4_frequency(float freq);
 	void set_lfo_5_frequency(float freq);
+	void set_lfo_6_frequency(float freq);
 
 	void set_lfo_1_waveform(float wf);
 	void set_lfo_2_waveform(float wf);
 	void set_lfo_3_waveform(float wf);
 	void set_lfo_4_waveform(float wf);
 	void set_lfo_5_waveform(float wf);
+	void set_lfo_6_waveform(float wf);
 
 	void set_lfo_1_stmmetry(float sym);
 	void set_lfo_2_stmmetry(float sym);
 	void set_lfo_3_stmmetry(float sym);
 	void set_lfo_4_stmmetry(float sym);
 	void set_lfo_5_stmmetry(float sym);
+	void set_lfo_6_stmmetry(float sym);
 
 	void set_amp_1_pan_mod_lfo(int lfo);
 	void set_amp_1_pan_mod_lfo_level(int lev);
@@ -151,7 +154,7 @@ public:
 	
 	virtual void update(void);
 
-	DSP_Osc *lfo1, *lfo2, *lfo3, *lfo4, *lfo5;
+	DSP_Osc *lfo1, *lfo2, *lfo3, *lfo4, *lfo5, *lfo6;
 	
 
 private:
@@ -180,8 +183,9 @@ private:
 	float *preserved_send_1[_SYNTH_MAX_NUM_OF_VOICES];
 	float *preserved_send_2[_SYNTH_MAX_NUM_OF_VOICES];
 
-	float lfo_1_actual_freq, lfo_2_actual_freq, lfo_3_actual_freq, lfo_4_actual_freq, lfo_5_actual_freq;
-	float lfo_out[5];
+	float lfo_1_actual_freq, lfo_2_actual_freq, lfo_3_actual_freq;
+	float lfo_4_actual_freq, lfo_5_actual_freq, lfo_6_actual_freq;
+	float lfo_out[_NUM_OF_LFOS];
 
 	int amp_1_pan_mod_lfo, amp_2_pan_mod_lfo;
 	float amp_1_pan_mod_lfo_level, amp_2_pan_mod_lfo_level;

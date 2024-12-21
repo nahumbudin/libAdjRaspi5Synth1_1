@@ -320,6 +320,66 @@ int mod_synth_get_active_env_mod_5_release()
 	}
 }
 
+int mod_synth_get_active_env_mod_6_attack()
+{
+	res_mod = settings_manager->get_int_param(AdjSynth::get_instance()->get_active_patch_params(),
+		"adjsynth.env_6.attack",
+		&int_param_mod);
+	if (res_mod == _SETTINGS_KEY_FOUND)
+	{
+		return int_param_mod.value;
+	}
+	else
+	{
+		return 0;
+	}
+}
+
+int mod_synth_get_active_env_mod_6_decay()
+{
+	res_mod = settings_manager->get_int_param(AdjSynth::get_instance()->get_active_patch_params(),
+		"adjsynth.env_6.decay",
+		&int_param_mod);
+	if (res_mod == _SETTINGS_KEY_FOUND)
+	{
+		return int_param_mod.value;
+	}
+	else
+	{
+		return 0;
+	}
+}
+
+int mod_synth_get_active_env_mod_6_sustain()
+{
+	res_mod = settings_manager->get_int_param(AdjSynth::get_instance()->get_active_patch_params(),
+		"adjsynth.env_6.sustain",
+		&int_param_mod);
+	if (res_mod == _SETTINGS_KEY_FOUND)
+	{
+		return int_param_mod.value;
+	}
+	else
+	{
+		return 0;
+	}
+}
+
+int mod_synth_get_active_env_mod_6_release()
+{
+	res_mod = settings_manager->get_int_param(AdjSynth::get_instance()->get_active_patch_params(),
+		"adjsynth.env_6.release",
+		&int_param_mod);
+	if (res_mod == _SETTINGS_KEY_FOUND)
+	{
+		return int_param_mod.value;
+	}
+	else
+	{
+		return 0;
+	}
+}
+
 
 int mod_synth_get_active_lfo_mod_1_waveform()
 {
@@ -536,6 +596,51 @@ int mod_synth_get_active_lfo_mod_5_rate()
 {
 	res_mod = settings_manager->get_int_param(AdjSynth::get_instance()->get_active_patch_params(),
 		"adjsynth.lfo_5.rate",
+		&int_param_mod);
+	if (res_mod == _SETTINGS_KEY_FOUND)
+	{
+		return int_param_mod.value;
+	}
+	else
+	{
+		return 0;
+	}
+}
+
+int mod_synth_get_active_lfo_mod_6_waveform()
+{
+	res_mod = settings_manager->get_int_param(AdjSynth::get_instance()->get_active_patch_params(),
+		"adjsynth.lfo_6.waveform",
+		&int_param_mod);
+	if (res_mod == _SETTINGS_KEY_FOUND)
+	{
+		return int_param_mod.value;
+	}
+	else
+	{
+		return 0;
+	}
+}
+
+int mod_synth_get_active_lfo_mod_6_symmetry()
+{
+	res_mod = settings_manager->get_int_param(AdjSynth::get_instance()->get_active_patch_params(),
+		"adjsynth.lfo_6.symmetry",
+		&int_param_mod);
+	if (res_mod == _SETTINGS_KEY_FOUND)
+	{
+		return int_param_mod.value;
+	}
+	else
+	{
+		return 0;
+	}
+}
+
+int mod_synth_get_active_lfo_mod_6_rate()
+{
+	res_mod = settings_manager->get_int_param(AdjSynth::get_instance()->get_active_patch_params(),
+		"adjsynth.lfo_6.rate",
 		&int_param_mod);
 	if (res_mod == _SETTINGS_KEY_FOUND)
 	{

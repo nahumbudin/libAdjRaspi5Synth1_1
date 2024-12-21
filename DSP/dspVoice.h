@@ -352,6 +352,7 @@ public:
 	void set_lfo_3_frequency(float freq);
 	void set_lfo_4_frequency(float freq);
 	void set_lfo_5_frequency(float freq);
+	void set_lfo_6_frequency(float freq);
 
 	void calc_next_modulation_values();
 
@@ -384,12 +385,14 @@ public:
 	DSP_Osc *lfo_3 = NULL;
 	DSP_Osc *lfo_4 = NULL;
 	DSP_Osc *lfo_5 = NULL;
+	DSP_Osc* lfo_6 = NULL;
 
 	DSP_ADSR *adsr_1 = NULL;
 	DSP_ADSR *adsr_2 = NULL;
 	DSP_ADSR *adsr_3 = NULL;
 	DSP_ADSR *adsr_4 = NULL;
 	DSP_ADSR *adsr_5 = NULL;
+	DSP_ADSR* adsr_6 = NULL;
 
 	float amp_1_pan_mod;
 	float amp_2_pan_mod;
@@ -424,7 +427,7 @@ private:
 	float mso_1_out;
 	float wavetable_1_out_1, wavetable_1_out_2;
 
-	float lfo_out[5], adsr_out[5];	
+	float lfo_out[_NUM_OF_LFOS], adsr_out[_NUM_OF_ADSRS];	
 
 	int osc_1_freq_mod_lfo, osc_1_pwm_mod_lfo, osc_1_amp_mod_lfo;
 	float osc_1_freq_mod_lfo_level, osc_1_pwm_mod_lfo_level, osc_1_amp_mod_lfo_level;
@@ -455,7 +458,8 @@ private:
 	int amp_1_pan_mod_lfo, amp_2_pan_mod_lfo;
 	float amp_1_pan_mod_lfo_level, amp_2_pan_mod_lfo_level;
 
-	float lfo_1_actual_freq, lfo_2_actual_freq, lfo_3_actual_freq, lfo_4_actual_freq, lfo_5_actual_freq;
+	float lfo_1_actual_freq, lfo_2_actual_freq, lfo_3_actual_freq;
+	float lfo_4_actual_freq, lfo_5_actual_freq, lfo_6_actual_freq;
 	
 	float osc_1_send_filter_1_level;
 	float osc_1_send_filter_2_level;		

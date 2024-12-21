@@ -259,6 +259,54 @@ int AdjSynth::set_default_patch_parameters_modulators(_settings_params_t *params
 		_SET_TYPE | _SET_BLOCK_START_INDEX | 
 		_SET_BLOCK_STOP_INDEX | _SET_CALLBACK | _SET_BLOCK_CALLBACK,
 		prog);
+
+	res |= adj_synth_settings_manager->set_int_param
+	(params,
+		"adjsynth.lfo_6.waveform",
+		_OSC_WAVEFORM_SINE,
+		_OSC_WAVEFORM_SAMPHOLD,
+		_OSC_WAVEFORM_SINE,
+		_ADJ_SYNTH_PATCH_PARAMS,
+		set_mixer_lfo_6_waveform_cb,
+		0,
+		num_of_voices - 1,
+		set_voice_block_lfo_6_waveform_cb,
+		_SET_VALUE | _SET_MAX_VAL | _SET_MIN_VAL |
+		_SET_TYPE | _SET_BLOCK_START_INDEX |
+		_SET_BLOCK_STOP_INDEX | _SET_CALLBACK | _SET_BLOCK_CALLBACK,
+		prog);
+
+	res |= adj_synth_settings_manager->set_int_param
+	(params,
+		"adjsynth.lfo_6.rate",
+		10,
+		100,
+		0,
+		_ADJ_SYNTH_PATCH_PARAMS,
+		set_mixer_lfo_6_rate_cb,
+		0,
+		num_of_voices - 1,
+		set_voice_block_lfo_6_rate_cb,
+		_SET_VALUE | _SET_MAX_VAL | _SET_MIN_VAL |
+		_SET_TYPE | _SET_BLOCK_START_INDEX |
+		_SET_BLOCK_STOP_INDEX | _SET_CALLBACK | _SET_BLOCK_CALLBACK,
+		prog);
+
+	res |= adj_synth_settings_manager->set_int_param
+	(params,
+		"adjsynth.lfo_6.symmetry",
+		50,
+		100,
+		0,
+		_ADJ_SYNTH_PATCH_PARAMS,
+		setmixer_lfo_6_symmetry_cb,
+		0,
+		num_of_voices - 1,
+		set_voice_block_lfo_6_symmetry_cb,
+		_SET_VALUE | _SET_MAX_VAL | _SET_MIN_VAL |
+		_SET_TYPE | _SET_BLOCK_START_INDEX |
+		_SET_BLOCK_STOP_INDEX | _SET_CALLBACK | _SET_BLOCK_CALLBACK,
+		prog);
 	
 	
 	res |= adj_synth_settings_manager->set_int_param
@@ -582,6 +630,70 @@ int AdjSynth::set_default_patch_parameters_modulators(_settings_params_t *params
 		set_voice_block_env_5_release_cb,
 		_SET_VALUE | _SET_MAX_VAL | _SET_MIN_VAL | 
 		_SET_TYPE | _SET_BLOCK_START_INDEX | 
+		_SET_BLOCK_STOP_INDEX | _SET_BLOCK_CALLBACK,
+		prog);
+
+	res |= adj_synth_settings_manager->set_int_param
+	(params,
+		"adjsynth.env_6.attack",
+		5,
+		100,
+		0,
+		_ADJ_SYNTH_PATCH_PARAMS,
+		NULL,
+		0,
+		num_of_voices - 1,
+		set_voice_block_env_6_attack_cb,
+		_SET_VALUE | _SET_MAX_VAL | _SET_MIN_VAL |
+		_SET_TYPE | _SET_BLOCK_START_INDEX |
+		_SET_BLOCK_STOP_INDEX | _SET_BLOCK_CALLBACK,
+		prog);
+
+	res |= adj_synth_settings_manager->set_int_param
+	(params,
+		"adjsynth.env_6.decay",
+		10,
+		100,
+		0,
+		_ADJ_SYNTH_PATCH_PARAMS,
+		NULL,
+		0,
+		num_of_voices - 1,
+		set_voice_block_env_6_decay_cb,
+		_SET_VALUE | _SET_MAX_VAL | _SET_MIN_VAL |
+		_SET_TYPE | _SET_BLOCK_START_INDEX |
+		_SET_BLOCK_STOP_INDEX | _SET_BLOCK_CALLBACK,
+		prog);
+
+	res |= adj_synth_settings_manager->set_int_param
+	(params,
+		"adjsynth.env_6.sustain",
+		80,
+		100,
+		0,
+		_ADJ_SYNTH_PATCH_PARAMS,
+		NULL,
+		0,
+		num_of_voices - 1,
+		set_voice_block_env_6_sustain_cb,
+		_SET_VALUE | _SET_MAX_VAL | _SET_MIN_VAL |
+		_SET_TYPE | _SET_BLOCK_START_INDEX |
+		_SET_BLOCK_STOP_INDEX | _SET_BLOCK_CALLBACK,
+		prog);
+
+	res |= adj_synth_settings_manager->set_int_param
+	(params,
+		"adjsynth.env_6.release",
+		10,
+		100,
+		0,
+		_ADJ_SYNTH_PATCH_PARAMS,
+		NULL,
+		0,
+		num_of_voices - 1,
+		set_voice_block_env_6_release_cb,
+		_SET_VALUE | _SET_MAX_VAL | _SET_MIN_VAL |
+		_SET_TYPE | _SET_BLOCK_START_INDEX |
 		_SET_BLOCK_STOP_INDEX | _SET_BLOCK_CALLBACK,
 		prog);
 	

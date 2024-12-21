@@ -67,6 +67,11 @@ AudioVoiceFloat::AudioVoiceFloat(
 	init_poly();
 }
 
+/**
+*	@brief	Sets the sample-rate
+*	@param	int sample rate (_SAMPLE_RATE_44 or _SAMPLE_RATE_48)
+*	@return set sample-rate
+*/	
 int AudioVoiceFloat::set_sample_rate(int samp_rate)
 {
 	if (!is_valid_sample_rate(samp_rate))
@@ -290,7 +295,7 @@ bool AudioVoiceFloat::is_voice_wait_for_not_active()
 }
 
 /**
-*   @brief  Set the voice timestamp
+*   @brief  Set the voice timestamp [us]
 *   @param  timestamp	timestamp value
 *   @return void
 */
@@ -401,12 +406,14 @@ void AudioVoiceFloat::update()
 		// unable to allocate memory, so we'll send nothing
 		if (block_out1)
 		{
+			// release if the only one
 			pthread_mutex_lock(&voice_mem_blocks_allocation_control_mutex);
 			release_audio_block(block_out1);
 			pthread_mutex_unlock(&voice_mem_blocks_allocation_control_mutex);
 		}
 		if (block_out2)
 		{
+			// release if the only one
 			pthread_mutex_lock(&voice_mem_blocks_allocation_control_mutex);
 			release_audio_block(block_out2);
 			pthread_mutex_unlock(&voice_mem_blocks_allocation_control_mutex);
@@ -419,7 +426,7 @@ void AudioVoiceFloat::update()
 
 	for (i = 0; i < audio_block_size; i++) 
 	{
-		// Update modulation factors
+		// Update modulation factors - updated only every _CONTROL_SUB_SAMPLING samples
 		if ((i % _CONTROL_SUB_SAMPLING) == 0)
 		{
 			dsp_voice->calc_next_modulation_values();

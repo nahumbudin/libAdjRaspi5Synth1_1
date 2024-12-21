@@ -81,10 +81,17 @@ public:
 	
 private:
 	
+	/* Individual voice number 0 - max num of voices - 1*/
 	int voice_num;
+	/* Voice audio output level 0 - 1.0*/
 	float magnitude;
-	bool active, wait_for_not_active;
+	/* When true, the voice is active */
+	bool active;
+	/* When true, the voice is active. When the output signal is low (e.g. note release ended) */
+	bool wait_for_not_active;
+	/* The played note MIDI number*/
 	int note;
+	/* Last activation time [us] - elapsed time from program start */
 	uint64_t timestamp;
 	
 	int sample_rate, audio_block_size;

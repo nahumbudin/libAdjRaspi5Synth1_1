@@ -11,7 +11,19 @@
 *				1.0	15-Nov-2019 
 *
 *	@brief		Handle AdjSynth MIDI programs
-*				A MIDI program is a adjSyntg preset (voice).
+*	
+*				The adjSynth Program implements a preset voice settings, in a similar way of a MIDI program.
+*				In this way, the adjSynth voices may be dynamically allocated and set with various "sounds".
+*				
+*				In this version, there are 19 programs (0-18):
+*					0-15	MIDI-mapping mode programs used each for a MIDI channel 1-16
+*							Settings are loaded with presets and cannot be addited
+*					16		Sketch 1 - settings can be changed online
+*					17		Sketch 2 - settings can be changed online
+*					18		Sketch 3 - settings can be changed online
+*					
+*				
+*					
 */
 
 #pragma once

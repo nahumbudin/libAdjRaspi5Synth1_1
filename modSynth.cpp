@@ -29,6 +29,7 @@
 #include "./Instrument/instrumentsManager.h"
 #include "./Instrument/instrumentFluidSynth.h"
 #include "./Instrument/instrumentHammondOrgan.h"
+#include "./Instrument/instrumentAnalogSynth.h"
 
 #include "./Instrument/instrumentMidiPlayer.h"
 #include "./Instrument/instrumentMidiMapper.h"
@@ -141,6 +142,10 @@ ModSynth::ModSynth()
 	hammond_organ = new InstrumentHammondOrgan();
 	instruments_manager->add_instrument(_INSTRUMENT_NAME_HAMMON_ORGAN_STR_KEY, 
 										hammond_organ);
+	
+	analog_synth = new InstrumentAnalogSynth();
+	instruments_manager->add_instrument(_INSTRUMENT_NAME_ANALOG_SYNTH_STR_KEY,
+										analog_synth);
 
 	midi_mapper = new InstrumentMidiMapper(alsa_midi_system_control,
 										   &alsa_midi_system_control->midi_mapper_client_in_name);
@@ -343,6 +348,16 @@ void ModSynth::on_exit()
 }
 
 /**
+*   @brief  Clear all playing notes and polyphonic allocations
+*   @param  none
+*   @return void
+*/
+void ModSynth::synth_panic_action()
+{
+	fluid_synth->get_fluid_synth_interface()->fluid_synth_panic_action();
+}
+
+/**
 *   @brief  performs periodic update tasks - called by the audio processing update cycle process
 *   @param  voc	voice number (na - global)
 *   @return pointer to adjheart synthesizr
@@ -410,6 +425,16 @@ AlsaBtClientOutput* ModSynth::get_bt_alsa_out()
 InstrumentFluidSynth *ModSynth::get_fluid_synth()
 {
 	return fluid_synth;
+}
+
+/**
+*   @brief  retruns a pointer to the AnalogSynth instrument object
+*   @param  none
+*   @return a pointer to the AnalogSynth instrument object
+*/
+InstrumentAnalogSynth *ModSynth::get_analog_synth()
+{
+	return analog_synth;
 }
 
 /**
