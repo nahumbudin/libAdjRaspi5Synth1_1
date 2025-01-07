@@ -23,6 +23,9 @@ The AdjSynth supports external MIDI keyboards based on the ALSA MIDI streaming a
 
 ![alt text](./images/Raspi5Synth_TopAssemblyv148.jpg "Control Box")
 
+![Raspi5Synth_TopAssemblyBackPannel v148](https://github.com/user-attachments/assets/e490051b-9d72-48fb-8c06-07235d10a3ee)
+
+
 
 ## Detailed Decription
 
