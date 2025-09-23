@@ -1,14 +1,15 @@
 /**
 *	@file		adjSynth.h
 *	@author		Nahum Budin
-*	@date		4-Oct-2024
-*	@version	1.3 
+*	@date		23-Sep-2025
+*	@version	1.4 
 *					1. Code refactoring and notaion.
 *					
 *	@brief		A collection of 4 synthesizers: Additive, Karplus String, PAD and Morphed Sine Oscilator (MSO)
 *	
 *	History:\n
 *	
+*	version 1.3		4-Oct-2024	Code refactoring and notaion.
 *	version 1.2		4-Feb--2021:
 *			1. Code refactoring and notaion.
 *			2. Adding sample-rate and bloc-size settings
@@ -23,7 +24,10 @@
 #include "adjSynthVoice.h"
 #include "adjSynthPolyphony.h"
 #include "adjSynthProgram.h"
+
 #include "adjSynthPolyphonyManager.h"
+#include "adjSynthPolyphonyManagerThreads.h"
+
 #include "synthKeyboard.h"
 
 #include "../Audio/audioManager.h"
@@ -160,6 +164,7 @@ public:
 	void update_ui_callback();
 
 	AdjPolyphonyManager *polypony_manager;
+	AdjPolyphonyManagerThreads *polypony_manager_threads;
 	
 	SynthKeyboard *kbd1 = NULL;
 
@@ -178,13 +183,15 @@ public:
 	static SynthVoice *synth_voice[_SYNTH_MAX_NUM_OF_VOICES];
 
 	SynthProgram *synth_program[_SYNTH_MAX_NUM_OF_PROGRAMS];
+	
 	static AdjPolyphonyManager *synth_polyphony_manager;
+	static AdjPolyphonyManagerThreads *synth_polyphony_manager_threads;
 
 	SynthPADcreator *synth_pad_creator = NULL;
 	DSP_MorphingSinusOscWTAB *mso_wtab = NULL;
 	Wavetable *program_wavetable = NULL;
-	
-	
+
+	static int num_of_cores;
 	static int num_of_core_voices;
 	
 	int poly_mode;

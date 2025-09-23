@@ -4,7 +4,7 @@
 *	@date		24-06-2024
 *	@version	1.0	Initial release
 *					
-*	@brief		The basic music generating object, e.g., analog-synthesizer,
+*	@brief		The basic music generating or processing object, e.g., analog-synthesizer,
 *				FluidSynth SoundFont synthesizer, organ, etc.
 *	
 *	History:\n
@@ -14,12 +14,27 @@
 #include "instrument.h"
 #include "../MIDI/midiStream.h"
 
+/* Holds the BT input client name. */
 std::string AlsaMidiSysControl::bt_client_in_name = "";
+/* Holds the control box input client name.*/
 std::string AlsaMidiSysControl::control_box_client_in_name = "";
+/* Holds the control box external MIDI interface input client name. */
 std::string AlsaMidiSysControl::control_box_xt_midi_in_client_name = "";
+/* Holds the MIDI playerr input client name. */
 std::string AlsaMidiSysControl::midi_player_client_in_name = "";
+/* Holds the MIDI mapper input clent name. */
 std::string AlsaMidiSysControl::midi_mapper_client_in_name = "";
 
+/**
+*   @brief  Creates an Instrument object
+*   @param  string				name				the instrument name
+*   @param	bool				with_midi_in		if true, the instrument have a midi in interface
+*   @param	bool				with_audio_out		if true, the instrument have an audio output interface
+*	@param	bool				with_midi_out		if true, the instrument have a midi output port
+*	@param	AlsaMidiSysControl	alse_control		a pointer to an ALSA control object
+*	@param	string				alsa_client_in_name	the name of the ALSA input client.
+*   @return 0 if done
+*/
 Instrument::Instrument(std::string name, bool with_midi_in,
 					   bool with_audio_out, bool with_midi_out,
 					   AlsaMidiSysControl *alsa_control,
@@ -40,6 +55,7 @@ Instrument::Instrument(std::string name, bool with_midi_in,
 
 	if (audio_out_enable)
 	{
+		// Curenly ALSA audio is not supported TODO:
 		jack_connections = JackConnections::get_instance();
 	}
 
@@ -61,6 +77,7 @@ Instrument::Instrument(std::string name, bool with_midi_in,
 			{
 				// Scan for current ALSA In Instrument client
 				alsa_control->refresh_alsa_clients_data();
+				// The last client name is of theis instrumet just created client.
 				int last_input_client_num = alsa_control->get_num_of_input_midi_clients() - 1;
 				alsa_control->get_midi_input_client_name_string(last_input_client_num,
 																alsa_client_in_name);
@@ -112,6 +129,7 @@ void Instrument::set_active_midi_channels(uint16_t act_chans){
 
 	if (midi_in_enable)
 	{
+		// A bit map that indicates which channel is allocated to this instrument.
 		alsa_midi_sequencer_events_handler->set_active_midi_channels(act_chans);
 	}
 }
@@ -127,6 +145,10 @@ uint16_t Instrument::get_active_midi_channels()
 		return 0;
 	}
 }
+
+/************************************ 
+ * Virtual interfaces
+ ************************************/
 
 void Instrument::note_on_handler(uint8_t channel, uint8_t note, uint8_t velocity)
 {

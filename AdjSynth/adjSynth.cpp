@@ -1,14 +1,18 @@
 /**
 *	@file		adjSynth.h
 *	@author		Nahum Budin
-*	@date		4-Oct-2024
-*	@version	1.3 
+*	@date		23-Sep-2025
+*	@version	1.4 
 *					1. Code refactoring and notaion.
 *					
-*	@brief		A collection of 5 synthesizers: Additive, Noise Karplus String, PAD and Morphed Sine Oscilator (MSO)
+*	@brief		A collection of 4 synthesizers: Additive, Karplus String, PAD and Morphed Sine Oscilator (MSO)
+*					
+*	@brief		A collection of 4 synthesizers: Additive, Noise, Karplus String, PAD and Morphed Sine Oscilator (MSO)
+*				Note - the FluidSynth is not handeled by this object. 
 *	
 *	History:\n
 *	
+*	version 1.3		4-Oct-2024	Code refactoring and notaion.*	
 *	version 1.2		4-Feb--2021:
 *			1. Code refactoring and notaion.
 *			2. Adding sample-rate and bloc-size settings
@@ -33,32 +37,48 @@
 
 class DSP_Voice;
 
-
+/* This is the top most object of the synthesizer - a singltone. */
 AdjSynth *AdjSynth::adj_synth = NULL;
+/* A monophonic signal generator and processor that generates audio blocks. 
+ * Plyphony is created by using multiple voice objects */
 SynthVoice *AdjSynth::synth_voice[_SYNTH_MAX_NUM_OF_VOICES] = { NULL };
+
+/* This object manges the allocation of voices to create a polyphonic 
+   capabilities  - a singltone. See more detaile in adjSynthPolyphonyManagerThreads.h */
 AdjPolyphonyManager *AdjSynth::synth_polyphony_manager = NULL;
+/* This the polyphony manager main thread - ststic */
+AdjPolyphonyManagerThreads *AdjSynth::synth_polyphony_manager_threads = NULL;
 
-
+/* Holds the number of detected CPU cores (4 for Raspberry Pi 5)  - a singltone. */
+int AdjSynth::num_of_cores = 1;
+/* Represents the number of voice objects that are allocated to a CPU core 
+   at current time  - a singltone. */
 int AdjSynth::num_of_core_voices = 1;
 
-// Mutex to handle note on / off opperations
+/* A mutex to handle note on / off opperations */
 pthread_mutex_t voice_manage_mutex;
-// Mutex to handle busy/not-busy voices marking
+/* A mutex to handle busy/not-busy voices marking */
 pthread_mutex_t voice_busy_mutex;
-// Mutex to controll audio memory blocks allocation
+/* Mutex to controll audio memory blocks allocation */
 pthread_mutex_t voice_mem_blocks_allocation_control_mutex;
 
-// Callback that is initiated by the AudioManager audio-update thread
+/* A callback function that is initiated by the AudioManager audio-update thread
+   The audio update thread calculates the given voice number output audio block,
+   and send it to the audio system mixer. */ 
 void callback_audio_voice_update(int voice_num)
 {
 	if (AdjSynth::synth_voice[voice_num]->audio_voice->is_voice_active() ||
 		AdjSynth::synth_voice[voice_num]->audio_voice->is_voice_wait_for_not_active())
 	{
+		// Run only if the voice is active or the voice is in a Release segment and
+		//	we now wait until the Release phase will end so the voice object can be released. 
 		AdjSynth::synth_voice[voice_num]->update_all();
 	}
 }
 
-// Callback that is initiated by the AudioManager audio-update thread.
+/*  A callback that is initiated by the AudioManager audio-update thread, that updates all
+ *  the voices and audio blocks of the last stage of the audio pipeline. 
+ *  TODO: why is int param a parameter? */
 void callback_audio_update_cycle_end_tasks(int param)
 {
 	AudioBlockFloat *p;
@@ -68,7 +88,9 @@ void callback_audio_update_cycle_end_tasks(int param)
 	}
 }
 
-// Callback that is initiated by SynthProg
+/* A callback that is initiated by the SynthProg object to set a group of voices
+   with a the given parameters. All the group voices are marked as a Program.
+   A program reperesents a specific sound, like in MIDI, for example a piano program. */
 int set_patch_settings_default_params_callback_wrapper(_settings_params_t *params, int prog)
 {
 	return AdjSynth::get_instance()->set_default_patch_parameters(params, prog);
@@ -82,77 +104,122 @@ int set_patch_settings_default_params_callback_wrapper(_settings_params_t *param
 
 AdjSynth::AdjSynth()
 {
+	/* A voice number. */
 	int voice;
-	
+	/* Holds the singletone instance. */
 	adj_synth = this;
 
 	// Create settings managers
 	adj_synth_settings_manager = new Settings(&active_adj_synth_settings_params);
-	//adj_synth_general_settings_manager = new ModSynthSettings(&active_adj_synth_general_settings_params);
+	//adj_synth_general_settings_manager = new ModSynthSettings(&active_adj_synth_general_settings_params); 
+	
+	// TODO: reorgenize the various settings types used in previous version.
 	
 	num_of_voices = _SYNTH_MAX_NUM_OF_VOICES;
+	/* Holds the max number of programs (piano, flute, custom-sound.....)*/
 	num_of_programs = _SYNTH_MAX_NUM_OF_PROGRAMS;
+	/* Will hold the CPU utilization in %. */
 	utilization = 0;
+	/* Specific settings of the Hammond Organ instrument. */
 	hammond_percussion_on = false;
 	hammond_percussion_slow = false;
 	hammond_percussion_soft = false; 
-	hammond_ercussion_3_rd = false; 
+	hammond_ercussion_3_rd = false;
+	
+	/* The id of the active sketch. Sketch-program 1 to 3 represents an online editted sketches. */
 	active_sketch = _SKETCH_PROGRAM_1;
 	
+	// Create the polyphony manager.
 	polypony_manager = AdjPolyphonyManager::get_poly_manger_instance(num_of_core_voices);
+	// Creates the manager threads handller. 
+	polypony_manager_threads = AdjPolyphonyManagerThreads::get_poly_manger_instance(num_of_voices); // num_of_core_voices
 
+	// TODO:
 	// Allocate audio blocks data memory pool
 //	AllocateAudioMemoryBlocksFloatPool(_MAX_AUDIO_BLOCKS_MESSAGES_POOL_SIZE, audio_block_size); // moved down after setting sample-rate and block size
 
-	// Allocate midi blocks data memory pool
+	// Allocate midi blocks data memory pool. Pre allocation makes execution much faster.
 	allocate_midi_stream_messages_memory_pool(_MAX_MIDI_STREAM_MESSAGES_POOL_SIZE);
 	allocate_raw_data_mssgs_memory_pool(_MAX_RAWDATA_MSSGS_POOL_SIZE);
+
+	// Get the number of cpu cores.
+	num_of_cores = std::thread::hardware_concurrency();
+	if (num_of_cores < 1)
+	{
+		num_of_cores = 1;
+	}
+	
+	// TODO:
+	// Number of voices per core
+	//num_of_core_voices = mod_synth_get_synthesizer_num_of_polyphonic_voices() / num_of_cores;
+
+	// Calculate the max number of voices that can be allocated to the CPU N-1 cores. 
+	if (num_of_cores > 1)
+	{
+		num_of_core_voices = mod_synth_get_synthesizer_num_of_polyphonic_voices() / (num_of_cores - 1);
+	}
+	else
+	{
+		num_of_core_voices = mod_synth_get_synthesizer_num_of_polyphonic_voices();
+	}
 	
 
-	// Init mutexes
+	// Init the mutexes.
 	pthread_mutex_init(&voice_manage_mutex, NULL);
 	pthread_mutex_init(&voice_busy_mutex, NULL);
 	pthread_mutex_init(&voice_mem_blocks_allocation_control_mutex, NULL);
 
+	// Set the main audio parameters.
 	set_sample_rate(_DEFAULT_SAMPLE_RATE);
 	set_audio_block_size(_DEFAULT_BLOCK_SIZE);
 
-	// Allocate audio blocks data memory pool
+	// Allocate audio blocks data memory pool. Pre allocation save time at runtime.
 	AllocateAudioMemoryBlocksFloatPool(_MAX_AUDIO_BLOCKS_MESSAGES_POOL_SIZE, audio_block_size);
 	
-	// Create a Keyboard instance
+	// Create a Keyboard-control  instance
 	kbd1 = new SynthKeyboard(sample_rate, audio_block_size);
-	// Do not change with patch
-	poly_mode = _KBD_POLY_MODE_REUSE; // _KBD_POLY_MODE_FIFO;
-	play_mode = _PLAY_MODE_POLY;
-	midi_mapping_mode = _MIDI_MAPPING_MODE_SKETCH;
+	// Do not change with patch TODO: ?
+	poly_mode = _KBD_POLY_MODE_REUSE; // When all voices are allocated, reuse the oldest one. // _KBD_POLY_MODE_FIFO;
+	play_mode = _PLAY_MODE_POLY; // Not monophonic
+	midi_mapping_mode = _MIDI_MAPPING_MODE_SKETCH; // An online adjustable sketch patch
 	
+	// TODO: why again and NULL - see 130 above
 	synth_polyphony_manager = NULL; //AdjSynthPolyphony::get_instance(); // new AdjSynthPolyphony();
+	synth_polyphony_manager_threads = NULL;
 	
+	// Create and set an audio manager singletone.
 	// Don't change the order (stage - TODO:)
 	audio_manager = AudioManager::get_instance();
 	audio_manager->set_sample_rate(sample_rate);
 	audio_manager->set_audio_block_size(audio_block_size);
+	// Calulate the audio-blocks perid in us.
 	audio_manager->set_period_time_us(((unsigned long)audio_block_size * 1000000) / sample_rate + 0.5);	
-	
+	// A call back that initiates audio block update cycle.
 	audio_manager->register_callback_audio_voice_update(&callback_audio_voice_update);
+	// A call back that is called when the audio blocks update cycle is completed.
 	audio_manager->register_callback_audio_update_cycle_end_tasks(&callback_audio_update_cycle_end_tasks);
-	
 
+	// A Wavetable of float samples handling. Samples may be output as 2 values using 2 pointers.
+	//   This wavetable is used by a program that is based on the PAD synthesizer module.
 	program_wavetable = new Wavetable();
 	program_wavetable->size = _PAD_DEFAULT_WAVETABLE_SIZE;
 	program_wavetable->samples = (float*)malloc(_PAD_DEFAULT_WAVETABLE_SIZE * sizeof(float));
+	/* This object is used to creat wavetables for the PAD synthesizer module. */
 	synth_pad_creator = new SynthPADcreator(program_wavetable, program_wavetable->size, sample_rate);
 	program_wavetable->base_freq =
 		synth_pad_creator->set_base_frequency(program_wavetable, _PAD_DEFAULT_BASE_NOTE);
 
+	/* Create a wave table that is used by the Morphed Sinus Oscilator synthesizer module. */
 	mso_wtab = new DSP_MorphingSinusOscWTAB(sample_rate);
+	// Calculate the base waveform parameters.
 	mso_wtab->calc_segments_lengths(&mso_wtab->base_segment_lengths, &mso_wtab->base_segment_positions);
 	mso_wtab->calc_wtab(mso_wtab->base_waveform_tab, &mso_wtab->base_segment_lengths, &mso_wtab->base_segment_positions);
+	// Calculate the morphed waveform parameters.
 	mso_wtab->calc_segments_lengths(&mso_wtab->morphed_segment_lengths, &mso_wtab->morphed_segment_positions);
 	mso_wtab->calc_wtab(mso_wtab->morphed_waveform_tab, &mso_wtab->morphed_segment_lengths, &mso_wtab->morphed_segment_positions);
 		
-	// TODO:
+	// TODO:?
+	/* Create an Audio Mixer object singletone. */
 	audio_poly_mixer = AudioPolyMixerFloat::get_instance(
 		_AUDIO_STAGE_0,
 		num_of_voices,
@@ -163,39 +230,50 @@ AdjSynth::AdjSynth()
 
 	audio_poly_mixer->set_active();
 
+	/* Create an Audio Equalizer object. */
 	audio_equalizer = new AudioBandEqualizer(_AUDIO_STAGE_0, audio_block_size, &audio_common_first_update);
-
+	/* Create a reverb module (common to all voices) */
 	audio_reverb = new AudioReverb(_AUDIO_STAGE_0, sample_rate, audio_block_size, &audio_common_first_update);
 
+	/* Create an audio output object. */
 	audio_out = new AudioOutputFloat(_AUDIO_STAGE_0,
 		audio_block_size,
 		audio_manager->audio_block_stereo_float_shared_memory_outputs,
 		&audio_common_first_update);
 
+	/* Create audio connections for the mixer output. */
 	connection_mixer_out_L = audio_manager->connections_manager->get_audio_connection();
-	connection_mixer_out_R = audio_manager->connections_manager->get_audio_connection();	
-	
+	connection_mixer_out_R = audio_manager->connections_manager->get_audio_connection();
+
+	/* Create audio connections for the eqalizer output. */
 	connection_equilizer_out_L = audio_manager->connections_manager->get_audio_connection();
 	connection_equilizer_out_R = audio_manager->connections_manager->get_audio_connection();
-	
+
+	/* Create audio connections for the reverb output. */
 	connection_reverb_out_L = audio_manager->connections_manager->get_audio_connection();
 	connection_reverb_out_R = audio_manager->connections_manager->get_audio_connection();
-	
+
+	/* Create audio connections for the mixer send output (routed to effects). */
 	connection_mixer_send_L = audio_manager->connections_manager->get_audio_connection();
 	connection_mixer_send_R = audio_manager->connections_manager->get_audio_connection();
 	
+	// Connect the mixer output to the equilizer input.
 	connection_mixer_out_L->connect(audio_poly_mixer, _LEFT, audio_equalizer, _LEFT);
 	connection_mixer_out_R->connect(audio_poly_mixer, _RIGHT, audio_equalizer, _RIGHT);
-	
+
+	// Connect the mixer send output to the reverb input.
 	connection_mixer_send_L->connect(audio_poly_mixer, _SEND_LEFT, audio_reverb, _LEFT);
 	connection_mixer_send_R->connect(audio_poly_mixer, _SEND_RIGHT, audio_reverb, _RIGHT);
-	
+
+	// Connect the reverb output to the equilizer input.
 	connection_reverb_out_L->connect(audio_reverb, _LEFT, audio_equalizer, _SEND_LEFT);
 	connection_reverb_out_R->connect(audio_reverb, _RIGHT, audio_equalizer, _SEND_RIGHT);
-	
+
+	// Connect the equilizer output to the audio output input.
 	connection_equilizer_out_L->connect(audio_equalizer, _LEFT, audio_out, _LEFT);
-	connection_equilizer_out_R->connect(audio_equalizer, _RIGHT, audio_out, _RIGHT);
+	connection_equilizer_out_R->connect(audio_equalizer, _RIGHT, audio_out, _RIGHT);	
 	
+	// Set audio parameters.
 	set_audio_driver_type(_DEFAULT_AUDIO_DRIVER);
 	set_sample_rate(_DEFAULT_SAMPLE_RATE);
 	set_audio_block_size(_DEFAULT_BLOCK_SIZE);
@@ -205,11 +283,11 @@ AdjSynth::AdjSynth()
 
 AdjSynth::~AdjSynth()
 {
-	
+	// Nothin hjere yet.
 }
 
 /**
-*   @brief  retruns the single AdjSynth instance
+*   @brief  retruns the single (singltone) AdjSynth instance
 *   @param  none
 *   @return the single modular synth instance
 */
@@ -242,7 +320,7 @@ int AdjSynth::set_sample_rate(int samp_rate)
 		sample_rate = samp_rate;
 	}
 
-	// TODO: reallocate audio blocks.
+	// TODO: reallocate audio blocks.?
 
 	if (kbd1)
 	{
@@ -272,7 +350,10 @@ int AdjSynth::set_sample_rate(int samp_rate)
 *	@param	none
 *	@return set sample-rate
 */	
-int AdjSynth::get_sample_rate() { return sample_rate; }
+int AdjSynth::get_sample_rate() 
+{ 
+	return sample_rate; 
+}
 
 /**
 *   @brief  sets the audio block size 
@@ -328,7 +409,10 @@ int AdjSynth::set_audio_block_size(int size)
 *   @param  none
 *   @return buffer size
 */	
-int AdjSynth::get_audio_block_size() { return audio_block_size; }
+int AdjSynth::get_audio_block_size() 
+{ 
+	return audio_block_size; 
+}
 
 /**
 *	@brief	Sets the audio driver type
@@ -355,11 +439,14 @@ int AdjSynth::set_audio_driver_type(int driver)
 *	@param	none
 *	@return audio driver type
 */	
-int AdjSynth::get_audio_driver_type() { return audio_driver_type; }
+int AdjSynth::get_audio_driver_type() 
+{ 
+	return audio_driver_type; 
+}
 
 /**
 *   @brief  Starts the audio service.
-*			Must be called after intializtion.
+*			Must be called only after intializtion.
 *   @param  none
 *   @return 0 if done
 */
@@ -388,6 +475,7 @@ int AdjSynth::stop_audio()
 
 /**
 *   @brief  retruns a pointer to an original main dsp voice 
+*			(original dsp voice settings to be reproduced when a dsp voice is disallocated by a voice program).
 *   @param  voice voice number
 *   @return  pointer to an original main dsp voice if OK; NULL if param out of range
 */	
@@ -404,7 +492,8 @@ DSP_Voice *AdjSynth::get_original_main_dsp_voices(int voice)
 }
 
 /**
-*   @brief  Set synthvoice instances to point at program[0] voices //Create and initialize the synth voice instances
+*   @brief  Create and initialize all the synth voice instances and
+*			set synthvoice instances to point at program[0] 
 *   @param  none
 *   @return void
 */
@@ -436,8 +525,8 @@ void AdjSynth::init_synth_voices()
 */
 void AdjSynth::init_synth_programs()
 {
-	// Program[0] is the active non MIDIping mode program used for editting patches, etc.
-	// Program[1] to Program[16] are MIDI-mapping mode programs used each for a MIDI channel 1-16 
+	// Program[16] to Program[18] are the active non MIDIping mode program used for editting patches, etc.
+	// Program[0] to Program[15] are MIDI-mapping mode programs used each for a MIDI channel 1-16 
 	for (int program = 0; program < num_of_programs; program++)
 	{		
 		synth_program[program] = new SynthProgram(
@@ -633,7 +722,7 @@ int AdjSynth::init_synth_settings_params(_settings_params_t *settings_params)
 		audio_equalizer->band_equalizer_R->set_preset(int_param.value);
 	}
 	
-	// TODO: Mixer
+	// TODO: Mixer?
 	
 	return res;	
 }
@@ -643,14 +732,20 @@ int AdjSynth::init_synth_settings_params(_settings_params_t *settings_params)
 *   @param  none
 *   @return the actual max num of voices
 */
-int AdjSynth::get_num_of_voices() { return num_of_voices; }
+int AdjSynth::get_num_of_voices() 
+{ 
+	return num_of_voices; 
+}
 
 /**
 *   @brief  Retruns the actual max num of Midi Programs
 *   @param  none
 *   @return the actual max num of Midi Programs
 */
-int AdjSynth::get_num_of_programs() { return num_of_programs; }
+int AdjSynth::get_num_of_programs() 
+{ 
+	return num_of_programs; 
+}
 
 /**
 *   @brief  Sets the active sketch num
@@ -670,7 +765,10 @@ void AdjSynth::set_active_sketch(int ask)
 *   @param  none
 *   @return the active sketch num _SKETCH_1 to _SKETCH_3
 */
-int AdjSynth::get_active_sketch() { return active_sketch; }
+int AdjSynth::get_active_sketch() 
+{ 
+	return active_sketch; 
+}
 
 /**
 *   @brief  Copy source sketch params to a destination sketch params
@@ -706,6 +804,7 @@ void AdjSynth::init_poly()
 		{	
 			synth_voice[voice]->audio_voice->init_poly();
 		}
+		// TODO: currentlu not in use
 		mark_voice_not_busy_callback(voice);
 
 		for (int core = 0; core < polypony_manager->get_number_of_cores() ; core++)
@@ -731,14 +830,14 @@ void AdjSynth::init_poly()
 void AdjSynth::init_jack()
 {
 	int res;
-	sleep(1);
+	sleep(1); // TODO: why?
 	res = initialize_jack_server_interface();
 	//	res |= intilize_jack_server_connection_out("AdjHeartSynth_out", "default");
 	//	res |= intilize_jack_server_connection_in("AdjHeartSynth_in", "default");
 }
 
 /**
-*   @brief  Start the audio update process.
+*   @brief  Start the audio update process. - Implemented above.
 *   @param	none
 *   @return void
 */
@@ -754,7 +853,7 @@ void AdjSynth::init_jack()
 /**
 *   @brief  Set MIDI mapping mode.
 *			In non mapping mode, MIDI channel is ignored.
-*			Non mapping mode enabled editing and creating patches.
+*			Non mapping mode enables editing and creating patches.
 *			In mapping mode, patches can only be loaded into each program/channel.
 *   @param	mod	_MIDI_MAPPING_MODE_NON_MAPPING or _MIDI_MAPPING_MODE_MAPPING
 *   @return void
@@ -767,7 +866,7 @@ void AdjSynth::set_midi_mapping_mode(int mod)
 		
 		pthread_mutex_lock(&voice_manage_mutex);
 
-		//		for (int voice = 0; voice < _SYNTH_MAX_NUM_OF_VOICES; voice++)
+		//		for (int voice = 0; voice < _SYNTH_MAX_NUM_OF_VOICES; voice++) TODO: ?
 		//		{
 					// Assign all voices their original (non-mapung mode) params.
 					//			synth_voice[voice]->assignDspVoice(originalMainDspVoices[voice]);
@@ -782,7 +881,7 @@ void AdjSynth::set_midi_mapping_mode(int mod)
 
 		init_poly();
 
-		//	synth_program[0]->set_num_of_voices(num_of_voices);
+		//	synth_program[0]->set_num_of_voices(num_of_voices); TODO: ?
 
 		pthread_mutex_unlock(&voice_manage_mutex);
 	}
@@ -794,7 +893,10 @@ void AdjSynth::set_midi_mapping_mode(int mod)
 	audio_poly_mixer->set_midi_maping_mode(midi_mapping_mode);
 }
 
-int AdjSynth::get_midi_mapping_mode() { return midi_mapping_mode; }
+int AdjSynth::get_midi_mapping_mode() 
+{ 
+	return midi_mapping_mode; 
+}
 
 /**
 *   @brief  Set the settings handling object and the params structure
@@ -860,7 +962,7 @@ _settings_params_t *AdjSynth::get_active_settings_params()
 }
 
 /**
-*   @brief  retruns a pointer to the active general settings params struct
+*   @brief  retruns a pointer to the active general settings params struct TODO: reevaluate the setting params types.
 *   @param  none
 *   @return a pointer to the active general settings params struct
 */
@@ -916,7 +1018,7 @@ int AdjSynth::set_default_settings_parameters(_settings_params_t *params)
 }
 
 /**
-*   @brief  Set the general settings parameters to their default values
+*   @brief  Set the general settings parameters to their default values TODO: reevaluate the setting params types.
 *   @param	params	a _setting_params_t parameters struct
 *   @return 0 if done
 */
@@ -939,27 +1041,29 @@ int AdjSynth::set_default_general_settings_parameters(_setting_params_t *params)
 
 void AdjSynth::mark_voice_not_busy_callback(int vnum)
 {
+	// TODO:
 	//callback_mark_voice_not_busy(vnum);
 }
 
 void AdjSynth::mark_voice_busy_callback(int vnum)
 {
+	// TODO:
 	//callback_mark_voice_busy(vnum);
 }
 
 void AdjSynth::set_utilization_callback(int util)
 {
-	
+	// TODO:
 }
 
 int AdjSynth::get_utilization_callback()
 {
-	return utilization; // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< utilization not set
+	return utilization; // TODO: <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< utilization not set
 }
 
 void AdjSynth::update_ui_callback()
 {
-	
+	// TODO:
 }
 
 
@@ -968,7 +1072,7 @@ void AdjSynth::update_ui_callback()
 *			Allocate free voice
 *			In portamento mode use momophonic voice 0 only.
 *			In non mapping mode assign selected free voice with selected program params
-*   @param	channel	MIDI channel: 0-15 patc1-3: 16-18
+*   @param	channel	MIDI channel: 0-15 patch 1-3: 16-18
 *	@param	byte2	note midi num
 *	@param	byte3	note velocity (if set to 0, note off will be executed).
 *	@param	voc		voice (NA).
@@ -992,6 +1096,7 @@ void  AdjSynth::midi_play_note_on(uint8_t channel, uint8_t byte2, uint8_t byte3,
 	pthread_mutex_lock(&voice_manage_mutex);
 
 	if (byte3 == 0)
+		// Note off
 	{
 		pthread_mutex_unlock(&voice_manage_mutex);
 		midi_play_note_off(channel, byte2, byte3);
@@ -1002,7 +1107,7 @@ void  AdjSynth::midi_play_note_on(uint8_t channel, uint8_t byte2, uint8_t byte3,
 
 	if (kbd1->portamento_is_enabled()) // TODO mobe portamento to programs?
 	{
-		// TODO: Polyphonic portament?
+		// TODO: Polyphonic portamento?
 		synth_voice[_SYNTH_VOICE_1]->audio_voice->set_active();
 		synth_voice[_SYNTH_VOICE_1]->audio_voice->reset_wait_for_not_active();
 		mark_voice_busy_callback(_SYNTH_VOICE_1);
@@ -1010,7 +1115,7 @@ void  AdjSynth::midi_play_note_on(uint8_t channel, uint8_t byte2, uint8_t byte3,
 	}
 	else
 	{
-		if (poly_mode == _KBD_POLY_MODE_REUSE)
+		if (poly_mode == _KBD_POLY_MODE_REUSE) // Reuse a voice that is already playing the same note
 		{
 			voice = synth_polyphony_manager->get_reused_note((int)byte2, channel); // TODO: program = 0
 			if (voice > -1)
@@ -1062,6 +1167,7 @@ void  AdjSynth::midi_play_note_on(uint8_t channel, uint8_t byte2, uint8_t byte3,
 			synth_voice[voice]->allocated_to_program_num = prog_voice->allocated_to_program_num;
 			synth_voice[voice]->allocated_to_program_voice_num = prog_voice->voice_num;
 			audio_poly_mixer->preserve_gain_pan(voice);
+			// Get pointers to parameters so they can be modified
 			audio_poly_mixer->set_voice_gain_1_ptr(voice, prog);
 			audio_poly_mixer->set_voice_gain_2_ptr(voice, prog);
 			audio_poly_mixer->set_voice_pan_1_ptr(voice, prog);
@@ -1080,7 +1186,7 @@ void  AdjSynth::midi_play_note_on(uint8_t channel, uint8_t byte2, uint8_t byte3,
 _voice_is_on:
 	if ((voice > -1) && (synth_voice[voice] != NULL))
 	{
-		if (!reused)
+		if (!reused) //
 		{
 			core = voice / num_of_core_voices;
 			pthread_mutex_lock(&voice_busy_mutex);
@@ -1138,6 +1244,7 @@ _voice_is_on:
 		synth_voice[voice]->dsp_voice->adsr_note_on(synth_voice[voice]->dsp_voice->adsr_3);
 		synth_voice[voice]->dsp_voice->adsr_note_on(synth_voice[voice]->dsp_voice->adsr_4);
 		synth_voice[voice]->dsp_voice->adsr_note_on(synth_voice[voice]->dsp_voice->adsr_5);
+		synth_voice[voice]->dsp_voice->adsr_note_on(synth_voice[voice]->dsp_voice->adsr_6);
 
 		//		fprintf(stderr, "\nsynth on %i %i ", byte2, voice);
 	}

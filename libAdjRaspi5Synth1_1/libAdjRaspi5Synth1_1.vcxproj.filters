@@ -636,6 +636,9 @@
     <ClCompile Include="..\Instrument\instrumentAnalogSynth.cpp">
       <Filter>Source files\Insrtument\Analog Synth</Filter>
     </ClCompile>
+    <ClCompile Include="..\AdjSynth\adjSynthPolyphonyManagerThreads.cpp">
+      <Filter>Source files\Synthesizer\AdjSynth</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\libAdjRaspi5Synth_1_1.h">
@@ -949,6 +952,9 @@
     </ClInclude>
     <ClInclude Include="..\Instrument\instrumentAnalogSynth.h">
       <Filter>Header files\Instrument\Analog Synth</Filter>
+    </ClInclude>
+    <ClInclude Include="..\AdjSynth\adjSynthPolyphonyManagerThreads.h">
+      <Filter>Header files\Synthesizer\AdjSynth</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

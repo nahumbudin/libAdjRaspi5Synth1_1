@@ -11,6 +11,7 @@
 */
 
 #include "instrumentAnalogSynth.h"
+#include "../AdjSynth/adjSynth.h"
 
 InstrumentAnalogSynth::InstrumentAnalogSynth()
 	: Instrument(_INSTRUMENT_NAME_ANALOG_SYNTH_STR_KEY, true, true, false)
@@ -25,10 +26,12 @@ InstrumentAnalogSynth::~InstrumentAnalogSynth()
 
 void InstrumentAnalogSynth::note_on_handler(uint8_t channel, uint8_t note, uint8_t velocity)
 {
+	//AdjSynth::get_instance()->midi_play_note_on(channel, note, velocity);
 }
 
 void InstrumentAnalogSynth::note_off_handler(uint8_t channel, uint8_t note, uint8_t velocity)
 {
+	//AdjSynth::get_instance()->midi_play_note_off(channel, note, 0);
 }
 
 void InstrumentAnalogSynth::change_program_handler(uint8_t channel, uint8_t program)

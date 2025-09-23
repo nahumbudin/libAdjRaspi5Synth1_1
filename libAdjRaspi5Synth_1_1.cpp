@@ -1,11 +1,14 @@
 /**
 * @file		libAdjRaspi5Synth_1_1.cpp
 *	@author		Nahum Budin
-*	@date		8-May-2024
-*	@version	1.0
+*	@date		22-Sep-2025
+*	@version	1.1
+*					1. Code refactoring rename modules to instruments*
 *
-*
-*	History:\n
+*	History:
+*				Ver1.0  8-May-2024 Initial
+*	
+*\n
 *
 *
 *
@@ -109,7 +112,7 @@ int mod_synth_deinit_bt_services()
  *********************** Instrumants API **************************
  ******************************************************************/
 
-en_modules_types_t mod_synth_get_instrument_type(en_modules_ids_t inst_id)
+en_instruments_types_t mod_synth_get_instrument_type(en_instruments_ids_t inst_id)
 {
 	return mod_synthesizer->instruments_manager->get_instrument_type(inst_id);
 }
@@ -162,6 +165,17 @@ int mod_synth_deinit_midi_services()
 
 	return 0;
 }
+
+int mod_synth_get_synthesizer_num_of_polyphonic_voices() 
+{ 
+	return AdjSynth::get_instance()->get_num_of_voices(); 
+}
+
+int mod_synth_get_synthesizer_num_of_programs() 
+{ 
+	return AdjSynth::get_instance()->get_num_of_programs(); 
+}
+
 
 int mod_synth_get_cpu_utilization() 
 { 
@@ -416,47 +430,43 @@ int mod_synth_remove_module(string ins_name)
 	return 0;
 }
 
-int mod_synth_add_active_module(en_modules_ids_t mod)
+int mod_synth_add_active_instrument(en_instruments_ids_t mod)
 {
 	mod_synthesizer->instruments_manager->add_active_instrument(mod);
 	
 	return 0;
 }
 
-int mod_synth_remove_active_module(en_modules_ids_t mod)
+int mod_synth_remove_active_instrument(en_instruments_ids_t mod)
 {
 	mod_synthesizer->instruments_manager->remove_active_instrument(mod);
 	
 	return 0;
 }
 
-int mod_synth_allocate_midi_channel_synth(int ch, en_modules_ids_t synth)
+int mod_synth_allocate_midi_channel_synth(int ch, en_instruments_ids_t synth)
 {
 	return mod_synthesizer->instruments_manager->allocate_midi_channel_synth(ch, synth);
 }
 
-en_modules_ids_t mod_synth_get_allocated_midi_channel_synth(int ch)
+en_instruments_ids_t mod_synth_get_allocated_midi_channel_synth(int ch)
 {
 	return mod_synthesizer->instruments_manager->get_allocated_midi_channel_synth(ch);
 }
 
-
-
-
-
-void mod_synth_register_callback_wrapper_close_module_pannel_id(func_ptr_void_en_modules_ids_t_t ptr)
+void mod_synth_register_callback_wrapper_close_instrument_pannel_id(func_ptr_void_en_instruments_ids_t_t ptr)
 {
-	mod_synthesizer->instruments_manager->register_callback_close_module_pannel_id(ptr);
+	mod_synthesizer->instruments_manager->register_callback_close_instrument_pannel_id(ptr);
 }
 
-void mod_synth_register_callback_wrapper_close_module_pannel_name(func_ptr_void_string_t ptr)
+void mod_synth_register_callback_wrapper_close_instrument_pannel_name(func_ptr_void_string_t ptr)
 {
-	mod_synthesizer->instruments_manager->register_callback_close_module_pannel_name(ptr);
+	mod_synthesizer->instruments_manager->register_callback_close_instrument_pannel_name(ptr);
 }
 
-void mod_synth_register_callback_wrapper_open_module_pannel_name(func_ptr_void_string_t ptr)
+void mod_synth_register_callback_wrapper_open_instrument_pannel_name(func_ptr_void_string_t ptr)
 {
-	mod_synthesizer->instruments_manager->register_callback_open_module_pannel_name(ptr);
+	mod_synthesizer->instruments_manager->register_callback_open_instrument_pannel_name(ptr);
 }
 
 
@@ -1520,9 +1530,9 @@ void mod_synth_register_midi_channel_change_program_command_trapped_callback(fun
  *********************** Patches Management API **************************
  ******************************************************************/
 
-void mod_synth_register_callback_get_active_modules_names_list(func_ptr_vector_std_string_void_t ptr)
+void mod_synth_register_callback_get_active_instruments_names_list(func_ptr_vector_std_string_void_t ptr)
 {
-	return mod_synthesizer->patches_handler->register_callback_get_active_modules_names_list(ptr);
+	return mod_synthesizer->patches_handler->register_callback_get_active_instruments_names_list(ptr);
 }
 
 int mod_synth_save_patch_file(std::string file_path)
@@ -1532,8 +1542,8 @@ int mod_synth_save_patch_file(std::string file_path)
 
 int mod_synth_load_patch_file(std::string file_path)
 {
-	mod_synthesizer->patches_handler->disconnect_current_oppened_modules_midi_in_connections();
-	mod_synthesizer->patches_handler->close_current_oppened_modules();
+	mod_synthesizer->patches_handler->disconnect_current_oppened_instruments_midi_in_connections();
+	mod_synthesizer->patches_handler->close_current_oppened_instruments();
 	return mod_synthesizer->patches_handler->load_patch_file(file_path);
 }
 

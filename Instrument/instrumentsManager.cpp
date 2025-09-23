@@ -1,12 +1,15 @@
 /**
 * @file		instrumentsManager.cpp
 *	@author		Nahum Budin
-*	@date		10-Jul-2024
-*	@version	1.0	Initial release
+*	@date		22-Sep-2025
+*	@version	1.1	
+*					Code refactoring rename modules to instruments
 *					
 *	@brief		Manages active instruments
 *	
-*	History:\n
+*	History:
+*				Ver 1.0 	10-Jul-2024	Initial release	
+*\n
 *	
 */
 
@@ -23,9 +26,9 @@ class ModSynth;
 InstrumentsManager *InstrumentsManager::instruments_manager_instance = NULL;
 
 InstrumentsManager::InstrumentsManager(){
-	
-	callback_close_module_pannel_id_ptr = NULL;
-	callback_close_module_pannel_name_ptr = NULL;
+
+	callback_close_instrument_pannel_id_ptr = NULL;
+	callback_close_instrument_pannel_name_ptr = NULL;
 	
 	
 		
@@ -44,21 +47,21 @@ InstrumentsManager::InstrumentsManager(){
 	map_instruments_names[_INSTRUMENT_NAME_CONTROL_BOX_HANDLER_STR_KEY] = "Control Box";	
 	map_instruments_names[_INSTRUMENT_NAME_EXT_MIDI_INT_CONTROL_STR_KEY] = "Ext. MIDI Int.";	
 	map_instruments_names[_INSTRUMENT_NAME_KEYBOARD_CONTROL_STR_KEY] = "Keyboard Control";
-	
-	map_instruments_type[en_modules_ids_t::fluid_synth] = en_modules_types_t::synth;				
-	map_instruments_type[en_modules_ids_t::adj_analog_synth] = en_modules_types_t::synth;				
-	map_instruments_type[en_modules_ids_t::adj_hammond_organ] = en_modules_types_t::synth;				
-	map_instruments_type[en_modules_ids_t::adj_karplusstrong_string_synth] = en_modules_types_t::synth;
-	map_instruments_type[en_modules_ids_t::adj_morphed_sin_synth] = en_modules_types_t::synth;		
-	map_instruments_type[en_modules_ids_t::adj_pad_synth] = en_modules_types_t::synth;
-	map_instruments_type[en_modules_ids_t::adj_midi_player] = en_modules_types_t::player;
-	map_instruments_type[en_modules_ids_t::adj_midi_mapper] = en_modules_types_t::control;	
-	map_instruments_type[en_modules_ids_t::midi_mixer] = en_modules_types_t::control;
-	map_instruments_type[en_modules_ids_t::adj_distortion_effect] = en_modules_types_t::effect;			
-	map_instruments_type[en_modules_ids_t::adj_graphic_equilizer] = en_modules_types_t::effect;		
-	map_instruments_type[en_modules_ids_t::adj_reverb_effect] = en_modules_types_t::effect;
-	map_instruments_type[en_modules_ids_t::adj_ext_midi_interface] = en_modules_types_t::interface;	
-	map_instruments_type[en_modules_ids_t::adj_keyboard_control] = en_modules_types_t::keyboard;
+
+	map_instruments_type[en_instruments_ids_t::fluid_synth] = en_instruments_types_t::synth;
+	map_instruments_type[en_instruments_ids_t::adj_analog_synth] = en_instruments_types_t::synth;
+	map_instruments_type[en_instruments_ids_t::adj_hammond_organ] = en_instruments_types_t::synth;
+	map_instruments_type[en_instruments_ids_t::adj_karplusstrong_string_synth] = en_instruments_types_t::synth;
+	map_instruments_type[en_instruments_ids_t::adj_morphed_sin_synth] = en_instruments_types_t::synth;
+	map_instruments_type[en_instruments_ids_t::adj_pad_synth] = en_instruments_types_t::synth;
+	map_instruments_type[en_instruments_ids_t::adj_midi_player] = en_instruments_types_t::player;
+	map_instruments_type[en_instruments_ids_t::adj_midi_mapper] = en_instruments_types_t::control;
+	map_instruments_type[en_instruments_ids_t::midi_mixer] = en_instruments_types_t::control;
+	map_instruments_type[en_instruments_ids_t::adj_distortion_effect] = en_instruments_types_t::effect;
+	map_instruments_type[en_instruments_ids_t::adj_graphic_equilizer] = en_instruments_types_t::effect;
+	map_instruments_type[en_instruments_ids_t::adj_reverb_effect] = en_instruments_types_t::effect;
+	map_instruments_type[en_instruments_ids_t::adj_ext_midi_interface] = en_instruments_types_t::interface;
+	map_instruments_type[en_instruments_ids_t::adj_keyboard_control] = en_instruments_types_t::keyboard;
 	
 	
 }
@@ -118,28 +121,27 @@ Instrument *InstrumentsManager::get_instrument(std::string ins_name)
 	return NULL;
 }
 
-
-void InstrumentsManager::close_module_pannel_id(en_modules_ids_t mod_id)
+void InstrumentsManager::close_instrument_pannel_id(en_instruments_ids_t inst_id)
 {
-	if (callback_close_module_pannel_id_ptr != NULL)
+	if (callback_close_instrument_pannel_id_ptr != NULL)
 	{
-		callback_close_module_pannel_id_ptr(mod_id);
+		callback_close_instrument_pannel_id_ptr(inst_id);
 	}
 }
 
-void InstrumentsManager::close_module_pannel_name(string mod_name)
+void InstrumentsManager::close_instrument_pannel_name(string inst_name)
 {
-	if (callback_close_module_pannel_name_ptr != NULL)
+	if (callback_close_instrument_pannel_name_ptr != NULL)
 	{
-		callback_close_module_pannel_name_ptr(mod_name);
+		callback_close_instrument_pannel_name_ptr(inst_name);
 	}
 }
 
-void InstrumentsManager::open_module_pannel_name(string mod_name)
+void InstrumentsManager::open_instrument_pannel_name(string inst_name)
 {
-	if (callback_open_module_pannel_name_ptr != NULL)
+	if (callback_open_instrument_pannel_name_ptr != NULL)
 	{
-		callback_open_module_pannel_name_ptr(mod_name);
+		callback_open_instrument_pannel_name_ptr(inst_name);
 	}
 }
 int InstrumentsManager::set_instrument_active_midi_channels_mask(string instrument_key_str, uint16_t mask)
@@ -170,23 +172,22 @@ uint16_t InstrumentsManager::get_instrument_active_midi_channels_mask(string ins
 	return 0;
 }
 
-en_modules_types_t InstrumentsManager::get_instrument_type(en_modules_ids_t inst_id)
+en_instruments_types_t InstrumentsManager::get_instrument_type(en_instruments_ids_t inst_id)
 {
 	if (map_instruments_type.find(inst_id) == map_instruments_type.end())
 	{
 		/* Instrument not found */
-		return en_modules_types_t::none_module_type;
+		return en_instruments_types_t::none_instrument_type;
 	}
 	
 	return map_instruments_type[inst_id];
 }
 
-
-void InstrumentsManager::add_active_instrument(en_modules_ids_t inst)
+void InstrumentsManager::add_active_instrument(en_instruments_ids_t inst)
 {
 	bool exist = false;
-	
-	for (en_modules_ids_t act_inst : active_instruments)
+
+	for (en_instruments_ids_t act_inst : active_instruments)
 	{
 		if (act_inst == inst)
 		{
@@ -198,21 +199,22 @@ void InstrumentsManager::add_active_instrument(en_modules_ids_t inst)
 	if (!exist)
 	{
 		active_instruments.push_back(inst);
-		
-		if (map_instruments_type[inst] == en_modules_types_t::synth)
+
+		if (map_instruments_type[inst] == en_instruments_types_t::synth)
 		{
 			/* A synthesizer module added */
+			// TODO:
 			
 		}
 	}
 }
 
-void InstrumentsManager::remove_active_instrument(en_modules_ids_t inst)
+void InstrumentsManager::remove_active_instrument(en_instruments_ids_t inst)
 {
 	int i = 0;
 	bool exist = false;
-	
-	for (en_modules_ids_t act_inst : active_instruments)
+
+	for (en_instruments_ids_t act_inst : active_instruments)
 	{
 		if (act_inst == inst)
 		{
@@ -226,18 +228,18 @@ void InstrumentsManager::remove_active_instrument(en_modules_ids_t inst)
 	if (exist)
 	{
 		active_instruments.erase(active_instruments.begin() + i);
-		
-		if (map_instruments_type[inst] == en_modules_types_t::synth)
+
+		if (map_instruments_type[inst] == en_instruments_types_t::synth)
 		{
 			/* A synthesizer module removed */
-			
+			// TODO:
 		}
 	}
 }
 
-int InstrumentsManager::allocate_midi_channel_synth(int ch, en_modules_ids_t synth)
+int InstrumentsManager::allocate_midi_channel_synth(int ch, en_instruments_ids_t synth)
 {
-	en_modules_ids_t last_connected;
+	en_instruments_ids_t last_connected;
 	
 	
 	fprintf(stderr, "Allocate MIDI channel %i to instrument %i\n", ch, synth);
@@ -253,8 +255,8 @@ int InstrumentsManager::allocate_midi_channel_synth(int ch, en_modules_ids_t syn
 	
 	/* Disconnect previous channel's instrument */
 	last_connected = midi_channels_allocated_synth[ch];
-	
-	if (last_connected == en_modules_ids_t::fluid_synth)
+
+	if (last_connected == en_instruments_ids_t::fluid_synth)
 	{
 		if (ModSynth::get_instance()->get_fluid_synth() != NULL)
 		{
@@ -265,7 +267,7 @@ int InstrumentsManager::allocate_midi_channel_synth(int ch, en_modules_ids_t syn
 				alsa_midi_sequencer_events_handler->set_active_midi_channels(channels);
 		}
 	}
-	else if (last_connected == en_modules_ids_t::adj_analog_synth)
+	else if (last_connected == en_instruments_ids_t::adj_analog_synth)
 	{
 		if (ModSynth::get_instance()->get_analog_synth() != NULL)
 		{
@@ -276,7 +278,7 @@ int InstrumentsManager::allocate_midi_channel_synth(int ch, en_modules_ids_t syn
 				alsa_midi_sequencer_events_handler->set_active_midi_channels(channels);
 		}
 	}
-	else if (last_connected == en_modules_ids_t::adj_hammond_organ)
+	else if (last_connected == en_instruments_ids_t::adj_hammond_organ)
 	{
 		if (ModSynth::get_instance()->get_hammond_organ() != NULL)
 		{
@@ -289,7 +291,7 @@ int InstrumentsManager::allocate_midi_channel_synth(int ch, en_modules_ids_t syn
 	}
 	
 	/* Connect the new channel */
-	if (synth == en_modules_ids_t::fluid_synth)
+	if (synth == en_instruments_ids_t::fluid_synth)
 	{
 		if (ModSynth::get_instance()->get_fluid_synth() != NULL)
 		{
@@ -301,7 +303,7 @@ int InstrumentsManager::allocate_midi_channel_synth(int ch, en_modules_ids_t syn
 			midi_channels_allocated_synth[ch] = synth;
 		}
 	}
-	if (synth == en_modules_ids_t::adj_analog_synth)
+	if (synth == en_instruments_ids_t::adj_analog_synth)
 	{
 		if (ModSynth::get_instance()->get_analog_synth() != NULL)
 		{
@@ -313,7 +315,7 @@ int InstrumentsManager::allocate_midi_channel_synth(int ch, en_modules_ids_t syn
 			midi_channels_allocated_synth[ch] = synth;
 		}
 	}
-	else if (synth == en_modules_ids_t::adj_hammond_organ)
+	else if (synth == en_instruments_ids_t::adj_hammond_organ)
 	{
 		if (ModSynth::get_instance()->get_hammond_organ() != NULL)
 		{
@@ -328,22 +330,22 @@ int InstrumentsManager::allocate_midi_channel_synth(int ch, en_modules_ids_t syn
 	
 	return 0;
 }
-en_modules_ids_t InstrumentsManager::get_allocated_midi_channel_synth(int ch)
+en_instruments_ids_t InstrumentsManager::get_allocated_midi_channel_synth(int ch)
 {
 	
 }
 
-void InstrumentsManager::register_callback_close_module_pannel_id(func_ptr_void_en_modules_ids_t_t ptr)
+void InstrumentsManager::register_callback_close_instrument_pannel_id(func_ptr_void_en_instruments_ids_t_t ptr)
 {
-	callback_close_module_pannel_id_ptr = ptr;
+	callback_close_instrument_pannel_id_ptr = ptr;
 }
 
-void InstrumentsManager::register_callback_close_module_pannel_name(func_ptr_void_string_t ptr)
+void InstrumentsManager::register_callback_close_instrument_pannel_name(func_ptr_void_string_t ptr)
 {
-	callback_close_module_pannel_name_ptr = ptr;
+	callback_close_instrument_pannel_name_ptr = ptr;
 }
 
-void InstrumentsManager::register_callback_open_module_pannel_name(func_ptr_void_string_t ptr)
+void InstrumentsManager::register_callback_open_instrument_pannel_name(func_ptr_void_string_t ptr)
 {
-	callback_open_module_pannel_name_ptr = ptr;
+	callback_open_instrument_pannel_name_ptr = ptr;
 }

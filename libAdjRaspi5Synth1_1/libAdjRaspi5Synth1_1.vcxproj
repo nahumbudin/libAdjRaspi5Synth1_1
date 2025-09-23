@@ -63,6 +63,7 @@
     <ClInclude Include="..\AdjSynth\adjSynth.h" />
     <ClInclude Include="..\AdjSynth\adjSynthPADcreator.h" />
     <ClInclude Include="..\AdjSynth\adjSynthPolyphonyManager.h" />
+    <ClInclude Include="..\AdjSynth\adjSynthPolyphonyManagerThreads.h" />
     <ClInclude Include="..\AdjSynth\adjSynthProgram.h" />
     <ClInclude Include="..\AdjSynth\adjSynthVoice.h" />
     <ClInclude Include="..\AdjSynth\synthKeyboard.h" />
@@ -196,6 +197,7 @@
     <ClCompile Include="..\AdjSynth\adjSynthEventsHandlingVCO.cpp" />
     <ClCompile Include="..\AdjSynth\adjSynthPADcreator.cpp" />
     <ClCompile Include="..\AdjSynth\adjSynthPolyphonyManager.cpp" />
+    <ClCompile Include="..\AdjSynth\adjSynthPolyphonyManagerThreads.cpp" />
     <ClCompile Include="..\AdjSynth\adjSynthProgram.cpp" />
     <ClCompile Include="..\AdjSynth\adjSynthSetHammondPercussionMode.cpp" />
     <ClCompile Include="..\AdjSynth\adjSynthSettingsCallbacksAudio.cpp" />

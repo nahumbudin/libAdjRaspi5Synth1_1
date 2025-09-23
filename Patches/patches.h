@@ -1,27 +1,28 @@
 /**
 * @file		patch.h
 *	@author		Nahum Budin
-*	@date		29-Aug-2024
-*	@version	1.0
-*					
+*	@date		22-Sep-2025
+*	@version	1.1
+*					1. Code refactoring rename modules to instruments
 *	
 *	@brief		Modular synthersizer patches handling.
 *
-*	History: 
+*	History:
+*				Ver 1.0		29-Aug-2024		Initial
 */
 
 /**
 *	Here we handle the sysnthesizer patches.
-*	A patch is a set of active modules and their connected MIDI and audio connections.
+*	A patch is a set of active instruments and their connected MIDI and audio connections.
 *	Patches are stored as hirarcial JSON files.
 *	A patch general structure looks like:
 *	
 *	{
 *		"name": "patch name string",
-*		"modules" : [
+*		"patches" : [
 *			{
-*				"name": "module  1 name string id",
-*				"settings_file: "module 1 settings.html file name",
+*				"name": "instrument  1 name string id",
+*				"settings_file: "instrument 1 settings.html file name",
 *				"connections": [
 *					{ "midi input connections": [
 *						{ connection 1 TBD },
@@ -45,8 +46,8 @@
 *					} ],
 *			},
 *			{
-*				"name": "module  2 name string id",
-*				"settings_file: "module 2 settings.html file name",
+*				"name": "instrument  2 name string id",
+*				"settings_file: "instrument 2 settings.html file name",
 *				"connections": [
 *				
 *			}]
@@ -72,21 +73,21 @@ class PatchsHandler
 	int save_patch_file(std::string file_path);
 	int load_patch_file(std::string file_path);
 
-	int close_current_oppened_modules();
-	int disconnect_current_oppened_modules_midi_in_connections();
+	int close_current_oppened_instruments();
+	int disconnect_current_oppened_instruments_midi_in_connections();
 
-	void register_callback_get_active_modules_names_list(func_ptr_vector_std_string_void_t ptr);
+	void register_callback_get_active_instruments_names_list(func_ptr_vector_std_string_void_t ptr);
 
   private:
 	PatchsHandler();
 
-	int create_active_modules_settings_files(vector<string> mod_names, string patch_file_path);
+	int create_active_instruments_settings_files(vector<string> inst_names, string patch_file_path);
 
-	int implement_patch(vector<string> active_modules, vector<string> settings_files,
+	int implement_patch(vector<string> active_instruments, vector<string> settings_files,
 						vector<vector<string>> midi_in_connections,
 						string file_path);
 
 	static PatchsHandler *patch_handler_instance;
 
-	func_ptr_vector_std_string_void_t callback_get_active_modules_names_list_ptr;
+	func_ptr_vector_std_string_void_t callback_get_active_instruments_names_list_ptr;
 };

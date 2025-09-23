@@ -1,12 +1,14 @@
 /**
 * @file			types.h
 *	@author		Nahum Budin
-*	@date		6-Jul-2024
-*	@version	1.0
+*	@date		22-Sep-2025
+*	@version	1.1
+*					Refactoring rename modules to instruments
 *	
 *	@brief		Provides the synthesizer high level API
 *	
-*	Based on libAdjHeartModSynth_1.h Ver 1.3 9-Jan-2021
+*	History:
+*				version 1.0  6-Jul-2024	Based on libAdjHeartModSynth_1.h Ver 1.3 9-Jan-2021
 */
 
 #pragma once
@@ -78,7 +80,40 @@ int mod_synth_deinit_midi_services();
 *   @param  none
 *   @return void
 */
-void mod_synth_on_exit();	
+void mod_synth_on_exit();
+
+/**
+*   @brief  Returns the synthesizer maximum number of polyiphonic voices.
+*   @param  none
+*   @return int	maximum number of polyiphonic voices.
+*/
+int mod_synth_get_synthesizer_max_num_of_polyphonic_voices();
+/**
+*   @brief  Returns the synthesizer enabled number of polyiphonic voices.
+*   @param  none
+*   @return int	enabled number of polyiphonic voices.
+*/
+int mod_synth_get_synthesizer_num_of_polyphonic_voices();
+/**
+*   @brief  Returns the synthesizer maximum number of programs.
+*   @param  none
+*   @return int	maximum number of programs.
+*/
+int mod_synth_get_synthesizer_max_num_of_programs();
+/**
+*   @brief  Returns the synthesizer enabled number of programs.
+*   @param  none
+*   @return int	enabled number of programs.
+*/
+int mod_synth_get_synthesizer_num_of_programs();
+
+/**
+*   @brief  Returns the number of the CPU cores.
+*   @param  none
+*   @return int	number of the CPU cores (1, 2, 3, 4...).
+*/
+int mod_synth_get_number_of_cores();
+
 
 /**
 *   @brief  Returns the total (all cores) CPU utilization.
@@ -93,43 +128,43 @@ int mod_synth_get_cpu_utilization();
 *   @param	pointer to the instrument instance
 *   @return 0 if done
 */
-int mod_synth_add_module(string ins_name, Instrument *instrument=NULL);
+int mod_synth_add_instrument(string ins_name, Instrument *instrument=NULL);
 
 /**
 *   @brief  Removes an instrument.
 *   @param  string	instrument name string
 *   @return 0 if done
 */
-int mod_synth_remove_module(string ins_name);
+int mod_synth_remove_instrument(string ins_name);
 
 /**
 *   @brief  Adds an active instrument.
-*   en_modules_ids_t instrument module id
+*   en_instruments_ids_t instrument instrument id
 *   @return 0 if done
 */
-int mod_synth_add_active_module(en_modules_ids_t mod);
+int mod_synth_add_active_instrument(en_instruments_ids_t mod);
 
 /**
 *   @brief  Removes an active instrument.
-*   @param  en_modules_ids_t instrument module id
+*   @param  en_instruments_ids_t instrument id
 *   @return 0 if done
 */
-int mod_synth_remove_active_module(en_modules_ids_t mod);
+int mod_synth_remove_active_instrument(en_instruments_ids_t mod);
 
 /**
 *   @brief  Allocates an instrument to a midi channel.
 *   @param	int midi channel 0-15
-*   @param  en_modules_ids_t instrument module id
+*   @param  en_instruments_ids_t instrument id
 *   @return 0 if done
 */
-int mod_synth_allocate_midi_channel_synth(int ch, en_modules_ids_t synth);
+int mod_synth_allocate_midi_channel_synth(int ch, en_instruments_ids_t synth);
 
 /**
 *   @brief  Return the allocated midi channel instrument.
 *   @param	int midi channel 0-15
-*   @return en_modules_ids_t instrument module id
+*   @return en_instruments_ids_t instrument id
 */
-en_modules_ids_t mod_synth_get_allocated_midi_channel_synth(int ch);
+en_instruments_ids_t mod_synth_get_allocated_midi_channel_synth(int ch);
 
 
 
@@ -2499,10 +2534,10 @@ float mod_synth_get_lfo_max_frequency();
 
 /**
 *   @brief  Returns the instrument type.
-*   @param  en_modules_ids_t  instrument id enum  LibAPI/types.h
-*   @return en_modules_types instrument type en_modules_types::none_module_type if key string not found.
+*   @param  en_instruments_ids_t  instrument id enum  LibAPI/types.h
+*   @return en_instruments_types instrument type en_instruments_types::none_instrument_type if key string not found.
 */
-en_modules_types_t mod_synth_get_instrument_type(en_modules_ids_t inst_id);
+en_instruments_types_t mod_synth_get_instrument_type(en_instruments_ids_t inst_id);
 
 
 
@@ -2519,28 +2554,26 @@ en_modules_types_t mod_synth_get_instrument_type(en_modules_ids_t inst_id);
 */
 //void mod_synth_register_callback_update_ui(func_ptr_void_void_t ptr);
 
-
-
 /**
-*   @brief  Register a callback function that closes a module on the main window.
-*   @param  func_ptr_void_en_modules_ids_t_t  a pointer to the callback function 
-*													( void func(en_modules_ids_t) ) (module id)
+*   @brief  Register a callback function that closes an instrument pannel on the main window.
+*   @param  func_ptr_void_en_instruments_ids_t_t  a pointer to the callback function 
+*													( void func(en_instruments_ids_t) ) (instrument id)
 *   @return void
 */
-void mod_synth_register_callback_wrapper_close_module_pannel_id(func_ptr_void_en_modules_ids_t_t ptr);
+void mod_synth_register_callback_wrapper_close_instrument_pannel_id(func_ptr_void_en_instruments_ids_t_t ptr);
 
 /**
-*   @brief  Register a callback function that closes a module on the main window.
+*   @brief  Register a callback function that closes an instrument on the main window.
 *   @param  func_ptr_void_string_t  a pointer to the callback function 
-*													( void func(std::string) ) (module name)
+*													( void func(std::string) ) (instrument name)
 *   @return void
 */
-void mod_synth_register_callback_wrapper_close_module_pannel_name(func_ptr_void_string_t ptr);
+void mod_synth_register_callback_wrapper_close_instrument_pannel_name(func_ptr_void_string_t ptr);
 
 /**
-*   @brief  Register a callback function that opens a module on the main window.
+*   @brief  Register a callback function that opens an instrument on the main window.
 *   @param  func_ptr_void_string_t  a pointer to the callback function 
-*													( void func(std::string) ) (module name)
+*													( void func(std::string) ) (instrument name)
 *   @return void
 */
-void mod_synth_register_callback_wrapper_open_module_pannel_name(func_ptr_void_string_t ptr);
+void mod_synth_register_callback_wrapper_open_instrument_pannel_name(func_ptr_void_string_t ptr);

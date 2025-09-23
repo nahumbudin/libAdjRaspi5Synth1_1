@@ -1,12 +1,14 @@
 /**
 * @file			types.h
 *	@author		Nahum Budin
-*	@date		6-Jul-2024
-*	@version	1.0
+*	@date		22-Sep-205
+*	@version	1.1
+*					1. Refactoring rename modules to instruments
 *	
 *	@brief		Types definitions
 *	
-*	Based on libAdjHeartModSynth_1.h Ver 1.3 9-Jan-2021
+*	History:
+*				Ver 1.0  6-Jul-2024	Based on libAdjHeartModSynth_1.h Ver 1.3 9-Jan-2021
 */
 
 #pragma once
@@ -29,10 +31,10 @@ typedef struct _soundfont_presets_data
 	int program;
 } _soundfont_presets_data_t;
 
-/* Holds moduls IDs */
+/* Holds instruments IDs */
 typedef enum
 {
-	none_module_id = -1,
+	none_instrument_id = -1,
 	fluid_synth,
 	adj_hammond_organ,
 	adj_analog_synth,
@@ -48,12 +50,12 @@ typedef enum
 	adj_ext_midi_interface,
 	adj_keyboard_control
 
-} en_modules_ids_t;
+} en_instruments_ids_t;
 
-/* Holds modules types */
+/* Holds instruments types */
 typedef enum
 {
-	none_module_type = -1,
+	none_instrument_type = -1,
 	synth,
 	effect,
 	player,
@@ -61,7 +63,7 @@ typedef enum
 	interface,
 	keyboard
 	
-} en_modules_types_t;
+} en_instruments_types_t;
 
 typedef enum 
 {
@@ -129,6 +131,6 @@ typedef void (*func_ptr_void_int_vector_t)(std::vector<int>);
 /* std::vector<std::string> foo(void) function pointer */
 typedef std::vector<std::string>(*func_ptr_vector_std_string_void_t)(void);
 
-/* void foo(en_modules_ids_t) function pointer */
-typedef void(*func_ptr_void_en_modules_ids_t_t)(en_modules_ids_t);
+/* void foo(en_instruments_ids_t) function pointer */
+typedef void(*func_ptr_void_en_instruments_ids_t_t)(en_instruments_ids_t);
 
