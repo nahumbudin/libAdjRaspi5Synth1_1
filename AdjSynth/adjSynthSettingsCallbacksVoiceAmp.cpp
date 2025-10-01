@@ -23,7 +23,7 @@ int set_amp_ch_1_send_cb(int lev, int prog)
 {
 	if ((prog >= 0) && (prog < _SYNTH_MAX_NUM_OF_PROGRAMS))
 	{
-		AdjSynth::get_instance()->audio_poly_mixer->set_master_send_1(lev);
+		AdjSynth::get_instance()->audio_polyphony_mixer->set_master_send_1(lev);
 		return 0;
 	}
 	else
@@ -36,7 +36,7 @@ int set_amp_ch_2_send_cb(int lev, int prog)
 {
 	if ((prog >= 0) && (prog < _SYNTH_MAX_NUM_OF_PROGRAMS))
 	{
-		AdjSynth::get_instance()->audio_poly_mixer->set_master_send_2(lev);
+		AdjSynth::get_instance()->audio_polyphony_mixer->set_master_send_2(lev);
 		return 0;
 	}
 	else
@@ -50,7 +50,7 @@ int set_voice_block_amp_ch_1_level_cb(int lev, int voice, int prog)
 {
 	if ((prog >= 0) && (prog < _SYNTH_MAX_NUM_OF_PROGRAMS)) // ???
 	{
-		AdjSynth::get_instance()->audio_poly_mixer->set_master_level_1(lev);
+		AdjSynth::get_instance()->audio_polyphony_mixer->set_master_level_1(lev);
 		return 0;
 	}
 	else
@@ -63,7 +63,7 @@ int set_voice_block_amp_ch_1_pan_cb(int pan, int voice, int prog)
 {
 	if ((prog >= 0) && (prog < _SYNTH_MAX_NUM_OF_PROGRAMS))
 	{
-		AdjSynth::get_instance()->audio_poly_mixer->set_master_pan_1(pan);
+		AdjSynth::get_instance()->audio_polyphony_mixer->set_master_pan_1(pan);
 		return 0;
 	}
 	else
@@ -76,7 +76,7 @@ int set_voice_block_amp_ch_1_pan_modulation_lfo_num_cb(int num, int voice, int p
 {
 	if ((prog >= 0) && (prog < _SYNTH_MAX_NUM_OF_PROGRAMS))
 	{
-		AdjSynth::get_instance()->audio_poly_mixer->set_amp_1_pan_mod_lfo(num);
+		AdjSynth::get_instance()->audio_polyphony_mixer->set_amp_1_pan_mod_lfo(num);
 		return 0;
 	}
 	else
@@ -89,7 +89,7 @@ int set_voice_block_amp_ch_1_pan_modulation_lfo_level_cb(int lev, int voice, int
 {
 	if ((prog >= 0) && (prog < _SYNTH_MAX_NUM_OF_PROGRAMS))
 	{
-		AdjSynth::get_instance()->audio_poly_mixer->set_amp_1_pan_mod_lfo_level(lev);
+		AdjSynth::get_instance()->audio_polyphony_mixer->set_amp_1_pan_mod_lfo_level(lev);
 		return 0;
 	}
 	else
@@ -103,7 +103,7 @@ int set_voice_block_amp_ch_2_level_cb(int lev, int voice, int prog)
 {
 	if ((prog >= 0) && (prog < _SYNTH_MAX_NUM_OF_PROGRAMS))
 	{
-		AdjSynth::get_instance()->audio_poly_mixer->set_master_level_2(lev);
+		AdjSynth::get_instance()->audio_polyphony_mixer->set_master_level_2(lev);
 		return 0;
 	}
 	else
@@ -116,7 +116,7 @@ int set_voice_block_amp_ch_2_pan_cb(int pan, int voice, int prog)
 {
 	if ((prog >= 0) && (prog < _SYNTH_MAX_NUM_OF_PROGRAMS))
 	{
-		AdjSynth::get_instance()->audio_poly_mixer->set_master_pan_2(pan);
+		AdjSynth::get_instance()->audio_polyphony_mixer->set_master_pan_2(pan);
 		return 0;
 	}
 	else
@@ -129,7 +129,7 @@ int set_voice_block_amp_ch_2_pan_modulation_lfo_num_cb(int num, int voice, int p
 {
 	if ((prog >= 0) && (prog < _SYNTH_MAX_NUM_OF_PROGRAMS))
 	{
-		AdjSynth::get_instance()->audio_poly_mixer->set_amp_2_pan_mod_lfo(num);
+		AdjSynth::get_instance()->audio_polyphony_mixer->set_amp_2_pan_mod_lfo(num);
 		return 0;
 	}
 	else
@@ -142,7 +142,7 @@ int set_voice_block_amp_ch_2_pan_modulation_lfo_level_cb(int lev, int voice, int
 {
 	if ((prog >= 0) && (prog < _SYNTH_MAX_NUM_OF_PROGRAMS))
 	{
-		AdjSynth::get_instance()->audio_poly_mixer->set_amp_2_pan_mod_lfo_level(lev);
+		AdjSynth::get_instance()->audio_polyphony_mixer->set_amp_2_pan_mod_lfo_level(lev);
 		return 0;
 	}
 	else

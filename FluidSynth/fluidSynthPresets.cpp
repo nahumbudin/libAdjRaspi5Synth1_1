@@ -1,13 +1,15 @@
 /**
 *	@file		fluidSynthPresets.cpp
 *	@author		Nahum Budin
-*	@date		28-Jul-2024
-*	@version	1.0
+*	@date		23-Sep-2025
+*	@version	1.1
 *					1. Code refactoring and notaion.
+*					2. 
 *
 *	@brief		Used for collecting preset params
 *
 *	History:\n
+*		version 1.2		28-Jul-2024: Code refactoring and notaion.
 *		Based on modSynthCollectPresetParams.h
 *		version 1.1		7-Feb-2021
 *		version 1.0		30-4-2020: 	First version
@@ -17,7 +19,10 @@
 #include <algorithm>
 
 #include "../Instrument/instrumentFluidSynth.h"
+#include "settings.h"
 #include "../utils/xmlFiles.h"
+
+class InstrumentFluidSynth;
 
 int InstrumentFluidSynth::collect_fluid_synth_preset_parms(_settings_params_t *params)
 {
@@ -420,7 +425,7 @@ int InstrumentFluidSynth::save_fluid_synth_preset_file(string path)
 		instrument_settings->get_settings_version(),
 		xml_files->get_xml_file_name(path),
 		path,
-		"fluid-synth-preset");
+		"fluid_settings_params");
 
 	return res;
 }

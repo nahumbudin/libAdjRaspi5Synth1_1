@@ -3,10 +3,12 @@
 *	@author		Nahum Budin
 *	@date		22-Sep-2025
 *	@version	1.1
-*					1. Code refactoring rename modules to instruments*
+*					1. Code refactoring rename modules to instruments and patches to preset parameters.
+*					2. Replacing all analog synthgesizers instruments Jack output ports
+*						name and port names with AdjSynth names.
 *
 *	History:
-*				Ver1.0  8-May-2024 Initial
+*			Ver1.0  8-May-2024 Initial
 *	
 *\n
 *
@@ -23,7 +25,6 @@
 *	It provides a full API supporting all features incluuding callback functions for updates and events initiation.
 *
 */
-
 
 //#include "libAdjRaspi5Synth_1.h"
 
@@ -361,19 +362,44 @@ int mod_synth_connect_jack_connection(
 {
 	int res;
 	
+	// All analog based instruments uses the AdjHeartSynth output
+	std::string client_out_name = out_client_name;
+	std:string client_port_out_name = out_client_port_name;
+	
+	if ((out_client_name == _INSTRUMENT_NAME_ANALOG_SYNTH_STR_KEY) ||
+		(out_client_name == _INSTRUMENT_NAME_HAMMON_ORGAN_STR_KEY) ||
+		(out_client_name == _INSTRUMENT_NAME_KARPLUS_STRONG_STRING_SYNTH_STR_KEY) ||
+		(out_client_name == _INSTRUMENT_NAME_MORPHED_SINUS_SYNTH_STR_KEY) ||
+		(out_client_name == _INSTRUMENT_NAME_PADSYNTH_SYNTH_STR_KEY))
+	{
+		client_out_name = "AdjHeartSynth_out";
+		
+		if (out_client_port_name == "left")
+		{
+			client_port_out_name = "AdjHeartSynthL_out";
+		}
+		else if (out_client_port_name == "right")
+		{
+			client_port_out_name = "AdjHeartSynthR_out";
+		}
+	}
+	
+	
 	if (connect)
 	{
-		res = mod_synthesizer->jack_connections->connect_jack_connection(in_client_name,
-																		  in_client_port_name, 
-																		  out_client_name, 
-																		  out_client_port_name);
+		res = mod_synthesizer->jack_connections->connect_jack_connection(
+			in_client_name,																		  
+			in_client_port_name, 
+			client_out_name, 
+			client_port_out_name);
 	}
 	else
 	{
-		res = mod_synthesizer->jack_connections->disconnect_jack_connection(in_client_name,
-																		  in_client_port_name,
-																		  out_client_name,
-																		  out_client_port_name);
+		res = mod_synthesizer->jack_connections->disconnect_jack_connection(
+			in_client_name,
+			in_client_port_name,
+			client_out_name,
+			client_port_out_name);
 	}
 	
 	return res;
@@ -495,234 +521,261 @@ int mod_synth_copy_sketch(int srcsk, int destsk)
 
 int mod_synth_amp_event_int(int ampid, int eventid, int val)
 {
-	return AdjSynth::get_instance()->amp_event(ampid, eventid, val, 
-		AdjSynth::get_instance()->get_active_patch_params(),
+	return AdjSynth::get_instance()->amp_event(
+		ampid, eventid, val, 
+		AdjSynth::get_instance()->get_active_preset_params(),
 		AdjSynth::get_instance()->get_active_sketch());
 }
 
 int mod_synth_audio_event_int(int audid, int eventid, int val)
 {
-	return AdjSynth::get_instance()->audio_event_int(audid, eventid, val,
-		AdjSynth::get_instance()->get_active_patch_params(),
+	return AdjSynth::get_instance()->audio_event_int(
+		audid, eventid, val,
+		AdjSynth::get_instance()->get_active_preset_params(),
 		AdjSynth::get_instance()->get_active_sketch());
 }
 
 int mod_synth_audio_event_bool(int audid, int eventid, bool val)
 {
-	return AdjSynth::get_instance()->audio_event_bool(audid, eventid, val, 
-		AdjSynth::get_instance()->get_active_patch_params(),
+	return AdjSynth::get_instance()->audio_event_bool(
+		audid, eventid, val,
+		AdjSynth::get_instance()->get_active_preset_params(),
 		AdjSynth::get_instance()->get_active_sketch());
 }
 
 int mod_synth_distortion_event_int(int distid, int eventid, int val)
 {
-	return AdjSynth::get_instance()->distortion_event_int(distid, eventid, val, 
-		AdjSynth::get_instance()->get_active_patch_params(),
+	return AdjSynth::get_instance()->distortion_event_int(
+		distid, eventid, val,
+		AdjSynth::get_instance()->get_active_preset_params(),
 		AdjSynth::get_instance()->get_active_sketch());
 }
 
 int mod_synth_distortion_event_bool(int distid, int eventid, bool val)
 {
-	return AdjSynth::get_instance()->distortion_event_bool(distid, eventid, val, 
-		AdjSynth::get_instance()->get_active_patch_params(),
+	return AdjSynth::get_instance()->distortion_event_bool(
+		distid, eventid, val,
+		AdjSynth::get_instance()->get_active_preset_params(),
 		AdjSynth::get_instance()->get_active_sketch());
 }
 
 int mod_synth_band_equilizer_event(int beqid, int eventid, int val)
 {
-	return AdjSynth::get_instance()->band_equilizer_event(beqid, eventid, val, 
-		AdjSynth::get_instance()->get_active_patch_params());
+	return AdjSynth::get_instance()->band_equilizer_event(
+		beqid, eventid, val,
+		AdjSynth::get_instance()->get_active_preset_params());
 }
 
 int mod_synth_filter_event_int(int filtid, int eventid, int val)
 {
-	return AdjSynth::get_instance()->filter_event(filtid, eventid, val, 
-		AdjSynth::get_instance()->get_active_patch_params(),
+	return AdjSynth::get_instance()->filter_event(
+		filtid, eventid, val,
+		AdjSynth::get_instance()->get_active_preset_params(),
 		AdjSynth::get_instance()->get_active_sketch());
 }
 
 int mod_synth_kbd_event_int(int kbid, int eventid, int val)
 {
-	return AdjSynth::get_instance()->kbd_event_int(kbid, eventid, val, 
-		AdjSynth::get_instance()->get_active_patch_params());
+	return AdjSynth::get_instance()->kbd_event_int(
+		kbid, eventid, val,
+		AdjSynth::get_instance()->get_active_preset_params());
 }
 
 int mod_synth_karplus_event_int(int karlplusid, int eventid, int val)
 {
-	return AdjSynth::get_instance()->karplus_event_int(karlplusid,
+	return AdjSynth::get_instance()->karplus_event_int(
+		karlplusid,
 		eventid,
-		val, 
-		AdjSynth::get_instance()->get_active_patch_params(),
+		val,
+		AdjSynth::get_instance()->get_active_preset_params(),
 		AdjSynth::get_instance()->get_active_sketch());
 }
 
 int mod_synth_karplus_event_bool(int karlplusid, int eventid, bool val)
 {
-	return AdjSynth::get_instance()->karplus_event_bool(karlplusid,
+	return AdjSynth::get_instance()->karplus_event_bool(
+		karlplusid,
 		eventid,
-		val, 
-		AdjSynth::get_instance()->get_active_patch_params(),
+		val,
+		AdjSynth::get_instance()->get_active_preset_params(),
 		AdjSynth::get_instance()->get_active_sketch());
 }
 
 int mod_synth_modulator_event_int(int modid, int eventid, int val)
 {
-	return AdjSynth::get_instance()->modulator_event_int(modid,
+	return AdjSynth::get_instance()->modulator_event_int(
+		modid,
 		eventid,
-		val, 
-		AdjSynth::get_instance()->get_active_patch_params(),
+		val,
+		AdjSynth::get_instance()->get_active_preset_params(),
 		AdjSynth::get_instance()->get_active_sketch());
 }
 
 int mod_synth_mso_event_int(int msoid, int eventid, int val)
 {
-	return AdjSynth::get_instance()->mso_event_int(msoid,
+	return AdjSynth::get_instance()->mso_event_int(
+		msoid,
 		eventid,
-		val, 
-		AdjSynth::get_instance()->get_active_patch_params(),
+		val,
+		AdjSynth::get_instance()->get_active_preset_params(),
 		AdjSynth::get_instance()->get_active_sketch());
 }
 
 int mod_synth_mso_event_bool(int msoid, int eventid, bool val)
 {
-	return AdjSynth::get_instance()->mso_event_bool(msoid,
+	return AdjSynth::get_instance()->mso_event_bool(
+		msoid,
 		eventid,
-		val, 
-		AdjSynth::get_instance()->get_active_patch_params(),
+		val,
+		AdjSynth::get_instance()->get_active_preset_params(),
 		AdjSynth::get_instance()->get_active_sketch());
 }
 
 int mod_synth_noise_event_int(int noiseid, int eventid, int val)
 {
-	return AdjSynth::get_instance()->noise_event_int(noiseid,
+	return AdjSynth::get_instance()->noise_event_int(
+		noiseid,
 		eventid,
-		val, 
-		AdjSynth::get_instance()->get_active_patch_params(),
+		val,
+		AdjSynth::get_instance()->get_active_preset_params(),
 		AdjSynth::get_instance()->get_active_sketch());
 }
 
 int mod_synth_noise_event_bool(int noiseid, int eventid, bool val)
 {
-	return AdjSynth::get_instance()->noise_event_bool(noiseid,
+	return AdjSynth::get_instance()->noise_event_bool(
+		noiseid,
 		eventid,
-		val, 
-		AdjSynth::get_instance()->get_active_patch_params(),
+		val,
+		AdjSynth::get_instance()->get_active_preset_params(),
 		AdjSynth::get_instance()->get_active_sketch());
 }
 
 int mod_synth_pad_event_int(int padid, int eventid, int val)
 {
-	return AdjSynth::get_instance()->pad_event_int(padid,
+	return AdjSynth::get_instance()->pad_event_int(
+		padid,
 		eventid,
-		val, 
-		AdjSynth::get_instance()->get_active_patch_params(),
+		val,
+		AdjSynth::get_instance()->get_active_preset_params(),
 		AdjSynth::get_instance()->get_active_sketch());
 }
 
 int mod_synth_pad_event_bool(int padid, int eventid, bool val)
 {
-	return AdjSynth::get_instance()->pad_event_bool(padid,
+	return AdjSynth::get_instance()->pad_event_bool(
+		padid,
 		eventid,
-		val, 
-		AdjSynth::get_instance()->get_active_patch_params(),
+		val,
+		AdjSynth::get_instance()->get_active_preset_params(),
 		AdjSynth::get_instance()->get_active_sketch());
 }
 
 int mod_synth_reverb_event_int(int revid, int eventid, int val)
 {
-	return AdjSynth::get_instance()->reverb_event_int(revid,
+	return AdjSynth::get_instance()->reverb_event_int(
+		revid,
 		eventid,
-		val, 
-		AdjSynth::get_instance()->get_active_patch_params());
+		val,
+		AdjSynth::get_instance()->get_active_preset_params());
 }
 
 int mod_synth_reverb_event_bool(int revid, int eventid, bool val)
 {
-	return AdjSynth::get_instance()->reverb_event_bool(revid,
+	return AdjSynth::get_instance()->reverb_event_bool(
+		revid,
 		eventid,
-		val, 
-		AdjSynth::get_instance()->get_active_patch_params());
+		val,
+		AdjSynth::get_instance()->get_active_preset_params());
 }
 
 int mod_synth_vco_event_int(int vcoid, int eventid, int val)
 {
-	return AdjSynth::get_instance()->vco_event_int(vcoid,
+	return AdjSynth::get_instance()->vco_event_int(
+		vcoid,
 		eventid,
-		val, 
-		AdjSynth::get_instance()->get_active_patch_params(),
+		val,
+		AdjSynth::get_instance()->get_active_preset_params(),
 		AdjSynth::get_instance()->get_active_sketch());
 }
 
 int mod_synth_vco_event_bool(int vcoid, int eventid, bool val)
 {
-	return AdjSynth::get_instance()->vco_event_bool(vcoid,
+	return AdjSynth::get_instance()->vco_event_bool(
+		vcoid,
 		eventid,
-		val, 
-		AdjSynth::get_instance()->get_active_patch_params(),
+		val,
+		AdjSynth::get_instance()->get_active_preset_params(),
 		AdjSynth::get_instance()->get_active_sketch());
 }
 
 void mod_synth_enable_osc1() 
-{ 
-	AdjSynth::get_instance()->vco_event_bool(_OSC_1_EVENT,
+{
+	AdjSynth::get_instance()->vco_event_bool(
+		_OSC_1_EVENT,
 		_OSC_ENABLE,
-		_ENABLE, 
-		AdjSynth::get_instance()->get_active_patch_params(),
+		_ENABLE,
+		AdjSynth::get_instance()->get_active_preset_params(),
 		AdjSynth::get_instance()->get_active_sketch());
 	
 	//mod_synth->synth_event_mapping(_OSC_1_EVENT, _OSC_ENABLE, 127);
 }
 
 void mod_synth_disable_osc1() 
-{ 
-	AdjSynth::get_instance()->vco_event_bool(_OSC_1_EVENT,
+{
+	AdjSynth::get_instance()->vco_event_bool(
+		_OSC_1_EVENT,
 		_OSC_ENABLE,
-		_DISABLE, 
-		AdjSynth::get_instance()->get_active_patch_params(),
+		_DISABLE,
+		AdjSynth::get_instance()->get_active_preset_params(),
 		AdjSynth::get_instance()->get_active_sketch()); 
 	
 	//mod_synth->synth_event_mapping(_OSC_1_EVENT, _OSC_ENABLE, 0);
 }
 
 void mod_synth_enable_osc2() 
-{ 
-	AdjSynth::get_instance()->vco_event_bool(_OSC_2_EVENT,
+{
+	AdjSynth::get_instance()->vco_event_bool(
+		_OSC_2_EVENT,
 		_OSC_ENABLE,
-		_ENABLE, 
-		AdjSynth::get_instance()->get_active_patch_params(),
+		_ENABLE,
+		AdjSynth::get_instance()->get_active_preset_params(),
 		AdjSynth::get_instance()->get_active_sketch()); 
 	
 	//mod_synth->synth_event_mapping(_OSC_2_EVENT, _OSC_ENABLE, 127);
 }
 
 void mod_synth_disable_osc2() 
-{ 
-	AdjSynth::get_instance()->vco_event_bool(_OSC_2_EVENT,
+{
+	AdjSynth::get_instance()->vco_event_bool(
+		_OSC_2_EVENT,
 		_OSC_ENABLE,
-		_DISABLE, 
-		AdjSynth::get_instance()->get_active_patch_params(),
+		_DISABLE,
+		AdjSynth::get_instance()->get_active_preset_params(),
 		AdjSynth::get_instance()->get_active_sketch());
 	
 	//mod_synth->synth_event_mapping(_OSC_1_EVENT, _OSC_ENABLE, 0);
 }
 
 void mod_synth_enable_noise() 
-{ 
-	AdjSynth::get_instance()->noise_event_bool(_NOISE_1_EVENT,
+{
+	AdjSynth::get_instance()->noise_event_bool(
+		_NOISE_1_EVENT,
 		_NOISE_ENABLE,
-		_ENABLE, 
-		AdjSynth::get_instance()->get_active_patch_params(),
+		_ENABLE,
+		AdjSynth::get_instance()->get_active_preset_params(),
 		AdjSynth::get_instance()->get_active_sketch());
 
 	//mod_synth->synth_event_mapping(_NOISE_1_EVENT, _NOISE_ENABLE, 127);
 }
 
 void mod_synth_disable_noise() 
-{ 
-	AdjSynth::get_instance()->noise_event_bool(_NOISE_1_EVENT,
+{
+	AdjSynth::get_instance()->noise_event_bool(
+		_NOISE_1_EVENT,
 		_NOISE_ENABLE,
-		_DISABLE, 
-		AdjSynth::get_instance()->get_active_patch_params(),
+		_DISABLE,
+		AdjSynth::get_instance()->get_active_preset_params(),
 		AdjSynth::get_instance()->get_active_sketch());
 
 	//mod_synth->synth_event_mapping(_NOISE_1_EVENT, _NOISE_ENABLE, 0);
@@ -730,21 +783,23 @@ void mod_synth_disable_noise()
 
 void mod_synth_enable_karplus() 
 {
-	AdjSynth::get_instance()->karplus_event_bool(_KARPLUS_1_EVENT,
+	AdjSynth::get_instance()->karplus_event_bool(
+		_KARPLUS_1_EVENT,
 		_KARPLUS_STRONG_ENABLE,
 		_ENABLE,
-		AdjSynth::get_instance()->get_active_patch_params(),
+		AdjSynth::get_instance()->get_active_preset_params(),
 		AdjSynth::get_instance()->get_active_sketch());
 
 	//mod_synth->synth_event_mapping(_KARPLUS_1_EVENT, _KARPLUS_STRONG_ENABLE, 127);
 }
 
 void mod_synth_disable_karplus() 
-{ 
-	AdjSynth::get_instance()->karplus_event_bool(_KARPLUS_1_EVENT,
+{
+	AdjSynth::get_instance()->karplus_event_bool(
+		_KARPLUS_1_EVENT,
 		_KARPLUS_STRONG_ENABLE,
 		_DISABLE,
-		AdjSynth::get_instance()->get_active_patch_params(),
+		AdjSynth::get_instance()->get_active_preset_params(),
 		AdjSynth::get_instance()->get_active_sketch());
 
 	//mod_synth->synth_event_mapping(_KARPLUS_1_EVENT, _KARPLUS_STRONG_ENABLE, 0);
@@ -752,44 +807,48 @@ void mod_synth_disable_karplus()
 }
 
 void mod_synth_enable_mso() 
-{ 
-	AdjSynth::get_instance()->mso_event_bool(_MSO_1_EVENT,
+{
+	AdjSynth::get_instance()->mso_event_bool(
+		_MSO_1_EVENT,
 		_MSO_ENABLE,
-		_ENABLE, 
-		AdjSynth::get_instance()->get_active_patch_params(),
+		_ENABLE,
+		AdjSynth::get_instance()->get_active_preset_params(),
 		AdjSynth::get_instance()->get_active_sketch());
 
 	//mod_synth->synth_event_mapping(_MSO_1_EVENT, _MSO_ENABLE, 127);
 }
 
 void mod_synth_disable_mso() 
-{ 
-	AdjSynth::get_instance()->mso_event_bool(_MSO_1_EVENT,
+{
+	AdjSynth::get_instance()->mso_event_bool(
+		_MSO_1_EVENT,
 		_MSO_ENABLE,
-		_DISABLE, 
-		AdjSynth::get_instance()->get_active_patch_params(),
+		_DISABLE,
+		AdjSynth::get_instance()->get_active_preset_params(),
 		AdjSynth::get_instance()->get_active_sketch());
 
 	//mod_synth->synth_event_mapping(_MSO_1_EVENT, _MSO_ENABLE, 0);
 }
 
 void mod_synth_enable_pad_synth() 
-{ 
-	AdjSynth::get_instance()->pad_event_bool(_PAD_1_EVENT,
+{
+	AdjSynth::get_instance()->pad_event_bool(
+		_PAD_1_EVENT,
 		_PAD_ENABLE,
-		_ENABLE, 
-		AdjSynth::get_instance()->get_active_patch_params(),
+		_ENABLE,
+		AdjSynth::get_instance()->get_active_preset_params(),
 		AdjSynth::get_instance()->get_active_sketch());
 
 	//mod_synth->synth_event_mapping(_PAD_1_EVENT, _PAD_ENABLE, 127);
 }
 
 void mod_synth_disable_pad_synth() 
-{ 
-	AdjSynth::get_instance()->pad_event_bool(_PAD_1_EVENT,
+{
+	AdjSynth::get_instance()->pad_event_bool(
+		_PAD_1_EVENT,
 		_PAD_ENABLE,
-		_DISABLE, 
-		AdjSynth::get_instance()->get_active_patch_params(),
+		_DISABLE,
+		AdjSynth::get_instance()->get_active_preset_params(),
 		AdjSynth::get_instance()->get_active_sketch());
 
 	//mod_synth->synth_event_mapping(_PAD_1_EVENT, _PAD_ENABLE, 0);

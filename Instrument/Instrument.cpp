@@ -1,13 +1,15 @@
 /**
 * @file		instrument.cpp
 *	@author		Nahum Budin
-*	@date		24-06-2024
-*	@version	1.0	Initial release
+*	@date		24-09-2025
+*	@version	1.1	
+*					1. Adding a pointer to a AdjSynth object
 *					
-*	@brief		The basic music generating or processing object, e.g., analog-synthesizer,
+*	@brief		The basic music generating object, e.g., analog-synthesizer,
 *				FluidSynth SoundFont synthesizer, organ, etc.
 *	
 *	History:\n
+*		version 1.0		24-06-2024: First version
 *	
 */
 
@@ -33,12 +35,14 @@ std::string AlsaMidiSysControl::midi_mapper_client_in_name = "";
 *	@param	bool				with_midi_out		if true, the instrument have a midi output port
 *	@param	AlsaMidiSysControl	alse_control		a pointer to an ALSA control object
 *	@param	string				alsa_client_in_name	the name of the ALSA input client.
+*	@param	AdjSynth			*adj_synth			a pointer to the main AdjSynth object
 *   @return 0 if done
 */
 Instrument::Instrument(std::string name, bool with_midi_in,
 					   bool with_audio_out, bool with_midi_out,
 					   AlsaMidiSysControl *alsa_control,
-					   std::string *alsa_client_in_name)
+					   std::string *alsa_client_in_name,
+					   AdjSynth *adj_synth)
 {
 	instrument_name = name;
 

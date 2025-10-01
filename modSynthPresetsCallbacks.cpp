@@ -17,7 +17,7 @@
 #include <string>
 
 #include "modSynth.h"
-#include "modSynthPreset.h"
+#include "modSynthPatch.h"
 
 #include "./Instrument/instrumentFluidSynth.h"
 

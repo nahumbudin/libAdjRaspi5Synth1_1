@@ -4,6 +4,8 @@
 *	@date		23-Sep-2025
 *	@version	1.4 
 *					1. Code refactoring and notaion.
+*					2. Rename Patch to Preset (Patch is to be used for full setup settings)
+*					3. Redfining the Programs concept Programs.h
 *					
 *	@brief		A collection of 4 synthesizers: Additive, Karplus String, PAD and Morphed Sine Oscilator (MSO)
 *	
@@ -23,29 +25,34 @@
 #include "adjSynthPADcreator.h"
 #include "adjSynthVoice.h"
 #include "adjSynthPolyphony.h"
+
 #include "adjSynthProgram.h"
+#include "adjSynthPrograms.h"
 
 #include "adjSynthPolyphonyManager.h"
-#include "adjSynthPolyphonyManagerThreads.h"
+//#include "adjSynthPolyphonyManagerThreads.h"
 
 #include "synthKeyboard.h"
 
 #include "../Audio/audioManager.h"
 #include "../Audio/audioBandEqualizer.h"
 #include "../Audio/audioReverb.h"
+
 #include "../Audio/audioPolyphonyMixer.h"
+#include "../Audio/audioPolyMixer.h"
 
 class DSP_Voice;
 class AudioManager;
 class SynthVoice;
 class AudioOutputFloat;
-class AudioPolyMixerFloat;
+class AudioPolyphonyMixerFloat;
+class AdjSynthPrograms;
 
 void callback_audio_voice_update(int voice_num);
 void callback_audio_update_cycle_end_tasks(int param);
 //void callback_voice_end(int voice);
 
-int set_patch_settings_default_params_callback_wrapper(_settings_params_t *params, int prog);
+int set_preset_settings_default_params_callback_wrapper(_settings_params_t *params, int prog);
 
 class AdjSynth
 {
@@ -81,9 +88,9 @@ public:
 	int set_settings_params(Settings *settings,  
 		_settings_params_t *settings_params);
 
-	std::string get_program_patch_name(int prog);
+	std::string get_program_preset_name(int prog);
 	
-	_settings_params_t *get_active_patch_params();
+	_settings_params_t *get_active_preset_params();
 	_settings_params_t *get_active_settings_params();
 	//_setting_params_t *get_active_general_settings_params();
 	
@@ -95,21 +102,20 @@ public:
 
 	void init_poly();
 	void init_jack();
-	//void start_audio();
 	
 	void set_midi_mapping_mode(int mod);
 	int get_midi_mapping_mode();
 	
-	int set_default_patch_parameters(_settings_params_t *params, int prog);
-	int set_default_patch_parameters_vco(_settings_params_t *params, int prog);
-	int set_default_patch_parameters_noise(_settings_params_t *params, int prog);
-	int set_default_patch_parameters_kps(_settings_params_t *params, int prog);
-	int set_default_patch_parameters_mso(_settings_params_t *params, int prog);
-	int set_default_patch_parameters_pad(_settings_params_t *params, int prog);
-	int set_default_patch_parameters_filter(_settings_params_t *params, int prog);
-	int set_default_patch_parameters_amp(_settings_params_t *params, int prog);
-	int set_default_patch_parameters_distortion(_settings_params_t *params, int prog);
-	int set_default_patch_parameters_modulators(_settings_params_t *params, int prog);		
+	int set_default_preset_parameters(_settings_params_t *params, int prog);
+	int set_default_preset_parameters_vco(_settings_params_t *params, int prog);
+	int set_default_preset_parameters_noise(_settings_params_t *params, int prog);
+	int set_default_preset_parameters_kps(_settings_params_t *params, int prog);
+	int set_default_preset_parameters_mso(_settings_params_t *params, int prog);
+	int set_default_preset_parameters_pad(_settings_params_t *params, int prog);
+	int set_default_preset_parameters_filter(_settings_params_t *params, int prog);
+	int set_default_preset_parameters_amp(_settings_params_t *params, int prog);
+	int set_default_preset_parameters_distortion(_settings_params_t *params, int prog);
+	int set_default_preset_parameters_modulators(_settings_params_t *params, int prog);		
 	
 	int set_default_settings_parameters(_settings_params_t *params);
 	int set_default_settings_parameters_equalizer(_settings_params_t *params);
@@ -159,17 +165,25 @@ public:
 	void mark_voice_busy_callback(int vnum);
 	void osc1_set_unison_mode_callback(int unimode);
 	//	void setEventPrevDestCallback(int src, int evntId, int dest);
-	void set_utilization_callback(int util);	
-	int get_utilization_callback();
+	void set_cpu_utilization_callback(int util);	
+	int get_cpu_utilization_callback();
 	void update_ui_callback();
 
-	AdjPolyphonyManager *polypony_manager;
-	AdjPolyphonyManagerThreads *polypony_manager_threads;
+	//AdjPolyphonyManager *polypony_manager;
+	//AdjPolyphonyManagerThreads *polypony_manager_threads;
 	
 	SynthKeyboard *kbd1 = NULL;
 
 	AudioManager *audio_manager = NULL;
-	AudioPolyMixerFloat *audio_poly_mixer = NULL;
+	
+	// TODO: change to AudioPolyMixer when completed
+#define _USE_NEW_POLY_MIXER_
+
+#ifdef _USE_NEW_POLY_MIXER_
+	AudioPolyMixer *audio_polyphony_mixer = NULL;
+#else
+	AudioPolyphonyMixerFloat *audio_polyphony_mixer = NULL;
+#endif
 
 	AudioReverb *audio_reverb = NULL;
 	AudioBandEqualizer *audio_equalizer = NULL;
@@ -183,9 +197,11 @@ public:
 	static SynthVoice *synth_voice[_SYNTH_MAX_NUM_OF_VOICES];
 
 	SynthProgram *synth_program[_SYNTH_MAX_NUM_OF_PROGRAMS];
-	
+
+	AdjSynthPrograms *synth_programs[_SYNTH_MAX_NUM_OF_PROGRAMS];	
+
 	static AdjPolyphonyManager *synth_polyphony_manager;
-	static AdjPolyphonyManagerThreads *synth_polyphony_manager_threads;
+	static AdjPolyphonyManager *synth_polyphony_manager_threads;
 
 	SynthPADcreator *synth_pad_creator = NULL;
 	DSP_MorphingSinusOscWTAB *mso_wtab = NULL;
@@ -208,8 +224,8 @@ private:
 	
 	static AdjSynth *adj_synth;
 
-	/* Holds the AdjSynth patch parameters */	
-	_settings_params_t active_adj_synth_patch_params;
+	/* Holds the AdjSynth preset parameters */
+	_settings_params_t active_adj_synth_preset_params;
 	/* Holds the AdjSynth settings parameters */
 	_settings_params_t active_adj_synth_settings_params;
 	/* Holds the ModSynth general settings parameters */
@@ -229,7 +245,7 @@ private:
 
 	int master_volume;
 	
-	int utilization;
+	int cpu_utilization;
 
 	// Audio connections
 	AudioConnectionFloat *connection_mixer_out_L = NULL;

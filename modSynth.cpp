@@ -1,12 +1,15 @@
 /**
 *	@file		modSynth.h
 *	@author		Nahum Budin
-*	@date		11-May-2024
-*	@version	1.0
+*	@date		24-Sep-2025
+*	@version	1.1
+*					1. Code refactoring rename patches to preset parameters.
 *
 *	@brief		This is the main modular synthesizer libraray object.
 *
 *	History:\n
+*	
+*	version 1.0		11-May-2024: First version
 *
 *	Based on libAdjHeartModSynth_2 library
 *
@@ -14,7 +17,7 @@
 
 #include "modSynth.h"
 #include "commonDefs.h"
-#include "modSynthPreset.h"
+#include "modSynthPatch.h"
 
 #include "./CPU/CPUSnapshot.h"
 
@@ -101,10 +104,11 @@ ModSynth::ModSynth()
 
 	/* An object that use system "aconnect" commands to scan and control ALSA midi connections. */
 	alsa_midi_system_control = AlsaMidiSysControl::get_instance();
+	
 	/* An object that use system "jack_lsp" commands to scan and control JACK connections. */
 	jack_connections = JackConnections::get_instance();
 
-	/* Create a Bluetooth ALSA output Client.
+	/* The Bluetooth ALSA output Client.
 	 * Handles the BT RFCOMM(SPP) midi input streams and
 	 * uses ALSA output(source) to enable connecting them to any alsa input. */
 	bt_alsa_out = AlsaBtClientOutput::get_instance();
@@ -115,7 +119,7 @@ ModSynth::ModSynth()
 	alsa_midi_system_control->get_midi_input_client_name_string(last_input_client_num,
 																&alsa_midi_system_control->bt_client_in_name);
 
-	/* Create the Control Box MIDI ALSA output Client 
+	/* The Control Box MIDI ALSA output Client 
 	 * A Serial Port input based alsa output client (serial->alsa) */
 	control_box_alsa_out = ControlBoxClientAlsaOutput::get_instance();
 	// Scan for current ALSA MIDI In Clients - the last is the Control Box In client
@@ -124,48 +128,56 @@ ModSynth::ModSynth()
 	alsa_midi_system_control->get_midi_input_client_name_string(last_input_client_num,
 																&alsa_midi_system_control->control_box_client_in_name);
 
-	/* Create the Control Box external MIDI in port ALSA output Client
-	 * This is a Serial Port input based alsa output client (serial->alsa) */
+	/* The Control Box external MIDI in port ALSA output Client
+	    This is a Serial Port input based alsa output client (serial->alsa) */
 	control_box_ext_midi_in_alsa_out = ControlBoxExtMidiInClientAlsaOutput::get_instance();
+	
 	// Scan for current ALSA MIDI In Clients - the last should be the Control Box Ext MIDI In client
 	alsa_midi_system_control->refresh_alsa_clients_data();
 	last_input_client_num = alsa_midi_system_control->get_num_of_input_midi_clients() - 1;
 	alsa_midi_system_control->get_midi_input_client_name_string(last_input_client_num,
 																&alsa_midi_system_control->control_box_xt_midi_in_client_name);
 
-	/* Create an external MIDI interface
+	/* The external MIDI interface
 	 * Handeles the external MIDI interfaces (including the device knobs, sliders, etc.)
 	 * Note - this serial port interfaces to the device controller board that hosts the
 	 * 32500 MIDI UART.  */
 	midi_ext_interface = MidiExtInterface::get_midi_ext_interface_instance();
+	
+	/* A singleton of the AdjSynth. */ // TODO: can it be above
+	adj_synth = AdjSynth::get_instance();
+	
+	set_audio_driver_type(_DEFAULT_AUDIO_DRIVER);
+	set_audio_block_size(_DEFAULT_BLOCK_SIZE);
+	set_sample_rate(_DEFAULT_SAMPLE_RATE);
 
-	/* Create an Instruments Manager that manages active instruments*/
+	/* The Instruments Manager that manages active instruments*/
 	instruments_manager = InstrumentsManager::get_instance();
 	
 	// TODO: create instances only when oppened ?.
 
-	/* Create a FLuidSynth instument */
+	/* A FLuidSynth instument */
 	fluid_synth = new InstrumentFluidSynth();
 	// Add it to list of instruments
 	instruments_manager->add_instrument(_INSTRUMENT_NAME_FLUID_SYNTH_STR_KEY, 
 										fluid_synth);
-	/* Create a Hammond Organ Instrument */
+	/* An Hammond Organ Instrument */
 	hammond_organ = new InstrumentHammondOrgan();
 	instruments_manager->add_instrument(_INSTRUMENT_NAME_HAMMON_ORGAN_STR_KEY, 
 										hammond_organ);
 	
-	/* Create a Analog Synth Instrument */
-	analog_synth = new InstrumentAnalogSynth();
+	/* An Analog Synth Instrument */
+	analog_synth = new InstrumentAnalogSynth(this->adj_synth);
 	instruments_manager->add_instrument(_INSTRUMENT_NAME_ANALOG_SYNTH_STR_KEY,
 										analog_synth);
 
-	/* Create a MIDI Mapper Instrument. */
+	/* A MIDI Mapper Instrument. */
 	midi_mapper = new InstrumentMidiMapper(alsa_midi_system_control,
 										   &alsa_midi_system_control->midi_mapper_client_in_name);
 	instruments_manager->add_instrument(_INSTRUMENT_NAME_MIDI_MAPPER_STR_KEY,
 										midi_mapper);
 
-	/* Create a MIDI Player Instrument. */
+	/* A MIDI Player Instrument. */
 	midi_player = new InstrumentMidiPlayer(alsa_midi_system_control, 
 										   &alsa_midi_system_control->midi_player_client_in_name);
 	instruments_manager->add_instrument(_INSTRUMENT_NAME_MIDI_PLAYER_STR_KEY,
@@ -183,29 +195,29 @@ ModSynth::ModSynth()
 	midi_player->register_midi_player_potision_update_callback(NULL);
 	// midi_player->register_send_midi_events_vector_callback(NULL);  in player
 	
-	/* Create a Control Box events handler Instrument. */
+	/* The Control Box events handler Instrument. */
 	control_box_events_handler = new InstrumentControlBoxEventsHandler();
 	instruments_manager->add_instrument(_INSTRUMENT_NAME_CONTROL_BOX_HANDLER_STR_KEY, 
 										control_box_events_handler);
 
 	// Refresh the list of all ALSA clients
 	alsa_midi_system_control->refresh_alsa_clients_data();
-	// REfresh the list of all JackAudio clients
+	// Refresh the list of all JackAudio clients
 	jack_connections->refresh_jack_clients_data();
 
-	/* This holds all the input clients names*/
+	/* Holds all the input clients names*/
 	std::list<std::string> in_clients;
-	/* Get the number of input clients. */
+	/* The number of input clients. */
 	int num_of_alsa_clients =
 		fluid_synth->alsa_connections->get_alsa_midi_in_clients_names_list(&in_clients);
 	
 	//fluid_synth->instrument_connections_control->alsa_midi_system_contrl->connect_midi_clients(5, 0, 2, 0);
 
-	/* Get the number of JackAudio clients. */
+	/* The number of JackAudio clients. */
 	int num_of_jack_clients = 
 		fluid_synth->jack_connections->get_num_of_output_jack_clients();
 
-	/* Get the index of the control box input client*/
+	// Get the index of the control box input client
 	i = alsa_midi_system_control->get_midi_input_client_id(_ALSA_NAME_CLIENT_CONTROL_BOX_EXT_MIDI_STR, true);
 	
 	// Connect the control box handler to the midi input client
@@ -217,15 +229,17 @@ ModSynth::ModSynth()
 		removed_name = alsa_midi_system_control->control_box_client_in_name.substr(loc + 1);
 	}
 
-	/* Get the id of the control box input handler. */
+	/* The id of the control box input handler. */
 	int in_dev = alsa_midi_system_control->get_midi_input_client_id(removed_name);
-	/* Get the id of control box output handler. */
+	
+	/* The id of control box output handler. */
 	int out_dev = alsa_midi_system_control->get_midi_output_client_id(
 		_INSTRUMENT_NAME_CONTROL_BOX_HANDLER_STR_KEY);
+	
 	// Connect the the control box input (to the system) to the control box output (from the control box)
 	alsa_midi_system_control->connect_midi_clients(in_dev, 0, out_dev, 0);
 
-	/* Create a Patch Handler. */
+	/* The Patchs Handler. */
 	patches_handler = PatchsHandler::get_patchs_handler_instance();
 	
 	for (i = _PROGRAM_0; i < _PROGRAM_15; i++)
@@ -249,17 +263,17 @@ ModSynth::ModSynth()
 	/* Create the FLuidSynth settings manager */
 	fluid_synth_settings_manager = new Settings(&active_fluid_synth_settings_params);
 	
-	/* Create a singleton of the AdjSynth. */
-	adj_synth = AdjSynth::get_instance();
+	/* Create a singleton of the AdjSynth. */ // TODO: can it be above
+	//adj_synth = AdjSynth::get_instance();
 	
-	set_audio_driver_type(_DEFAULT_AUDIO_DRIVER);
-	set_audio_block_size(_DEFAULT_BLOCK_SIZE);
-	set_sample_rate(_DEFAULT_SAMPLE_RATE);
+	//set_audio_driver_type(_DEFAULT_AUDIO_DRIVER);
+	//set_audio_block_size(_DEFAULT_BLOCK_SIZE);
+	//set_sample_rate(_DEFAULT_SAMPLE_RATE);
 	
 	// Init the Adj synthesizers
 	init();
 	
-	/* Register the call back the indicates that a new updat cycle has started. */
+	// Register the callback that indicates that a new updat cycle has started.
 	adj_synth->audio_manager->register_callback_audio_update_cycle_start_tasks
 		(&callback_audio_update_cycle_start_tasks_wrapper);
 	
@@ -271,15 +285,15 @@ ModSynth::ModSynth()
 		// File read failed - set to default settings parameters
 		set_default_general_settings_parameters(&active_general_synth_settings_params);
 	}
-	
-	// Init temp presets
+
+	// Init temp presets   ******************** Presets OR Patches????????????????
 	preset_temp.name = "Preset_Temp";
 	preset_temp.settings_type = _MOD_SYNTH_PRESET_PARAMS;
 	preset_temp.version = general_settings_manager->get_settings_version();
 	set_default_preset_parameters(&preset_temp);
 
 	// Initilizes the presets data.
-	ModSynthPresets::init();
+	ModSynthPatches::init();
 	
 	
 	// Start the CPU utilization measuring thread.
@@ -321,34 +335,39 @@ int ModSynth::init()
 	// Assign the AdjSynth settings manager, active settings parameters..
 	adj_synth->set_settings_params(adj_synth->adj_synth_settings_manager,
 		adj_synth->get_active_settings_params());
-	// Create and initialize the AdjSynth default Settings parameters values.
-	set_adj_synth_default_settings(adj_synth->get_active_settings_params());
+	
+	// Create and initialize the AdjSynth default Preset parameters values.
+	
+	
+	// ****************** TODO:  29-Sep-2025   set_adj_synth_default_settings(adj_synth->get_active_preset_params());
 	
 	
 	// Init programs - must be called before init voices.
 	adj_synth->init_synth_programs(/*&active_adj_synth_patch*/);
+	
 	// Init voices
 	adj_synth->init_synth_voices();
 	
 	// Init polyphony manager
 	adj_synth->init_poly();
+	
 	// Init JACK audio
 	adj_synth->init_jack();
-	
+
 	res = general_settings_manager->set_int_param(
-											&active_general_synth_settings_params,
+		&active_general_synth_settings_params, // TODO: general settings params?
 		"synth.master_volume",
 		_DEFAULT_MASTER_VOLUME,
 		100,
 		0,
-		_ADJ_SYNTH_PATCH_PARAMS,
-		NULL,	// no callbacks,
+		_ADJ_SYNTH_PRESET_PARAMS,
+		NULL, // no callbacks,
 		0,
 		0,
 		NULL,
 		_SET_VALUE | _SET_MAX_VAL | _SET_MIN_VAL | _SET_TYPE,
 		-1);
-	
+
 	set_fluid_synth_volume(_DEFAULT_FLUID_SYNTH_VOLUME);
 	set_master_volume(_DEFAULT_MASTER_VOLUME);
 
@@ -496,12 +515,12 @@ void ModSynth::set_master_volume(int vol)
 
 	// for correct limit testing, synth.master_volume param must be already intialized
 	res = general_settings_manager->set_int_param(
-											&active_general_synth_settings_params,
+		&active_general_synth_settings_params,
 		"synth.master_volume",
 		vol,
 		100,
 		0,
-		_ADJ_SYNTH_PATCH_PARAMS,
+		_ADJ_SYNTH_PRESET_PARAMS,
 		NULL,
 		_SET_VALUE);
 
@@ -794,7 +813,7 @@ int ModSynth::save_adj_synth_patch_file(string path, Settings *settings, _settin
 		settings->get_settings_version(),
 		xml_files->get_xml_file_name(path),
 		path,
-		_ADJ_SYNTH_PATCH_PARAMS);
+		_ADJ_SYNTH_PRESET_PARAMS);
 	
 	//	printf("Save settings to  %s\n", path.c_str());
 
@@ -813,8 +832,8 @@ int ModSynth::open_adj_synth_patch_file(string path, Settings *settings, _settin
 	settings_res_t res;
 	
 	return_val_if_true(params == NULL || settings == NULL, _SETTINGS_BAD_PARAMETERS);
-	
-	res = settings->read_settings_file(params, path, _ADJ_SYNTH_PATCH_PARAMS, channel);
+
+	res = settings->read_settings_file(params, path, _ADJ_SYNTH_PRESET_PARAMS, channel);
 
 	if (res == _SETTINGS_OK)
 	{
@@ -851,8 +870,8 @@ int ModSynth::open_adj_synth_patch_file(string path, Settings *settings, _settin
 int ModSynth::save_adj_synth_patch_file(string path)
 {
 	return save_adj_synth_patch_file(path,
-		adj_synth->adj_synth_settings_manager, 
-		&adj_synth->synth_program[mod_synth_get_active_sketch()]->active_patch_params);
+									 adj_synth->adj_synth_settings_manager,
+									 &adj_synth->synth_program[mod_synth_get_active_sketch()]->active_preset_params);
 }
 
 /**
@@ -864,8 +883,8 @@ int ModSynth::save_adj_synth_patch_file(string path)
 int ModSynth::open_adj_synth_patch_file(string path, int channel)
 {
 	return open_adj_synth_patch_file(path,
-		adj_synth->adj_synth_settings_manager, 
-		&adj_synth->synth_program[channel]->active_patch_params,
+									 adj_synth->adj_synth_settings_manager,
+									 &adj_synth->synth_program[channel]->active_preset_params,
 		channel);
 }
 

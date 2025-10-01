@@ -1,17 +1,21 @@
 /**
 * @file		instrument.h
 *	@author		Nahum Budin
-*	@date		24-06-2024
-*	@version	1.0	Initial release
+*	@date		24-09-2025
+*	@version	1.1	
+*					1. Adding a pointer to a AdjSynth object
 *					
 *	@brief		The basic music generating object, e.g., analog-synthesizer,
 *				FluidSynth SoundFont synthesizer, organ, etc.
 *	
 *	History:\n
+*		version 1.0		24-06-2024: First version
 *	
 */
 
 #pragma once
+
+#include "../AdjSynth/adjSynth.h"
 
 #include "../ALSA/alsaMidi.h"
 #include "../ALSA/alsaMidiSequencerClient.h"
@@ -32,8 +36,9 @@ class Instrument
 public:
   Instrument(string name = "", bool with_midi_in = false,
 			 bool with_audio_out = true, bool with_midi_out = false,
-			 AlsaMidiSysControl *alsa_control=NULL,
-			 string *alsa_client_in_name=NULL);
+			 AlsaMidiSysControl *alsa_control = NULL,
+			 string *alsa_client_in_name = NULL,
+			 AdjSynth *adj_synth = NULL);
 	~Instrument();
 
 	void set_active_midi_channels(uint16_t act_chans);
@@ -61,6 +66,8 @@ public:
 	virtual int set_default_settings_parameters(_settings_params_t *params, int prog = -1);
 
 	AlsaMidiSeqencerEventsHandler *alsa_midi_sequencer_events_handler;
+
+	AdjSynth *adjheart_synth;
 
 	Settings *instrument_settings;
 	_settings_params_t *active_settings_params;

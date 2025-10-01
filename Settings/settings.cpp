@@ -1,19 +1,23 @@
 /**
 * @file		settings.h
 *	@author		Nahum Budin
-*	@date		28-Jun-2024
-*	@version	1.1
-*					1. A parent class to each individual instrument son.
-*					2. File handling is common and is managed by the modSynth settings object.
+*	@date		23-Sep-2025
+*	@version	1.2
+*					1. Refactoring.
+*					2. Comments
 *	
 *	@brief		Instruments and common settings.
 *
 *	History: see h file\n
+*		ver. 1.1  28-Jun-2024
+*					1. A parent class to each individual instrument son.
+*					2. File handling is common and is managed by the modSynth settings object.
+*					3. Replacing param type field from int to string
 *		ver. 1.0  5-Oct-2019  modSynthSettings.h
 */
 
 /**
-*	Here we handle the sysnthesizer settings parameters.
+*	Here we handle the AdjHeart instruments sysnthesizer settings parameters.
 *	Each instrument or common resources has an instance of a settings object.
 *	Each settings parameter is identified by a unique string key (name).
 *	There are 4 types of parameters values: string, integer, float (double) and boolean.
@@ -29,9 +33,11 @@
 #include "settings.h"
 //#include "../utils/utils.h"
 
+/* A nutex to control asynchronous settings operation request execution */
 std::mutex Settings::settings_manage_mutex;
+
 /* Settings version */
-uint32_t Settings::settings_version;
+uint32_t Settings::settings_version = 250923; // 2025-09-23
 
 /**
  * @brief Creates a settings class object instance
@@ -49,7 +55,7 @@ Settings::Settings(_settings_params_t *settings_params)
 
 	active_settings_params = settings_params;
 
-	settings_version = 240729; // 2024-07-29
+	settings_version = get_settings_version();
 }
 
 Settings::~Settings()
@@ -72,7 +78,7 @@ _settings_params_t *Settings::get_active_settings_parameters()
 }
 
 /**
-*	@brief	Deep copy settings parameters from given source to destination.
+*	@brief	Deep copy settings parameters from a given source to a destination.
 *
 *	@param	destination_params	destination _setting_params_t
 *	@param	source_params		source _setting_params_t
@@ -99,9 +105,9 @@ uint32_t Settings::get_settings_version()
 /**
  * @brief Returns the specified string setting param structure.
  *
- * @param settings all settings object (mandatory parameter)
- * @param name the setting's name (mandatory parameter)
- * @param param pointer to a requested settings param (mandatory parameter)
+ * @param settings	all settings object (mandatory parameter)
+ * @param name		the setting's name (mandatory parameter)
+ * @param param		pointer to a requested settings param (mandatory parameter)
  * @return parameter #_SETTINGS_OK if the name has been found
  */
 settings_res_t Settings::get_string_param(_settings_params_t *settings, string name,
@@ -114,7 +120,7 @@ settings_res_t Settings::get_string_param(_settings_params_t *settings, string n
 	return_val_if_true(name == "", _SETTINGS_BAD_PARAMETERS);
 	return_val_if_true(param == NULL, _SETTINGS_BAD_PARAMETERS);
 
-	//	settings_manage_mutex.lock();
+	//	settings_manage_mutex.lock(); TODO: check if needed for read operations
 
 	_settings_params_t *_settings;
 
@@ -1447,7 +1453,7 @@ settings_res_t Settings::set_bool_param_value(_settings_params_t *settings,
 /**
  *	Returns the index of map key value
  */
-int Settings::lookForKey(std::string key, std::map<std::string, int> paramsMap)
+int Settings::look_for_key(std::string key, std::map<std::string, int> paramsMap)
 {
 	std::map<std::string, int>::iterator it;
 

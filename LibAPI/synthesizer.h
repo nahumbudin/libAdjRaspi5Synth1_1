@@ -1,8 +1,12 @@
 /**
 * @file			oscilator.h
 *	@author		Nahum Budin
-*	@date		13-Sep-2024
-*	@version	1.0
+*	@date		24-Sep-2025
+*	@version	1.1
+*					1. Code refactoring and notaion presetes renamed to patches (presets are used for settings)
+*	
+*	History:\n
+*		version 1.0		13-Sep-2024: First version
 *	
 *	@brief		Provides the Oscilators related API
 *	
@@ -27,7 +31,9 @@ Error - must be no more than 64
 	Error -
 	must be no more than PROGRAM_18 + 1
 #endif
-		
+
+#define _NUM_OF_PATCHES						5
+
 #define _NUM_OF_PRESETS						5
 	
 #define	_NUM_OF_HARMONIES					9

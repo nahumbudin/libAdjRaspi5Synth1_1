@@ -1,13 +1,15 @@
 /**
 * @file		settingsFiles.cpp
 *	@author		Nahum Budin
-*	@date		29-06-2024
-*	@version	1.1
+*	@date		23-Sep-2025
+*	@version	1.2
 *					1. Code refactoring
+*					2. Handlig all instruments settings parameters
 *	
 *	@brief		Synthesizer settings files handling.
 *
 *	History see h file:\n
+*		ver 1.1 29-Jun-2024 Code refactoring (handling onlu FluidSynth params)
 *		ver 1.0 5-Oct-2019 Initial 	modSynthSettingsFiles.cpp
 *
 */
@@ -66,13 +68,15 @@ settings_res_t Settings::write_settings_file(_settings_params_t *params,
 	// Unmark the define below to enable saving all settings parametrs.
 	// Leave marked if only settings value parameter should be saved (default)
 	//#define _SAVE_ALL_PARAMTERS_
+	
+
 
 	// Go over all string parameters
 	for (std::map<std::string, _settings_str_param_t>::iterator param = params->string_parameters_map.begin();
 		 param != params->string_parameters_map.end(); ++param)
 	{
 		// Verify param type
-		if (param->second.type == "fluid-synth-param")
+		if (param->second.type == type)
 		{
 			xmlfilestring.push_back(xml_files->string_val_element(
 				"string_param",
@@ -110,7 +114,7 @@ settings_res_t Settings::write_settings_file(_settings_params_t *params,
 	for (std::map<std::string, _settings_int_param_t>::iterator param = params->int_parameters_map.begin();
 		 param != params->int_parameters_map.end(); ++param)
 	{
-		if (param->second.type == "fluid-synth-param")
+		if (param->second.type == type)
 		{
 			xmlfilestring.push_back(xml_files->int_val_element("int_param", param->first,
 															 param->second.value, 4));
@@ -158,7 +162,7 @@ settings_res_t Settings::write_settings_file(_settings_params_t *params,
 	for (std::map<std::string, _settings_float_param_t>::iterator param = params->float_parameters_map.begin();
 		 param != params->float_parameters_map.end(); ++param)
 	{
-		if (param->second.type == "fluid-synth-param")
+		if (param->second.type == type)
 		{
 			xmlfilestring.push_back(xml_files->float_val_element("float_param", param->first,
 															     param->second.value, 4));
@@ -205,7 +209,7 @@ settings_res_t Settings::write_settings_file(_settings_params_t *params,
 	for (std::map<std::string, _settings_bool_param_t>::iterator param = params->bool_parameters_map.begin();
 		 param != params->bool_parameters_map.end(); ++param)
 	{
-		if (param->second.type == "fluid-synth-param")
+		if (param->second.type == type)
 		{
 			xmlfilestring.push_back(xml_files->bool_val_element("bool_param", param->first,
 															    param->second.value, 4));

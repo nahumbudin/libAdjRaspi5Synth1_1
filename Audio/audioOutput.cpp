@@ -1,11 +1,12 @@
 /**
 *	@file		audioOutput.cpp
 *	@author		Nahum Budin
-*	@date		2-Oct-2024
-*	@version	1.2 
+*	@date		24-Sep-2025
+*	@version	1.3 
 *					1. Code refactoring and notaion.
 *					
-*	@version	29-Jan-2021	1.1 
+*	@version	Ver1.2	Code refactoring and notaion.
+*				29-Jan-2021	1.1 
 *					1. Code refactoring and notaion.
 *					2. Adding bloc-size settings
 *				11-Nov-2019	1.0 revised version from old libAdjHeartRaspiFlSynthMultiCore_3_1 May 17, 2017.
@@ -19,7 +20,7 @@
 
 extern pthread_mutex_t voice_mem_blocks_allocation_control_mutex;
 
-AudioManager *_oaudio_manager = NULL;
+//AudioManager *_oaudio_manager = NULL;
 
 /**
 *   @brief  Create an AudioOutputFloat object instance.
@@ -73,7 +74,10 @@ int AudioOutputFloat::set_audio_block_size(int size)
 *   @param  none
 *   @return buffer size
 */	
-int AudioOutputFloat::get_audio_block_size() {	return audio_block_size; }
+int AudioOutputFloat::get_audio_block_size() 
+{	
+	return audio_block_size; 
+}
 
 /**
 *   @brief   set the adj synth master volume

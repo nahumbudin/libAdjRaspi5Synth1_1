@@ -1597,7 +1597,7 @@ void DSP_Voice::update_voice_modulation(int voice)
 		AdjSynth::get_instance()->synth_voice[voice]->assign_dsp_voice(AdjSynth::get_instance()->get_original_main_dsp_voices(voice));
 		AdjSynth::get_instance()->synth_voice[voice]->mso_wtab = original_mso_wtab_1;	
 		AdjSynth::get_instance()->synth_voice[voice]->pad_wavetable = original_pad_wavetable_1;
-		AdjSynth::get_instance()->audio_poly_mixer->restore_gain_pan(voice);
+		AdjSynth::get_instance()->audio_polyphony_mixer->restore_gain_pan(voice);
 
 	}
 	

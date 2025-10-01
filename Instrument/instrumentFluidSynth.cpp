@@ -437,7 +437,7 @@ int InstrumentFluidSynth::save_fluid_synth_settings_file(string path)
 		instrument_settings->get_settings_version(),
 		"",
 		path,
-		"fluid_synth_settings");
+		"fluid_settings_params");
 	return res;
 }
 

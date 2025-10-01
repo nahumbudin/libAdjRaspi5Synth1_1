@@ -35,11 +35,11 @@ extern float program_idle_send_1, program_idle_send_2;
 
 class DSP_Osc;
 
-class AudioPolyMixerFloat : public AudioBlockFloat
+class AudioPolyphonyMixerFloat : public AudioBlockFloat
 {
 	friend class AudioBlockFloat;
 public:
-	static AudioPolyMixerFloat* get_instance(
+  static AudioPolyphonyMixerFloat* get_instance(
 		int stage,
 		int num_of_voices,
 		int num_of_programs,
@@ -158,7 +158,7 @@ public:
 	
 
 private:
-	AudioPolyMixerFloat(
+  AudioPolyphonyMixerFloat(
 		int stage = 0,
 		int block_size = _DEFAULT_BLOCK_SIZE,
 		int num_of_programs = _SYNTH_MAX_NUM_OF_PROGRAMS,
@@ -196,5 +196,5 @@ private:
 	static bool voice_active[_SYNTH_MAX_NUM_OF_VOICES];
 	static bool voice_wait_for_not_active[_SYNTH_MAX_NUM_OF_VOICES];
 
-	static AudioPolyMixerFloat* audio_poly_mixer_instance;
+	static AudioPolyphonyMixerFloat* audio_poly_mixer_instance;
 };

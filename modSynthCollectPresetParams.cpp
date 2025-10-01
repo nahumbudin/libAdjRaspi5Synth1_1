@@ -70,8 +70,8 @@ int ModSynth::collect_mod_synth_preset_parms(_settings_params_t *params) {
 
 		res |= AdjSynth::get_instance()->adj_synth_settings_manager->set_string_param_value(
 			params,
-			"modsynth.mixer_ch" + std::to_string(i + 1) + ".adj_synth_patch_name",
-			AdjSynth::get_instance()->synth_program[i]->active_patch_params.name,
+			"modsynth.mixer_ch" + std::to_string(i + 1) + ".adj_synth_preset_name",
+			AdjSynth::get_instance()->synth_program[i]->active_preset_params.name,
 			_SET_VALUE,
 			-1);
 

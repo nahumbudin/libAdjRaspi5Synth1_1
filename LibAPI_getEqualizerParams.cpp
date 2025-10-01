@@ -1,18 +1,18 @@
 /**
 *	@file		LibAPI_getEqualizerParams.cpp
 *	@author		Nahum Budin
-*	@date		15-Oct-2024
-*	@version	1.2
-*					1. Code refactoring and notaion.
+*	@date		26-Sep-2025
+*	@version	1.3
+*					1. Rename patch to preset parameters.
 *
 *	@brief		Get active Equalizer settings parameters
 *
 *	History: 
+*				version	1.2	15-Oct-2024	Code refactoring and notaion.
 *				version	1.1	9-Feb-2021	Code refactoring and notaion.
 *				version 1.0	5-Oct-2019	1st version
 *
 */
-
 
 #include "modSynth.h"
 #include "./LibAPI_settingsManager.h"

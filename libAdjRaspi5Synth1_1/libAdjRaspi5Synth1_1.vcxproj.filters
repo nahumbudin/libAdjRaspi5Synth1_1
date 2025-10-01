@@ -426,31 +426,31 @@
     <ClCompile Include="..\AdjSynth\adjSynthDefaultSettingsReverb.cpp">
       <Filter>Source files\Synthesizer\AdjSynth\Default Settings</Filter>
     </ClCompile>
-    <ClCompile Include="..\AdjSynth\adjSynthDefaultPatchParamsAmp.cpp">
+    <ClCompile Include="..\AdjSynth\adjSynthDefaultPresetParamsAmp.cpp">
       <Filter>Source files\Synthesizer\AdjSynth\Default Settings</Filter>
     </ClCompile>
-    <ClCompile Include="..\AdjSynth\adjSynthDefaultPatchParamsDistortion.cpp">
+    <ClCompile Include="..\AdjSynth\adjSynthDefaultPresetParamsDistortion.cpp">
       <Filter>Source files\Synthesizer\AdjSynth\Default Settings</Filter>
     </ClCompile>
-    <ClCompile Include="..\AdjSynth\adjSynthDefaultPatchParamsFilter.cpp">
+    <ClCompile Include="..\AdjSynth\adjSynthDefaultPresetParamsFilter.cpp">
       <Filter>Source files\Synthesizer\AdjSynth\Default Settings</Filter>
     </ClCompile>
-    <ClCompile Include="..\AdjSynth\adjSynthDefaultPatchParamsKPS.cpp">
+    <ClCompile Include="..\AdjSynth\adjSynthDefaultPresetParamsKPS.cpp">
       <Filter>Source files\Synthesizer\AdjSynth\Default Settings</Filter>
     </ClCompile>
-    <ClCompile Include="..\AdjSynth\adjSynthDefaultPatchParamsModulators.cpp">
+    <ClCompile Include="..\AdjSynth\adjSynthDefaultPresetParamsModulators.cpp">
       <Filter>Source files\Synthesizer\AdjSynth\Default Settings</Filter>
     </ClCompile>
-    <ClCompile Include="..\AdjSynth\adjSynthDefaultPatchParamsMSO.cpp">
+    <ClCompile Include="..\AdjSynth\adjSynthDefaultPresetParamsMSO.cpp">
       <Filter>Source files\Synthesizer\AdjSynth\Default Settings</Filter>
     </ClCompile>
-    <ClCompile Include="..\AdjSynth\adjSynthDefaultPatchParamsNoise.cpp">
+    <ClCompile Include="..\AdjSynth\adjSynthDefaultPresetParamsNoise.cpp">
       <Filter>Source files\Synthesizer\AdjSynth\Default Settings</Filter>
     </ClCompile>
-    <ClCompile Include="..\AdjSynth\adjSynthDefaultPatchParamsPAD.cpp">
+    <ClCompile Include="..\AdjSynth\adjSynthDefaultPresetParamsPAD.cpp">
       <Filter>Source files\Synthesizer\AdjSynth\Default Settings</Filter>
     </ClCompile>
-    <ClCompile Include="..\AdjSynth\adjSynthDefaultPatchParamsVCO.cpp">
+    <ClCompile Include="..\AdjSynth\adjSynthDefaultPresetParamsVCO.cpp">
       <Filter>Source files\Synthesizer\AdjSynth\Default Settings</Filter>
     </ClCompile>
     <ClCompile Include="..\AdjSynth\adjSynthDefaultSettingsEqualizer.cpp">
@@ -468,7 +468,7 @@
     <ClCompile Include="..\AdjSynth\adjSynthPADcreator.cpp">
       <Filter>Source files\Synthesizer\AdjSynth</Filter>
     </ClCompile>
-    <ClCompile Include="..\AdjSynth\adjSynthPolyphonyManager.cpp">
+    <ClCompile Include="..\AdjSynth\adjSynthPolyphonyManager_obs.cpp">
       <Filter>Source files\Synthesizer\AdjSynth</Filter>
     </ClCompile>
     <ClCompile Include="..\AdjSynth\adjSynthProgram.cpp">
@@ -621,7 +621,7 @@
     <ClCompile Include="..\DSP\dspVoicePad.cpp">
       <Filter>Source files\DSP</Filter>
     </ClCompile>
-    <ClCompile Include="..\modSynthPreset.cpp">
+    <ClCompile Include="..\modSynthPatch.cpp">
       <Filter>Source files\Synthesizer\modSynth</Filter>
     </ClCompile>
     <ClCompile Include="..\modSynthPresetsCallbacks.cpp">
@@ -636,8 +636,17 @@
     <ClCompile Include="..\Instrument\instrumentAnalogSynth.cpp">
       <Filter>Source files\Insrtument\Analog Synth</Filter>
     </ClCompile>
-    <ClCompile Include="..\AdjSynth\adjSynthPolyphonyManagerThreads.cpp">
+    <ClCompile Include="..\AdjSynth\adjSynthPolyphonyManager.cpp">
       <Filter>Source files\Synthesizer\AdjSynth</Filter>
+    </ClCompile>
+    <ClCompile Include="..\AdjSynth\analogSynthPresets.cpp">
+      <Filter>Source files\Insrtument\Analog Synth</Filter>
+    </ClCompile>
+    <ClCompile Include="..\AdjSynth\adjSynthPrograms.cpp">
+      <Filter>Source files\Synthesizer\AdjSynth</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Audio\audioPolyMixer.cpp">
+      <Filter>Source files\Audio</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -920,7 +929,7 @@
     <ClInclude Include="..\AdjSynth\adjSynthPADcreator.h">
       <Filter>Header files\Synthesizer\AdjSynth</Filter>
     </ClInclude>
-    <ClInclude Include="..\AdjSynth\adjSynthPolyphonyManager.h">
+    <ClInclude Include="..\AdjSynth\adjSynthPolyphonyManager_obs.h">
       <Filter>Header files\Synthesizer\AdjSynth</Filter>
     </ClInclude>
     <ClInclude Include="..\AdjSynth\adjSynthProgram.h">
@@ -944,7 +953,7 @@
     <ClInclude Include="..\DSP\dspVoice.h">
       <Filter>Header files\DSP</Filter>
     </ClInclude>
-    <ClInclude Include="..\modSynthPreset.h">
+    <ClInclude Include="..\modSynthPatch.h">
       <Filter>Header files\Synthesizer</Filter>
     </ClInclude>
     <ClInclude Include="..\LibAPI\utils.h">
@@ -953,7 +962,13 @@
     <ClInclude Include="..\Instrument\instrumentAnalogSynth.h">
       <Filter>Header files\Instrument\Analog Synth</Filter>
     </ClInclude>
-    <ClInclude Include="..\AdjSynth\adjSynthPolyphonyManagerThreads.h">
+    <ClInclude Include="..\AdjSynth\adjSynthPolyphonyManager.h">
+      <Filter>Header files\Synthesizer\AdjSynth</Filter>
+    </ClInclude>
+    <ClInclude Include="..\AdjSynth\adjSynthPrograms.h">
+      <Filter>Header files\Synthesizer\AdjSynth</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Audio\audioPolyMixer.h">
       <Filter>Header files\Synthesizer\AdjSynth</Filter>
     </ClInclude>
   </ItemGroup>

@@ -1,12 +1,15 @@
 /**
 *	@file		adjSynthProgram.cpp
 *	@author		Nahum Budin
-*	@date		5-Oct-2024
-*	@version	1.2 
+*	@date		23-Sep-2025
+*	@version	1.3 
 *					1. Code refactoring and notaion.
+*					2. Rename Patch to Preset (Patch is to be used for full setup settings)
+*					3. Intinitialize max num of voices in constructor
 *					
 *	History:\n	
 *		
+*		version	1.2		5-Oct-2024	Code refactoring and notaion.
 *		version	1.1	4-Feb-2021	Code refactoring and notaion.
 *		version	1.0	15-Nov-2019 
 *
@@ -27,15 +30,16 @@
 
 extern pthread_mutex_t voice_busy_mutex;
 
-int SynthProgram::prog_numbers = 0; 
+int SynthProgram::prog_numbers = 0; // Static program number counter
 
 /**
 *   @brief  Condtructor - creates an instance of a SynthProgram object
-*   @param	samp_rate	sample-rate
-*   @param	block_size	audio block-size
-*   @param  voices	number of voices
+*   @param	samp_rate		sample-rate
+*   @param	block_size		audio block-size
+*   @param  voices			number of voices
 *   @param	first_v_index	1st voice index
-*   @param wt_size	wavetable size
+*   @param wt_size			wavetable size (must be a power of 2
+*   @param  aud_mng			pointer to an AudioManager object
 *   @return none
 */
 SynthProgram::SynthProgram(
@@ -47,10 +51,11 @@ SynthProgram::SynthProgram(
 	AudioManager *aud_mng)
 {
 	int v_num, res, i;
-	char name[64] = "Patch1";
-	uint32_t patch_version;
+	/* Temp name */
+	char name[64] = "Preset1";
+	uint32_t preset_version;
 
-	// Allocate a sequntial ID
+	// Allocate a sequntial ID - this is a static variable.
 	prog_num = prog_numbers++;
 	
 	audio_manager = aud_mng;
@@ -62,10 +67,10 @@ SynthProgram::SynthProgram(
 	portamento_time = 0.0f;
 	first_voice_index = first_v_index;
 
-	char startPatchName_x[128];
+	char start_preset_name_x[128];
 	//	sprintf(startPatchName_x, "%s%s", Synthesizer::getInstance()->synthPatchParams_x->getPatchPath(), "StartPatch");  // .xml is added inside call.
 	
-	// Verify that size is a power of 2
+	// Verify that the wavetable size is a power of 2
 	if ((wt_size & (wt_size - 1)) != 0)
 	{
 		// Not a power of 2
@@ -78,17 +83,19 @@ SynthProgram::SynthProgram(
 	//{
 	//	set_patch_settings_default_params_callback_ptr(&active_patch_params, prog_num);
 	//}
+
+	// Set the voice with the default preset parameters values
+	AdjSynth::get_instance()->set_default_preset_parameters(&active_preset_params, prog_num);
 	
-	AdjSynth::get_instance()->set_default_patch_parameters(&active_patch_params, prog_num);
-	
-	active_patch_params.name = "default_patch";
-	active_patch_params.settings_type = "patch_params_settings";
-	settings_manager = new Settings(&active_patch_params);
-	active_patch_params.version = settings_manager->get_settings_version();
+	active_preset_params.name = "default_preset";
+	active_preset_params.settings_type = _ADJ_SYNTH_PRESET_PARAMS;
+	settings_manager = new Settings(&active_preset_params);
+	active_preset_params.version = settings_manager->get_settings_version();
 
 	program_wavetable = new Wavetable();
 	program_wavetable->size = wt_size;
 	program_wavetable->samples = (float*)malloc(wt_size * sizeof(float));
+	
 	synth_pad_creator = new SynthPADcreator(program_wavetable, program_wavetable->size);
 	program_wavetable->base_freq =
 		synth_pad_creator->set_base_frequency(program_wavetable, _PAD_DEFAULT_BASE_NOTE);
@@ -105,7 +112,7 @@ SynthProgram::SynthProgram(
 		synth_voices[i] = NULL;
 	}
 
-	num_of_voices = 4; // Just in case illegal num of voices was provided (something to start with
+	num_of_voices = _SYNTH_MAX_NUM_OF_VOICES;
 	set_num_of_voices(voices); // This will also create the synthVoice objects
 }
 
@@ -119,26 +126,26 @@ SynthProgram::~SynthProgram()
 }
 
 /**
-*	@brief	Register a callback function to set the program patch default params
+*	@brief	Register a callback function to set the program preset default params
 *	@param	ptr  a pointer to a function void foo(_setting_params_t *params, int prog_num)					
 *	@return void
 */
-void SynthProgram::register_set_patch_settings_default_params_callback_ptr(func_ptr_int_settings_parms_ptr_int_t ptr)
+void SynthProgram::register_set_preset_settings_default_params_callback_ptr(func_ptr_int_settings_parms_ptr_int_t ptr)
 {
-	set_patch_settings_default_params_callback_ptr = ptr;
+	set_preset_settings_default_params_callback_ptr = ptr;
 }
 
 /**
-*	@brief	Activates a callback function to set the program patch default params
-*	@param	params		a pointer to a setting_params_t patch settings
+*	@brief	Activates a callback function to set the program preset default params
+*	@param	params		a pointer to a setting_params_t preset settings
 *	@parm	prog		program number
 *	@return set operation results
 */
-int SynthProgram::activate_set_patch_settings_default_params_callback(_settings_params_t* params, int prog)
+int SynthProgram::activate_set_preset_settings_default_params_callback(_settings_params_t* params, int prog)
 {
-	if (set_patch_settings_default_params_callback_ptr)
+	if (set_preset_settings_default_params_callback_ptr)
 	{
-		return set_patch_settings_default_params_callback_ptr(params, prog);
+		return set_preset_settings_default_params_callback_ptr(params, prog);
 	}
 	
 	return 0;
@@ -210,14 +217,17 @@ int SynthProgram::set_audio_block_size(int size)
 *   @param  none
 *   @return buffer size
 */	
-int SynthProgram::get_audio_block_size() { return audio_block_size; }
+int SynthProgram::get_audio_block_size() 
+{ 
+	return audio_block_size; 
+}
 
 /**
-*   @brief  Set the program patch params
+*   @brief  Set the program preset params
 *   @param  vparams a pointer to a _setting_params_t struct holding the patch params
 *   @return void
 */
-void SynthProgram::set_program_patch_params(_settings_params_t *params)
+void SynthProgram::set_program_preset_params(_settings_params_t *params)
 {
 	settings_res_t res;
 	_settings_str_param_t str_param;
@@ -227,7 +237,7 @@ void SynthProgram::set_program_patch_params(_settings_params_t *params)
 		_settings_str_param_t>::iterator param = params->string_parameters_map.begin();
 		param != params->string_parameters_map.end(); ++param)
 	{
-		settings_manager->set_string_param_value(&active_patch_params,
+		settings_manager->set_string_param_value(&active_preset_params,
 			param->first,
 			param->second.value,
 			_EXEC_CALLBACK | _EXEC_BLOCK_CALLBACK,
@@ -237,7 +247,7 @@ void SynthProgram::set_program_patch_params(_settings_params_t *params)
 	res = settings_manager->get_string_param(params, "name", &str_param);
 	if (res == _SETTINGS_KEY_FOUND)
 	{
-		active_patch_params.name = str_param.value;
+		active_preset_params.name = str_param.value;
 	}
 
 	// Go over all integer parameters
@@ -245,7 +255,7 @@ void SynthProgram::set_program_patch_params(_settings_params_t *params)
 		_settings_int_param_t>::iterator param = params->int_parameters_map.begin();
 		param != params->int_parameters_map.end(); ++param)
 	{
-		settings_manager->set_int_param_value(&active_patch_params,
+		settings_manager->set_int_param_value(&active_preset_params,
 			param->first,
 			param->second.value,
 			_EXEC_CALLBACK | _EXEC_BLOCK_CALLBACK,
@@ -257,7 +267,7 @@ void SynthProgram::set_program_patch_params(_settings_params_t *params)
 		_settings_float_param_t>::iterator param = params->float_parameters_map.begin();
 		param != params->float_parameters_map.end(); ++param)
 	{
-		settings_manager->set_float_param_value(&active_patch_params,
+		settings_manager->set_float_param_value(&active_preset_params,
 			param->first,
 			param->second.value,
 			_EXEC_CALLBACK | _EXEC_BLOCK_CALLBACK,
@@ -269,7 +279,7 @@ void SynthProgram::set_program_patch_params(_settings_params_t *params)
 		_settings_bool_param_t>::iterator param = params->bool_parameters_map.begin();
 		param != params->bool_parameters_map.end(); ++param)
 	{
-		settings_manager->set_bool_param_value(&active_patch_params,
+		settings_manager->set_bool_param_value(&active_preset_params,
 			param->first,
 			param->second.value,
 			_EXEC_CALLBACK | _EXEC_BLOCK_CALLBACK,
@@ -295,11 +305,11 @@ SynthVoice *SynthProgram::get_free_voice()
 	int minvoice = -1, mincore = -1;
 	bool reused = false;
 
-	//if (mod_synth_get_cpu_utilization() > 90)
-	//{	
+	if (mod_synth_get_cpu_utilization() > 90)
+	{	
 		// DSP urilization is too high
-	//	return NULL;
-	//}
+		return NULL;
+	}
 
 	if (portamento_enabled)
 	{
@@ -363,17 +373,17 @@ void SynthProgram::set_num_of_voices(int nov)
 		for (i = 0; i < num_of_voices; i++)
 		{
 			if (synth_voices[i] == NULL)
-			{				
+			{
 				synth_voices[i] = new SynthVoice(
 					i,
 					prog_num,
 					sample_rate,
 					audio_block_size,
-					&active_patch_params, 
+					&active_preset_params, 
 					mso_wtab,
 					program_wavetable,
 					audio_manager);
-				synth_voices[i]->set_voice_params(&active_patch_params);
+				synth_voices[i]->set_voice_params(&active_preset_params);
 			}
 		}
 	}	

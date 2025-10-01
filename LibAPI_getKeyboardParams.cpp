@@ -1,14 +1,15 @@
 /**
 *	@file		LibAPI_getKeyboardParams.cpp
 *	@author		Nahum Budin
-*	@date		15-Oct-2024
-*	@version	1.2
-*					1. Code refactoring and notaion.
+*	@date		29-Sep-2025
+*	@version	1.3
+*					1. Rename patch to preset parameters.
 *
 *	@brief		Get active Keyboard settings parameters
 *
-*	History:	version 1.1	9-Feb-2021	Code refactoring and notaion.
-*				
+*	History:	
+*				version 1.2	15-Oct-2024	Rename patch to preset parameters.
+*				version 1.1	9-Feb-2021	Code refactoring and notaion.
 *				version 1.0	5-Oct-2019	1st version
 *
 */

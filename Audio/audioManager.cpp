@@ -1,20 +1,26 @@
 /**
 *	@file		audioManager.cpp
 *	@author		Nahum Budin
-*	@date		1-Oct-2024
-*	@version	1.2 
+*	@date		23-Sep-2025
+*	@version	1.3 
 *					1. Code refactoring and notaion.
-*					
-*	@version	1.1
-*					1. Code refactoring and notaion.
-*					2. Adding settings of sample-rate and audio block-size
-*					3. Adding callback to activate tasks when audio update cycle starts
-*					4. Adding call back to activate each voice update-cycle
-*					5. Adding callback to activate tasks when audio update cycle ends
-*					6. Moving Jack server activation from main.(start_jack_service())
-*				1.0	11-Nov-2019 (revised version from old libAdjHeartRaspiFlSynthMultiCore_3_1 October 18, 2017)
-*
+*					2. Bugs fix.
+*	
 *	@brief		Manage and control audio system
+*
+*	History:	
+*			Ver1.2	1-Oct-2024	Code refactoring and notaion.
+*			Ver1.1
+*				1. Code refactoring and notaion.
+*				2. Adding settings of sample-rate and audio block-size
+*				3. Adding callback to activate tasks when audio update cycle starts
+*				4. Adding call back to activate each voice update-cycle
+*				5. Adding callback to activate tasks when audio update cycle ends
+*				6. Moving Jack server activation from main.(start_jack_service())
+*			
+*			Ver1.0	11-Nov-2019 (revised version from old libAdjHeartRaspiFlSynthMultiCore_3_1 October 18, 2017)
+*
+*	
 */
 
 #include <sys/shm.h>		//Used for shared memory
@@ -387,14 +393,13 @@ int AudioManager::start_audio_service(int driver, int samp_rate, int block_size)
 	else if (driver == _AUDIO_JACK)
 	{
 		stop_alsa_main_thread();
-		//start_jack_main_thread();
+		start_jack_connect_thread();
 		
-		//start_jack_service(_JACK_MODE_APP_CONTROL, _DEFAULT_JACK_AUTO_START, _DEFAULT_JACK_AUTO_CONNECT_AUDIO); // TODO:
-		start_jack_service(get_jack_mode(), get_jack_auto_start_state(), get_jack_auto_connect_audio_state());
+		int mode = get_jack_mode();
+		bool auto_start = get_jack_auto_start_state();
+		bool auto_connect = get_jack_auto_connect_audio_state();
+		start_jack_service(mode, auto_start, auto_connect);
 	}
-	
-	// Start anyhow for fluidsynth until handling fluid will be added
-//	start_jack_service(_JACK_MODE_APP_CONTROL, _DEFAULT_JACK_AUTO_START, _DEFAULT_JACK_AUTO_CONNECT_AUDIO);  // TODO:
 	
 	return 0;
 }
@@ -736,46 +741,45 @@ void* AUDMNG_update_thread(void *arg)
 		//omp_set_num_threads(4/*Synthesizer::numOfCores*/);
 				
 		int i;
-/*
-#pragma omp parallel if (AdjSynth::num_of_cores > 1) //private(voice)
+
+//#pragma omp parallel if (AdjSynth::num_of_cores > 1) //private(voice)
+//		{
+//#pragma omp for schedule(static)	
+		for (voice = 0; voice < mod_synth_get_synthesizer_num_of_polyphonic_voices(); voice++)
 		{
-#pragma omp for schedule(static)	
-			for (voice = 0; voice < mod_synth_get_synthesizer_num_of_polyphonic_voices(); voice++)
+			if(AdjSynth::synth_voice[voice]->audio_voice->is_voice_active() ||
+					AdjSynth::synth_voice[voice]->audio_voice->is_voice_wait_for_not_active())
+
 			{
+				//ID = omp_get_thread_num();
+				//core = sched_getcpu();
+				// Bellow should be in the callback
+				AdjSynth::synth_voice[voice]->update_all();
 
-				////			if(AdjSynth::synth_voice[voice]->audioVoice->isVoiceActive() ||
-				////				AdjSynth::synth_voice[voice]->audioVoice->isVoiceWaitForNotActive())
-
+				// Activate each voice update
+				if (AudioManager::callback_audio_voice_update_ptr)
 				{
-					//ID = omp_get_thread_num();
-					//core = sched_getcpu();
-					// Bellow should be in the callback
-					////AdjSynth::synth_voice[voice]->updateAll();
-
-					// Activate each voice update
-					if (AudioManager::callback_audio_voice_update_ptr)
-					{
-						AudioManager::callback_audio_voice_update_ptr(voice);
-					}
-										
-					//gettimeofday(&stopts, NULL);
-					//printf("Core: %i Th: %i  voice: %i  : %i \n", core, ID, voice, stopts.tv_usec-startts.tv_usec);
+					AudioManager::callback_audio_voice_update_ptr(voice);
 				}
+										
+				//gettimeofday(&stopts, NULL);
+				//printf("Core: %i Th: %i  voice: %i  : %i \n", core, ID, voice, stopts.tv_usec-startts.tv_usec);
 			}
+		}
 			
-		}//#pragma omp parallel
-*/		
+//	}//#pragma omp parallel
+		
 		// Update common blocks: poly-mixer, reverb, stereo-output	
 		if (AudioManager::callback_audio_update_cycle_end_tasks_ptr)
 		{
 			AudioManager::callback_audio_update_cycle_end_tasks_ptr(0); // 0 - dummy param
 		}
 		// Below should be in the above callback
-////		AudioBlockFloat *p;
-////		for (p = *AdjSynth::get_instance()->audioPolyMixer->audio_first_update; p; p = p->audio_next_update)
-////		{
-////			p->update();
-////		}
+//		AudioBlockFloat *p;
+//		for (p = *AdjSynth::get_instance()->audio_poly_mixer->audio_first_update; p; p = p->audio_next_update)
+//		{
+//			p->update();
+//		}
 
 		gettimeofday(&stop_ts, NULL);		
 
@@ -818,8 +822,8 @@ void *AUDMNG_run_alsa(void *threadid) {
 		exit(1);
 	}	
 	
-	long tid = (long)threadid;
-	tid++;
+	//long tid = (long)threadid;
+	//tid++;
 	
 	pthread_t thId = pthread_self();
 
@@ -833,23 +837,23 @@ void *AUDMNG_run_alsa(void *threadid) {
 
 void *AUDMNG_try_connect_jack(void *threadid) {
 		
-	int res, retry = 0;
+	int res, retry_out, retry_in = 0;
 	
-	long tid = (long)threadid;
-	tid++;
+	//long tid = (long)threadid;
+	//tid++;
 	
 	pthread_t thId = pthread_self();
 	
 	//	pthread_setname_np(thId, "jack_thread");
 
 	
-	while (retry < 5)
+	while (retry_out < 5)
 	{
 		res = intilize_jack_server_connection_out("AdjHeartSynth_out", "default");
 		if (res != 0)
 		{
 			fprintf(stderr, "Jack connect thread: Jack (out) not started");
-			retry++;
+			retry_out++;
 			sleep(1);
 		}
 		else
@@ -859,13 +863,13 @@ void *AUDMNG_try_connect_jack(void *threadid) {
 		}
 	}
 	
-	while (retry < 5)
+	while (retry_in < 5)
 	{
 		res = intilize_jack_server_connection_in("AdjHeartSynth_in", "default");
 		if (res != 0)
 		{
 			fprintf(stderr, "Jack connect thread: Jack (in) not started");
-			retry++;
+			retry_in++;
 			sleep(1);
 		}
 		else

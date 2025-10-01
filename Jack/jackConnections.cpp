@@ -23,7 +23,7 @@ JackConnections::JackConnections()
 {
 	jack_connections_instance = this;
 
-	refresh_jack_clients_data();
+	//refresh_jack_clients_data();
 }
 
 JackConnections *JackConnections::get_instance()

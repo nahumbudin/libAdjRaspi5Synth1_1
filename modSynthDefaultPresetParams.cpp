@@ -14,7 +14,7 @@
 */
 
 #include "modSynth.h"
-#include "modSynthPreset.h"
+#include "modSynthPatch.h"
 #include "./AdjSynth/adjSynth.h"
 #include "./FluidSynth/fluidSynthInterface.h"
 #include <string>

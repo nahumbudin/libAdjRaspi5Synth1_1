@@ -1,13 +1,14 @@
 /**
 *	@ file		jackAudioClients.h
 *	@ author		Nahum Budin
-*	@ date		2-Oct-2024
-*	@ version	1.3 
+*	@ date		27-Sep-2025
+*	@ version	1.4 
 *						1. Code refactoring and notaion.
 *
 *	@ brief		Handle JACK input and output audio streaming
 *	
 *	History:\n
+*		2-Oct-2024 1.3 Code refactoring and notaion.
 *		18-Jan-2021 1.2 
 *						1. Code refactoring and notaion.
 *						2. Adding jack setting mode manual: app sets JACK params; Auto: apps get params from JACK
@@ -80,7 +81,7 @@ sample_t osc_right_signal[_AUDIO_MAX_BUF_SIZE];
 
 /**
 *   @brief  Initialize the Jack server interface
-*   @param  none		a pointer to a null terminated chars string holding the server name
+*   @param  none		
 *   @return 0 if OK
 */
 int initialize_jack_server_interface()

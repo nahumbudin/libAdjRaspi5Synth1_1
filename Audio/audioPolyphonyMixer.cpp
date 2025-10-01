@@ -1,14 +1,16 @@
 /**
 *	@file		audioPolyphonyMixer.cpp
 *	@author		Nahum Budin
-*	@date		1-Feb-2021
-*	@version	1.1 
-*					1. Code refactoring and notaion.
-*					2. Adding sample-rate and bloc-size settings
-*					3. Adding midi maping mode settings (midi/sketch)
-*					4. Adding voice-status settings (null, not-active, wait-for-not-active, active)
-*					
-*	@version	1.0		11-Nov-2019 (revised version from old libAdjHeartRaspiFlSynthMultiCore_3_1 May 17, 2017)
+*	@date		24-Sep-2025
+*	@version	1.2 
+*					1. Bugs fix.
+*	
+*	History
+*		version 1.1		1-Feb-2021	1. Code refactoring and notaion.
+*									2. Adding sample-rate and bloc-size settings
+*									3. Adding midi maping mode settings (midi/sketch)
+*									4. Adding voice-status settings (null, not-active, wait-for-not-active, active)
+*		version	1.0		11-Nov-2019 (revised version from old libAdjHeartRaspiFlSynthMultiCore_3_1 May 17, 2017)
 *
 *	@brief		Mix audio ch1 and ch2 of all voices into stereo Left and Right output signals 
 */
@@ -21,16 +23,16 @@
 
 extern pthread_mutex_t voice_mem_blocks_allocation_control_mutex;
 
-AudioManager *poly_mixer_manager; // = AudioManager::get_instance();
+AudioManager *polyphony_mixer_manager; // = AudioManager::get_instance();
 
 /* Used to set individual output level/pan for non program operation*/
-float master_level_1, master_level_2, master_pan_1, master_pan_2, master_send_1, master_send_2;
+ float master_level_1, master_level_2, master_pan_1, master_pan_2, master_send_1, master_send_2;
 
-AudioPolyMixerFloat* AudioPolyMixerFloat::audio_poly_mixer_instance = NULL;
-int AudioPolyMixerFloat::inputs = 1;
+AudioPolyphonyMixerFloat *AudioPolyphonyMixerFloat::audio_poly_mixer_instance = NULL;
+int AudioPolyphonyMixerFloat::inputs = 1;
 
-bool AudioPolyMixerFloat::voice_active[_SYNTH_MAX_NUM_OF_VOICES];
-bool AudioPolyMixerFloat::voice_wait_for_not_active[_SYNTH_MAX_NUM_OF_VOICES];
+bool AudioPolyphonyMixerFloat::voice_active[_SYNTH_MAX_NUM_OF_VOICES];
+bool AudioPolyphonyMixerFloat::voice_wait_for_not_active[_SYNTH_MAX_NUM_OF_VOICES];
 
 /* Used to set individual output level/pan for each program */
 float program_level_1[_SYNTH_MAX_NUM_OF_PROGRAMS], program_level_2[_SYNTH_MAX_NUM_OF_PROGRAMS];
@@ -48,7 +50,8 @@ float program_idle_send_1, program_idle_send_2;
 *								    that is the first in the update chain
 *   @return none
 */
-AudioPolyMixerFloat::AudioPolyMixerFloat(int stage,
+AudioPolyphonyMixerFloat::AudioPolyphonyMixerFloat(
+	int stage,
 	int num_of_voices,
 	int block_size,
 	int num_of_programs,
@@ -61,8 +64,8 @@ AudioPolyMixerFloat::AudioPolyMixerFloat(int stage,
 	stage)
 {
 	set_audio_block_size(block_size);
-	
-	poly_mixer_manager = AudioManager::get_instance();
+
+	polyphony_mixer_manager = AudioManager::get_instance();
 	
 	inputs = num_of_voices;
 	if (inputs > _SYNTH_MAX_NUM_OF_VOICES)
@@ -95,6 +98,8 @@ AudioPolyMixerFloat::AudioPolyMixerFloat(int stage,
 		voice_active[i] = false;
 		voice_wait_for_not_active[i] = false;
 	}
+
+	midi_mapping_mode = mapping_mode;
 
 	master_level_1 = master_level_2 = 0.5f;
 	master_pan_1 = master_pan_2 = 0.f;
@@ -196,7 +201,7 @@ AudioPolyMixerFloat::AudioPolyMixerFloat(int stage,
 	set_lfo_6_frequency((float)10);
 }
 
-AudioPolyMixerFloat* AudioPolyMixerFloat::get_instance(
+AudioPolyphonyMixerFloat *AudioPolyphonyMixerFloat::get_instance(
 	int stage,
 	int num_of_voices,
 	int num_of_programs,
@@ -206,7 +211,7 @@ AudioPolyMixerFloat* AudioPolyMixerFloat::get_instance(
 {
 	if (audio_poly_mixer_instance == NULL)
 	{
-		audio_poly_mixer_instance = new AudioPolyMixerFloat(
+		audio_poly_mixer_instance = new AudioPolyphonyMixerFloat(
 			stage,
 			num_of_voices,
 			num_of_programs,
@@ -223,7 +228,7 @@ AudioPolyMixerFloat* AudioPolyMixerFloat::get_instance(
 *   @param  int size: _AUDIO_BLOCK_SIZE_256, _AUDIO_BLOCK_SIZE_512, _AUDIO_BLOCK_SIZE_1024
 *   @return bloc size OK; -1 param out of range
 */
-int AudioPolyMixerFloat::set_audio_block_size(int size)
+int AudioPolyphonyMixerFloat::set_audio_block_size(int size)
 {
 	int res = 0;
 	
@@ -244,8 +249,8 @@ int AudioPolyMixerFloat::set_audio_block_size(int size)
 *   @brief  retruns the audio block size  
 *   @param  none
 *   @return buffer size
-*/	
-int AudioPolyMixerFloat::get_audio_block_size() 
+*/
+int AudioPolyphonyMixerFloat::get_audio_block_size() 
 {	
 	return audio_block_size; 
 }
@@ -255,7 +260,7 @@ int AudioPolyMixerFloat::get_audio_block_size()
 *   @param  int mode: _MIDI_MAPPING_MODE_SKETCH, _MIDI_MAPPING_MODE_MAPPING
 *   @return mode if OK; -1 param out of range
 */
-int AudioPolyMixerFloat::set_midi_maping_mode(int mode)
+int AudioPolyphonyMixerFloat::set_midi_maping_mode(int mode)
 {
 	int res = 0;
 	
@@ -276,8 +281,8 @@ int AudioPolyMixerFloat::set_midi_maping_mode(int mode)
 *   @brief  retruns the audio block size  
 *   @param  none
 *   @return buffer size
-*/	
-int AudioPolyMixerFloat::get_midi_maping_mode() 
+*/
+int AudioPolyphonyMixerFloat::get_midi_maping_mode() 
 {	
 	return midi_mapping_mode; 
 }
@@ -287,7 +292,7 @@ int AudioPolyMixerFloat::get_midi_maping_mode()
 *	@param	voice_num	voice number
 *   @return void
 */
-void AudioPolyMixerFloat::set_voice_active(int voice)
+void AudioPolyphonyMixerFloat::set_voice_active(int voice)
 {
 	if ((voice >= 0) && (voice < _SYNTH_MAX_NUM_OF_VOICES))
 	{
@@ -300,7 +305,7 @@ void AudioPolyMixerFloat::set_voice_active(int voice)
 *	@param	voice_num	voice number
 *   @return void
 */
-void AudioPolyMixerFloat::set_voice_not_active(int voice)
+void AudioPolyphonyMixerFloat::set_voice_not_active(int voice)
 {
 	if ((voice >= 0) && (voice < _SYNTH_MAX_NUM_OF_VOICES))
 	{
@@ -313,7 +318,7 @@ void AudioPolyMixerFloat::set_voice_not_active(int voice)
 *	@param	voice_num	voice number
 *   @return voice active state; false if voice out of range
 */
-bool AudioPolyMixerFloat::voice_is_active(int voice)
+bool AudioPolyphonyMixerFloat::voice_is_active(int voice)
 {
 	if ((voice >= 0) && (voice < _SYNTH_MAX_NUM_OF_VOICES))
 	{
@@ -330,7 +335,7 @@ bool AudioPolyMixerFloat::voice_is_active(int voice)
 *	@param	voice_num	voice number
 *   @return void
 */
-void AudioPolyMixerFloat::set_voice_wait_for_not_active(int voice)
+void AudioPolyphonyMixerFloat::set_voice_wait_for_not_active(int voice)
 {
 	if ((voice >= 0) && (voice < _SYNTH_MAX_NUM_OF_VOICES))
 	{
@@ -343,7 +348,7 @@ void AudioPolyMixerFloat::set_voice_wait_for_not_active(int voice)
 *	@param	voice_num	voice number
 *   @return void
 */
-void AudioPolyMixerFloat::reset_voice_wait_for_not_active(int voice)
+void AudioPolyphonyMixerFloat::reset_voice_wait_for_not_active(int voice)
 {
 	if ((voice >= 0) && (voice < _SYNTH_MAX_NUM_OF_VOICES))
 	{
@@ -356,7 +361,7 @@ void AudioPolyMixerFloat::reset_voice_wait_for_not_active(int voice)
 *	@param	voice_num	voice number
 *   @return voice wait for not active state; false if voice out of range
 */
-bool AudioPolyMixerFloat::voice_waits_for_not_active(int voice)
+bool AudioPolyphonyMixerFloat::voice_waits_for_not_active(int voice)
 {
 	if ((voice >= 0) && (voice < _SYNTH_MAX_NUM_OF_VOICES))
 	{
@@ -373,7 +378,7 @@ bool AudioPolyMixerFloat::voice_waits_for_not_active(int voice)
 *   @param  active	when true mixer will become active and not active when set to false
 *   @return void
 */
-void AudioPolyMixerFloat::set_active() 
+void AudioPolyphonyMixerFloat::set_active() 
 { 
 	active = true; 
 }
@@ -383,7 +388,7 @@ void AudioPolyMixerFloat::set_active()
 *   @param  lev	level 0-100
 *   @return void
 */
-void AudioPolyMixerFloat::set_master_level_1(int lev)
+void AudioPolyphonyMixerFloat::set_master_level_1(int lev)
 {
 	master_level_1 = (float)lev / 100.f;
 	
@@ -402,7 +407,7 @@ void AudioPolyMixerFloat::set_master_level_1(int lev)
 *   @param  lev	level 0-100
 *   @return void
 */
-void AudioPolyMixerFloat::set_master_level_2(int lev)
+void AudioPolyphonyMixerFloat::set_master_level_2(int lev)
 {
 	master_level_2 = (float)lev / 100.f;
 	if (master_level_2 < 0)
@@ -420,7 +425,7 @@ void AudioPolyMixerFloat::set_master_level_2(int lev)
 *   @param  pan	level 0-100 (50 - center)
 *   @return void
 */
-void AudioPolyMixerFloat::set_master_pan_1(int pan)
+void AudioPolyphonyMixerFloat::set_master_pan_1(int pan)
 {
 	master_pan_1 = (float)(pan - 50) / 50.f;
 	if (master_pan_1 < -1.f)
@@ -438,7 +443,7 @@ void AudioPolyMixerFloat::set_master_pan_1(int pan)
 *   @param  pan	level 0-100 (50 - center)
 *   @return void
 */
-void AudioPolyMixerFloat::set_master_pan_2(int pan)
+void AudioPolyphonyMixerFloat::set_master_pan_2(int pan)
 {
 	master_pan_2 = (float)(pan - 50) / 50.f;
 	if (master_pan_2 < -1.f)
@@ -456,7 +461,7 @@ void AudioPolyMixerFloat::set_master_pan_2(int pan)
 *   @param  pan	level 0-100 (50 - center)
 *   @return void
 */
-void AudioPolyMixerFloat::set_master_send_1(int lev)
+void AudioPolyphonyMixerFloat::set_master_send_1(int lev)
 {
 	master_send_1 = (float)lev / 100.f;
 	if (master_send_1 < 0)
@@ -474,7 +479,7 @@ void AudioPolyMixerFloat::set_master_send_1(int lev)
 *   @param  pan	level 0-100 (50 - center)
 *   @return void
 */
-void AudioPolyMixerFloat::set_master_send_2(int lev)
+void AudioPolyphonyMixerFloat::set_master_send_2(int lev)
 {
 	master_send_2 = (float)lev / 100.f;
 	if (master_send_2 < 0)
@@ -493,7 +498,7 @@ void AudioPolyMixerFloat::set_master_send_2(int lev)
 *   @param  lev		level 0-100
 *   @return void
 */
-void AudioPolyMixerFloat::set_program_level_1(int prog, int lev)
+void AudioPolyphonyMixerFloat::set_program_level_1(int prog, int lev)
 {
 	if ((prog >= 0) && (prog < _SYNTH_MAX_NUM_OF_PROGRAMS))
 	{
@@ -516,7 +521,7 @@ void AudioPolyMixerFloat::set_program_level_1(int prog, int lev)
 *   @param  lev		level 0-100
 *   @return void
 */
-void AudioPolyMixerFloat::set_program_level_2(int prog, int lev)
+void AudioPolyphonyMixerFloat::set_program_level_2(int prog, int lev)
 {
 	if ((prog >= 0) && (prog < _SYNTH_MAX_NUM_OF_PROGRAMS))
 	{
@@ -539,7 +544,7 @@ void AudioPolyMixerFloat::set_program_level_2(int prog, int lev)
 *   @param  pan		pan 0-100 (50 - center)
 *   @return void
 */
-void AudioPolyMixerFloat::set_program_pan_1(int prog, int pan)
+void AudioPolyphonyMixerFloat::set_program_pan_1(int prog, int pan)
 {
 	if ((prog >= 0) && (prog < _SYNTH_MAX_NUM_OF_PROGRAMS))
 	{
@@ -562,7 +567,7 @@ void AudioPolyMixerFloat::set_program_pan_1(int prog, int pan)
 *   @param  pan		pan 0-100 (50 - center)
 *   @return void
 */
-void AudioPolyMixerFloat::set_program_pan_2(int prog, int pan)
+void AudioPolyphonyMixerFloat::set_program_pan_2(int prog, int pan)
 {
 	if ((prog >= 0) && (prog < _SYNTH_MAX_NUM_OF_PROGRAMS))
 	{
@@ -585,7 +590,7 @@ void AudioPolyMixerFloat::set_program_pan_2(int prog, int pan)
 *   @param  pan		send 0-100 (50 - center)
 *   @return void
 */
-void AudioPolyMixerFloat::set_program_send_1(int prog, int snd)
+void AudioPolyphonyMixerFloat::set_program_send_1(int prog, int snd)
 {
 	if ((prog >= 0) && (prog < _SYNTH_MAX_NUM_OF_PROGRAMS))
 	{
@@ -608,7 +613,7 @@ void AudioPolyMixerFloat::set_program_send_1(int prog, int snd)
 *   @param  pan		send 0-100 (50 - center)
 *   @return void
 */
-void AudioPolyMixerFloat::set_program_send_2(int prog, int snd)
+void AudioPolyphonyMixerFloat::set_program_send_2(int prog, int snd)
 {
 	if ((prog >= 0) && (prog < _SYNTH_MAX_NUM_OF_PROGRAMS))
 	{
@@ -630,7 +635,7 @@ void AudioPolyMixerFloat::set_program_send_2(int prog, int snd)
 *   @param  none
 *   @return a pointer to mixer Master level 1 float variable
 */
-float *AudioPolyMixerFloat::get_master_level_1_ptr() 
+float *AudioPolyphonyMixerFloat::get_master_level_1_ptr() 
 { 
 	return &master_level_1; 
 }
@@ -640,7 +645,7 @@ float *AudioPolyMixerFloat::get_master_level_1_ptr()
 *   @param  none
 *   @return a pointer to mixer Master level 2 float variable
 */
-float *AudioPolyMixerFloat::get_master_level_2_ptr() 
+float *AudioPolyphonyMixerFloat::get_master_level_2_ptr() 
 {
 	return &master_level_2; 
 }
@@ -650,7 +655,7 @@ float *AudioPolyMixerFloat::get_master_level_2_ptr()
 *   @param  none
 *   @return a pointer to mixer Master pan 1 float variable
 */
-float *AudioPolyMixerFloat::get_master_pan_1_ptr() 
+float *AudioPolyphonyMixerFloat::get_master_pan_1_ptr() 
 { 
 	return &master_pan_1;
 }
@@ -660,7 +665,7 @@ float *AudioPolyMixerFloat::get_master_pan_1_ptr()
 *   @param  none
 *   @return a pointer to mixer Master pan 2 float variable
 */
-float *AudioPolyMixerFloat::get_master_pan_2_ptr() 
+float *AudioPolyphonyMixerFloat::get_master_pan_2_ptr() 
 { 
 	return &master_pan_2; 
 }
@@ -670,7 +675,7 @@ float *AudioPolyMixerFloat::get_master_pan_2_ptr()
 *   @param  none
 *   @return a pointer to mixer Master send 1 float variable
 */
-float *AudioPolyMixerFloat::get_master_send_1_ptr() 
+float *AudioPolyphonyMixerFloat::get_master_send_1_ptr() 
 { 
 	return &master_send_1; 
 }
@@ -680,7 +685,7 @@ float *AudioPolyMixerFloat::get_master_send_1_ptr()
 *   @param  none
 *   @return a pointer to mixer Master send 2 float variable
 */
-float *AudioPolyMixerFloat::get_master_send_2_ptr() 
+float *AudioPolyphonyMixerFloat::get_master_send_2_ptr() 
 { 
 	return &master_send_2; 
 }
@@ -690,7 +695,7 @@ float *AudioPolyMixerFloat::get_master_send_2_ptr()
 *   @param  prog	program number 0 to _SYNTH_NUM_OF_PROGRAMS
 *   @return a pointer to mixer Master level 1 float variable
 */
-float *AudioPolyMixerFloat::get_program_level_1_ptr(int prog) 
+float *AudioPolyphonyMixerFloat::get_program_level_1_ptr(int prog) 
 {
 	if ((prog >= 0) && (prog < _SYNTH_MAX_NUM_OF_PROGRAMS))
 	{
@@ -707,7 +712,7 @@ float *AudioPolyMixerFloat::get_program_level_1_ptr(int prog)
 *   @param  prog	program number 0 to _SYNTH_NUM_OF_PROGRAMS
 *   @return a pointer to mixer Master level 2 float variable
 */
-float *AudioPolyMixerFloat::get_program_level_2_ptr(int prog) 
+float *AudioPolyphonyMixerFloat::get_program_level_2_ptr(int prog) 
 {
 	if ((prog >= 0) && (prog < _SYNTH_MAX_NUM_OF_PROGRAMS))
 	{
@@ -724,7 +729,7 @@ float *AudioPolyMixerFloat::get_program_level_2_ptr(int prog)
 *   @param  prog	program number 0 to _SYNTH_NUM_OF_PROGRAMS
 *   @return a pointer to mixer Master pan 1 float variable
 */
-float *AudioPolyMixerFloat::get_program_pan_1_ptr(int prog) 
+float *AudioPolyphonyMixerFloat::get_program_pan_1_ptr(int prog) 
 {
 	if ((prog >= 0) && (prog < _SYNTH_MAX_NUM_OF_PROGRAMS))
 	{
@@ -741,7 +746,7 @@ float *AudioPolyMixerFloat::get_program_pan_1_ptr(int prog)
 *   @param  prog	program number 0 to _SYNTH_NUM_OF_PROGRAMS
 *   @return a pointer to mixer Master oan 2 float variable
 */
-float *AudioPolyMixerFloat::get_program_pan_2_ptr(int prog) 
+float *AudioPolyphonyMixerFloat::get_program_pan_2_ptr(int prog) 
 {
 	if ((prog >= 0) && (prog < _SYNTH_MAX_NUM_OF_PROGRAMS))
 	{
@@ -758,7 +763,7 @@ float *AudioPolyMixerFloat::get_program_pan_2_ptr(int prog)
 *   @param  prog	program number 0 to _SYNTH_NUM_OF_PROGRAMS
 *   @return a pointer to mixer Master send 1 float variable
 */
-float *AudioPolyMixerFloat::get_program_send_1_ptr(int prog) {
+float *AudioPolyphonyMixerFloat::get_program_send_1_ptr(int prog) {
 	if ((prog >= 0) && (prog < _SYNTH_MAX_NUM_OF_PROGRAMS))
 	{
 		return &program_send_1[prog];
@@ -774,7 +779,7 @@ float *AudioPolyMixerFloat::get_program_send_1_ptr(int prog) {
 *   @param  prog	program number 0 to _SYNTH_NUM_OF_PROGRAMS
 *   @return a pointer to mixer Master send 2 float variable
 */
-float *AudioPolyMixerFloat::get_program_send_2_ptr(int prog) {
+float *AudioPolyphonyMixerFloat::get_program_send_2_ptr(int prog) {
 	if ((prog >= 0) && (prog < _SYNTH_MAX_NUM_OF_PROGRAMS))
 	{
 		return &program_send_2[prog];
@@ -793,7 +798,7 @@ float *AudioPolyMixerFloat::get_program_send_2_ptr(int prog) {
 *   @param  prog	program number 0 to _SYNTH_NUM_OF_PROGRAMS
 *   @return void
 */
-void AudioPolyMixerFloat::set_voice_gain_1_ptr(int voice, int prog)
+void AudioPolyphonyMixerFloat::set_voice_gain_1_ptr(int voice, int prog)
 {
 	if ((voice >= 0) && (voice < _SYNTH_MAX_NUM_OF_VOICES) &&
 		(prog >= 0) && (prog < _SYNTH_MAX_NUM_OF_PROGRAMS))
@@ -810,7 +815,7 @@ void AudioPolyMixerFloat::set_voice_gain_1_ptr(int voice, int prog)
 *   @param  prog	program number 0 to _SYNTH_NUM_OF_PROGRAMS
 *   @return void
 */
-void AudioPolyMixerFloat::set_voice_gain_2_ptr(int voice, int prog)
+void AudioPolyphonyMixerFloat::set_voice_gain_2_ptr(int voice, int prog)
 {
 	if ((voice >= 0) && (voice < _SYNTH_MAX_NUM_OF_VOICES) &&
 		(prog >= 0) && (prog < _SYNTH_MAX_NUM_OF_PROGRAMS))
@@ -827,7 +832,7 @@ void AudioPolyMixerFloat::set_voice_gain_2_ptr(int voice, int prog)
 *   @param  prog	program number 0 to _SYNTH_NUM_OF_PROGRAMS
 *   @return void
 */
-void AudioPolyMixerFloat::set_voice_pan_1_ptr(int voice, int prog)
+void AudioPolyphonyMixerFloat::set_voice_pan_1_ptr(int voice, int prog)
 {
 	if ((voice >= 0) && (voice < _SYNTH_MAX_NUM_OF_VOICES) &&
 		(prog >= 0) && (prog < _SYNTH_MAX_NUM_OF_PROGRAMS))
@@ -844,7 +849,7 @@ void AudioPolyMixerFloat::set_voice_pan_1_ptr(int voice, int prog)
 *   @param  prog	program number 0 to _SYNTH_NUM_OF_PROGRAMS
 *   @return void
 */
-void AudioPolyMixerFloat::set_voice_pan_2_ptr(int voice, int prog)
+void AudioPolyphonyMixerFloat::set_voice_pan_2_ptr(int voice, int prog)
 {
 	if ((voice >= 0) && (voice < _SYNTH_MAX_NUM_OF_VOICES) &&
 		(prog >= 0) && (prog < _SYNTH_MAX_NUM_OF_PROGRAMS))
@@ -861,7 +866,7 @@ void AudioPolyMixerFloat::set_voice_pan_2_ptr(int voice, int prog)
 *   @param  prog	program number 0 to _SYNTH_NUM_OF_PROGRAMS
 *   @return void
 */
-void AudioPolyMixerFloat::set_voice_send_1_ptr(int voice, int prog)
+void AudioPolyphonyMixerFloat::set_voice_send_1_ptr(int voice, int prog)
 {
 	if ((voice >= 0) && (voice < _SYNTH_MAX_NUM_OF_VOICES) &&
 		(prog >= 0) && (prog < _SYNTH_MAX_NUM_OF_PROGRAMS))
@@ -878,7 +883,7 @@ void AudioPolyMixerFloat::set_voice_send_1_ptr(int voice, int prog)
 *   @param  prog	program number 0 to _SYNTH_NUM_OF_PROGRAMS
 *   @return void
 */
-void AudioPolyMixerFloat::set_voice_send_2_ptr(int voice, int prog)
+void AudioPolyphonyMixerFloat::set_voice_send_2_ptr(int voice, int prog)
 {
 	if ((voice >= 0) && (voice < _SYNTH_MAX_NUM_OF_VOICES) &&
 		(prog >= 0) && (prog < _SYNTH_MAX_NUM_OF_PROGRAMS))
@@ -892,7 +897,7 @@ void AudioPolyMixerFloat::set_voice_send_2_ptr(int voice, int prog)
 *	@param	voice	voice number 0 to _SYNTH_MAX_NUM_OF_VOICES
 *   @return a poinetr of specific voice gain 1 variable 
 */
-float *AudioPolyMixerFloat::get_voice_gain_1_ptr(int voice) 
+float *AudioPolyphonyMixerFloat::get_voice_gain_1_ptr(int voice) 
 { 
 	if ((voice >= 0) && (voice < _SYNTH_MAX_NUM_OF_VOICES))
 	{	
@@ -909,7 +914,7 @@ float *AudioPolyMixerFloat::get_voice_gain_1_ptr(int voice)
 *	@param	voice	voice number 0 to _SYNTH_MAX_NUM_OF_VOICES
 *   @return a poinetr of specific voice gain 2 variable 
 */
-float *AudioPolyMixerFloat::get_voice_gain_2_ptr(int voice)
+float *AudioPolyphonyMixerFloat::get_voice_gain_2_ptr(int voice)
 {
 	if ((voice >= 0) && (voice < _SYNTH_MAX_NUM_OF_VOICES))
 	{	
@@ -926,7 +931,7 @@ float *AudioPolyMixerFloat::get_voice_gain_2_ptr(int voice)
 *	@param	voice	voice number 0 to _SYNTH_MAX_NUM_OF_VOICES
 *   @return a poinetr of specific voice pan 1 variable 
 */
-float *AudioPolyMixerFloat::get_voice_pan_1_ptr(int voice)
+float *AudioPolyphonyMixerFloat::get_voice_pan_1_ptr(int voice)
 {
 	if ((voice >= 0) && (voice < _SYNTH_MAX_NUM_OF_VOICES))
 	{	
@@ -943,7 +948,7 @@ float *AudioPolyMixerFloat::get_voice_pan_1_ptr(int voice)
 *	@param	voice	voice number 0 to _SYNTH_MAX_NUM_OF_VOICES
 *   @return a poinetr of specific voice pan 2 variable 
 */
-float *AudioPolyMixerFloat::get_voice_pan_2_ptr(int voice)
+float *AudioPolyphonyMixerFloat::get_voice_pan_2_ptr(int voice)
 {
 	if ((voice >= 0) && (voice < _SYNTH_MAX_NUM_OF_VOICES))
 	{	
@@ -960,7 +965,7 @@ float *AudioPolyMixerFloat::get_voice_pan_2_ptr(int voice)
 *	@param	voice	voice number 0 to _SYNTH_MAX_NUM_OF_VOICES
 *   @return a poinetr of specific voice send 1 variable
 */
-float *AudioPolyMixerFloat::get_voice_send_1_ptr(int voice)
+float *AudioPolyphonyMixerFloat::get_voice_send_1_ptr(int voice)
 {
 	if ((voice >= 0) && (voice < _SYNTH_MAX_NUM_OF_VOICES))
 		return send1[voice];
@@ -973,7 +978,7 @@ float *AudioPolyMixerFloat::get_voice_send_1_ptr(int voice)
 *	@param	voice	voice number 0 to _SYNTH_MAX_NUM_OF_VOICES
 *   @return a poinetr of specific voice send 2 variable
 */
-float *AudioPolyMixerFloat::get_voice_send_2_ptr(int voice)
+float *AudioPolyphonyMixerFloat::get_voice_send_2_ptr(int voice)
 {
 	if ((voice >= 0) && (voice < _SYNTH_MAX_NUM_OF_VOICES))
 		return send2[voice];
@@ -988,7 +993,7 @@ float *AudioPolyMixerFloat::get_voice_send_2_ptr(int voice)
 *	@param	in2		chan 2 signal
 *   @return voice stereo left output
 */
-float AudioPolyMixerFloat::get_voice_left_output(int voice, float in1, float in2)
+float AudioPolyphonyMixerFloat::get_voice_left_output(int voice, float in1, float in2)
 {
 	if ((voice >= 0) && (voice < _SYNTH_MAX_NUM_OF_VOICES))
 	{	
@@ -1007,7 +1012,7 @@ float AudioPolyMixerFloat::get_voice_left_output(int voice, float in1, float in2
 *	@param	in2		chan 2 signal
 *   @return voice stereo right output
 */
-float AudioPolyMixerFloat::get_voice_right_output(int voice, float in1, float in2)
+float AudioPolyphonyMixerFloat::get_voice_right_output(int voice, float in1, float in2)
 {
 	if ((voice >= 0) && (voice < _SYNTH_MAX_NUM_OF_VOICES))
 	{	
@@ -1024,7 +1029,7 @@ float AudioPolyMixerFloat::get_voice_right_output(int voice, float in1, float in
 *	@param	voice	voice number 0 to _SYNTH_MAX_NUM_OF_VOICES
 *   @return void
 */
-void AudioPolyMixerFloat::preserve_gain_pan(int voice)
+void AudioPolyphonyMixerFloat::preserve_gain_pan(int voice)
 {
 	if ((voice >= 0) && (voice < _SYNTH_MAX_NUM_OF_VOICES))
 	{
@@ -1042,7 +1047,7 @@ void AudioPolyMixerFloat::preserve_gain_pan(int voice)
 *	@param	voice	voice number 0 to _SYNTH_MAX_NUM_OF_VOICES
 *   @return void
 */
-void AudioPolyMixerFloat::restore_gain_pan(int voice)
+void AudioPolyphonyMixerFloat::restore_gain_pan(int voice)
 {
 	if ((voice >= 0) && (voice < _SYNTH_MAX_NUM_OF_VOICES))
 	{
@@ -1061,7 +1066,7 @@ void AudioPolyMixerFloat::restore_gain_pan(int voice)
 *	@param	freq	frequency 0-100
 *   @return void
 */
-void AudioPolyMixerFloat::set_lfo_1_frequency(float freq)
+void AudioPolyphonyMixerFloat::set_lfo_1_frequency(float freq)
 {
 	float logf = (Utils::calc_log_scale_100_float(_MOD_LFO_MIN_FREQ, _MOD_LFO_MAX_FREQ, 10.0, freq));
 
@@ -1079,7 +1084,7 @@ void AudioPolyMixerFloat::set_lfo_1_frequency(float freq)
 *	@param	freq	frequency 0-100
 *   @return void
 */
-void AudioPolyMixerFloat::set_lfo_2_frequency(float freq)
+void AudioPolyphonyMixerFloat::set_lfo_2_frequency(float freq)
 {
 	float logf = (Utils::calc_log_scale_100_float(_MOD_LFO_MIN_FREQ, _MOD_LFO_MAX_FREQ, 10.0, freq));
 
@@ -1097,7 +1102,7 @@ void AudioPolyMixerFloat::set_lfo_2_frequency(float freq)
 *	@param	freq	frequency 0-100
 *   @return void
 */
-void AudioPolyMixerFloat::set_lfo_3_frequency(float freq)
+void AudioPolyphonyMixerFloat::set_lfo_3_frequency(float freq)
 {
 	float logf = (Utils::calc_log_scale_100_float(_MOD_LFO_MIN_FREQ, _MOD_LFO_MAX_FREQ, 10.0, freq));
 
@@ -1113,7 +1118,7 @@ void AudioPolyMixerFloat::set_lfo_3_frequency(float freq)
 *	@param	freq	frequency 0-100
 *   @return void
 */
-void AudioPolyMixerFloat::set_lfo_4_frequency(float freq)
+void AudioPolyphonyMixerFloat::set_lfo_4_frequency(float freq)
 {
 	float logf = (Utils::calc_log_scale_100_float(_MOD_LFO_MIN_FREQ, _MOD_LFO_MAX_FREQ, 10.0, freq));
 
@@ -1131,7 +1136,7 @@ void AudioPolyMixerFloat::set_lfo_4_frequency(float freq)
 *	@param	freq	frequency 0-100
 *   @return void
 */
-void AudioPolyMixerFloat::set_lfo_5_frequency(float freq)
+void AudioPolyphonyMixerFloat::set_lfo_5_frequency(float freq)
 {
 	float logf = (Utils::calc_log_scale_100_float(_MOD_LFO_MIN_FREQ, _MOD_LFO_MAX_FREQ, 10.0, freq));
 
@@ -1149,7 +1154,7 @@ void AudioPolyMixerFloat::set_lfo_5_frequency(float freq)
 *	@param	freq	frequency 0-100
 *   @return void
 */
-void AudioPolyMixerFloat::set_lfo_6_frequency(float freq)
+void AudioPolyphonyMixerFloat::set_lfo_6_frequency(float freq)
 {
 	float logf = (Utils::calc_log_scale_100_float(_MOD_LFO_MIN_FREQ, _MOD_LFO_MAX_FREQ, 10.0, freq));
 
@@ -1166,7 +1171,7 @@ void AudioPolyMixerFloat::set_lfo_6_frequency(float freq)
 *	@param wform waveform
 *	@return void
 */
-void AudioPolyMixerFloat::set_lfo_1_waveform(float wf)
+void AudioPolyphonyMixerFloat::set_lfo_1_waveform(float wf)
 {
 	if ((wf >= _OSC_WAVEFORM_SINE) && (wf <= _OSC_WAVEFORM_SAMPHOLD))
 	{
@@ -1179,7 +1184,7 @@ void AudioPolyMixerFloat::set_lfo_1_waveform(float wf)
 *	@param wform waveform
 *	@return void
 */
-void AudioPolyMixerFloat::set_lfo_2_waveform(float wf)
+void AudioPolyphonyMixerFloat::set_lfo_2_waveform(float wf)
 {
 	if ((wf >= _OSC_WAVEFORM_SINE) && (wf <= _OSC_WAVEFORM_SAMPHOLD))
 	{
@@ -1192,7 +1197,7 @@ void AudioPolyMixerFloat::set_lfo_2_waveform(float wf)
 *	@param wform waveform
 *	@return void
 */
-void AudioPolyMixerFloat::set_lfo_3_waveform(float wf)
+void AudioPolyphonyMixerFloat::set_lfo_3_waveform(float wf)
 {
 	if ((wf >= _OSC_WAVEFORM_SINE) && (wf <= _OSC_WAVEFORM_SAMPHOLD))
 	{
@@ -1205,7 +1210,7 @@ void AudioPolyMixerFloat::set_lfo_3_waveform(float wf)
 *	@param wform waveform
 *	@return void
 */
-void AudioPolyMixerFloat::set_lfo_4_waveform(float wf)
+void AudioPolyphonyMixerFloat::set_lfo_4_waveform(float wf)
 {
 	if ((wf >= _OSC_WAVEFORM_SINE) && (wf <= _OSC_WAVEFORM_SAMPHOLD))
 	{
@@ -1218,7 +1223,7 @@ void AudioPolyMixerFloat::set_lfo_4_waveform(float wf)
 *	@param wform waveform
 *	@return void
 */
-void AudioPolyMixerFloat::set_lfo_5_waveform(float wf)
+void AudioPolyphonyMixerFloat::set_lfo_5_waveform(float wf)
 {
 	if ((wf >= _OSC_WAVEFORM_SINE) && (wf <= _OSC_WAVEFORM_SAMPHOLD))
 	{
@@ -1231,7 +1236,7 @@ void AudioPolyMixerFloat::set_lfo_5_waveform(float wf)
 *	@param wform waveform
 *	@return void
 */
-void AudioPolyMixerFloat::set_lfo_6_waveform(float wf)
+void AudioPolyphonyMixerFloat::set_lfo_6_waveform(float wf)
 {
 	if ((wf >= _OSC_WAVEFORM_SINE) && (wf <= _OSC_WAVEFORM_SAMPHOLD))
 	{
@@ -1244,7 +1249,7 @@ void AudioPolyMixerFloat::set_lfo_6_waveform(float wf)
 *	@param sym	symmetry
 *	@return void
 */
-void AudioPolyMixerFloat::set_lfo_1_stmmetry(float sym)
+void AudioPolyphonyMixerFloat::set_lfo_1_stmmetry(float sym)
 {
 	int symmetry = sym;
 
@@ -1265,7 +1270,7 @@ void AudioPolyMixerFloat::set_lfo_1_stmmetry(float sym)
 *	@param sym	symmetry
 *	@return void
 */
-void AudioPolyMixerFloat::set_lfo_2_stmmetry(float sym)
+void AudioPolyphonyMixerFloat::set_lfo_2_stmmetry(float sym)
 {
 	int symmetry = sym;
 
@@ -1286,7 +1291,7 @@ void AudioPolyMixerFloat::set_lfo_2_stmmetry(float sym)
 *	@param sym	symmetry
 *	@return void
 */
-void AudioPolyMixerFloat::set_lfo_3_stmmetry(float sym)
+void AudioPolyphonyMixerFloat::set_lfo_3_stmmetry(float sym)
 {
 	int symmetry = sym;
 
@@ -1307,7 +1312,7 @@ void AudioPolyMixerFloat::set_lfo_3_stmmetry(float sym)
 *	@param sym	symmetry
 *	@return void
 */
-void AudioPolyMixerFloat::set_lfo_4_stmmetry(float sym)
+void AudioPolyphonyMixerFloat::set_lfo_4_stmmetry(float sym)
 {
 	int symmetry = sym;
 
@@ -1328,7 +1333,7 @@ void AudioPolyMixerFloat::set_lfo_4_stmmetry(float sym)
 *	@param sym	symmetry
 *	@return void
 */
-void AudioPolyMixerFloat::set_lfo_5_stmmetry(float sym)
+void AudioPolyphonyMixerFloat::set_lfo_5_stmmetry(float sym)
 {
 	int symmetry = sym;
 
@@ -1348,7 +1353,7 @@ void AudioPolyMixerFloat::set_lfo_5_stmmetry(float sym)
 *	@param sym	symmetry
 *	@return void
 */
-void AudioPolyMixerFloat::set_lfo_6_stmmetry(float sym)
+void AudioPolyphonyMixerFloat::set_lfo_6_stmmetry(float sym)
 {
 	int symmetry = sym;
 
@@ -1369,13 +1374,14 @@ void AudioPolyMixerFloat::set_lfo_6_stmmetry(float sym)
 *	@param	none
 *   @return void
 */
-void AudioPolyMixerFloat::calc_next_modulation_values()
+void AudioPolyphonyMixerFloat::calc_next_modulation_values()
 {
 	lfo_out[0] = lfo1->get_next_output_val(lfo_1_actual_freq);
 	lfo_out[1] = lfo2->get_next_output_val(lfo_2_actual_freq);
 	lfo_out[2] = lfo3->get_next_output_val(lfo_3_actual_freq);
 	lfo_out[3] = lfo4->get_next_output_val(lfo_4_actual_freq);
 	lfo_out[4] = lfo5->get_next_output_val(lfo_5_actual_freq);
+	lfo_out[5] = lfo6->get_next_output_val(lfo_6_actual_freq);
 
 	if (amp_1_pan_mod_lfo > _LFO_NONE)
 	{
@@ -1402,7 +1408,7 @@ void AudioPolyMixerFloat::calc_next_modulation_values()
 *	@param	modVal		modulation signal value
 *   @return void
 */
-void AudioPolyMixerFloat::set_amp_1_pan_lfo_modulation(float mod_factor, float mod_val)
+void AudioPolyphonyMixerFloat::set_amp_1_pan_lfo_modulation(float mod_factor, float mod_val)
 {
 	amp_1_pan_mod = mod_factor * mod_val + master_pan_1;
 	if (amp_1_pan_mod < -1.0f)
@@ -1423,7 +1429,7 @@ void AudioPolyMixerFloat::set_amp_1_pan_lfo_modulation(float mod_factor, float m
 *	@param	modVal		modulation signal value
 *   @return void
 */
-void AudioPolyMixerFloat::set_amp_2_pan_lfo_modulation(float mod_factor, float mod_val)
+void AudioPolyphonyMixerFloat::set_amp_2_pan_lfo_modulation(float mod_factor, float mod_val)
 {
 	amp_2_pan_mod = mod_factor * mod_val + master_pan_2;
 	if (amp_2_pan_mod < -1.0f)
@@ -1443,13 +1449,14 @@ void AudioPolyMixerFloat::set_amp_2_pan_lfo_modulation(float mod_factor, float m
 *	@param	none
 *   @return void
 */
-void AudioPolyMixerFloat::calc_next_modulation_values(float *value_ch1, float *value_ch2)
+void AudioPolyphonyMixerFloat::calc_next_modulation_values(float *value_ch1, float *value_ch2)
 {	
 	lfo_out[0] = lfo1->get_next_output_val(lfo_1_actual_freq);
 	lfo_out[1] = lfo2->get_next_output_val(lfo_2_actual_freq);
 	lfo_out[2] = lfo3->get_next_output_val(lfo_3_actual_freq);
 	lfo_out[3] = lfo4->get_next_output_val(lfo_4_actual_freq);
 	lfo_out[4] = lfo5->get_next_output_val(lfo_5_actual_freq);
+	lfo_out[5] = lfo6->get_next_output_val(lfo_6_actual_freq);
 
 	if (amp_1_pan_mod_lfo > _LFO_NONE)
 	{
@@ -1477,7 +1484,7 @@ void AudioPolyMixerFloat::calc_next_modulation_values(float *value_ch1, float *v
 *	@param	value		pointer to a float variable to hold new modulation value
 *   @return void
 */
-void AudioPolyMixerFloat::set_amp_1_pan_lfo_modulation_value(float mod_factor, float mod_val, float *value)
+void AudioPolyphonyMixerFloat::set_amp_1_pan_lfo_modulation_value(float mod_factor, float mod_val, float *value)
 {
 	*(value) = mod_factor * mod_val + master_pan_1;
 	if (*(value) < -1.0f)
@@ -1497,7 +1504,7 @@ void AudioPolyMixerFloat::set_amp_1_pan_lfo_modulation_value(float mod_factor, f
 *	@param	value		pointer to a float variable to hold modulation valu
 *   @return void
 */
-void AudioPolyMixerFloat::set_amp_2_pan_lfo_modulation_value(float mod_factor, float mod_val, float *value)
+void AudioPolyphonyMixerFloat::set_amp_2_pan_lfo_modulation_value(float mod_factor, float mod_val, float *value)
 {
 	*(value) = mod_factor * mod_val + master_pan_1;
 	if (*(value) < -1.0f)
@@ -1515,7 +1522,7 @@ void AudioPolyMixerFloat::set_amp_2_pan_lfo_modulation_value(float mod_factor, f
 *	@param	Lfo		LFO number _LFO_NONE to  _LFO_6
 *   @return void
 */
-void AudioPolyMixerFloat::set_amp_1_pan_mod_lfo(int lfo) 
+void AudioPolyphonyMixerFloat::set_amp_1_pan_mod_lfo(int lfo) 
 {
 	if ((lfo >= _LFO_NONE) && (lfo <= _LFO_6))
 	{
@@ -1528,7 +1535,7 @@ void AudioPolyMixerFloat::set_amp_1_pan_mod_lfo(int lfo)
 *	@param	Lev		Modulation level 0 to 100
 *   @return void
 */
-void AudioPolyMixerFloat::set_amp_1_pan_mod_lfo_level(int lev) 
+void AudioPolyphonyMixerFloat::set_amp_1_pan_mod_lfo_level(int lev) 
 { 
 	if ((lev >= 0) && (lev <= 100)) 
 	{
@@ -1541,7 +1548,7 @@ void AudioPolyMixerFloat::set_amp_1_pan_mod_lfo_level(int lev)
 *	@param	Lfo		LFO number _LFO_NONE to  _LFO_5
 *   @return void
 */
-void AudioPolyMixerFloat::set_amp_2_pan_mod_lfo(int lfo)
+void AudioPolyphonyMixerFloat::set_amp_2_pan_mod_lfo(int lfo)
 {
 	if ((lfo >= _LFO_NONE) && (lfo <= _LFO_3))
 	{
@@ -1554,7 +1561,7 @@ void AudioPolyMixerFloat::set_amp_2_pan_mod_lfo(int lfo)
 *	@param	Lev		Modulation level 0 to 100
 *   @return void
 */
-void AudioPolyMixerFloat::set_amp_2_pan_mod_lfo_level(int lev) 
+void AudioPolyphonyMixerFloat::set_amp_2_pan_mod_lfo_level(int lev) 
 { 
 	if ((lev >= 0) && (lev <= 100))
 	{
@@ -1568,15 +1575,17 @@ void AudioPolyMixerFloat::set_amp_2_pan_mod_lfo_level(int lev)
 *   @param  none
 *   @return void
 */
-void AudioPolyMixerFloat::update()
+void AudioPolyphonyMixerFloat::update()
 {
 	audio_block_float_mono_t *block_out_L, *block_out_R, *block_send_L, *block_send_R;
 	int voice, i;
 
+	/* Holds pan modulation values at sub sampling rate */
 	float amp_1_pan_mod_samp[_AUDIO_MAX_BUF_SIZE / _CONTROL_SUB_SAMPLING + 1];
 	float amp_2_pan_mod_samp[_AUDIO_MAX_BUF_SIZE / _CONTROL_SUB_SAMPLING + 1];
+	
 	int j;
-
+	// Fill PAN modulation arrays with subsampled modulation values.
 	for (j = 0; j < audio_block_size / _CONTROL_SUB_SAMPLING + 1; j++)
 	{
 		calc_next_modulation_values(&amp_1_pan_mod_samp[j], &amp_2_pan_mod_samp[j]);
@@ -1598,7 +1607,7 @@ void AudioPolyMixerFloat::update()
 
 		if (!block_out_L || !block_out_R || !block_send_L || !block_send_R)
 		{
-			// unable to allocate memory, so we'll send nothing
+			// unable to allocate memory, so we'll release what we could get, send nothing, and return.
 			pthread_mutex_lock(&voice_mem_blocks_allocation_control_mutex);
 			if (block_out_L)
 			{
@@ -1623,13 +1632,13 @@ void AudioPolyMixerFloat::update()
 		}
 
 		j = 0;
-		
-		// voice 0
+
+		// voice 0 - it is the 1st voice, so its samples will be used as base for all other voices.
 		if (voice_is_active(0) || voice_waits_for_not_active(0))
 		{
 			for (i = 0; i < audio_block_size; i++) 
 			{
-				// Update modulation factors
+				// Update modulation factors at sub sampling rate.
 				if ((i % _CONTROL_SUB_SAMPLING) == 0)
 				{
 					left_gain_1 = *gain1[0] * (1 - *pan1[0]) * (1 - amp_1_pan_mod_samp[j]) * master_level_1 * 0.1f;
@@ -1639,6 +1648,7 @@ void AudioPolyMixerFloat::update()
 
 					if (midi_mapping_mode == _MIDI_MAPPING_MODE_MAPPING)
 					{
+						// In mapping mode use each voice send value for send calculation.
 						left_send_1 = *send1[0] * (1 - *pan1[0]) * (1 - amp_1_pan_mod) * master_level_1 * 0.1f;
 						left_send_2 = *send2[0] * (1 - *pan2[0]) * (1 - amp_2_pan_mod) * master_level_2 * 0.1f;
 						right_send_1 = *send1[0] * (1 + *pan1[0]) * (1 + amp_1_pan_mod) * master_send_1 * 0.1f;
@@ -1646,6 +1656,7 @@ void AudioPolyMixerFloat::update()
 					}
 					else
 					{
+						// In non-mapping mode use master send value for send calculation.
 						left_send_1 = master_send_1 * (1 - master_pan_1) * (1 - amp_1_pan_mod) * 0.1f;
 						left_send_2 = master_send_2 * (1 - master_pan_2) * (1 - amp_2_pan_mod) * 0.1f;
 						right_send_1 = master_send_1 * (1 + master_pan_1) * (1 + amp_1_pan_mod) * 0.1f;
@@ -1654,20 +1665,21 @@ void AudioPolyMixerFloat::update()
 					
 					j++;
 				}
-				
+
+				// Calculate all block output samples for voice 0
 				block_out_L->data[i] =
-					poly_mixer_manager->audio_block_stereo_float_shared_memory_voices_output[0]->data[_LEFT][i] * left_gain_1 +
-					poly_mixer_manager->audio_block_stereo_float_shared_memory_voices_output[0]->data[_RIGHT][i] * left_gain_2;
+					polyphony_mixer_manager->audio_block_stereo_float_shared_memory_voices_output[0]->data[_LEFT][i] * left_gain_1 +
+					polyphony_mixer_manager->audio_block_stereo_float_shared_memory_voices_output[0]->data[_RIGHT][i] * left_gain_2;
 				block_out_R->data[i] =
-					poly_mixer_manager->audio_block_stereo_float_shared_memory_voices_output[0]->data[_LEFT][i] * right_gain_1 +
-					poly_mixer_manager->audio_block_stereo_float_shared_memory_voices_output[0]->data[_RIGHT][i] * right_gain_2;
+					polyphony_mixer_manager->audio_block_stereo_float_shared_memory_voices_output[0]->data[_LEFT][i] * right_gain_1 +
+					polyphony_mixer_manager->audio_block_stereo_float_shared_memory_voices_output[0]->data[_RIGHT][i] * right_gain_2;
 
 				block_send_L->data[i] =
-					poly_mixer_manager->audio_block_stereo_float_shared_memory_voices_output[0]->data[_LEFT][i] * left_send_1 +
-					poly_mixer_manager->audio_block_stereo_float_shared_memory_voices_output[0]->data[_RIGHT][i] * left_send_2;
+					polyphony_mixer_manager->audio_block_stereo_float_shared_memory_voices_output[0]->data[_LEFT][i] * left_send_1 +
+					polyphony_mixer_manager->audio_block_stereo_float_shared_memory_voices_output[0]->data[_RIGHT][i] * left_send_2;
 				block_send_R->data[i] =
-					poly_mixer_manager->audio_block_stereo_float_shared_memory_voices_output[0]->data[_LEFT][i] * right_send_1 +
-					poly_mixer_manager->audio_block_stereo_float_shared_memory_voices_output[0]->data[_RIGHT][i] * right_send_2;
+					polyphony_mixer_manager->audio_block_stereo_float_shared_memory_voices_output[0]->data[_LEFT][i] * right_send_1 +
+					polyphony_mixer_manager->audio_block_stereo_float_shared_memory_voices_output[0]->data[_RIGHT][i] * right_send_2;
 			}
 		}
 		else
@@ -1690,7 +1702,7 @@ void AudioPolyMixerFloat::update()
 			{
 				for (i = 0; i < audio_block_size; i++)
 				{
-					// Update modulation factors
+					// Update modulation factors at sub sampling rate.
 					if ((i % _CONTROL_SUB_SAMPLING) == 0)
 					{
 						left_gain_1 = *gain1[voice] * (1 - *pan1[voice]) * (1 - amp_1_pan_mod_samp[j]) * master_level_1 * 0.2f;
@@ -1700,6 +1712,7 @@ void AudioPolyMixerFloat::update()
 
 						if (midi_mapping_mode == _MIDI_MAPPING_MODE_MAPPING)
 						{
+							// In mapping mode use each voice send value for send calculation.
 							left_send_1 = *send1[0] * (1 - *pan1[0]) * (1 - amp_1_pan_mod) * master_level_1 * 0.1f;
 							left_send_2 = *send2[0] * (1 - *pan2[0]) * (1 - amp_2_pan_mod) * master_level_2 * 0.1f;
 							right_send_1 = *send1[0] * (1 + *pan1[0]) * (1 + amp_1_pan_mod) * master_send_1 * 0.1f;
@@ -1707,6 +1720,7 @@ void AudioPolyMixerFloat::update()
 						}
 						else
 						{
+							// In non-mapping mode use master send value for send calculation.
 							left_send_1 = master_send_1 * (1 - master_pan_1) * (1 - amp_1_pan_mod) * 0.1f;
 							left_send_2 = master_send_2 * (1 - master_pan_2) * (1 - amp_2_pan_mod) * 0.1f;
 							right_send_1 = master_send_1 * (1 + master_pan_1) * (1 + amp_1_pan_mod) * 0.1f;
@@ -1715,20 +1729,21 @@ void AudioPolyMixerFloat::update()
 
 						j++;
 					}
-					
+
+					// Accumulate all block output samples for all other voices
 					block_out_L->data[i] +=
-						poly_mixer_manager->audio_block_stereo_float_shared_memory_voices_output[voice]->data[_LEFT][i] * left_gain_1 +
-						poly_mixer_manager->audio_block_stereo_float_shared_memory_voices_output[voice]->data[_RIGHT][i] * left_gain_2;
+						polyphony_mixer_manager->audio_block_stereo_float_shared_memory_voices_output[voice]->data[_LEFT][i] * left_gain_1 +
+						polyphony_mixer_manager->audio_block_stereo_float_shared_memory_voices_output[voice]->data[_RIGHT][i] * left_gain_2;
 					block_out_R->data[i] +=
-						poly_mixer_manager->audio_block_stereo_float_shared_memory_voices_output[voice]->data[_LEFT][i] * right_gain_1 +
-						poly_mixer_manager->audio_block_stereo_float_shared_memory_voices_output[voice]->data[_RIGHT][i] * right_gain_2;
+						polyphony_mixer_manager->audio_block_stereo_float_shared_memory_voices_output[voice]->data[_LEFT][i] * right_gain_1 +
+						polyphony_mixer_manager->audio_block_stereo_float_shared_memory_voices_output[voice]->data[_RIGHT][i] * right_gain_2;
 
 					block_send_L->data[i] +=
-						poly_mixer_manager->audio_block_stereo_float_shared_memory_voices_output[voice]->data[_LEFT][i] * left_send_1 +
-						poly_mixer_manager->audio_block_stereo_float_shared_memory_voices_output[voice]->data[_RIGHT][i] * left_send_2;
+						polyphony_mixer_manager->audio_block_stereo_float_shared_memory_voices_output[voice]->data[_LEFT][i] * left_send_1 +
+						polyphony_mixer_manager->audio_block_stereo_float_shared_memory_voices_output[voice]->data[_RIGHT][i] * left_send_2;
 					block_send_R->data[i] +=
-						poly_mixer_manager->audio_block_stereo_float_shared_memory_voices_output[voice]->data[_LEFT][i] * right_send_1 +
-						poly_mixer_manager->audio_block_stereo_float_shared_memory_voices_output[voice]->data[_RIGHT][i] * right_send_2;
+						polyphony_mixer_manager->audio_block_stereo_float_shared_memory_voices_output[voice]->data[_LEFT][i] * right_send_1 +
+						polyphony_mixer_manager->audio_block_stereo_float_shared_memory_voices_output[voice]->data[_RIGHT][i] * right_send_2;
 				}
 			}
 		}
@@ -1749,10 +1764,13 @@ void AudioPolyMixerFloat::update()
 //		if (RiffWave::getInstance()->getRecordingLength() >= 441000)
 //			RiffWave::getInstance()->stopRecording();
 */
+		// Send output blocks to next stage.
 		transmit_audio_block(block_out_L, _LEFT);
 		transmit_audio_block(block_out_R, _RIGHT);
 		transmit_audio_block(block_send_L, _SEND_LEFT);
 		transmit_audio_block(block_send_R, _SEND_RIGHT);
+
+		// Release all blocks.
 		pthread_mutex_lock(&voice_mem_blocks_allocation_control_mutex);
 		release_audio_block(block_out_L);
 		release_audio_block(block_out_R);

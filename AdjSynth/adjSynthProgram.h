@@ -4,6 +4,7 @@
 *	@date		4-Oct-2024
 *	@version	1.3 
 *					1. Code refactoring and notaion.
+*					2. Rename Patch to Preset (Patch is to be used for full setup settings).
 *					
 *	@version	1.1	4-Feb-2021
 *					1. Code refactoring and notaion.
@@ -53,8 +54,8 @@ public:
 
 	~SynthProgram();
 	
-	void register_set_patch_settings_default_params_callback_ptr(func_ptr_int_settings_parms_ptr_int_t ptr);
-	int activate_set_patch_settings_default_params_callback(_settings_params_t* params, int prog);
+	void register_set_preset_settings_default_params_callback_ptr(func_ptr_int_settings_parms_ptr_int_t ptr);
+	int activate_set_preset_settings_default_params_callback(_settings_params_t* params, int prog);
 	
 	
 	void register_mark_voice_bussy_callback_ptr(func_ptr_void_int_t ptr);
@@ -68,7 +69,7 @@ public:
 	void set_num_of_voices(int nov);
 	int get_num_of_voices();
 
-	void set_program_patch_params(_settings_params_t *patch_params);
+	void set_program_preset_params(_settings_params_t *preset_params);
 
 	void set_portamento_time(float porta);
 	void set_portamento_time(int porta);
@@ -87,7 +88,7 @@ public:
 	SynthVoice *synth_voices[_SYNTH_MAX_NUM_OF_VOICES] = { NULL };
 
 	Settings *settings_manager = NULL; 
-	_settings_params_t active_patch_params, prev_active_patch_params_x;  
+	_settings_params_t active_preset_params, prev_active_preset_params_x;  
 
 	DSP_MorphingSinusOscWTAB *mso_wtab = NULL;
 
@@ -126,6 +127,6 @@ private:
 	
 	int sample_rate, audio_block_size;
 	
-	func_ptr_int_settings_parms_ptr_int_t set_patch_settings_default_params_callback_ptr = NULL;
+	func_ptr_int_settings_parms_ptr_int_t set_preset_settings_default_params_callback_ptr = NULL;
 	func_ptr_void_int_t mark_voice_bussy_callback_ptr = NULL;
 };
