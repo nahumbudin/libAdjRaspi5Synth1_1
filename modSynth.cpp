@@ -1,9 +1,10 @@
 /**
-*	@file		modSynth.h
-*	@author		Nahum Budin
-*	@date		24-Sep-2025
-*	@version	1.1
-*					1. Code refactoring rename patches to preset parameters.
+ *	@file		modSynth.h
+ *	@author		Nahum Budin
+ *	@date		24-Sep-2025
+ *	@version	1.1
+ *					1. Code refactoring rename patches to preset parameters.
+ *					2. Adding support in both old and new MIDI program objects.
 *
 *	@brief		This is the main modular synthesizer libraray object.
 *
@@ -871,7 +872,12 @@ int ModSynth::save_adj_synth_patch_file(string path)
 {
 	return save_adj_synth_patch_file(path,
 									 adj_synth->adj_synth_settings_manager,
-									 &adj_synth->synth_program[mod_synth_get_active_sketch()]->active_preset_params);
+#ifdef _USE_NEW_MIDI_PROGRAM
+									 adj_synth->synth_program[mod_synth_get_active_sketch()]->active_preset_params);
+#else
+									 &adj_synth->synth_program[mod_synth_get_active_sketch()]->active_preset_params);							 
+#endif
+
 }
 
 /**
@@ -884,8 +890,12 @@ int ModSynth::open_adj_synth_patch_file(string path, int channel)
 {
 	return open_adj_synth_patch_file(path,
 									 adj_synth->adj_synth_settings_manager,
-									 &adj_synth->synth_program[channel]->active_preset_params,
-		channel);
+#ifdef _USE_NEW_MIDI_PROGRAM
+									 adj_synth->synth_program[channel]->active_preset_params,						 
+#else
+									 &adj_synth->synth_program[channel]->active_preset_params,		
+#endif
+									channel);
 }
 
 /**

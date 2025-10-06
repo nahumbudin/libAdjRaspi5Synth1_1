@@ -279,7 +279,7 @@ int get_num_of_system_audio_output_ports() { return num_of_system_output_audio_p
 *   @param	arg		a pointer to a (void) srgument data (not in use)
 *   @return 0 if connected; non-zero otherwise
 */
-int jack_callback_process_out(jack_nframes_t nun_of_frames, void *arg)
+int jack_callback_process_out(jack_nframes_t num_of_frames, void *arg)
 {
 	//	fprintf(stderr, "Jack out callback frames: %i\n", nframes);
 	int err, core;
@@ -290,17 +290,17 @@ int jack_callback_process_out(jack_nframes_t nun_of_frames, void *arg)
 		jack_position_t pos;
 		if (jack_transport_query(client_out, &pos) != JackTransportRolling) 
 		{
-			process_silence_out(nun_of_frames);
+			process_silence_out(num_of_frames);
 			return 0;
 		}
 	}
 
-	if (nun_of_frames != jack_block_size)
+	if (num_of_frames != jack_block_size)
 	{
 		fprintf(stderr, "jack callback small buffer\n");
 	}
 
-	process_out(nun_of_frames);
+	process_out(num_of_frames);
 	
 
 	// Triger update process	
@@ -336,24 +336,29 @@ void process_silence_out(jack_nframes_t nun_of_frames)
 void process_out(jack_nframes_t nun_of_frames) 
 {
 	volatile int i, voice;
+	struct timeval start_ts;
+	static long prev_ts_sec, prev_ts_usec;
 
-	//	static sample_t *prevBufferL = NULL, *prevBufferR = NULL;
+		//static sample_t *prevBuffer_L = NULL, *prevBuffer_R = NULL;
 
 	sample_t *buffer_L = (sample_t *) jack_port_get_buffer(output_port[_LEFT], nun_of_frames);	
 	sample_t *buffer_R = (sample_t *) jack_port_get_buffer(output_port[_RIGHT], nun_of_frames);
 
-	//	if (bufferL == prevBufferL)
-	//	{
-	//		fprintf(stderr, "jack server duplicate L buffer\n");
-	//	}
+	/*
+		if (buffer_L == prevBuffer_L)
+		{
+			fprintf(stderr, "jack server duplicate L buffer\n");
+		}
 
-	//	if (bufferR == prevBufferR)
-	//	{
-	//		fprintf(stderr, "jack server duplicate R buffer\n");
-	//	}
+		if (buffer_R == prevBuffer_R)
+		{
+			fprintf(stderr, "jack server duplicate R buffer\n");
+		}
 
-	//	prevBufferR = bufferR;
-	//	prevBufferL = bufferL;
+		prevBuffer_R = buffer_R;
+		prevBuffer_L = buffer_L;
+		
+	*/
 
 	if (audio_manager != NULL)
 	{
@@ -363,6 +368,15 @@ void process_out(jack_nframes_t nun_of_frames)
 			*(buffer_R + i) = (sample_t)audio_manager->audio_block_stereo_float_shared_memory_outputs->data[_RIGHT][i]; // / 32767.0;
 		}
 	}
+
+	/*
+	gettimeofday(&start_ts, NULL);
+	printf("jack out  %x %ld\n", (long)audio_manager->audio_block_stereo_float_shared_memory_outputs, 
+		(long)((start_ts.tv_sec - prev_ts_sec) * 1000000L + (start_ts.tv_usec - prev_ts_usec))); // <<<<<
+	prev_ts_sec = start_ts.tv_sec;
+	prev_ts_usec = start_ts.tv_usec;
+	*/
+	
 }
 
 /**

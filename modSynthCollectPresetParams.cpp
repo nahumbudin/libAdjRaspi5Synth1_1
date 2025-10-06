@@ -1,18 +1,19 @@
 /**
-*	@file		modSynthCollectPresetParams.cpp
-*	@author		Nahum Budin
-*	@date		14-Oct-2024
-*	@version	1.2
-*					1. Code refactoring and notaion.
-*
-*	@brief		Used for collecting preset params
-*
-*	History:\n
-*
-*		version	1.1	7-Feb-2021	Code refactoring and notaion
-*		version 1.0	30-4-2020: 	First version
-*
-*/
+ *	@file		modSynthCollectPresetParams.cpp
+ *	@author		Nahum Budin
+ *	@date		2-Oct-2025
+ *	@version	1.3
+ *					1. Adding support in both old and new MIDI program objects..
+ *
+ *	@brief		Used for collecting preset params
+ *
+ *	History:\n
+ *
+ *		version 1.2	14-Oct-2024	Code refactoring and notaion.
+ *		version	1.1	7-Feb-2021	Code refactoring and notaion
+ *		version 1.0	30-4-2020: 	First version
+ *
+ */
 
 #include "modSynth.h"
 #include "./AdjSynth/adjSynth.h"
@@ -71,7 +72,11 @@ int ModSynth::collect_mod_synth_preset_parms(_settings_params_t *params) {
 		res |= AdjSynth::get_instance()->adj_synth_settings_manager->set_string_param_value(
 			params,
 			"modsynth.mixer_ch" + std::to_string(i + 1) + ".adj_synth_preset_name",
+#ifdef _USE_NEW_MIDI_PROGRAM
+			AdjSynth::get_instance()->synth_program[i]->active_preset_params->name,
+#else
 			AdjSynth::get_instance()->synth_program[i]->active_preset_params.name,
+#endif
 			_SET_VALUE,
 			-1);
 

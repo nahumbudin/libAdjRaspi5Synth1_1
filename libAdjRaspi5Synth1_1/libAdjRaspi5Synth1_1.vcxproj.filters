@@ -468,9 +468,6 @@
     <ClCompile Include="..\AdjSynth\adjSynthPADcreator.cpp">
       <Filter>Source files\Synthesizer\AdjSynth</Filter>
     </ClCompile>
-    <ClCompile Include="..\AdjSynth\adjSynthPolyphonyManager_obs.cpp">
-      <Filter>Source files\Synthesizer\AdjSynth</Filter>
-    </ClCompile>
     <ClCompile Include="..\AdjSynth\adjSynthProgram.cpp">
       <Filter>Source files\Synthesizer\AdjSynth</Filter>
     </ClCompile>

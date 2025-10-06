@@ -1,11 +1,13 @@
 /**
-*	@file		adjSynth.h
-*	@author		Nahum Budin
-*	@date		23-Sep-2025
-*	@version	1.4 
-*					1. Code refactoring and notaion.
-*					2. Bugs fix.
-*					3. Redfining the Programs concept Programs.h
+ *	@file		adjSynth.h
+ *	@author		Nahum Budin
+ *	@date		23-Sep-2025
+ *	@version	1.4
+ *					1. Code refactoring and notaion.
+ *					2. Bugs fix.
+ *					3. Redfining the Programs concept Programs.h
+ *					4. Adding support in both old and new MIDI program objects.
+ *					5. Polyphony - Not manging cores loads - let the OS do it.
 *					
 *	@brief		A collection of 4 synthesizers: Additive, Karplus String, PAD and Morphed Sine Oscilator (MSO)
 *					
@@ -179,7 +181,7 @@ AdjSynth::AdjSynth()
 	// Do not change with patch TODO: ?
 	poly_mode = _KBD_POLY_MODE_REUSE; // When all voices are allocated, reuse the oldest one. // _KBD_POLY_MODE_FIFO;
 	play_mode = _PLAY_MODE_POLY; // Not monophonic
-	midi_mapping_mode = _MIDI_MAPPING_MODE_SKETCH; // An online adjustable sketch patch
+	midi_mapping_mode = _DEFAULT_MIDI_MAPPING_MODE; // Mapping mode
 
 	// Create the polyphony manager.
 	synth_polyphony_manager = AdjPolyphonyManager::get_poly_manger_instance(num_of_voices);
@@ -272,6 +274,13 @@ AdjSynth::AdjSynth()
 	connection_mixer_send_L = audio_manager->connections_manager->get_audio_connection();
 	connection_mixer_send_R = audio_manager->connections_manager->get_audio_connection();
 	
+	
+	// Temporarlly connect poly mixer output to audio out  TODO: <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+	//connection_mixer_out_L->connect(audio_polyphony_mixer, _LEFT, audio_out, _LEFT);
+	//connection_mixer_out_R->connect(audio_polyphony_mixer, _RIGHT, audio_out, _RIGHT);
+	
+	//*
+	
 	// Connect the mixer output to the equilizer input.
 	connection_mixer_out_L->connect(audio_polyphony_mixer, _LEFT, audio_equalizer, _LEFT);
 	connection_mixer_out_R->connect(audio_polyphony_mixer, _RIGHT, audio_equalizer, _RIGHT);
@@ -286,7 +295,9 @@ AdjSynth::AdjSynth()
 
 	// Connect the equilizer output to the audio output input.
 	connection_equilizer_out_L->connect(audio_equalizer, _LEFT, audio_out, _LEFT);
-	connection_equilizer_out_R->connect(audio_equalizer, _RIGHT, audio_out, _RIGHT);	
+	connection_equilizer_out_R->connect(audio_equalizer, _RIGHT, audio_out, _RIGHT);
+	
+	//*/
 	
 	// Set audio parameters.
 	set_audio_driver_type(_DEFAULT_AUDIO_DRIVER);
@@ -524,8 +535,12 @@ void AdjSynth::init_synth_voices()
 			program_wavetable,
 			audio_manager);
 
+#ifdef _USE_NEW_MIDI_PROGRAM
+		
+#else		
 		// Assign a DSP_Voice object instance
 		synth_voice[voice]->assign_dsp_voice(synth_program[active_sketch]->synth_voices[voice]->dsp_voice);
+#endif
 		
 		// Assingn LUTs
 		synth_voice[voice]->mso_wtab = synth_program[active_sketch]->mso_wtab;
@@ -541,28 +556,28 @@ void AdjSynth::init_synth_voices()
 void AdjSynth::init_synth_programs()
 {
 	// Program[16] to Program[18] are the active non MIDI mapping mode programs used for editting analog patches, etc.
-	// Program[0] to Program[15] are MIDI-mapping mode programs used each for a MIDI channel 1-16 
-	for (int program = 0; program < num_of_programs; program++)
-	{		
-		synth_program[program] = new SynthProgram(
-				sample_rate,
-			audio_block_size,			
-			num_of_voices,								
-			0,						// 1st voice num'
-			_PAD_DEFAULT_WAVETABLE_SIZE,
-			audio_manager);
-	}
-	
-	/***** TODO: Init new programs - when done delete the above ******/
+	// Program[0] to Program[15] are MIDI-mapping mode programs used each for a MIDI channel 1-16
 
-	
+#ifdef _USE_NEW_MIDI_PROGRAM
 	for (int program = 0; program < num_of_programs; program++)
 	{
 		_settings_params_t *default_params = new _settings_params_t;
 		set_default_preset_parameters(default_params, 0);
-		synth_programs[program] = new AdjSynthPrograms(program, _PAD_DEFAULT_WAVETABLE_SIZE,
+		synth_program[program] = new AdjSynthPrograms(program, _PAD_DEFAULT_WAVETABLE_SIZE,
 													   default_params, audio_polyphony_mixer);
 	}
+#else
+	for (int program = 0; program < num_of_programs; program++)
+	{
+		synth_program[program] = new SynthProgram(
+			sample_rate,
+			audio_block_size,
+			num_of_voices,
+			0, // 1st voice num'
+			_PAD_DEFAULT_WAVETABLE_SIZE,
+			audio_manager);
+	}
+#endif 
 	
 }
 
@@ -812,7 +827,13 @@ int AdjSynth::copy_sketch(int srcsk, int destsk)
 	}
 	else
 	{
+#ifdef _USE_NEW_MIDI_PROGRAM
+		synth_program[destsk]->set_program_preset_params(synth_program[srcsk]->active_preset_params);
+#else
 		synth_program[destsk]->set_program_preset_params(&synth_program[srcsk]->active_preset_params);
+#endif		
+		
+		
 	}
 
 	return 0;
@@ -841,9 +862,16 @@ void AdjSynth::init_poly()
 
 		for (int program = 0; program < _SYNTH_MAX_NUM_OF_PROGRAMS; program++)
 		{
-			if (synth_program[program]->synth_voices[voice] != NULL)
+			SynthVoice *synth_voice = NULL;
+
+#ifdef _USE_NEW_MIDI_PROGRAM
+			synth_voice = synth_program[program]->get_voice(voice);
+#else
+			synth_voice = synth_program[program]->synth_voices[voice];
+#endif			
+			if (synth_voice != NULL)
 			{	
-				synth_program[program]->synth_voices[voice]->dsp_voice->not_in_use();
+				synth_voice->dsp_voice->not_in_use();
 			}
 		}
 	}
@@ -918,7 +946,7 @@ void AdjSynth::set_midi_mapping_mode(int mod)
 		midi_mapping_mode = _MIDI_MAPPING_MODE_MAPPING;
 	}
 
-	audio_polyphony_mixer->set_midi_maping_mode(midi_mapping_mode);
+	audio_polyphony_mixer->set_midi_mapping_mode(midi_mapping_mode);
 }
 
 int AdjSynth::get_midi_mapping_mode() 
@@ -960,7 +988,12 @@ std::string AdjSynth::get_program_preset_name(int prog)
 {
 	if ((prog >= 0) && (prog <= 16))
 	{
+#ifdef _USE_NEW_MIDI_PROGRAM
+		return synth_program[prog]->active_preset_params->name;
+#else
 		return synth_program[prog]->active_preset_params.name;
+#endif		
+		
 	}
 	else
 	{
@@ -975,7 +1008,13 @@ std::string AdjSynth::get_program_preset_name(int prog)
 */
 _settings_params_t *AdjSynth::get_active_preset_params()
 {
+#ifdef _USE_NEW_MIDI_PROGRAM
+	return synth_program[active_sketch]->active_preset_params;
+#else
 	return &synth_program[active_sketch]->active_preset_params;
+#endif
+	
+	
 }
 
 /**
@@ -1111,7 +1150,7 @@ void  AdjSynth::midi_play_note_on(uint8_t channel, uint8_t byte2, uint8_t byte3,
 	bool reused = false;
 	SynthVoice *prog_voice = NULL;
 	
-	if (midi_mapping_mode == _MIDI_MAPPING_MODE_MAPPING)
+	if (midi_mapping_mode == _MIDI_MAPPING_MODE_MAPPING) // TODO:
 	{
 		prog = channel;
 	}
@@ -1120,17 +1159,13 @@ void  AdjSynth::midi_play_note_on(uint8_t channel, uint8_t byte2, uint8_t byte3,
 		prog = active_sketch;
 	}
 
-	pthread_mutex_lock(&voice_manage_mutex);
-
 	if (byte3 == 0)
 		// Note off
 	{
-		pthread_mutex_unlock(&voice_manage_mutex);
 		midi_play_note_off(channel, byte2, byte3);
+		
 		return;
 	}
-
-	voice = -1;
 
 	if (kbd1->portamento_is_enabled()) // TODO mobe portamento to programs?
 	{
@@ -1140,59 +1175,149 @@ void  AdjSynth::midi_play_note_on(uint8_t channel, uint8_t byte2, uint8_t byte3,
 		mark_voice_busy_callback(_SYNTH_VOICE_1);
 		voice = _SYNTH_VOICE_1;
 	}
+
+	voice = -1;
+
+	// New - Polyphony manager version
+	pthread_mutex_lock(&voice_manage_mutex);
+	
+	voice = synth_polyphony_manager->get_voice((int)byte2, prog); // TODO: program = 0??? old note
+	
+	if (voice < 0)
+	{
+		// No free voice found!
+		pthread_mutex_unlock(&voice_manage_mutex);
+		fprintf(stderr, "midi_play_note_on: No free voice found!\n");
+		return;
+	}
+
+	// Voice found
+
+	// Debug
+	fprintf(stderr, "midi_play_note_on: %i voice: %i program: %i \n", byte2, voice, prog); 
+	
+	// Asign the voice to the program
+	synth_program[prog]->assign_voice_with_preset_program_params(synth_voice[voice], voice);
+
+	// Assingn LUTs
+	synth_voice[voice]->mso_wtab = synth_program[prog]->mso_wtab;
+	synth_voice[voice]->pad_wavetable = synth_program[prog]->program_wavetable;
+
+	synth_polyphony_manager->activate_resource(voice, (int)byte2, prog);
+	//		kbd1->voices[voice].note = byte2;
+	synth_voice[voice]->audio_voice->set_note(byte2);
+	fprintf(stderr, "On voice %i\n", voice);
+
+	// Calculate and set the note frequency
+	kbd1->midi_play_note_on(channel, byte2, byte3);
+
+	// Velocity scaling based on keyboard split point and velocity
+	if (kbd1->get_split_point() == _KBD_SPLIT_POINT_NONE)
+	{
+		// No split point - general velocity scaling
+		scaledMagnitude = kbd1->get_scaled_velocity(byte3);
+	}
+	else if ((int)byte2 >= 12 * (kbd1->get_split_point() + 3))
+	{
+		// Above split point - general velocity scaling
+		scaledMagnitude = kbd1->get_scaled_velocity(byte3);
+	}
 	else
 	{
-		if (poly_mode == _KBD_POLY_MODE_REUSE) // Reuse a voice that is already playing the same note
+		// Below split point - low velocity scaling
+		scaledMagnitude = kbd1->get_low_scaled_velocity(byte3);
+	}
+
+	// Set the voice parameters
+	synth_voice[voice]->dsp_voice->set_voice_frequency(kbd1->get_note_frequency());
+
+	synth_voice[voice]->dsp_voice->filter_1->set_kbd_freq(kbd1->get_note_frequency());
+	synth_voice[voice]->dsp_voice->filter_2->set_kbd_freq(kbd1->get_note_frequency());
+
+	synth_voice[voice]->audio_voice->set_magnitude((float)scaledMagnitude / 127);
+	synth_voice[voice]->dsp_voice->karplus_1->note_on(byte2, (float)scaledMagnitude / 127);
+
+	// Trigger the ADSR envelopes
+	synth_voice[voice]->dsp_voice->adsr_note_on(synth_voice[voice]->dsp_voice->adsr_1);
+	synth_voice[voice]->dsp_voice->adsr_note_on(synth_voice[voice]->dsp_voice->adsr_2);
+	synth_voice[voice]->dsp_voice->adsr_note_on(synth_voice[voice]->dsp_voice->adsr_3);
+	synth_voice[voice]->dsp_voice->adsr_note_on(synth_voice[voice]->dsp_voice->adsr_4);
+	synth_voice[voice]->dsp_voice->adsr_note_on(synth_voice[voice]->dsp_voice->adsr_5);
+	synth_voice[voice]->dsp_voice->adsr_note_on(synth_voice[voice]->dsp_voice->adsr_6);
+
+	pthread_mutex_unlock(&voice_manage_mutex);
+
+	/*   Old - Core management version
+		else
 		{
-			voice = synth_polyphony_manager->get_reused_note((int)byte2, channel); // TODO: program = 0
-			if (voice > -1)
+			if (poly_mode == _KBD_POLY_MODE_REUSE) // Reuse a voice that is already playing the same note
 			{
-				reused = true;
+				voice = synth_polyphony_manager->get_reused_note((int)byte2, prog); // TODO: program = 0
+				if (voice > -1)
+				{
+					reused = true;
+				}
 			}
 		}
-	}
+
+		if (voice < 0)
+		{
+			// Not found yet
+			core = synth_polyphony_manager->get_less_busy_core();
+			// Look for a free voice
+			voice = synth_polyphony_manager->get_a_free_voice(core);
+
+			if ((voice < 0) && (poly_mode == _KBD_POLY_MODE_FIFO))
+			{
+				// Not found yet - get the oldest active
+				voice = synth_polyphony_manager->get_oldest_voice();
+			}
+		}
+
+
+			if ((voice > -1) && !reused)
+		{
+			//	moved up
+			 //	if (midi_mapping_mode == _MIDI_MAPPING_MODE_MAPPING)
+			//		{
+			//			prog = channel;
+			//	}
+			//	else
+			//	{
+			//		prog = active_sketch;
+			}
+
+			// Voice found and if not reused, get a free voice from mapped program
+			//prog_voice = synth_program[prog]->get_free_voice();
+			voice = synth_polyphony_manager->get_a_free_voice(core);
+			//Old - Core management version
+						  
+			//if (!prog_voice)
+			//	voice = -1; 
 
 	if (voice < 0)
 	{
-		// Not found yet
-		core = synth_polyphony_manager->get_less_busy_core();
-		// Look for a free voice
-		voice = synth_polyphony_manager->get_a_free_voice(core);
-
-		if ((voice < 0) && (poly_mode == _KBD_POLY_MODE_FIFO))
+		pthread_mutex_unlock(&voice_manage_mutex);
+		fprintf(stderr, "midi_play_note_on: No free voice found!\n");
+		return;
+	} 
+		else 
 		{
-			// Not found yet - get the oldest active
-			voice = synth_polyphony_manager->get_oldest_voice();
-		}
-	}
-
-	if ((voice > -1) && !reused)
-	{
-		/*	moved up	
-		 *	if (midi_mapping_mode == _MIDI_MAPPING_MODE_MAPPING)
-				{
-					prog = channel;
-			}
-			else
-			{
-				prog = active_sketch;
-		}
-*/		
-		// Voice found and if not reused, get a free voice from mapped program		
-		prog_voice = synth_program[prog]->get_free_voice();
-		
-		if (!prog_voice)
-			voice = -1;
-		else
-		{
+			synth_program[prog]->assign_voice_with_preset_program_params(synth_voice[voice], voice);
+			// OLD Code
 			// Assign the program voice to the free voice
-			synth_voice[voice]->assign_dsp_voice(prog_voice->dsp_voice);
+			//synth_voice[voice]->assign_dsp_voice(prog_voice->dsp_voice);
 			// Assingn LUTs
 			synth_voice[voice]->mso_wtab = synth_program[prog]->mso_wtab;			
 			synth_voice[voice]->pad_wavetable = synth_program[prog]->program_wavetable;
 
-			synth_voice[voice]->allocated_to_program_num = prog_voice->allocated_to_program_num;
-			synth_voice[voice]->allocated_to_program_voice_num = prog_voice->voice_num;
+			// Old Code
+			//synth_voice[voice]->allocated_to_program_num = prog_voice->allocated_to_program_num;
+			//synth_voice[voice]->allocated_to_program_voice_num = prog_voice->voice_num;
+
+#ifdef _USE_NEW_POLY_MIXER_
+			
+#else			
 			audio_polyphony_mixer->preserve_gain_pan(voice);
 			// Get pointers to parameters so they can be modified
 			audio_polyphony_mixer->set_voice_gain_1_ptr(voice, prog);
@@ -1201,15 +1326,16 @@ void  AdjSynth::midi_play_note_on(uint8_t channel, uint8_t byte2, uint8_t byte3,
 			audio_polyphony_mixer->set_voice_pan_2_ptr(voice, prog);
 			audio_polyphony_mixer->set_voice_send_1_ptr(voice, prog);
 			audio_polyphony_mixer->set_voice_send_2_ptr(voice, prog);
+#endif
 
 			fprintf(stderr,
-				"midi_play_note_on: %i voice: %i program: %i allocated to prog %i\n", 
-				byte2,
-				prog_voice->voice_num,
-				prog,
-				prog_voice->allocated_to_program_num);
+					"midi_play_note_on: %i voice: %i program: %i allocated to prog %i\n",
+					byte2,
+					voice, // prog_voice->voice_num,
+					prog,
+					prog); // prog_voice->allocated_to_program_num);
 		}
-	}
+	} 
 _voice_is_on:
 	if ((voice > -1) && (synth_voice[voice] != NULL))
 	{
@@ -1279,6 +1405,7 @@ _voice_is_on:
 		fprintf(stderr, "note %i on not found  ", byte2);
 
 	pthread_mutex_unlock(&voice_manage_mutex);
+*/
 }
 
 /**
@@ -1305,13 +1432,11 @@ void  AdjSynth::midi_play_note_off(uint8_t channel, uint8_t byte2, uint8_t byte3
 
 	pthread_mutex_lock(&voice_manage_mutex);
 
-	//	while ((voice  -1) /*&& (program < _SYNTH_NUM_OF_PROGRAMS)*/)
-	//	{
-			// look for the voice number of the voice that is part of the
-			// provided program and plays the provided note
-	voice = synth_polyphony_manager->get_reused_note(byte2, program);
-	//		program++;
-	//	}
+#ifdef _USE_NEW_MIDI_PROGRAM
+	voice = synth_program[program]->get_voice_num_playing_note(byte2);
+#else
+	voice = synth_polyphony_manager->get_reused_note(byte2, program); // ???
+#endif
 
 	if (voice != -1)
 	{		
@@ -1324,6 +1449,11 @@ void  AdjSynth::midi_play_note_off(uint8_t channel, uint8_t byte2, uint8_t byte3
 		synth_polyphony_manager->free_voice(voice, true); // go to pending untill env is zero
 		fprintf(stderr, "midi_play_note_off  %i voice: %i prog: %i\n", byte2, voice, program);
 
+#ifdef _USE_NEW_MIDI_PROGRAM
+		voice = synth_program[program]->deallocate_voice_from_program(voice);
+#else
+		// ???
+#endif
 		//synthVoice[voice]->assignDspVoice(originalMainDspVoices[voice]);
 
 	}
@@ -1331,11 +1461,6 @@ void  AdjSynth::midi_play_note_off(uint8_t channel, uint8_t byte2, uint8_t byte3
 	{
 		fprintf(stderr, "midi_play_note_off %i not found program: %i\n ", byte2, program);
 	}
-	
-	//	if (sequencer1->mainTrack->recording)
-	//	{
-	//		sequencer1->addEvent((int)byte2, channel, (int)byte3, false, SynthSequencer::getInstance()->mainTrack);
-	//	}
 
 	kbd1->midi_play_note_off(channel, byte2, byte3);
 

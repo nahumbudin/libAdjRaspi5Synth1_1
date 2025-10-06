@@ -1,126 +1,294 @@
 /**
-*	@file		adjSynthSettingsCallbacksVoicePAD.cpp
-*	@author		Nahum Budin
-*	@date		5-Oct-2024
-*	@version	1.2
-*					1. Code refactoring and notaion.
-*	
-*	@brief		Callback to handle voice block PAD Synthesizer Settings
-*	settings
-*
-*	History:\n
-*	
-*	version	1.1	5-Feb-2021
-*					1. Code refactoring and notaion.
-*	version 1.0	15_Nov-2019	First version
-*		
-*/
+ *	@file		adjSynthSettingsCallbacksVoicePAD.cpp
+ *	@author		Nahum Budin
+ *	@date		5-Oct-2024
+ *	@version	1.2
+ *					1. Code refactoring and notaion.
+ *					2. Adding support in both old and new MIDI program objects.
+ *
+ *	@brief		Callback to handle voice block PAD Synthesizer Settings
+ *	settings
+ *
+ *	History:\n
+ *
+ *	version	1.1	5-Feb-2021
+ *					1. Code refactoring and notaion.
+ *	version 1.0	15_Nov-2019	First version
+ *
+ */
 
 #include "adjSynth.h"
 
 int set_voice_block_pad_synth_enabled_cb(bool enable, int voice, int prog)
 {
+	SynthVoice *synth_voice = NULL;
+
+#ifdef _USE_NEW_MIDI_PROGRAM
+	synth_voice = AdjSynth::get_instance()->synth_program[prog]->get_voice(voice);
+#else
+	synth_voice = AdjSynth::get_instance()->synth_voice[voice];
+#endif
+	if (synth_voice == NULL)
+	{
+		return -1;
+	}
+	
 	if (enable)
 	{
-		AdjSynth::get_instance()->synth_program[prog]->synth_voices[voice]->dsp_voice->
-					enable_pad_synth_1();
+		synth_voice->dsp_voice->enable_pad_synth_1();
 	}
 	else
 	{
-		AdjSynth::get_instance()->synth_program[prog]->synth_voices[voice]->dsp_voice->
-					disable_pad_synth_1();
+		synth_voice->dsp_voice->disable_pad_synth_1();
+		
 	}
 	return 0;
 }
 
 int set_voice_block_pad_synth_detune_octave_cb(int oct, int voice, int prog)
 {
-	AdjSynth::get_instance()->synth_program[prog]->synth_voices[voice]->dsp_voice->wavetable_1->
-					set_freq_detune_oct(oct);
+	SynthVoice *synth_voice = NULL;
+
+#ifdef _USE_NEW_MIDI_PROGRAM
+	synth_voice = AdjSynth::get_instance()->synth_program[prog]->get_voice(voice);
+#else
+	synth_voice = AdjSynth::get_instance()->synth_voice[voice];
+#endif
+	if (synth_voice == NULL)
+	{
+		return -1;
+	}
+
+	synth_voice->dsp_voice->wavetable_1->set_freq_detune_oct(oct);
+	
 	return 0;
 }
 
 int set_voice_block_pad_synth_detune_semitones_cb(int semt, int voice, int prog)
 {
-	AdjSynth::get_instance()->synth_program[prog]->synth_voices[voice]->dsp_voice->wavetable_1->
-					set_freq_detune_semitones(semt);
+	SynthVoice *synth_voice = NULL;
+
+#ifdef _USE_NEW_MIDI_PROGRAM
+	synth_voice = AdjSynth::get_instance()->synth_program[prog]->get_voice(voice);
+#else
+	synth_voice = AdjSynth::get_instance()->synth_voice[voice];
+#endif
+	if (synth_voice == NULL)
+	{
+		return -1;
+	}
+
+	synth_voice->dsp_voice->wavetable_1->set_freq_detune_semitones(semt);
+	
 	return 0;
 }
 
 int set_voice_block_pad_synth_detune_cents_cb(int cnts, int voice, int prog)
 {
-	AdjSynth::get_instance()->synth_program[prog]->synth_voices[voice]->dsp_voice->wavetable_1->
-					set_freq_detune_cents(cnts);
+	SynthVoice *synth_voice = NULL;
+
+#ifdef _USE_NEW_MIDI_PROGRAM
+	synth_voice = AdjSynth::get_instance()->synth_program[prog]->get_voice(voice);
+#else
+	synth_voice = AdjSynth::get_instance()->synth_voice[voice];
+#endif
+	if (synth_voice == NULL)
+	{
+		return -1;
+	}
+
+	synth_voice->dsp_voice->wavetable_1->set_freq_detune_cents(cnts);
+	
 	return 0;
 }
 
 int set_voice_block_pad_synth_send_filter_1_cb(int snd, int voice, int prog)
 {
-	AdjSynth::get_instance()->synth_program[prog]->synth_voices[voice]->dsp_voice->
-					set_pad_1_send_filter_1_level(snd);
+	SynthVoice *synth_voice = NULL;
+
+#ifdef _USE_NEW_MIDI_PROGRAM
+	synth_voice = AdjSynth::get_instance()->synth_program[prog]->get_voice(voice);
+#else
+	synth_voice = AdjSynth::get_instance()->synth_voice[voice];
+#endif
+	if (synth_voice == NULL)
+	{
+		return -1;
+	}
+
+	synth_voice->dsp_voice->set_pad_1_send_filter_1_level(snd);
+	
 	return 0;
 }
 
 int set_voice_block_pad_synth_send_filter_2_cb(int snd, int voice, int prog)
 {
-	AdjSynth::get_instance()->synth_program[prog]->synth_voices[voice]->dsp_voice->
-					set_pad_1_send_filter_2_level(snd);
+	SynthVoice *synth_voice = NULL;
+
+#ifdef _USE_NEW_MIDI_PROGRAM
+	synth_voice = AdjSynth::get_instance()->synth_program[prog]->get_voice(voice);
+#else
+	synth_voice = AdjSynth::get_instance()->synth_voice[voice];
+#endif
+	if (synth_voice == NULL)
+	{
+		return -1;
+	}
+
+	synth_voice->dsp_voice->set_pad_1_send_filter_2_level(snd);
+	
 	return 0;
 }
 
 int set_voice_block_pad_synth_freq_modulation_lfo_num_cb(int lfo, int voice, int prog)
 {
-	AdjSynth::get_instance()->synth_program[prog]->synth_voices[voice]->dsp_voice->
-					set_pad_1_freq_mod_lfo(lfo);
+	SynthVoice *synth_voice = NULL;
+
+#ifdef _USE_NEW_MIDI_PROGRAM
+	synth_voice = AdjSynth::get_instance()->synth_program[prog]->get_voice(voice);
+#else
+	synth_voice = AdjSynth::get_instance()->synth_voice[voice];
+#endif
+	if (synth_voice == NULL)
+	{
+		return -1;
+	}
+
+	synth_voice->dsp_voice->set_pad_1_freq_mod_lfo(lfo);
+	
 	return 0;
 }
 
 int set_voice_block_pad_synth_freq_modulation_lfo_level_cb(int lev, int voice, int prog)
 {
-	AdjSynth::get_instance()->synth_program[prog]->synth_voices[voice]->dsp_voice->
-					set_pad_1_freq_mod_lfo_level(lev);
+	SynthVoice *synth_voice = NULL;
+
+#ifdef _USE_NEW_MIDI_PROGRAM
+	synth_voice = AdjSynth::get_instance()->synth_program[prog]->get_voice(voice);
+#else
+	synth_voice = AdjSynth::get_instance()->synth_voice[voice];
+#endif
+	if (synth_voice == NULL)
+	{
+		return -1;
+	}
+
+	synth_voice->dsp_voice->set_pad_1_freq_mod_lfo_level(lev);
+	
 	return 0;
 }
 
 int set_voice_block_pad_synth_freq_modulation_env_num_cb(int env, int voice, int prog)
 {
-	AdjSynth::get_instance()->synth_program[prog]->synth_voices[voice]->dsp_voice->
-					set_pad_1_freq_mod_env(env);
+	SynthVoice *synth_voice = NULL;
+
+#ifdef _USE_NEW_MIDI_PROGRAM
+	synth_voice = AdjSynth::get_instance()->synth_program[prog]->get_voice(voice);
+#else
+	synth_voice = AdjSynth::get_instance()->synth_voice[voice];
+#endif
+	if (synth_voice == NULL)
+	{
+		return -1;
+	}
+
+	synth_voice->dsp_voice->set_pad_1_freq_mod_env(env);
+	
 	return 0;
 }
 
 int set_voice_block_pad_synth_freq_modulation_env_level_cb(int lev, int voice, int prog)
 {
-	AdjSynth::get_instance()->synth_program[prog]->synth_voices[voice]->dsp_voice->
-					set_pad_1_freq_mod_env_level(lev);
+	SynthVoice *synth_voice = NULL;
+
+#ifdef _USE_NEW_MIDI_PROGRAM
+	synth_voice = AdjSynth::get_instance()->synth_program[prog]->get_voice(voice);
+#else
+	synth_voice = AdjSynth::get_instance()->synth_voice[voice];
+#endif
+	if (synth_voice == NULL)
+	{
+		return -1;
+	}
+
+	synth_voice->dsp_voice->set_pad_1_freq_mod_env_level(lev);
+	
 	return 0;
 }
 
 int set_voice_block_pad_synth_amp_modulation_lfo_num_cb(int lfo, int voice, int prog)
 {
-	AdjSynth::get_instance()->synth_program[prog]->synth_voices[voice]->dsp_voice->
-					set_pad_1_amp_mod_lfo(lfo);
+	SynthVoice *synth_voice = NULL;
+
+#ifdef _USE_NEW_MIDI_PROGRAM
+	synth_voice = AdjSynth::get_instance()->synth_program[prog]->get_voice(voice);
+#else
+	synth_voice = AdjSynth::get_instance()->synth_voice[voice];
+#endif
+	if (synth_voice == NULL)
+	{
+		return -1;
+	}
+
+	synth_voice->dsp_voice->set_pad_1_amp_mod_lfo(lfo);
+	
 	return 0;
 }
 
 int set_voice_block_pad_synth_amp_modulation_lfo_level_cb(int lev, int voice, int prog)
 {
-	AdjSynth::get_instance()->synth_program[prog]->synth_voices[voice]->dsp_voice->
-					set_pad_1_amp_mod_lfo_level(lev);
+	SynthVoice *synth_voice = NULL;
+
+#ifdef _USE_NEW_MIDI_PROGRAM
+	synth_voice = AdjSynth::get_instance()->synth_program[prog]->get_voice(voice);
+#else
+	synth_voice = AdjSynth::get_instance()->synth_voice[voice];
+#endif
+	if (synth_voice == NULL)
+	{
+		return -1;
+	}
+
+	synth_voice->dsp_voice->set_pad_1_amp_mod_lfo_level(lev);
+	
 	return 0;
 }
 
 int set_voice_block_pad_synth_amp_modulation_env_num_cb(int env, int voice, int prog)
 {
-	AdjSynth::get_instance()->synth_program[prog]->synth_voices[voice]->dsp_voice->
-					set_pad_1_amp_mod_env(env);
+	SynthVoice *synth_voice = NULL;
+
+#ifdef _USE_NEW_MIDI_PROGRAM
+	synth_voice = AdjSynth::get_instance()->synth_program[prog]->get_voice(voice);
+#else
+	synth_voice = AdjSynth::get_instance()->synth_voice[voice];
+#endif
+	if (synth_voice == NULL)
+	{
+		return -1;
+	}
+
+	synth_voice->dsp_voice->set_pad_1_amp_mod_env(env);
+	
 	return 0;
 }
 
 int set_voice_block_pad_synth_amp_modulation_env_level_cb(int lev, int voice, int prog)
 {
-	AdjSynth::get_instance()->synth_program[prog]->synth_voices[voice]->dsp_voice->
-					set_pad_1_amp_mod_env_level(lev);
+	SynthVoice *synth_voice = NULL;
+
+#ifdef _USE_NEW_MIDI_PROGRAM
+	synth_voice = AdjSynth::get_instance()->synth_program[prog]->get_voice(voice);
+#else
+	synth_voice = AdjSynth::get_instance()->synth_voice[voice];
+#endif
+	if (synth_voice == NULL)
+	{
+		return -1;
+	}
+
+	synth_voice->dsp_voice->set_pad_1_amp_mod_env_level(lev);
+	
 	return 0;
 }
 

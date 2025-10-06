@@ -1,14 +1,18 @@
 /**
-*	@file		modSynth.h
-*	@author		Nahum Budin
-*	@date		11-May-2024
-*	@version	1.0
-*
-*	@brief		This is the main/top modular synthesizer libraray object.
-*
-*	History:\n
-*
-*	Based on libAdjHeartModSynth_2 library 
+ *	@file		modSynth.h
+ *	@author		Nahum Budin
+ *	@date		24-Sep-2025
+ *	@version	1.1
+ *					1. Code refactoring rename patches to preset parameters.
+ *					2. Adding support in both old and new MIDI program objects.
+ *
+ *	@brief		This is the main modular synthesizer libraray object.
+ *
+ *	History:\n
+ *
+ *	version 1.0		11-May-2024: First version
+ *
+ *	Based on libAdjHeartModSynth_2 library
 *
 */
 

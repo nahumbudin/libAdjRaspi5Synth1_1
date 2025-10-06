@@ -1,31 +1,32 @@
 /**
-*	@file		audioManager.cpp
-*	@author		Nahum Budin
-*	@date		23-Sep-2025
-*	@version	1.3 
-*					1. Code refactoring and notaion.
-*					2. Bugs fix.
-*	
-*	@brief		Manage and control audio system
-*
-*	History:	
-*			Ver1.2	1-Oct-2024	Code refactoring and notaion.
-*			Ver1.1
-*				1. Code refactoring and notaion.
-*				2. Adding settings of sample-rate and audio block-size
-*				3. Adding callback to activate tasks when audio update cycle starts
-*				4. Adding call back to activate each voice update-cycle
-*				5. Adding callback to activate tasks when audio update cycle ends
-*				6. Moving Jack server activation from main.(start_jack_service())
-*			
-*			Ver1.0	11-Nov-2019 (revised version from old libAdjHeartRaspiFlSynthMultiCore_3_1 October 18, 2017)
-*
-*	
-*/
+ *	@file		audioManager.cpp
+ *	@author		Nahum Budin
+ *	@date		23-Sep-2025
+ *	@version	1.3
+ *					1. Code refactoring and notaion.
+ *					2. Bugs fix.
+ *					3. Temp comment ALSA handler - to be implemented. TODO:
+ *
+ *	@brief		Manage and control audio system
+ *
+ *	History:
+ *			Ver1.2	1-Oct-2024	Code refactoring and notaion.
+ *			Ver1.1
+ *				1. Code refactoring and notaion.
+ *				2. Adding settings of sample-rate and audio block-size
+ *				3. Adding callback to activate tasks when audio update cycle starts
+ *				4. Adding call back to activate each voice update-cycle
+ *				5. Adding callback to activate tasks when audio update cycle ends
+ *				6. Moving Jack server activation from main.(start_jack_service())
+ *
+ *			Ver1.0	11-Nov-2019 (revised version from old libAdjHeartRaspiFlSynthMultiCore_3_1 October 18, 2017)
+ *
+ *
+ */
 
 #include <sys/shm.h>		//Used for shared memory
 #include <sys/time.h>
-//#include <omp.h>
+// #include <omp.h>
 
 #include "audioManager.h"
 #include "audioCommons.h"
@@ -93,7 +94,7 @@ AudioManager::AudioManager(int mseed)
 	
 	audio_manager_instance = this;
 	
-	alsa_handler = AlsaHandler::get_instance();
+	//alsa_handler = AlsaHandler::get_instance(); TODO: ALSA AUDIO <<<<<<<<<<<<<<<<<<<<<<<<<
 	
 	period_time_us = _DEFAULT_JACK_AUD_PERIOD_TIME_USEC;
 	
@@ -168,13 +169,15 @@ int AudioManager::create_audio_shared_memory(int seed)
 
 	//	fprintf(stderr, "Creating stereo output shared memory %i...\n", voice);
 	audio_shared_mem_stereo_output_id =
-		shmget((key_t)(38151 + _AUDIO_MAX_BUF_SIZE + 1 + voice + seed), 
+		/*shmget((key_t)(38151 + _AUDIO_MAX_BUF_SIZE + 1 + voice + seed),*/
+		shmget((key_t)(38151 + _AUDIO_MAX_BUF_SIZE + 100 + seed),
 		sizeof(shared_memory_audio_block_float_stereo_struct_t),
 		0666 | IPC_CREAT);
 	if (audio_shared_mem_stereo_output_id == -1)
 	{
 		err = errno;
-		fprintf(stderr, "Audio-manager Shared stereo output shared memory voice %i shmget() failed err %s\r\n", voice, snd_strerror(err));
+		fprintf(stderr, "Audio-manager Shared stereo output shared memory voice %i shmget() failed err %s\r\n", 
+				voice, snd_strerror(err));
 		exit(EXIT_FAILURE);
 	}
 
@@ -189,7 +192,8 @@ int AudioManager::create_audio_shared_memory(int seed)
 	//	fprintf(stderr, "Stereo output Shared memory %i attached at %i\r\n", voice, (int)audio_shared_mem_stereo_output_pointer);
 	
 	//Assign the shared_memory segment to allocated memory segment
-	audio_block_stereo_float_shared_memory_outputs = (shared_memory_audio_block_float_stereo_struct_t *)audio_shared_mem_stereo_output_pointer;
+	audio_block_stereo_float_shared_memory_outputs = 
+		(shared_memory_audio_block_float_stereo_struct_t *)audio_shared_mem_stereo_output_pointer;
 
 	return err;
 }
@@ -387,12 +391,12 @@ int AudioManager::start_audio_service(int driver, int samp_rate, int block_size)
 	if (driver == _AUDIO_ALSA)
 	{
 		//		stop_jack_connect_thread();
-		disconnect_jack_audio_ports_out();
-		start_alsa_main_thread();
+		// disconnect_jack_audio_ports_out();TODO: ALSA AUDIO <<<<<<<<<<<<<<<<<<<<<<<<<
+		// start_alsa_main_thread();TODO: ALSA AUDIO <<<<<<<<<<<<<<<<<<<<<<<<<
 	}
 	else if (driver == _AUDIO_JACK)
 	{
-		stop_alsa_main_thread();
+		// stop_alsa_main_thread(); TODO: ALSA AUDIO <<<<<<<<<<<<<<<<<<<<<<<<<
 		start_jack_connect_thread();
 		
 		int mode = get_jack_mode();
@@ -416,7 +420,7 @@ int AudioManager::stop_audio_service()
 	stop_jack_connect_thread();
 	disconnect_jack_audio_ports_out();
 	disconnect_jack_audio_ports_in();
-	stop_alsa_main_thread();
+	//stop_alsa_main_thread();TODO: ALSA AUDIO <<<<<<<<<<<<<<<<<<<<<<<<<
 	
 	return 0;
 }
@@ -573,7 +577,12 @@ int AudioManager::set_period_time_us(unsigned long ptu) {
 *   @param  none	
 *   @return period time uSec
 */
-unsigned long AudioManager::get_period_time_us() { return period_time_us; }
+unsigned long AudioManager::get_period_time_us() 	
+{ 
+	
+	return period_time_us; 
+
+}
 
 /**
 *   @brief  start the periodic update timer (period_time usec).
@@ -736,7 +745,8 @@ void* AUDMNG_update_thread(void *arg)
 		prv_start_ts.tv_usec = start_ts.tv_usec;
 		gettimeofday(&start_ts, NULL);
 
-		//fprintf(stderr, "Time from last block: %i Time from prev block end time [us]: %i\n", startts.tv_usec- prvStartts.tv_usec, startts.tv_usec - stopts.tv_usec);
+		//fprintf(stderr, "Time from last block: %i Time from prev block end time [us]: %i\n", 
+		//		start_ts.tv_usec- prv_start_ts.tv_usec, start_ts.tv_usec - stop_ts.tv_usec);
 
 		//omp_set_num_threads(4/*Synthesizer::numOfCores*/);
 				
@@ -751,11 +761,6 @@ void* AUDMNG_update_thread(void *arg)
 					AdjSynth::synth_voice[voice]->audio_voice->is_voice_wait_for_not_active())
 
 			{
-				//ID = omp_get_thread_num();
-				//core = sched_getcpu();
-				// Bellow should be in the callback
-				AdjSynth::synth_voice[voice]->update_all();
-
 				// Activate each voice update
 				if (AudioManager::callback_audio_voice_update_ptr)
 				{
@@ -797,7 +802,7 @@ void* AUDMNG_update_thread(void *arg)
 			
 			utilization = (int)(float(stop_ts.tv_usec - start_ts.tv_usec) / (float)period_time_us * 100.0);
 			//callback_update_utilization_bar(utilization);
-			//printf("time= %i\n", stopts.tv_usec - startts.tv_usec);
+			fprintf(stderr, "Update Cycle time= %i\n", stop_ts.tv_usec - start_ts.tv_usec);
 			count = 0;
 		}
 

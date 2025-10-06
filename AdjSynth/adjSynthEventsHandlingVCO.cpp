@@ -221,7 +221,7 @@ int AdjSynth::vco_event_int(int vcoid, int eventid, int val, _settings_params_t 
 				_EXEC_BLOCK_CALLBACK,
 				program);
 				
-			adj_synth_settings_manager->get_int_param(params, "adjsynth.osc1.hammond_mode", &_int_param);
+			adj_synth_settings_manager->get_int_param(params, "adjsynth.osc1.hammond_percussion_mode", &_int_param);
 				
 			if ((_int_param.value != _HAMMOND_PERCUSION_MODE_OFF) &&  hammond_percussion_on)
 			{
@@ -266,7 +266,7 @@ int AdjSynth::vco_event_int(int vcoid, int eventid, int val, _settings_params_t 
 				_EXEC_BLOCK_CALLBACK,
 				program);
 				
-			adj_synth_settings_manager->get_int_param(params, "adjsynth.osc1.hammond_mode", &_int_param);
+			adj_synth_settings_manager->get_int_param(params, "adjsynth.osc1.hammond_percussion_mode", &_int_param);
 				
 			if ((_int_param.value != _HAMMOND_PERCUSION_MODE_OFF) &&  hammond_percussion_on)
 			{

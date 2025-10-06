@@ -118,6 +118,30 @@ int AdjSynthPrograms::set_active_program_preset_params_no_update(_settings_param
 	return 0;
 }
 
+/* Set the active preset parameters and update all the currentlly assigned voices */
+void AdjSynthPrograms::set_program_preset_params(_settings_params_t *preset_params)
+{
+	if (preset_params == nullptr)
+	{
+		return;
+	}
+	
+	active_preset_params = preset_params;
+	// Update all assigned voices with the new preset parameters
+	for (int i = 0; i < assigned_voices.size(); i++)
+	{
+		if (assigned_voices[i] != NULL)
+		{
+			SynthVoice *voice = AdjSynth::get_instance()->synth_voice[*assigned_voices[i]];
+			
+			if (voice != NULL)
+			{
+				voice->set_voice_params(active_preset_params);
+			}
+		}
+	}
+}
+
 /* Assign a voice with the program preset parameters */
 int AdjSynthPrograms::assign_voice_with_preset_program_params(SynthVoice *voice, int voice_num)
 {
@@ -138,6 +162,7 @@ int AdjSynthPrograms::assign_voice_with_preset_program_params(SynthVoice *voice,
 	int *vnum = new int;
 	*vnum = voice_num;
 	assigned_voices.push_back(vnum);
+	
 	return 0;
 }
 
@@ -165,6 +190,29 @@ int AdjSynthPrograms::deallocate_voice_from_program(int voice_num)
 
 	// Voice not found
 	return -2;
+}
+
+/* Get the voice number that plays a given not. */
+int AdjSynthPrograms::get_voice_num_playing_note(int note)
+{
+	SynthVoice *voice;
+
+	for (int i = 0; i < assigned_voices.size(); i++)
+	{
+		if (assigned_voices[i] != NULL)
+		{
+			voice = AdjSynth::get_instance()->synth_voice[*assigned_voices[i]];
+			if (voice != NULL)
+			{
+				if (voice->audio_voice->get_note() == note)
+				{
+					return *assigned_voices[i];
+				}
+			}
+		}
+	}
+
+	return -1;
 }
 
 /* Refresh all program assigned voices with a new preset params */
@@ -469,4 +517,27 @@ int AdjSynthPrograms::set_program_voices_poly_mixer_send_2_float(float send)
 		}
 	}
 	return 0;
+}
+
+/* Get a voice object. Rtuens NULL if the voice is not assigned to the program. */
+SynthVoice *AdjSynthPrograms::get_voice(int voice_num)
+{
+	if ((voice_num < 0) || (voice_num >= _SYNTH_MAX_NUM_OF_VOICES))
+	{
+		return NULL;
+	}
+
+	// Check if the voice is assigned to this program
+	for (int v = 0; v < assigned_voices.size(); v++)
+	{
+		if (assigned_voices[v] != NULL)
+		{
+			if (*assigned_voices[v] == voice_num)
+			{
+				return AdjSynth::get_instance()->synth_voice[voice_num];
+			}
+		}
+	}
+
+	return NULL;
 }

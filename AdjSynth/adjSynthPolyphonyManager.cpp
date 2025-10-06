@@ -1,5 +1,5 @@
 /**
-*	@file		adjSynthPolyphonyManagerThreads.h
+*	@file		adjSynthPolyphonyManager.cpp
 *	@author		Nahum Budin
 *	@date		6-Feb-2025
 *	@version	1.0 1st version	
@@ -14,6 +14,7 @@
 #include <thread>
 
 #include "adjSynthPolyphonyManager.h"
+#include "../libAdjRaspi5Synth_1_1.h"
 
 AdjPolyphonyManager *AdjPolyphonyManager::poly_manager_instance = NULL;
 
@@ -59,6 +60,200 @@ AdjPolyphonyManager *AdjPolyphonyManager::get_poly_manger_instance(int num_of_vo
 
 	return poly_manager_instance;
 }
+
+AdjPolyphonyManager::~AdjPolyphonyManager()
+{
+	if (poly_manager_instance != NULL)
+	{
+		delete poly_manager_instance;
+		poly_manager_instance = NULL;
+	}
+}
+
+/**
+ *   @brief  Get a free voice.
+ *		Start by looking if this note and program is already playing.
+ *		  (It is assumed that if a program note is already playing, 
+ *		   it should be reused, as playing the same note again is useless).
+ *		If no note to reuse is found, look for a free voice.
+ *		If no free voice is found, look for the 1st voice to become used (oldest)
+ *   @param  note	requested note
+ *   @param	program	requested program
+ *   @return voice number or -1 if no voice is free, -2 if CPU is too loaded, -3 if params are out of range
+ */
+int AdjPolyphonyManager::get_voice(int note, int program)
+{
+	int voice;
+
+	if (mod_synth_get_cpu_utilization() > 90)
+	// CPU is too loaded
+	{
+		return -2;
+	}
+
+	if ((note < 0) || (note > 127) || (program < 0) ||
+		(program >= mod_synth_get_synthesizer_num_of_programs()))
+	// Illegal parameters range
+	{
+		return -3;
+	}
+
+	// Look for a program voice note that is already playing
+	voice = get_reused_note(note, program);
+
+	if (voice >= 0)
+	{
+		return voice;
+	}
+
+	// No program voice note found - look for a free voice
+
+	for (voice = 0; voice < mod_synth_get_synthesizer_num_of_polyphonic_voices(); voice++)
+	{
+		if (AdjSynth::get_instance()->synth_voice[voice] != NULL)
+		{
+			if (!(AdjSynth::get_instance()->synth_voice[voice]->audio_voice->is_voice_active() ||
+				  AdjSynth::get_instance()->synth_voice[voice]->audio_voice->is_voice_wait_for_not_active()))
+			{
+				// A free voice
+				AdjSynth::get_instance()->synth_voice[voice]->audio_voice->set_active();
+				
+				return voice;
+			}
+		}
+	}	
+	
+	// No free voice found - reuse the oldest voice
+	voice = get_oldest_voice();
+	if (voice >= 0)
+	{
+		return voice;
+	}
+
+	return -1;
+}
+
+/**
+ *   @brief  Free a voice.
+ *   @param  voice	voice number
+ *   @param	pending if set true, wait untill envelope is zero
+ *   @return tvoid
+ */
+void AdjPolyphonyManager::free_voice(int voice, int program, bool pend)
+{
+	if ((voice >= 0) && (voice < mod_synth_get_synthesizer_num_of_polyphonic_voices()) &&
+		(program >= 0) && (program < mod_synth_get_synthesizer_num_of_programs()))
+	{
+		if (AdjSynth::get_instance()->synth_voice[voice] != NULL)
+		{
+			if (pend)
+			{
+				// The voice will be free only when voice envelope will decay to zero.
+				AdjSynth::get_instance()->synth_voice[voice]->audio_voice->set_wait_for_not_active();
+			}
+			else
+			{
+				// Free the voice immediately
+#ifdef _USE_NEW_POLY_MIXER_
+				AdjSynth::get_instance()->synth_program[program]->deallocate_voice_from_program(voice);
+#else
+				AdjSynth::get_instance()->synth_program[program]->free_voice(progvoice);
+#endif
+				AdjSynth::get_instance()->synth_voice[voice]->audio_voice->reset_wait_for_not_active();
+				AdjSynth::get_instance()->synth_voice[voice]->audio_voice->set_note(-1);
+				AdjSynth::get_instance()->synth_voice[voice]->audio_voice->set_timestamp(0);
+				AdjSynth::get_instance()->synth_voice[voice]->set_allocated_program(-1);
+				AdjSynth::get_instance()->synth_voice[voice]->audio_voice->set_inactive(); // TODO: need?
+				
+				// Update GUI ?
+				AdjSynth::get_instance()->mark_voice_not_busy_callback(voice);
+			}
+		}
+	}
+}
+
+/**
+ *   @brief  Returns the voice number of the voice which is active for the longest time
+ *   @param  none
+ *   @return the voice number of the voice which is active for the longest time
+ */
+int AdjPolyphonyManager::get_oldest_voice()
+{
+	int v;
+	int minvoice = -1;
+	uint64_t mintime = UINT64_MAX;
+
+	// Alocate first to be allocated in the past (oldest)
+	for (v = 0; v < mod_synth_get_synthesizer_num_of_polyphonic_voices(); v++)
+	{
+		if (AdjSynth::get_instance()->synth_voice[v] != NULL)
+		{
+			if (AdjSynth::get_instance()->synth_voice[v]->audio_voice->get_timestamp() < mintime)
+			{
+				mintime = AdjSynth::get_instance()->synth_voice[v]->audio_voice->get_timestamp();
+				minvoice = v;
+			}
+		}
+	}
+
+	return minvoice;
+}
+
+/**
+ *   @brief  Returns a voice num that is already assigned to this note and program.
+ *			If more than 1 found, look for the 1st to become used (oldest).
+ *			Used for reactivating a program note that is already playing.
+ *   @param  note	requested note
+ *   @param	program	requested program
+ *   @return a voice num that is already assigned to this note and program;
+ *			-2 if CPU is too loaded; -3 if params are out of range
+ */
+int AdjPolyphonyManager::get_reused_note(int note, int program)
+{
+	int v, result = -1;
+	SynthVoice *voice = NULL;
+
+	if (mod_synth_get_cpu_utilization() > 90)
+	// CPU is too loaded
+	{
+		return -2;
+	}
+
+	if ((note < 0) || (note > 127) || (program < 0) ||
+		(program >= mod_synth_get_synthesizer_num_of_programs()))
+	// Illegal parameters range
+	{
+		return -3;
+	}
+
+	// Look for a voice that is already assigned to this note and program
+	for (v = 0; v < mod_synth_get_synthesizer_num_of_polyphonic_voices(); v++)
+	{
+		voice = AdjSynth::get_instance()->synth_program[program]->get_voice(v);
+
+		if (voice != NULL)
+		{
+			if ((voice->audio_voice->is_voice_active()) &&
+				(voice->audio_voice->is_voice_wait_for_not_active()) &&
+				// Voice is active or in release phase
+				(voice->audio_voice->get_note() == note) &&
+				(voice->get_allocated_program() == program))
+			// Voice is assigned to this note and program
+			{
+				result = v;
+				break;
+			}
+		}
+	}
+
+	return result;
+}
+
+
+
+
+
+
 
 int AdjPolyphonyManager::get_number_of_cores()
 {
@@ -157,35 +352,43 @@ int AdjPolyphonyManager::get_less_busy_core()
 */
 int AdjPolyphonyManager::get_a_free_voice(int core)
 {
+	int result, voice = 0;
+	//	struct timeval timestamp;
+	int min_voice = -1, min_core = -1;
+	bool reused = false;
 
-	return -1;
+	result = -1;
+	// Look for a free voice on selected core
+	// Voices are distributed to cores as follows: (for example: 48 voices and 4 cores)
+	// core 0: voices 0-15; core 1: voices 16-31; core 2: voices 32-47; core 3: voices 48-63
+	voice = core * AdjSynth::num_of_core_voices;
+	for (voice; voice < (core + 1) * AdjSynth::num_of_core_voices; voice++)
+	{
+		if (AdjSynth::get_instance()->synth_voice[voice] != NULL)
+		{
+			if (!(AdjSynth::get_instance()->synth_voice[voice]->audio_voice->is_voice_active() ||
+				  AdjSynth::get_instance()->synth_voice[voice]->audio_voice->is_voice_wait_for_not_active()))
+			{
+				// A free voice
+				break;
+			}
+		}
+		//else
+		//{
+		//	break;
+		//}
+	}
+
+	if (voice < mod_synth_get_synthesizer_num_of_polyphonic_voices())
+	{
+		result = voice;
+		//	printf("Min Core %i Free voice %i", core, voice);
+	}
+
+	return result;
 }
 
-/**
-*   @brief  Returns the voice number of the voice which is active for the longest time
-*   @param  none
-*   @return the voice number of the voice which is active for the longest time
-*/
-int AdjPolyphonyManager::get_oldest_voice()
-{
 
-	return -1;
-}
-
-/**
-*   @brief  Returns a voice num that is already assigned to this note and program.
-*			If more than 1 found, look for the 1st to become used (oldest). 
-*			Used for reactivating a program note that is already playing.
-*   @param  note	requested note
-*   @param	program	requested program
-*   @return a voice num that is already assigned to this note and program;
-*			-2 if CPU is too loaded; -3 if params are out of range
-*/
-int AdjPolyphonyManager::get_reused_note(int note, int program)
-{
-
-	return -1;
-}
 
 /**
 *   @brief  Activate a voice resource..
@@ -196,17 +399,24 @@ int AdjPolyphonyManager::get_reused_note(int note, int program)
 */
 int AdjPolyphonyManager::activate_resource(int res_num, int note, int program)
 {
+	struct timeval timestamp;
+	bool reused = false;
 
-	return -1;
+	if ((res_num < 0) || (res_num >= mod_synth_get_synthesizer_num_of_polyphonic_voices()) ||
+		(note < 0) || (note > 127) || (program < 0) ||
+		(program > mod_synth_get_synthesizer_num_of_programs()))
+	{
+		// Illegal parameters range
+		return -1;
+	}
+
+	gettimeofday(&timestamp, NULL);
+	AdjSynth::get_instance()->synth_voice[res_num]->audio_voice->set_timestamp((timestamp.tv_usec - start_time.tv_usec) / 1000 + (timestamp.tv_sec - start_time.tv_sec) * 1000);
+	AdjSynth::get_instance()->synth_voice[res_num]->audio_voice->set_active();
+	AdjSynth::get_instance()->synth_voice[res_num]->audio_voice->reset_wait_for_not_active();
+	AdjSynth::get_instance()->synth_voice[res_num]->set_allocated_program(program);
+
+	return 0;
 }
 
-/**
-*   @brief  Free a voice.
-*   @param  voice	voice number
-*   @param	pending if set true, wait untill envelope is zero
-*   @return tvoid
-*/
-void AdjPolyphonyManager::free_voice(int voice, bool pend)
-{
 
-}

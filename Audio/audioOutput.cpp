@@ -43,7 +43,7 @@ AudioOutputFloat::AudioOutputFloat(
 			stage) 
 {
 	audio_block_stereo_float_shared_memory = shared_memory;
-	master_gain = 0.2f;
+	master_gain = 0.5f;   // 0.2 TODO: <<<<<<<<<<<<<<<<<<<<<<<<< 
 	set_audio_block_size(block_size);
 }
 
@@ -144,6 +144,7 @@ void AudioOutputFloat::update(void) {
 	}
 	else 
 	{
+		printf("Audio Output no input");
 		for (i = 0; i < audio_block_size; i++) 
 		{
 			// No input - fill with silence.
@@ -151,7 +152,7 @@ void AudioOutputFloat::update(void) {
 		}
 	}
 
-	//printf("out  %x ", (int)audio_block_stereo_float_shared_memory);
+	// printf("audio out  %x %x\n", (long)audio_block_stereo_float_shared_memory, id); // <<<<<
 	
 	audio_block_stereo_float_shared_memory->id = id;
 	id++;

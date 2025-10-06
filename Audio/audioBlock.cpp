@@ -34,7 +34,7 @@
 *	The order of Audio-blocks chain updates is set by using a linked-list, where each element points at the next 
 *	Audio-block of the chian. 
 *	
-*	Each linked list is owned the Audio-block parent adjSynthVoice object (see adjSynthVoive.h), in the case of
+*	Each linked list is owned by the Audio-block parent adjSynthVoice object (see adjSynthVoive.h), in the case of
 *	a polyphonic voice, or by the common audio effect module, as described above.
 *	
 *	This parent object provides the Audio-block with a pointer to a pointer of the 1st element of the list 
@@ -269,34 +269,45 @@ audio_block_float_mono_t * AudioBlockFloat::allocate_audio_block(void)
 	
 	update_stop();
 	
-	index = audio_data_blocks_memory_pool_first_mask;
+	index = audio_data_blocks_memory_pool_first_mask;  // = 0 ?
 	p += index;
 	while (1) 
 	{
 		if (p >= end) 
 		{
+			// All masks were checked - no available block
 			update_start();
 			return NULL;
 		}
 		avail = *p;
 		if (avail)
 		{
+			// Current mask is non all zero - there are available free blocks
 			break;
 		}
+		// Goto next mask
 		index++;
 		p++;
 	}
+	
 	// Mark as used
+	// n will be the number of leading zero bits
 	n = __builtin_clz(avail);
+	// Clear the 1st non zero bit - mark as used
 	avail &= ~(0x80000000 >> n);
 	*p = avail;
 	if (!avail) 
 	{
+		// No more available blocks in this mask - 
+		// next time start searching from the next following mask
 		index++;
 		audio_data_blocks_memory_pool_first_mask = index;
 	}
+	// Index holds the mask number
 	index = p - audio_data_blocks_memory_pool_available_mask;
+	// Avilable block = (mask number X 32) + bit number
 	block = audio_data_blocks_memory_pool + ((index << 5) + (31 - n));
+	// Will be counted down by each receiving audio block to indicate id still in use
 	block->ref_count = 1;
 
 	//	printf("allocate block %i\n", block->memory_pool_index);
@@ -321,6 +332,8 @@ void AudioBlockFloat::release_audio_block(audio_block_float_mono_t *block)
 	uint32_t index = block->memory_pool_index >> 5;
 
 	update_stop();
+	
+	// Release only if nor in use (multiple receiver)
 	if (block->ref_count > 1) 
 	{
 		block->ref_count--;

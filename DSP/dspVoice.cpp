@@ -1,12 +1,15 @@
 /**
 *	@file		dspVoice.cpp
 *	@author		Nahum Budin
-*	@date		16-Oct-2024
-*	@version	1.2 
-*					1. Code refactoring and notaion. 
+*	@date		3-Oct-2025
+*	@version	1.3 
+*					1. Fixing bug - added the ADSR6 and LFO6. 
+*					2. Set ADR values: use the _log functions
+*					3. Adding LFO/ADSR 6 settings
 
 *					
 *	@History	
+*				version 1.2	16-Oct-2024
 *				version 1.1	25_Jan-2021
 *					1. Code refactoring and notaion. 
 *					2. Adding sample-rate and bloc-size settings
@@ -423,40 +426,40 @@ DSP_Voice::DSP_Voice(
 	set_lfo_6_frequency((float)10);
 
 	adsr_1 = new DSP_ADSR(voice + 3000, (float)_CONTROL_SUB_SAMPLING / samp_rate);
-	adsr_1->set_attack_time_sec(10);
-	adsr_1->set_decay_time_sec(10);
+	adsr_1->set_attack_time_sec_log(10);
+	adsr_1->set_decay_time_sec_log(10);
 	adsr_1->set_sustain_level(100);
-	adsr_1->set_release_time_sec(10);
+	adsr_1->set_release_time_sec_log(10);
 
 	adsr_2 = new DSP_ADSR(voice + 3100, (float)_CONTROL_SUB_SAMPLING / samp_rate);
-	adsr_2->set_attack_time_sec(10);
-	adsr_2->set_decay_time_sec(10);
+	adsr_2->set_attack_time_sec_log(10);
+	adsr_2->set_decay_time_sec_log(10);
 	adsr_2->set_sustain_level(100);
-	adsr_2->set_release_time_sec(10);
+	adsr_2->set_release_time_sec_log(10);
 
 	adsr_3 = new DSP_ADSR(voice + 3200, (float)_CONTROL_SUB_SAMPLING / samp_rate);
-	adsr_3->set_attack_time_sec(10);
-	adsr_3->set_decay_time_sec(10);
+	adsr_3->set_attack_time_sec_log(10);
+	adsr_3->set_decay_time_sec_log(10);
 	adsr_3->set_sustain_level(100);
-	adsr_3->set_release_time_sec(10);
+	adsr_3->set_release_time_sec_log(10);
 
 	adsr_4 = new DSP_ADSR(voice + 3300, (float)_CONTROL_SUB_SAMPLING / samp_rate);
-	adsr_4->set_attack_time_sec(10);
-	adsr_4->set_decay_time_sec(10);
+	adsr_4->set_attack_time_sec_log(10);
+	adsr_4->set_decay_time_sec_log(10);
 	adsr_4->set_sustain_level(100);
-	adsr_4->set_release_time_sec(10);
+	adsr_4->set_release_time_sec_log(10);
 
 	adsr_5 = new DSP_ADSR(voice + 3400, (float)_CONTROL_SUB_SAMPLING / samp_rate);
-	adsr_5->set_attack_time_sec(10);
-	adsr_5->set_decay_time_sec(10);
+	adsr_5->set_attack_time_sec_log(10);
+	adsr_5->set_decay_time_sec_log(10);
 	adsr_5->set_sustain_level(100);
-	adsr_5->set_release_time_sec(10);
+	adsr_5->set_release_time_sec_log(10);
 
 	adsr_6 = new DSP_ADSR(voice + 3500, (float)_CONTROL_SUB_SAMPLING / samp_rate);
-	adsr_6->set_attack_time_sec(10);
-	adsr_6->set_decay_time_sec(10);
+	adsr_6->set_attack_time_sec_log(10);
+	adsr_6->set_decay_time_sec_log(10);
 	adsr_6->set_sustain_level(100);
-	adsr_6->set_release_time_sec(10);
+	adsr_6->set_release_time_sec_log(10);
 	
 	set_sample_rate(samp_rate);
 	set_audio_block_size(block_size);
@@ -536,6 +539,11 @@ int DSP_Voice::set_sample_rate(int samp_rate)
 		lfo_5->set_sample_rate(sample_rate);
 	}
 
+	if (lfo_6)
+	{
+		lfo_6->set_sample_rate(sample_rate);
+	}
+
 	if (adsr_1)
 	{
 		adsr_1->set_update_interval((float)_CONTROL_SUB_SAMPLING / samp_rate);
@@ -559,6 +567,11 @@ int DSP_Voice::set_sample_rate(int samp_rate)
 	if (adsr_5)
 	{
 		adsr_5->set_update_interval((float)_CONTROL_SUB_SAMPLING / samp_rate);
+	}
+
+	if (adsr_6)
+	{
+		adsr_6->set_update_interval((float)_CONTROL_SUB_SAMPLING / samp_rate);
 	}
 
 	return sample_rate;
@@ -586,7 +599,7 @@ int DSP_Voice::set_audio_block_size(int size)
 
 		if (osc_1)
 		{
-			// Osc dependent on block size was eliminated/
+			// Osc dependency on block size was eliminated/
 			//osc_1->set_audio_block_size(audio_block_size);
 		}
 
@@ -618,6 +631,11 @@ int DSP_Voice::set_audio_block_size(int size)
 		if (lfo_5)
 		{
 			//lfo5->set_audio_block_size(audio_block_size);
+		}
+
+		if (lfo_6)
+		{
+			// lfo6->set_audio_block_size(audio_block_size);
 		}
 
 		res = audio_block_size;
@@ -792,6 +810,7 @@ void DSP_Voice::copy_my_state_to(DSP_Voice target)
 	target.lfo_3_actual_freq = this->lfo_3_actual_freq;
 	target.lfo_4_actual_freq = this->lfo_4_actual_freq;
 	target.lfo_5_actual_freq = this->lfo_5_actual_freq;
+	target.lfo_6_actual_freq = this->lfo_6_actual_freq;
 	target.osc_1_send_filter_1_level = this->osc_1_send_filter_1_level;
 	target.osc_1_send_filter_2_level = this->osc_1_send_filter_2_level;
 	target.osc_1_amp_lfo_modulation = this->osc_1_amp_lfo_modulation;
@@ -1154,6 +1173,7 @@ void DSP_Voice::calc_next_modulation_values()
 	lfo_out[2] = lfo_3->get_next_output_val(lfo_3_actual_freq);
 	lfo_out[3] = lfo_4->get_next_output_val(lfo_4_actual_freq);
 	lfo_out[4] = lfo_5->get_next_output_val(lfo_5_actual_freq);
+	lfo_out[5] = lfo_6->get_next_output_val(lfo_6_actual_freq);
 					
 	//	fprintf(stderr, "note on time : %i %i %i\n", adsr1->getNoteToneElapsedTime(),
 	//	adsr2->getNoteToneElapsedTime(),adsr3->getNoteToneElapsedTime());
@@ -1172,6 +1192,9 @@ void DSP_Voice::calc_next_modulation_values()
 
 	adsr_5->calc_next_envelope_val();
 	adsr_out[4] = adsr_5->get_output_val();
+	
+	adsr_6->calc_next_envelope_val();
+	adsr_out[5] = adsr_6->get_output_val();
 
 	if (osc_1_freq_mod_lfo > _LFO_NONE)
 	{
@@ -1597,8 +1620,12 @@ void DSP_Voice::update_voice_modulation(int voice)
 		AdjSynth::get_instance()->synth_voice[voice]->assign_dsp_voice(AdjSynth::get_instance()->get_original_main_dsp_voices(voice));
 		AdjSynth::get_instance()->synth_voice[voice]->mso_wtab = original_mso_wtab_1;	
 		AdjSynth::get_instance()->synth_voice[voice]->pad_wavetable = original_pad_wavetable_1;
-		AdjSynth::get_instance()->audio_polyphony_mixer->restore_gain_pan(voice);
 
+#ifdef _USE_NEW_POLY_MIXER_
+		
+#else	
+		AdjSynth::get_instance()->audio_polyphony_mixer->restore_gain_pan(voice);
+#endif
 	}
 	
 	// Filter freq

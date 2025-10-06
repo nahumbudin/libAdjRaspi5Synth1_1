@@ -46,12 +46,18 @@ class AdjSynthPrograms
 	_settings_params_t *get_active_program_preset_params();
 	/* Set the active preset parameters without updating all the currentlly assigned voices*/
 	int set_active_program_preset_params_no_update(_settings_params_t *preset_params);
+	/* Set the active preset parameters and update all the currentlly assigned voices*/
+	void set_program_preset_params(_settings_params_t *preset_params);
 	
 	/* Assign a voice with the program preset parameters */
 	int assign_voice_with_preset_program_params(SynthVoice *voice, int voice_num);
+	
 	/* Deallocate a voice */
 	int deallocate_voice_from_program(int voice_num);
 	
+	/* Get the voice number that plays a given not. */
+	int get_voice_num_playing_note(int note);
+
 	/* Refresh all program assigned voices with a new preset params */
 	int refresh_all_program_voices_with_preset_params(_settings_params_t *preset_params);
 
@@ -81,6 +87,9 @@ class AdjSynthPrograms
 	/* Set all the program voices polly mixer send2 level */
 	int set_program_voices_poly_mixer_send_2_int(int send);
 	int set_program_voices_poly_mixer_send_2_float(float send);
+	
+	/* Get a voice object. */
+	SynthVoice *get_voice(int voice_num);
 
 	/* Used by the MSO a wave table */
 	DSP_MorphingSinusOscWTAB *mso_wtab = NULL;
@@ -88,6 +97,9 @@ class AdjSynthPrograms
 	/* synthPAD wavetable handling */
 	SynthPADcreator *synth_pad_creator = NULL;
 	Wavetable *program_wavetable = NULL;
+
+	/* Holds the program preset parameters */
+	_settings_params_t *active_preset_params;
 	
 
   private:
@@ -96,8 +108,6 @@ class AdjSynthPrograms
 
 	/* Holds the program number. */
 	int program_num;
-	/* Holds the program preset parameters */
-	_settings_params_t *active_preset_params;
 	
 	/* Holds the indexes of the assigned voices. */
 	std::vector<int *> assigned_voices;

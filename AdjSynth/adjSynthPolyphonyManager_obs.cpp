@@ -356,8 +356,11 @@ void AdjPolyphonyManager::free_voice(int voice, bool pend)
 			}
 			fprintf(stderr, "free program: %i voice: %i\n", program, progvoice);
 
+#ifdef _USE_NEW_MIDI_PROGRAM
+			
+#else
 			AdjSynth::get_instance()->synth_program[program]->free_voice(progvoice);
-
+#endif
 			AdjSynth::get_instance()->synth_voice[voice]->audio_voice->reset_wait_for_not_active();
 			AdjSynth::get_instance()->synth_voice[voice]->audio_voice->set_note(-1);
 			AdjSynth::get_instance()->synth_voice[voice]->audio_voice->set_timestamp(0);

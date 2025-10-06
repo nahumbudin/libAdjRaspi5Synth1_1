@@ -1,11 +1,13 @@
 /**
-*	@file		adjSynth.h
-*	@author		Nahum Budin
-*	@date		23-Sep-2025
-*	@version	1.4 
-*					1. Code refactoring and notaion.
-*					2. Rename Patch to Preset (Patch is to be used for full setup settings)
-*					3. Redfining the Programs concept Programs.h
+ *	@file		adjSynth.h
+ *	@author		Nahum Budin
+ *	@date		23-Sep-2025
+ *	@version	1.4
+ *					1. Code refactoring and notaion.
+ *					2. Rename Patch to Preset (Patch is to be used for full setup settings)
+ *					3. Redfining the Programs concept Programs.h
+ *					4. Adding support in both old and new MIDI program objects.
+ *					5. Polyphony - Not manging cores loads - let the OS do it.
 *					
 *	@brief		A collection of 4 synthesizers: Additive, Karplus String, PAD and Morphed Sine Oscilator (MSO)
 *	
@@ -196,9 +198,14 @@ public:
 		Each of them is only a pointer to a SynthVoice object. */
 	static SynthVoice *synth_voice[_SYNTH_MAX_NUM_OF_VOICES];
 
-	SynthProgram *synth_program[_SYNTH_MAX_NUM_OF_PROGRAMS];
+// TODO: change to AdjSynthPrograms when completed
+#define _USE_NEW_MIDI_PROGRAM
 
-	AdjSynthPrograms *synth_programs[_SYNTH_MAX_NUM_OF_PROGRAMS];	
+#ifdef _USE_NEW_MIDI_PROGRAM
+	AdjSynthPrograms *synth_program[_SYNTH_MAX_NUM_OF_PROGRAMS];
+#else
+	SynthProgram *synth_program[_SYNTH_MAX_NUM_OF_PROGRAMS];
+#endif 	
 
 	static AdjPolyphonyManager *synth_polyphony_manager;
 	static AdjPolyphonyManager *synth_polyphony_manager_threads;

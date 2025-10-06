@@ -50,6 +50,23 @@ AudioPolyMixer::AudioPolyMixer(
 	{
 		num_of_inputs = _SYNTH_MAX_NUM_OF_VOICES;
 	}
+	
+	for (int i = 0; i < num_of_inputs; i++)
+	{
+		gain1[i] = 0.5f;
+		gain2[i] = 0.5f;
+		pan1[i] = 0.0f;
+		pan2[i] = 0.0f;
+		send1[i] = 0.0f;
+		send2[i] = 0.0f;
+	}
+
+	master_level1 = 0.5f;
+	master_level2 = 0.5f;
+	master_pan1 = 0.0f;
+	master_pan2 = 0.0f;
+	master_send1 = 0.0f;
+	master_send2 = 0.0f;
 
 	/*
 	programs = num_of_programs;
@@ -797,6 +814,58 @@ void AudioPolyMixer::set_lfo_6_stmmetry(float sym)
 }
 
 /**
+ *   @brief  Set amp 1 modulation LFO number.
+ *	@param	Lfo		LFO number _LFO_NONE to  _LFO_6
+ *   @return void
+ */
+void AudioPolyMixer::set_amp_1_pan_mod_lfo(int lfo)
+{
+	if ((lfo >= _LFO_NONE) && (lfo <= _LFO_6))
+	{
+		amp_1_pan_mod_lfo = lfo;
+	}
+}
+
+/**
+ *   @brief  Set amp 1 modulation LFO level.
+ *	@param	Lev		Modulation level 0 to 100
+ *   @return void
+ */
+void AudioPolyMixer::set_amp_1_pan_mod_lfo_level(int lev)
+{
+	if ((lev >= 0) && (lev <= 100))
+	{
+		amp_1_pan_mod_lfo_level = (float)lev / 100.0;
+	}
+}
+
+/**
+ *   @brief  Set amp 2 modulation LFO number.
+ *	@param	Lfo		LFO number _LFO_NONE to  _LFO_5
+ *   @return void
+ */
+void AudioPolyMixer::set_amp_2_pan_mod_lfo(int lfo)
+{
+	if ((lfo >= _LFO_NONE) && (lfo <= _LFO_3))
+	{
+		amp_2_pan_mod_lfo = lfo;
+	}
+}
+
+/**
+ *   @brief  Set amp 2 modulation LFO level.
+ *	@param	Lev		Modulation level 0 to 100
+ *   @return void
+ */
+void AudioPolyMixer::set_amp_2_pan_mod_lfo_level(int lev)
+{
+	if ((lev >= 0) && (lev <= 100))
+	{
+		amp_2_pan_mod_lfo_level = (float)lev / 100.0;
+	}
+}
+
+/**
  *  @brief  Set amp 1 pan lfo modulation value.
  *	@param	modFactor	modulation factor (depth)
  *	@param	modVal		modulation signal value
@@ -916,6 +985,7 @@ void AudioPolyMixer::update()
 		if (!block_out_L || !block_out_R || !block_send_L || !block_send_R)
 		{
 			// unable to allocate any memory block, so we'll release what we could get, send nothing, and return.
+			printf("Audio Poly Mixer - Unable to Allocate Memory/n");
 			pthread_mutex_lock(&voice_mem_blocks_allocation_control_mutex);
 
 			if (block_out_L)
@@ -953,56 +1023,56 @@ void AudioPolyMixer::update()
 				if ((samp % _CONTROL_SUB_SAMPLING) == 0)
 				{
 					// Update modulation factors at sub sampling rate.
-					left_gain_1 = gain1[0] * (1 - pan1[0]) * (1 - amp_1_pan_mod_samp[samp]) * master_level1 * 0.1f;
-					left_gain_2 = gain2[0] * (1 - pan2[0]) * (1 - amp_2_pan_mod_samp[samp]) * master_level2 * 0.1f;
-					right_gain_1 = gain1[0] * (1 + pan1[0]) * (1 + amp_1_pan_mod_samp[samp]) * master_level1 * 0.1f;
-					right_gain_2 = gain2[0] * (1 + pan2[0]) * (1 + amp_2_pan_mod_samp[samp]) * master_level2 * 0.1f;
+					left_gain_1 = gain1[0] * (1 - pan1[0]) * (1 - amp_1_pan_mod_samp[subsamp]) * master_level1 * 0.1f;
+					left_gain_2 = gain2[0] * (1 - pan2[0]) * (1 - amp_2_pan_mod_samp[subsamp]) * master_level2 * 0.1f;
+					right_gain_1 = gain1[0] * (1 + pan1[0]) * (1 + amp_1_pan_mod_samp[subsamp]) * master_level1 * 0.1f;
+					right_gain_2 = gain2[0] * (1 + pan2[0]) * (1 + amp_2_pan_mod_samp[subsamp]) * master_level2 * 0.1f;
+
+					if (midi_mapping_mode == _MIDI_MAPPING_MODE_MAPPING)
+					{
+						// In mapping mode use each voice send value for send calculation.
+						left_send_1 = send1[0] * (1 - pan1[0]) * (1 - amp_1_pan_mod) * master_level1 * 0.1f;
+						left_send_2 = send2[0] * (1 - pan2[0]) * (1 - amp_2_pan_mod) * master_level2 * 0.1f;
+						right_send_1 = send1[0] * (1 + pan1[0]) * (1 + amp_1_pan_mod) * master_send1 * 0.1f;
+						right_send_2 = send2[0] * (1 + pan2[0]) * (1 + amp_2_pan_mod) * master_send2 * 0.1f;
+					}
+					else
+					{
+						// In non-mapping mode use master send value for send calculation.
+						left_send_1 = master_send_1 * (1 - master_pan1) * (1 - amp_1_pan_mod) * 0.1f;
+						left_send_2 = master_send_2 * (1 - master_pan2) * (1 - amp_2_pan_mod) * 0.1f;
+						right_send_1 = master_send_1 * (1 + master_pan1) * (1 + amp_1_pan_mod) * 0.1f;
+						right_send_2 = master_send_2 * (1 + master_pan2) * (1 + amp_2_pan_mod) * 0.1f;
+					}
+
+					subsamp++;
 				}
 
-				if (midi_mapping_mode == _MIDI_MAPPING_MODE_MAPPING)
-				{
-					// In mapping mode use each voice send value for send calculation.
-					left_send_1 = send1[0] * (1 - pan1[0]) * (1 - amp_1_pan_mod) * master_level1 * 0.1f;
-					left_send_2 = send2[0] * (1 - pan2[0]) * (1 - amp_2_pan_mod) * master_level2 * 0.1f;
-					right_send_1 = send1[0] * (1 + pan1[0]) * (1 + amp_1_pan_mod) * master_send1 * 0.1f;
-					right_send_2 = send2[0] * (1 + pan2[0]) * (1 + amp_2_pan_mod) * master_send2 * 0.1f;
-				}
-				else
-				{
-					// In non-mapping mode use master send value for send calculation.
-					left_send_1 = master_send_1 * (1 - master_pan1) * (1 - amp_1_pan_mod) * 0.1f;
-					left_send_2 = master_send_2 * (1 - master_pan2) * (1 - amp_2_pan_mod) * 0.1f;
-					right_send_1 = master_send_1 * (1 + master_pan1) * (1 + amp_1_pan_mod) * 0.1f;
-					right_send_2 = master_send_2 * (1 + master_pan2) * (1 + amp_2_pan_mod) * 0.1f;
-				}
+				// Calculate all block output samples for voice 0
+				block_out_L->data[samp] =
+					poly_mixer_manager->audio_block_stereo_float_shared_memory_voices_output[0]->data[_LEFT][samp] *
+						left_gain_1 +
+					poly_mixer_manager->audio_block_stereo_float_shared_memory_voices_output[0]->data[_RIGHT][samp] *
+						left_gain_2;
 
-				subsamp++;
-			} // for (samp = 0; samp < audio_block_size; samp++)
+				block_out_R->data[samp] =
+					poly_mixer_manager->audio_block_stereo_float_shared_memory_voices_output[0]->data[_LEFT][samp] *
+						right_gain_1 +
+					poly_mixer_manager->audio_block_stereo_float_shared_memory_voices_output[0]->data[_RIGHT][samp] *
+						right_gain_2;
 
-			// Calculate all block output samples for voice 0
-			block_out_L->data[samp] =
-				poly_mixer_manager->audio_block_stereo_float_shared_memory_voices_output[0]->data[_LEFT][samp] *
-					left_gain_1 +
-				poly_mixer_manager->audio_block_stereo_float_shared_memory_voices_output[0]->data[_RIGHT][samp] *
-					left_gain_2;
+				block_send_L->data[samp] =
+					poly_mixer_manager->audio_block_stereo_float_shared_memory_voices_output[0]->data[_LEFT][samp] *
+						left_send_1 +
+					poly_mixer_manager->audio_block_stereo_float_shared_memory_voices_output[0]->data[_RIGHT][samp] *
+						left_send_2;
 
-			block_out_R->data[samp] =
-				poly_mixer_manager->audio_block_stereo_float_shared_memory_voices_output[0]->data[_LEFT][samp] *
-					right_gain_1 +
-				poly_mixer_manager->audio_block_stereo_float_shared_memory_voices_output[0]->data[_RIGHT][samp] *
-					right_gain_2;
-
-			block_send_L->data[samp] =
-				poly_mixer_manager->audio_block_stereo_float_shared_memory_voices_output[0]->data[_LEFT][samp] *
-					left_send_1 +
-				poly_mixer_manager->audio_block_stereo_float_shared_memory_voices_output[0]->data[_RIGHT][samp] *
-					left_send_2;
-
-			block_send_R->data[samp] =
-				poly_mixer_manager->audio_block_stereo_float_shared_memory_voices_output[0]->data[_LEFT][samp] *
-					right_send_1 +
-				poly_mixer_manager->audio_block_stereo_float_shared_memory_voices_output[0]->data[_RIGHT][samp] *
-					right_send_2;
+				block_send_R->data[samp] =
+					poly_mixer_manager->audio_block_stereo_float_shared_memory_voices_output[0]->data[_LEFT][samp] *
+						right_send_1 +
+					poly_mixer_manager->audio_block_stereo_float_shared_memory_voices_output[0]->data[_RIGHT][samp] *
+						right_send_2;
+			}
 		}
 		else
 		{
@@ -1029,10 +1099,10 @@ void AudioPolyMixer::update()
 					if ((samp % _CONTROL_SUB_SAMPLING) == 0)
 					{
 						// Update modulation factors at sub sampling rate.
-						left_gain_1 = gain1[voice] * (1 - pan1[voice]) * (1 - amp_1_pan_mod_samp[samp]) * master_level1 * 0.1f;
-						left_gain_2 = gain2[voice] * (1 - pan2[voice]) * (1 - amp_2_pan_mod_samp[samp]) * master_level2 * 0.1f;
-						right_gain_1 = gain1[voice] * (1 + pan1[voice]) * (1 + amp_1_pan_mod_samp[samp]) * master_level1 * 0.1f;
-						right_gain_2 = gain2[0] * (1 + pan2[voice]) * (1 + amp_2_pan_mod_samp[samp]) * master_level2 * 0.1f;
+						left_gain_1 = gain1[voice] * (1 - pan1[voice]) * (1 - amp_1_pan_mod_samp[subsamp]) * master_level1 * 0.1f;
+						left_gain_2 = gain2[voice] * (1 - pan2[voice]) * (1 - amp_2_pan_mod_samp[subsamp]) * master_level2 * 0.1f;
+						right_gain_1 = gain1[voice] * (1 + pan1[voice]) * (1 + amp_1_pan_mod_samp[subsamp]) * master_level1 * 0.1f;
+						right_gain_2 = gain2[0] * (1 + pan2[voice]) * (1 + amp_2_pan_mod_samp[subsamp]) * master_level2 * 0.1f;
 
 						if (midi_mapping_mode == _MIDI_MAPPING_MODE_MAPPING)
 						{

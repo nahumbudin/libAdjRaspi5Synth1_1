@@ -155,13 +155,25 @@ int set_voice_block_amp_fixed_levels_state_cb(bool en, int voice, int prog)
 {
 	if ((prog >= 0) && (prog < _SYNTH_MAX_NUM_OF_PROGRAMS))
 	{
+		SynthVoice *synth_voice;
+
+#ifdef _USE_NEW_MIDI_PROGRAM
+		synth_voice = AdjSynth::get_instance()->synth_program[prog]->get_voice(voice);
+#else
+		synth_voice = AdjSynth::get_instance()->synth_voice[voice];
+#endif
+		if (synth_voice == NULL)
+		{
+			return -1;
+		}
+
 		if (en == _AMP_FIXED_LEVELS_ENABLE)
 		{
-			AdjSynth::get_instance()->synth_program[prog]->synth_voices[voice]->dsp_voice->out_amp_1->enable_fixed_levels();
+			synth_voice->dsp_voice->out_amp_1->enable_fixed_levels();
 		}
 		else if (en == _AMP_FIXED_LEVELS_DISABLE)
 		{
-			AdjSynth::get_instance()->synth_program[prog]->synth_voices[voice]->dsp_voice->out_amp_1->disable_fixed_levels();
+			synth_voice->dsp_voice->out_amp_1->disable_fixed_levels();
 		}
 
 		return 0;

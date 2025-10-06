@@ -198,7 +198,6 @@
     <ClCompile Include="..\AdjSynth\adjSynthEventsHandlingReverb.cpp" />
     <ClCompile Include="..\AdjSynth\adjSynthEventsHandlingVCO.cpp" />
     <ClCompile Include="..\AdjSynth\adjSynthPADcreator.cpp" />
-    <ClCompile Include="..\AdjSynth\adjSynthPolyphonyManager_obs.cpp" />
     <ClCompile Include="..\AdjSynth\adjSynthPolyphonyManager.cpp" />
     <ClCompile Include="..\AdjSynth\adjSynthProgram.cpp" />
     <ClCompile Include="..\AdjSynth\adjSynthPrograms.cpp" />
