@@ -1,9 +1,11 @@
 /**
-*	@file		adjSynthEventsHandlingNoise.cpp
-*	@author		Nahum Budin
-*	@date		11-Oct-2024
-*	@version	1.1
-*					1. Code refactoring and notaion.
+ *	@file		adjSynthEventsHandlingNoise.cpp
+ *	@author		Nahum Budin
+ *	@date		11-Oct-2024
+ *	@version	1.1
+ *					1. Code refactoring and notaion.
+ *					2. Update callbacks are changed from block to only program
+ *						_EXEC_BLOCK_CALLBACK -> _EXEC_CALLBACK.
 *	
 *	@brief		AdjHeart Synthesizer Noise Generator Events Handling
 *
@@ -61,7 +63,7 @@ int AdjSynth::noise_event_int(int noiseid, int eventid, int val, _settings_param
 			(params,
 			"adjsynth.noise.color",
 			val,
-			_EXEC_BLOCK_CALLBACK,
+			_EXEC_CALLBACK,
 			program);	
 			
 		break;
@@ -71,7 +73,7 @@ int AdjSynth::noise_event_int(int noiseid, int eventid, int val, _settings_param
 			(params,
 			"adjsynth.noise.send_filter_1",
 			val,
-			_EXEC_BLOCK_CALLBACK,
+			_EXEC_CALLBACK,
 			program);	
 			
 		break;
@@ -81,7 +83,7 @@ int AdjSynth::noise_event_int(int noiseid, int eventid, int val, _settings_param
 			(params,
 			"adjsynth.noise.send_filter_2",
 			val,
-			_EXEC_BLOCK_CALLBACK,
+			_EXEC_CALLBACK,
 			program);
 			
 		break;
@@ -91,7 +93,7 @@ int AdjSynth::noise_event_int(int noiseid, int eventid, int val, _settings_param
 			(params,
 			"adjsynth.noise.amp_modulation_lfo_num",
 			val,
-			_EXEC_BLOCK_CALLBACK,
+			_EXEC_CALLBACK,
 			program);
 			
 		break;
@@ -101,7 +103,7 @@ int AdjSynth::noise_event_int(int noiseid, int eventid, int val, _settings_param
 			(params,
 			"adjsynth.noise.amp_modulation_lfo_level",
 			val,
-			_EXEC_BLOCK_CALLBACK,
+			_EXEC_CALLBACK,
 			program);
 			
 		break;
@@ -111,7 +113,7 @@ int AdjSynth::noise_event_int(int noiseid, int eventid, int val, _settings_param
 			(params,
 			"adjsynth.noise.amp_modulation_env_num",
 			val,
-			_EXEC_BLOCK_CALLBACK,
+			_EXEC_CALLBACK,
 			program);
 			
 		break;
@@ -121,7 +123,7 @@ int AdjSynth::noise_event_int(int noiseid, int eventid, int val, _settings_param
 			(params,
 			"adjsynth.noise.amp_modulation_env_level",
 			val,
-			_EXEC_BLOCK_CALLBACK,
+			_EXEC_CALLBACK,
 			program);
 			
 		break;			
@@ -151,7 +153,7 @@ int AdjSynth::noise_event_bool(int noiseid, int eventid, bool val, _settings_par
 				(params,
 				"adjsynth.noise.enabled",
 				true,
-				_EXEC_BLOCK_CALLBACK,
+				_EXEC_CALLBACK,
 				program);
 		}
 		else
@@ -160,7 +162,7 @@ int AdjSynth::noise_event_bool(int noiseid, int eventid, bool val, _settings_par
 				(params,
 				"adjsynth.noise.enabled",
 				false,
-				_EXEC_BLOCK_CALLBACK,
+				_EXEC_CALLBACK,
 				program);
 		}
 		

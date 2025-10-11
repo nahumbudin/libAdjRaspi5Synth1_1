@@ -1,15 +1,17 @@
 /**
 *	@file		adjSynthEventsHandlingAmp.cpp
 *	@author		Nahum Budin
-*	@date		11-Oct-2024
-*	@version	1.1
-*					1. Code refactoring and notaion.
+*	@date		10-Oct-2025
+*	@version	1.2
+*					1. Limiting actions to Sketches only (program 16-18).
+*					2. Not a voice block update callback
 *	
 *	@brief		AdjHeart Synthesizer Amplifiers Events Handling
 *
 *	History:\n
 *	
-*	version 1.0		15_Nov-2019:		
+*		version 1.1		11-Oct-2024
+*		version 1.0		15_Nov-2019:		
 *		First version
 *		
 */
@@ -45,135 +47,146 @@
 */
 int AdjSynth::amp_event(int ampid, int eventid, int val, _settings_params_t *params, int program)
 {
-	switch (eventid)
+	if (eventid == _AMP_LEVEL)
 	{
-	case _AMP_LEVEL:
+		// Master Volume - common to all programs
 		if (ampid == _AMP_CH1_EVENT)
 		{
-			adj_synth_settings_manager->set_int_param_value
-				(params,
-				"adjsynth.amp_ch1.level",
-				val,
-				_EXEC_BLOCK_CALLBACK,
-				program);	
+			adj_synth_settings_manager->set_int_param_value(params,
+															"adjsynth.amp_ch1.level",
+															val,
+															_EXEC_CALLBACK,
+															program);
 		}
 		else if (ampid == _AMP_CH2_EVENT)
 		{
-			adj_synth_settings_manager->set_int_param_value
-				(params,
-				"adjsynth.amp_ch2.level",
-				val,
-				_EXEC_BLOCK_CALLBACK,
-				program);
+			adj_synth_settings_manager->set_int_param_value(params,
+															"adjsynth.amp_ch2.level",
+															val,
+															_EXEC_CALLBACK,
+															program);
 		}
-		break;
-
-	case _AMP_PAN:
-		if (ampid == _AMP_CH1_EVENT)
-		{
-			adj_synth_settings_manager->set_int_param_value
-				(params,
-				"adjsynth.amp_ch1.pan",
-				val,
-				_EXEC_BLOCK_CALLBACK,
-				program);
-		}
-		else if (ampid == _AMP_CH2_EVENT)
-		{
-			adj_synth_settings_manager->set_int_param_value
-				(params,
-				"adjsynth.amp_ch2.pan",
-				val,
-				_EXEC_BLOCK_CALLBACK,
-				program);
-		}
-		break;
-			
-	case _AMP_SEND:
-		if (ampid == _AMP_CH1_EVENT)
-		{
-			adj_synth_settings_manager->set_int_param_value
-				(params,
-				"adjsynth.amp_ch1.send",
-				val,
-				_EXEC_CALLBACK,
-				program);
-		}
-		else if (ampid == _AMP_CH2_EVENT)
-		{
-			adj_synth_settings_manager->set_int_param_value
-				(params,
-				"adjsynth.amp_ch2.send",
-				val,
-				_EXEC_CALLBACK,
-				program);
-		}
-		break;
-
-	case _AMP_PAN_MOD_LFO:
-		if (ampid == _AMP_CH1_EVENT)
-		{
-			adj_synth_settings_manager->set_int_param_value
-				(params,
-				"adjsynth.amp_ch1.pan_modulation_lfo_num",
-				val,
-				_EXEC_BLOCK_CALLBACK,
-				program);
-		}
-		else if (ampid == _AMP_CH2_EVENT)
-		{
-			adj_synth_settings_manager->set_int_param_value
-				(params,
-				"adjsynth.amp_ch2.pan_modulation_lfo_num",
-				val,
-				_EXEC_BLOCK_CALLBACK,
-				program);
-		}
-		break;
-
-	case _AMP_PAN_MOD_LFO_LEVEL:
-		if (ampid == _AMP_CH1_EVENT)
-		{
-			adj_synth_settings_manager->set_int_param_value
-				(params,
-				"adjsynth.amp_ch1.pan_modulation_lfo_level",
-				val,
-				_EXEC_BLOCK_CALLBACK,
-				program);
-		}
-		else if (ampid == _AMP_CH2_EVENT)
-		{
-			adj_synth_settings_manager->set_int_param_value
-				(params,
-				"adjsynth.amp_ch2.pan_modulation_lfo_level",
-				val,
-				_EXEC_BLOCK_CALLBACK,
-				program);
-		}
-		break;
-		
-	case _AMP_FIXED_LEVELS:
-		if (val == _AMP_FIXED_LEVELS_ENABLE)
-		{
-			adj_synth_settings_manager->set_bool_param_value
-				(params,
-				"adjsynth.amp.fixed_levels_enabled",
-				true,
-				_EXEC_BLOCK_CALLBACK,
-				program);
-		}
-		else if (val == _AMP_FIXED_LEVELS_DISABLE)
-		{
-			adj_synth_settings_manager->set_bool_param_value
-				(params,
-				"adjsynth.amp.fixed_levels_enabled",
-				false,
-				_EXEC_BLOCK_CALLBACK,
-				program);
-		}
-		break;
 	}
-	
+	else if (eventid == _AMP_SEND)
+	{
+		// Master Send - common to all programs (TODO: add GUI send per channel)
+		if (ampid == _AMP_CH1_EVENT)
+		{
+			adj_synth_settings_manager->set_int_param_value(params,
+															"adjsynth.amp_ch1.send",
+															val,
+															_EXEC_CALLBACK,
+															program);
+		}
+		else if (ampid == _AMP_CH2_EVENT)
+		{
+			adj_synth_settings_manager->set_int_param_value(params,
+															"adjsynth.amp_ch2.send",
+															val,
+															_EXEC_CALLBACK,
+															program);
+		}
+	}
+	else
+	{
+		if ((program < _PROGRAM_16) || (program > _PROGRAM_18))
+		{
+			// Sketches only - all other programs: MIDI Mixer control
+			return -1;
+		}
+
+		switch (eventid)
+		{
+			case _AMP_PAN:
+				if (ampid == _AMP_CH1_EVENT)
+				{
+					adj_synth_settings_manager->set_int_param_value(
+						params,
+						"adjsynth.amp_ch1.pan",
+						val,
+						_EXEC_CALLBACK,
+						program);
+				}
+				else if (ampid == _AMP_CH2_EVENT)
+				{
+					adj_synth_settings_manager->set_int_param_value(
+						params,
+						"adjsynth.amp_ch2.pan",
+						val,
+						_EXEC_CALLBACK,
+						program);
+				}
+
+				break;
+
+			case _AMP_PAN_MOD_LFO:
+				if (ampid == _AMP_CH1_EVENT)
+				{
+					adj_synth_settings_manager->set_int_param_value(
+						params,
+						"adjsynth.amp_ch1.pan_modulation_lfo_num",
+						val,
+						_EXEC_BLOCK_CALLBACK,
+						program);
+				}
+				else if (ampid == _AMP_CH2_EVENT)
+				{
+					adj_synth_settings_manager->set_int_param_value(
+						params,
+						"adjsynth.amp_ch2.pan_modulation_lfo_num",
+						val,
+						_EXEC_BLOCK_CALLBACK,
+						program);
+				}
+
+				break;
+
+			case _AMP_PAN_MOD_LFO_LEVEL:
+				if (ampid == _AMP_CH1_EVENT)
+				{
+					adj_synth_settings_manager->set_int_param_value(
+						params,
+						"adjsynth.amp_ch1.pan_modulation_lfo_level",
+						val,
+						_EXEC_BLOCK_CALLBACK,
+						program);
+				}
+				else if (ampid == _AMP_CH2_EVENT)
+				{
+					adj_synth_settings_manager->set_int_param_value(
+						params,
+						"adjsynth.amp_ch2.pan_modulation_lfo_level",
+						val,
+						_EXEC_BLOCK_CALLBACK,
+						program);
+				}
+
+				break;
+
+			case _AMP_FIXED_LEVELS: // TODO:
+				if (val == _AMP_FIXED_LEVELS_ENABLE)
+				{
+					adj_synth_settings_manager->set_bool_param_value(
+						params,
+						"adjsynth.amp.fixed_levels_enabled",
+						true,
+						_EXEC_BLOCK_CALLBACK,
+						program);
+				}
+				else if (val == _AMP_FIXED_LEVELS_DISABLE)
+				{
+					adj_synth_settings_manager->set_bool_param_value(
+						params,
+						"adjsynth.amp.fixed_levels_enabled",
+						false,
+						_EXEC_BLOCK_CALLBACK,
+						program);
+				}
+
+				break;
+		}
+	}
+
 	return 0;
 	
 }

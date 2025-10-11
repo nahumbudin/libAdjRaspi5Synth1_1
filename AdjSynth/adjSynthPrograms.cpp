@@ -11,12 +11,22 @@
 *	of preset parameters that is used to setup a general purpose voice object with the program preset
 *	parameters.
 *	
+*	The adjSynth programs collection is a MIDI bank that provides 19 programs (see hereafter), but unlike
+*	common MIDI banks, each program does not represent a fix "sound" preset, and may be dynamiclly
+*	loaded with any valid preset.
+*
 *	In this version, there are 19 programs (0-18):
 *		0-15	MIDI-mapping mode programs used each for a MIDI channel 1-16
 *				Settings are loaded with presets and cannot be addited
 *		16		Sketch 1 - settings can be changed online
 *		17		Sketch 2 - settings can be changed online
 *		18		Sketch 3 - settings can be changed online
+*		
+*	Programs 16-18 are allocated to sketchs - a mode that provides an online dynamic setting
+*	capabilities of the program preset parameters. The user can dynamiclly select the active
+*	sketch out of the 3.
+*	
+*	The MIDI Mapper can allocate any available MIDI channel (1-16) to the active sketch program.
 *
 *
 */

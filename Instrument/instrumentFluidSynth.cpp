@@ -1,12 +1,15 @@
 /**
 * @file		instrumentFluidSynth.cpp
 *	@author		Nahum Budin
-*	@date		24-06-2024
-*	@version	1.0	Initial release
+*	@date		7-Oct-2025
+*	@version	1.1	
+*					1. "Manua" copy of settings structure (mutx added)
 *					
 *	@brief		Implements a FluidSynth SoundFont synthesizer.
 *	
 *	History:\n
+*	
+*		version 1.0	24-June-2024	Initial
 *	
 */
 
@@ -35,9 +38,17 @@ InstrumentFluidSynth::InstrumentFluidSynth()
 	/*  Copy to presets */
 	for (int p = 0; p < _NUM_OF_FLUID_PRESETS; p++)
 	{
-		presets[p] = *active_settings_params;
+		//presets[p] = *active_settings_params;
+		
 		presets[p].settings_type = "fluid-synth-preset";
 		presets[p].name = "Preset " + to_string(p + 1);
+
+		presets[p].version = active_settings_params->version;
+
+		presets[p].bool_parameters_map = active_settings_params->bool_parameters_map;
+		presets[p].float_parameters_map = active_settings_params->float_parameters_map;
+		presets[p].int_parameters_map = active_settings_params->int_parameters_map;
+		presets[p].string_parameters_map = active_settings_params->string_parameters_map;
 	}
 
 	active_preset = 0;

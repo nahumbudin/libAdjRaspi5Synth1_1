@@ -1,9 +1,10 @@
 /**
-*	@file		adjSynthDefaultPatchParamsNoise.cpp
-*	@author		Nahum Budin
-*	@date		24-Sep-2025
-*	@version	1.2
-*					1. Rename patch to preset parameters.
+ *	@file		adjSynthDefaultPatchParamsNoise.cpp
+ *	@author		Nahum Budin
+ *	@date		24-Sep-2025
+ *	@version	1.2
+ *					1. Rename patch to preset parameters.
+ *					2. Adding default program settings callbacks
 *	
 *	@brief		Set default patch Noise Generator parameters
 *
@@ -26,12 +27,12 @@ int AdjSynth::set_default_preset_parameters_noise(_settings_params_t *params, in
 		"adjsynth.noise.enabled",
 		false,
 		_ADJ_SYNTH_PRESET_PARAMS,
-		NULL,
+		set_program_noise_enabled_cb,
 		0,
 		num_of_voices - 1,
 		set_voice_block_noise_enabled_cb,
 		_SET_VALUE | _SET_TYPE | _SET_BLOCK_START_INDEX | 
-		_SET_BLOCK_STOP_INDEX | _SET_BLOCK_CALLBACK,
+		_SET_BLOCK_STOP_INDEX | _SET_CALLBACK | _SET_BLOCK_CALLBACK,
 		prog);
 
 	res |= adj_synth_settings_manager->set_int_param(
@@ -41,13 +42,13 @@ int AdjSynth::set_default_preset_parameters_noise(_settings_params_t *params, in
 		_BROWN_NOISE,
 		_WHITE_NOISE,
 		_ADJ_SYNTH_PRESET_PARAMS,
-		NULL,
+		set_program_noise_color_cb,
 		0,
 		num_of_voices - 1,
 		set_voice_block_noise_color_cb,
-		_SET_VALUE | _SET_MAX_VAL | _SET_MIN_VAL | 
-		_SET_TYPE | _SET_BLOCK_START_INDEX | 
-		_SET_BLOCK_STOP_INDEX | _SET_BLOCK_CALLBACK,
+		_SET_VALUE | _SET_MAX_VAL | _SET_MIN_VAL |
+			_SET_TYPE | _SET_BLOCK_START_INDEX |
+			_SET_BLOCK_STOP_INDEX | _SET_CALLBACK | _SET_BLOCK_CALLBACK,
 		prog);
 
 	res |= adj_synth_settings_manager->set_int_param(
@@ -57,13 +58,13 @@ int AdjSynth::set_default_preset_parameters_noise(_settings_params_t *params, in
 		100,
 		0,
 		_ADJ_SYNTH_PRESET_PARAMS,
-		NULL,
+		set_program_noise_send_filter_1_cb,
 		0,
 		num_of_voices - 1,
 		set_voice_block_noise_send_filter_1_cb,
-		_SET_VALUE | _SET_MAX_VAL | _SET_MIN_VAL | 
-		_SET_TYPE | _SET_BLOCK_START_INDEX | 
-		_SET_BLOCK_STOP_INDEX | _SET_BLOCK_CALLBACK,
+		_SET_VALUE | _SET_MAX_VAL | _SET_MIN_VAL |
+			_SET_TYPE | _SET_BLOCK_START_INDEX |
+			_SET_BLOCK_STOP_INDEX | _SET_CALLBACK | _SET_BLOCK_CALLBACK,
 		prog);
 
 	res |= adj_synth_settings_manager->set_int_param(
@@ -73,13 +74,13 @@ int AdjSynth::set_default_preset_parameters_noise(_settings_params_t *params, in
 		100,
 		0,
 		_ADJ_SYNTH_PRESET_PARAMS,
-		NULL,
+		set_program_noise_send_filter_2_cb,
 		0,
 		num_of_voices - 1,
 		set_voice_block_noise_send_filter_2_cb,
-		_SET_VALUE | _SET_MAX_VAL | _SET_MIN_VAL | 
-		_SET_TYPE | _SET_BLOCK_START_INDEX | 
-		_SET_BLOCK_STOP_INDEX | _SET_BLOCK_CALLBACK,
+		_SET_VALUE | _SET_MAX_VAL | _SET_MIN_VAL |
+			_SET_TYPE | _SET_BLOCK_START_INDEX |
+			_SET_BLOCK_STOP_INDEX | _SET_CALLBACK | _SET_BLOCK_CALLBACK,
 		prog);
 
 	res |= adj_synth_settings_manager->set_int_param(
@@ -89,13 +90,13 @@ int AdjSynth::set_default_preset_parameters_noise(_settings_params_t *params, in
 		_LFO_6_DELAYED_2000MS,
 		_LFO_NONE,
 		_ADJ_SYNTH_PRESET_PARAMS,
-		NULL,
+		set_program_noise_amp_modulation_lfo_num_cb,
 		0,
 		num_of_voices - 1,
 		set_voice_block_noise_amp_modulation_lfo_num_cb,
-		_SET_VALUE | _SET_MAX_VAL | _SET_MIN_VAL | 
-		_SET_TYPE | _SET_BLOCK_START_INDEX | 
-		_SET_BLOCK_STOP_INDEX | _SET_BLOCK_CALLBACK,
+		_SET_VALUE | _SET_MAX_VAL | _SET_MIN_VAL |
+			_SET_TYPE | _SET_BLOCK_START_INDEX |
+			_SET_BLOCK_STOP_INDEX | _SET_CALLBACK | _SET_BLOCK_CALLBACK,
 		prog);
 
 	res |= adj_synth_settings_manager->set_int_param(
@@ -105,13 +106,13 @@ int AdjSynth::set_default_preset_parameters_noise(_settings_params_t *params, in
 		100,
 		0,
 		_ADJ_SYNTH_PRESET_PARAMS,
-		NULL,
+		set_program_noise_amp_modulation_lfo_level_cb,
 		0,
 		num_of_voices - 1,
 		set_voice_block_noise_amp_modulation_lfo_level_cb,
-		_SET_VALUE | _SET_MAX_VAL | _SET_MIN_VAL | 
-		_SET_TYPE | _SET_BLOCK_START_INDEX | 
-		_SET_BLOCK_STOP_INDEX | _SET_BLOCK_CALLBACK,
+		_SET_VALUE | _SET_MAX_VAL | _SET_MIN_VAL |
+			_SET_TYPE | _SET_BLOCK_START_INDEX |
+			_SET_BLOCK_STOP_INDEX | _SET_CALLBACK | _SET_BLOCK_CALLBACK,
 		prog);
 
 	res |= adj_synth_settings_manager->set_int_param(
@@ -121,13 +122,13 @@ int AdjSynth::set_default_preset_parameters_noise(_settings_params_t *params, in
 		_ENV_6,
 		_ENV_NONE,
 		_ADJ_SYNTH_PRESET_PARAMS,
-		NULL,
+		set_program_noise_amp_modulation_env_num_cb,
 		0,
 		num_of_voices - 1,
 		set_voice_block_noise_amp_modulation_env_num_cb,
-		_SET_VALUE | _SET_MAX_VAL | _SET_MIN_VAL | 
-		_SET_TYPE | _SET_BLOCK_START_INDEX | 
-		_SET_BLOCK_STOP_INDEX | _SET_BLOCK_CALLBACK,
+		_SET_VALUE | _SET_MAX_VAL | _SET_MIN_VAL |
+			_SET_TYPE | _SET_BLOCK_START_INDEX |
+			_SET_BLOCK_STOP_INDEX | _SET_CALLBACK | _SET_BLOCK_CALLBACK,
 		prog);
 
 	res |= adj_synth_settings_manager->set_int_param(
@@ -137,13 +138,13 @@ int AdjSynth::set_default_preset_parameters_noise(_settings_params_t *params, in
 		100,
 		0,
 		_ADJ_SYNTH_PRESET_PARAMS,
-		NULL,
+		set_program_noise_amp_modulation_env_level_cb,
 		0,
 		num_of_voices - 1,
 		set_voice_block_noise_amp_modulation_env_level_cb,
-		_SET_VALUE | _SET_MAX_VAL | _SET_MIN_VAL | 
-		_SET_TYPE | _SET_BLOCK_START_INDEX | 
-		_SET_BLOCK_STOP_INDEX | _SET_BLOCK_CALLBACK,
+		_SET_VALUE | _SET_MAX_VAL | _SET_MIN_VAL |
+			_SET_TYPE | _SET_BLOCK_START_INDEX |
+			_SET_BLOCK_STOP_INDEX | _SET_CALLBACK | _SET_BLOCK_CALLBACK,
 		prog);
 		
 	return res;	

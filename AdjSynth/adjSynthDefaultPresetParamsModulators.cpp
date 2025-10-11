@@ -4,6 +4,7 @@
 *	@date		24-Sep-2025
 *	@version	1.1
 *					1. Rename patch to preset parameters.
+*					2. Adding default program settings callbacks
 *	
 *	@brief		Set default patch Modulators parameters
 *
@@ -316,13 +317,13 @@ int AdjSynth::set_default_preset_parameters_modulators(_settings_params_t *param
 		100,
 		0,
 		_ADJ_SYNTH_PRESET_PARAMS,
-		NULL,
+		set_program_env_1_attack_cb,
 		0,
 		num_of_voices - 1,
 		set_voice_block_env_1_attack_cb,
 		_SET_VALUE | _SET_MAX_VAL | _SET_MIN_VAL | 
 		_SET_TYPE | _SET_BLOCK_START_INDEX | 
-		_SET_BLOCK_STOP_INDEX | _SET_BLOCK_CALLBACK,
+		_SET_BLOCK_STOP_INDEX | _SET_CALLBACK | _SET_BLOCK_CALLBACK,
 		prog);
 
 	res |= adj_synth_settings_manager->set_int_param(
@@ -332,13 +333,13 @@ int AdjSynth::set_default_preset_parameters_modulators(_settings_params_t *param
 		100,
 		0,
 		_ADJ_SYNTH_PRESET_PARAMS,
-		NULL,
+		set_program_env_1_decay_cb,
 		0,
 		num_of_voices - 1,
 		set_voice_block_env_1_decay_cb,
-		_SET_VALUE | _SET_MAX_VAL | _SET_MIN_VAL | 
-		_SET_TYPE | _SET_BLOCK_START_INDEX | 
-		_SET_BLOCK_STOP_INDEX | _SET_BLOCK_CALLBACK,
+		_SET_VALUE | _SET_MAX_VAL | _SET_MIN_VAL |
+			_SET_TYPE | _SET_BLOCK_START_INDEX |
+			_SET_BLOCK_STOP_INDEX | _SET_CALLBACK | _SET_BLOCK_CALLBACK,
 		prog);
 
 	res |= adj_synth_settings_manager->set_int_param(
@@ -348,13 +349,13 @@ int AdjSynth::set_default_preset_parameters_modulators(_settings_params_t *param
 		100,
 		0,
 		_ADJ_SYNTH_PRESET_PARAMS,
-		NULL,
+		set_program_env_1_sustain_cb,
 		0,
 		num_of_voices - 1,
 		set_voice_block_env_1_sustain_cb,
-		_SET_VALUE | _SET_MAX_VAL | _SET_MIN_VAL | 
-		_SET_TYPE | _SET_BLOCK_START_INDEX | 
-		_SET_BLOCK_STOP_INDEX | _SET_BLOCK_CALLBACK,
+		_SET_VALUE | _SET_MAX_VAL | _SET_MIN_VAL |
+			_SET_TYPE | _SET_BLOCK_START_INDEX |
+			_SET_BLOCK_STOP_INDEX | _SET_CALLBACK | _SET_BLOCK_CALLBACK,
 		prog);
 
 	res |= adj_synth_settings_manager->set_int_param(
@@ -364,13 +365,13 @@ int AdjSynth::set_default_preset_parameters_modulators(_settings_params_t *param
 		100,
 		0,
 		_ADJ_SYNTH_PRESET_PARAMS,
-		NULL,
+		set_program_env_1_release_cb,
 		0,
 		num_of_voices - 1,
 		set_voice_block_env_1_release_cb,
-		_SET_VALUE | _SET_MAX_VAL | _SET_MIN_VAL | 
-		_SET_TYPE | _SET_BLOCK_START_INDEX | 
-		_SET_BLOCK_STOP_INDEX | _SET_BLOCK_CALLBACK,
+		_SET_VALUE | _SET_MAX_VAL | _SET_MIN_VAL |
+			_SET_TYPE | _SET_BLOCK_START_INDEX |
+			_SET_BLOCK_STOP_INDEX | _SET_CALLBACK | _SET_BLOCK_CALLBACK,
 		prog);
 
 	res |= adj_synth_settings_manager->set_int_param(

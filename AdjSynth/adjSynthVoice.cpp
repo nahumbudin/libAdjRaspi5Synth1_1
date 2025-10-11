@@ -1,9 +1,11 @@
 /**
-*	@file		adjSynthVoice.cpp
-*	@author		Nahum Budin
-*	@date		3-Oct-2024
-*	@version	1.2 
-*					1. Code refactoring and notaion.
+ *	@file		adjSynthVoice.cpp
+ *	@author		Nahum Budin
+ *	@date		3-Oct-2024
+ *	@version	1.2
+ *					1. Code refactoring and notaion.
+ *					2. Add LFO6 and ADSR6 to set_voice_params()
+ *					3. Change ADR set_sec to set _sec_log in set_voice_params()
 *					
 *	@version	2-Feb--2021	1.1
 *					1. Code refactoring and notaion.
@@ -36,6 +38,12 @@ SynthVoice::SynthVoice(
 	Wavetable *synth_pad_wavetable, 
 	AudioManager *aud_mng)
 {
+	out_gain_1 = out_gain_2 = 50;
+	out_pan_1 = out_pan_2 = 50;
+	out_send_1 = out_send_2 = 0;
+	out_pan_lfo_1 = out_pan_lfo_2 = 0;
+	out_pan_lfo_level_1 = out_pan_lfo_level_2 = 0;
+	
 	set_sample_rate(samp_rate);
 	set_audio_block_size(block_size);
 	
@@ -195,6 +203,164 @@ void SynthVoice::set_allocated_program(int prg)
 int SynthVoice::get_allocated_program() 
 { 
 	return allocated_to_program_num;  
+}
+
+/**
+ *   @brief  Set the voice signal 1 gain
+ *   @param  gain  0-100
+ *   @return 0
+ */
+int SynthVoice::set_gain_1(int gain)
+{
+	if ((gain >= 0) && (gain <= 100))
+	{
+		out_gain_1 = gain;
+		dsp_voice->out_amp_1->set_ch1_gain(gain);
+	}
+	
+	return 0;
+}
+
+/**
+ *   @brief  Set the voice signal 2 gain
+ *   @param  gain  0-100
+ *   @return 0
+ */
+int SynthVoice::set_gain_2(int gain)
+{
+	if ((gain >= 0) && (gain <= 100))
+	{
+		out_gain_2 = gain;
+		dsp_voice->out_amp_1->set_ch2_gain(gain);
+	}
+
+	return 0;
+}
+
+/**
+ *   @brief  Set the voice signal 1 send
+ *   @param  send  0-100
+ *   @return 0
+ */
+int SynthVoice::set_send_1(int send)
+{
+	if ((send >= 0) && (send <= 100))
+	{
+		out_send_1 = send;
+	}
+
+	return 0;
+}
+
+/**
+ *   @brief  Set the voice signal 2 send
+ *   @param  send  0-100
+ *   @return 0
+ */
+int SynthVoice::set_send_2(int send)
+{
+	if ((send >= 0) && (send <= 100))
+	{
+		out_send_2 = send;
+	}
+
+	return 0;
+}
+
+/**
+ *   @brief  Set the voice pan 1 pan
+ *   @param  pan  0-100 (50 ceneter)
+ *   @return 0
+ */
+int SynthVoice::set_pan_1(int pan)
+{
+	if ((pan >= 0) && (pan <= 100))
+	{
+		out_pan_1 = pan;
+		dsp_voice->out_amp_1->set_ch1_pan(pan);
+	}
+
+	return 0;
+}
+
+/**
+ *   @brief  Set the voice pan 2 pan
+ *   @param  pan  0-100 (50 ceneter)
+ *   @return 0
+ */
+int SynthVoice::set_pan_2(int pan)
+{
+	if ((pan >= 0) && (pan <= 100))
+	{
+		out_pan_2 = pan;
+		dsp_voice->out_amp_1->set_ch2_pan(pan);
+	}
+
+	return 0;
+}
+
+/**
+ *   @brief  Set the voice signal 1 pan lfo num
+ *   @param  lfo number  0 none 1-6
+ *   @return 0
+ */
+int SynthVoice::set_pan_lfo_1(int lfo)
+{
+	if ((lfo >= 0) && (lfo <= _NUM_OF_LFOS))
+	{
+		out_pan_lfo_1 = lfo;
+		dsp_voice->set_amp_1_ch_1_pan_mod_lfo(lfo);
+	}
+
+	return 0;
+}
+
+/**
+ *   @brief  Set the voice signal 2 pan lfo num
+ *   @param  lfo number  0 none 1-6
+ *   @return 0
+ */
+int SynthVoice::set_pan_lfo_2(int lfo)
+{
+	if ((lfo >= 0) && (lfo <= _NUM_OF_LFOS))
+	{
+		out_pan_lfo_2 = lfo;
+		dsp_voice->set_amp_1_ch_2_pan_mod_lfo(lfo);
+	}
+
+	return 0;
+}
+
+/**
+ *   @brief  Set the voice signal 1 pan lfo level
+ *   @param  lfo level  0-100
+ *   @return 0
+ */
+int SynthVoice::set_pan_lfo_level_1(int lev)
+{
+	if ((lev >= 0) && (lev <= 100))
+	{
+		out_pan_lfo_level_1 = lev;
+		dsp_voice->set_amp_1_ch_1_pan_mod_lfo_level(lev);
+	}
+
+	return 0;
+}
+
+/**
+ *   @brief  Set the voice signal 1 pan lfo level
+ *   @param  lfo level  0-100
+ *   @return 0
+ */
+int SynthVoice::set_pan_lfo_level_2(int lev)
+{
+	if ((lev >= 0) && (lev <= 100))
+	{
+		out_pan_lfo_level_2 = lev;
+		dsp_voice->set_amp_1_ch_2_pan_mod_lfo_level(lev);
+	}
+
+	return 0;
 }
 
 /**
@@ -1290,17 +1456,35 @@ void SynthVoice::set_voice_params(_settings_params_t *params)
 	{
 		dsp_voice->lfo_5->set_pwm_dcycle(int_param.value);
 	}
+
+	res = settings_manager->get_int_param(params, "adjsynth.lfo_6.waveform", &int_param);
+	if (res == _SETTINGS_KEY_FOUND)
+	{
+		dsp_voice->lfo_6->set_waveform(int_param.value);
+	}
+
+	res = settings_manager->get_int_param(params, "adjsynth.lfo_6.rate", &int_param);
+	if (res == _SETTINGS_KEY_FOUND)
+	{
+		dsp_voice->set_lfo_6_frequency(int_param.value);
+	}
+
+	res = settings_manager->get_int_param(params, "adjsynth.lfo_6.symmetry", &int_param);
+	if (res == _SETTINGS_KEY_FOUND)
+	{
+		dsp_voice->lfo_6->set_pwm_dcycle(int_param.value);
+	}
 	
 	res = settings_manager->get_int_param(params, "adjsynth.env_1.attack", &int_param);
 	if (res == _SETTINGS_KEY_FOUND)
 	{
-		dsp_voice->adsr_1->set_attack_time_sec(int_param.value);
+		dsp_voice->adsr_1->set_attack_time_sec_log(int_param.value);
 	}
 	
 	res = settings_manager->get_int_param(params, "adjsynth.env_1.decay", &int_param);
 	if (res == _SETTINGS_KEY_FOUND)
 	{
-		dsp_voice->adsr_1->set_decay_time_sec(int_param.value);
+		dsp_voice->adsr_1->set_decay_time_sec_log(int_param.value);
 	}
 	
 	res = settings_manager->get_int_param(params, "adjsynth.env_1.sustain", &int_param);
@@ -1312,19 +1496,19 @@ void SynthVoice::set_voice_params(_settings_params_t *params)
 	res = settings_manager->get_int_param(params, "adjsynth.env_1.release", &int_param);
 	if (res == _SETTINGS_KEY_FOUND)
 	{
-		dsp_voice->adsr_1->set_release_time_sec(int_param.value);
+		dsp_voice->adsr_1->set_release_time_sec_log(int_param.value);
 	}
 	
 	res = settings_manager->get_int_param(params, "adjsynth.env_2.attack", &int_param);
 	if (res == _SETTINGS_KEY_FOUND)
 	{
-		dsp_voice->adsr_2->set_attack_time_sec(int_param.value);
+		dsp_voice->adsr_2->set_attack_time_sec_log(int_param.value);
 	}
 	
 	res = settings_manager->get_int_param(params, "adjsynth.env_2.decay", &int_param);
 	if (res == _SETTINGS_KEY_FOUND)
 	{
-		dsp_voice->adsr_2->set_decay_time_sec(int_param.value);
+		dsp_voice->adsr_2->set_decay_time_sec_log(int_param.value);
 	}
 	
 	res = settings_manager->get_int_param(params, "adjsynth.env_2.sustain", &int_param);
@@ -1336,19 +1520,19 @@ void SynthVoice::set_voice_params(_settings_params_t *params)
 	res = settings_manager->get_int_param(params, "adjsynth.env_2.release", &int_param);
 	if (res == _SETTINGS_KEY_FOUND)
 	{
-		dsp_voice->adsr_2->set_release_time_sec(int_param.value);
+		dsp_voice->adsr_2->set_release_time_sec_log(int_param.value);
 	}
 	
 	res = settings_manager->get_int_param(params, "adjsynth.env_3.attack", &int_param);
 	if (res == _SETTINGS_KEY_FOUND)
 	{
-		dsp_voice->adsr_3->set_attack_time_sec(int_param.value);
+		dsp_voice->adsr_3->set_attack_time_sec_log(int_param.value);
 	}
 	
 	res = settings_manager->get_int_param(params, "adjsynth.env_3.decay", &int_param);
 	if (res == _SETTINGS_KEY_FOUND)
 	{
-		dsp_voice->adsr_3->set_decay_time_sec(int_param.value);
+		dsp_voice->adsr_3->set_decay_time_sec_log(int_param.value);
 	}
 	
 	res = settings_manager->get_int_param(params, "adjsynth.env_3.sustain", &int_param);
@@ -1360,19 +1544,19 @@ void SynthVoice::set_voice_params(_settings_params_t *params)
 	res = settings_manager->get_int_param(params, "adjsynth.env_3.release", &int_param);
 	if (res == _SETTINGS_KEY_FOUND)
 	{
-		dsp_voice->adsr_3->set_release_time_sec(int_param.value);
+		dsp_voice->adsr_3->set_release_time_sec_log(int_param.value);
 	}
 	
 	res = settings_manager->get_int_param(params, "adjsynth.env_4.attack", &int_param);
 	if (res == _SETTINGS_KEY_FOUND)
 	{
-		dsp_voice->adsr_4->set_attack_time_sec(int_param.value);
+		dsp_voice->adsr_4->set_attack_time_sec_log(int_param.value);
 	}
 	
 	res = settings_manager->get_int_param(params, "adjsynth.env_4.decay", &int_param);
 	if (res == _SETTINGS_KEY_FOUND)
 	{
-		dsp_voice->adsr_4->set_decay_time_sec(int_param.value);
+		dsp_voice->adsr_4->set_decay_time_sec_log(int_param.value);
 	}
 	
 	res = settings_manager->get_int_param(params, "adjsynth.env_4.sustain", &int_param);
@@ -1384,19 +1568,19 @@ void SynthVoice::set_voice_params(_settings_params_t *params)
 	res = settings_manager->get_int_param(params, "adjsynth.env_4.release", &int_param);
 	if (res == _SETTINGS_KEY_FOUND)
 	{
-		dsp_voice->adsr_4->set_release_time_sec(int_param.value);
+		dsp_voice->adsr_4->set_release_time_sec_log(int_param.value);
 	}
 	
 	res = settings_manager->get_int_param(params, "adjsynth.env_5.attack", &int_param);
 	if (res == _SETTINGS_KEY_FOUND)
 	{
-		dsp_voice->adsr_5->set_attack_time_sec(int_param.value);
+		dsp_voice->adsr_5->set_attack_time_sec_log(int_param.value);
 	}
 	
 	res = settings_manager->get_int_param(params, "adjsynth.env_5.decay", &int_param);
 	if (res == _SETTINGS_KEY_FOUND)
 	{
-		dsp_voice->adsr_5->set_decay_time_sec(int_param.value);
+		dsp_voice->adsr_5->set_decay_time_sec_log(int_param.value);
 	}
 	
 	res = settings_manager->get_int_param(params, "adjsynth.env_5.sustain", &int_param);
@@ -1408,6 +1592,90 @@ void SynthVoice::set_voice_params(_settings_params_t *params)
 	res = settings_manager->get_int_param(params, "adjsynth.env_5.release", &int_param);
 	if (res == _SETTINGS_KEY_FOUND)
 	{
-		dsp_voice->adsr_5->set_release_time_sec(int_param.value);
-	}	
+		dsp_voice->adsr_5->set_release_time_sec_log(int_param.value);
+	}
+
+	res = settings_manager->get_int_param(params, "adjsynth.env_6.attack", &int_param);
+	if (res == _SETTINGS_KEY_FOUND)
+	{
+		dsp_voice->adsr_6->set_attack_time_sec_log(int_param.value);
+	}
+
+	res = settings_manager->get_int_param(params, "adjsynth.env_6.decay", &int_param);
+	if (res == _SETTINGS_KEY_FOUND)
+	{
+		dsp_voice->adsr_6->set_decay_time_sec_log(int_param.value);
+	}
+
+	res = settings_manager->get_int_param(params, "adjsynth.env_6.sustain", &int_param);
+	if (res == _SETTINGS_KEY_FOUND)
+	{
+		dsp_voice->adsr_6->set_sustain_level(int_param.value);
+	}
+
+	res = settings_manager->get_int_param(params, "adjsynth.env_6.release", &int_param);
+	if (res == _SETTINGS_KEY_FOUND)
+	{
+		dsp_voice->adsr_6->set_release_time_sec_log(int_param.value);
+	}
+
+	res = settings_manager->get_int_param(params, "adjsynth.voice_out.gain_1", &int_param);
+	if (res == _SETTINGS_KEY_FOUND)
+	{
+		set_gain_1(int_param.value);
+	}
+
+	res = settings_manager->get_int_param(params, "adjsynth.voice_out.gain_2", &int_param);
+	if (res == _SETTINGS_KEY_FOUND)
+	{
+		set_gain_2(int_param.value);
+	}
+
+	res = settings_manager->get_int_param(params, "adjsynth.voice_out.send_1", &int_param);
+	if (res == _SETTINGS_KEY_FOUND)
+	{
+		set_send_1(int_param.value);
+	}
+
+	res = settings_manager->get_int_param(params, "adjsynth.voice_out.send_2", &int_param);
+	if (res == _SETTINGS_KEY_FOUND)
+	{
+		set_send_2(int_param.value);
+	}
+
+	res = settings_manager->get_int_param(params, "adjsynth.voice_out.pan_1", &int_param);
+	if (res == _SETTINGS_KEY_FOUND)
+	{
+		set_pan_1(int_param.value);
+	}
+
+	res = settings_manager->get_int_param(params, "adjsynth.voice_out.pan_2", &int_param);
+	if (res == _SETTINGS_KEY_FOUND)
+	{
+		set_pan_2(int_param.value);
+	}
+
+	res = settings_manager->get_int_param(params, "adjsynth.voice_out.pan_lfo_1", &int_param);
+	if (res == _SETTINGS_KEY_FOUND)
+	{
+		dsp_voice->set_amp_1_ch_1_pan_mod_lfo(int_param.value);
+	}
+
+	res = settings_manager->get_int_param(params, "adjsynth.voice_out.pan_lfo_2", &int_param);
+	if (res == _SETTINGS_KEY_FOUND)
+	{
+		dsp_voice->set_amp_1_ch_2_pan_mod_lfo(int_param.value);
+	}
+
+	res = settings_manager->get_int_param(params, "adjsynth.voice_pan_out.lfo_level_1", &int_param);
+	if (res == _SETTINGS_KEY_FOUND)
+	{
+		set_pan_lfo_level_1(int_param.value);
+	}
+
+	res = settings_manager->get_int_param(params, "adjsynth.voice_pan_out.lfo_level_2", &int_param);
+	if (res == _SETTINGS_KEY_FOUND)
+	{
+		set_pan_lfo_level_2(int_param.value);
+	}
 }

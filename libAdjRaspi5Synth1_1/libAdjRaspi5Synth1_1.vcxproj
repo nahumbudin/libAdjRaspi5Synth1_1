@@ -177,6 +177,7 @@
     <ClCompile Include="..\AdjSynth\adjSynthDefaultPresetParamsModulators.cpp" />
     <ClCompile Include="..\AdjSynth\adjSynthDefaultPresetParamsMSO.cpp" />
     <ClCompile Include="..\AdjSynth\adjSynthDefaultPresetParamsNoise.cpp" />
+    <ClCompile Include="..\AdjSynth\adjSynthDefaultPresetParamsOut.cpp" />
     <ClCompile Include="..\AdjSynth\adjSynthDefaultPresetParamsPAD.cpp" />
     <ClCompile Include="..\AdjSynth\adjSynthDefaultPresetParamsVCO.cpp" />
     <ClCompile Include="..\AdjSynth\adjSynthDefaultSettingsEqualizer.cpp" />
@@ -202,18 +203,24 @@
     <ClCompile Include="..\AdjSynth\adjSynthProgram.cpp" />
     <ClCompile Include="..\AdjSynth\adjSynthPrograms.cpp" />
     <ClCompile Include="..\AdjSynth\adjSynthSetHammondPercussionMode.cpp" />
+    <ClCompile Include="..\AdjSynth\adjSynthSettingsCallbacksAmp.cpp" />
     <ClCompile Include="..\AdjSynth\adjSynthSettingsCallbacksAudio.cpp" />
     <ClCompile Include="..\AdjSynth\adjSynthSettingsCallbacksDistortion.cpp" />
     <ClCompile Include="..\AdjSynth\adjSynthSettingsCallbacksEqualizer.cpp" />
     <ClCompile Include="..\AdjSynth\adjSynthSettingsCallbacksKeyboard.cpp" />
     <ClCompile Include="..\AdjSynth\adjSynthSettingsCallbacksMisc.cpp" />
     <ClCompile Include="..\AdjSynth\adjSynthSettingsCallbacksMixer.cpp" />
+    <ClCompile Include="..\AdjSynth\adjSynthSettingsCallbacksProgramKPS.cpp" />
+    <ClCompile Include="..\AdjSynth\adjSynthSettingsCallbacksProgramModulators.cpp" />
+    <ClCompile Include="..\AdjSynth\adjSynthSettingsCallbacksProgramNoise.cpp" />
+    <ClCompile Include="..\AdjSynth\adjSynthSettingsCallbacksProgramOutput.cpp" />
+    <ClCompile Include="..\AdjSynth\adjSynthSettingsCallbacksPrograoVCO.cpp" />
     <ClCompile Include="..\AdjSynth\adjSynthSettingsCallbacksReverb.cpp" />
     <ClCompile Include="..\AdjSynth\adjSynthSettingsCallbacksVoiceAmp.cpp" />
     <ClCompile Include="..\AdjSynth\adjSynthSettingsCallbacksVoiceDistortion.cpp" />
     <ClCompile Include="..\AdjSynth\adjSynthSettingsCallbacksVoiceFilter.cpp" />
     <ClCompile Include="..\AdjSynth\adjSynthSettingsCallbacksVoiceKPS.cpp" />
-    <ClCompile Include="..\AdjSynth\adjSynthSettingsCallbacksVoiceModulators.cpp" />
+    <ClCompile Include="..\AdjSynth\adjSynthSettingsBlockCallbacksVoiceModulators.cpp" />
     <ClCompile Include="..\AdjSynth\adjSynthSettingsCallbacksVoiceMSO.cpp" />
     <ClCompile Include="..\AdjSynth\adjSynthSettingsCallbacksVoiceNoise.cpp" />
     <ClCompile Include="..\AdjSynth\adjSynthSettingsCallbacksVoicePAD.cpp" />
@@ -327,6 +334,7 @@
     <ClCompile Include="..\utils\fftWrapper.cpp" />
     <ClCompile Include="..\utils\utils.cpp" />
     <ClCompile Include="..\utils\xmlFiles.cpp" />
+    <ClCompile Include="adjSynthSettingsCallbacksProgramAmp.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="..\images\Raspi5Synth_TopAssemblyv148.jpg" />

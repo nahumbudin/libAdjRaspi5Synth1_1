@@ -142,9 +142,6 @@
     <Filter Include="Source files\Synthesizer\AdjSynth">
       <UniqueIdentifier>{2edf9512-1db1-431f-9956-c7229d94b337}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source files\Synthesizer\AdjSynth\Settings Callbacks">
-      <UniqueIdentifier>{49a608f2-c0e2-4b9d-b4d7-f10d2b220129}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source files\Synthesizer\AdjSynth\Default Settings">
       <UniqueIdentifier>{92d5477f-99f1-4a1f-9f61-e257c0aaea7f}</UniqueIdentifier>
     </Filter>
@@ -168,6 +165,15 @@
     </Filter>
     <Filter Include="images">
       <UniqueIdentifier>{6f675b6e-e7e3-41b3-9f7d-2767f4e1b531}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source files\Synthesizer\AdjSynth\Settings Block Callbacks">
+      <UniqueIdentifier>{49a608f2-c0e2-4b9d-b4d7-f10d2b220129}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source files\Synthesizer\AdjSynth\Settings Program Callbacks">
+      <UniqueIdentifier>{fccb7556-9035-4423-be5d-b55071e80e7a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source files\Synthesizer\AdjSynth\Settings Global Callbacks">
+      <UniqueIdentifier>{e0410618-de21-4f30-b2ae-1bf02ec72aac}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -376,52 +382,52 @@
       <Filter>Source files</Filter>
     </ClCompile>
     <ClCompile Include="..\AdjSynth\adjSynthSettingsCallbacksVoiceVCO.cpp">
-      <Filter>Source files\Synthesizer\AdjSynth\Settings Callbacks</Filter>
+      <Filter>Source files\Synthesizer\AdjSynth\Settings Block Callbacks</Filter>
     </ClCompile>
     <ClCompile Include="..\AdjSynth\adjSynthSettingsCallbacksAudio.cpp">
-      <Filter>Source files\Synthesizer\AdjSynth\Settings Callbacks</Filter>
+      <Filter>Source files\Synthesizer\AdjSynth\Settings Block Callbacks</Filter>
     </ClCompile>
     <ClCompile Include="..\AdjSynth\adjSynthSettingsCallbacksDistortion.cpp">
-      <Filter>Source files\Synthesizer\AdjSynth\Settings Callbacks</Filter>
+      <Filter>Source files\Synthesizer\AdjSynth\Settings Block Callbacks</Filter>
     </ClCompile>
     <ClCompile Include="..\AdjSynth\adjSynthSettingsCallbacksEqualizer.cpp">
-      <Filter>Source files\Synthesizer\AdjSynth\Settings Callbacks</Filter>
+      <Filter>Source files\Synthesizer\AdjSynth\Settings Block Callbacks</Filter>
     </ClCompile>
     <ClCompile Include="..\AdjSynth\adjSynthSettingsCallbacksKeyboard.cpp">
-      <Filter>Source files\Synthesizer\AdjSynth\Settings Callbacks</Filter>
+      <Filter>Source files\Synthesizer\AdjSynth\Settings Block Callbacks</Filter>
     </ClCompile>
     <ClCompile Include="..\AdjSynth\adjSynthSettingsCallbacksMisc.cpp">
-      <Filter>Source files\Synthesizer\AdjSynth\Settings Callbacks</Filter>
+      <Filter>Source files\Synthesizer\AdjSynth\Settings Block Callbacks</Filter>
     </ClCompile>
     <ClCompile Include="..\AdjSynth\adjSynthSettingsCallbacksMixer.cpp">
-      <Filter>Source files\Synthesizer\AdjSynth\Settings Callbacks</Filter>
+      <Filter>Source files\Synthesizer\AdjSynth\Settings Block Callbacks</Filter>
     </ClCompile>
     <ClCompile Include="..\AdjSynth\adjSynthSettingsCallbacksReverb.cpp">
-      <Filter>Source files\Synthesizer\AdjSynth\Settings Callbacks</Filter>
+      <Filter>Source files\Synthesizer\AdjSynth\Settings Block Callbacks</Filter>
     </ClCompile>
     <ClCompile Include="..\AdjSynth\adjSynthSettingsCallbacksVoiceAmp.cpp">
-      <Filter>Source files\Synthesizer\AdjSynth\Settings Callbacks</Filter>
+      <Filter>Source files\Synthesizer\AdjSynth\Settings Block Callbacks</Filter>
     </ClCompile>
     <ClCompile Include="..\AdjSynth\adjSynthSettingsCallbacksVoiceDistortion.cpp">
-      <Filter>Source files\Synthesizer\AdjSynth\Settings Callbacks</Filter>
+      <Filter>Source files\Synthesizer\AdjSynth\Settings Block Callbacks</Filter>
     </ClCompile>
     <ClCompile Include="..\AdjSynth\adjSynthSettingsCallbacksVoiceFilter.cpp">
-      <Filter>Source files\Synthesizer\AdjSynth\Settings Callbacks</Filter>
+      <Filter>Source files\Synthesizer\AdjSynth\Settings Block Callbacks</Filter>
     </ClCompile>
     <ClCompile Include="..\AdjSynth\adjSynthSettingsCallbacksVoiceKPS.cpp">
-      <Filter>Source files\Synthesizer\AdjSynth\Settings Callbacks</Filter>
+      <Filter>Source files\Synthesizer\AdjSynth\Settings Block Callbacks</Filter>
     </ClCompile>
-    <ClCompile Include="..\AdjSynth\adjSynthSettingsCallbacksVoiceModulators.cpp">
-      <Filter>Source files\Synthesizer\AdjSynth\Settings Callbacks</Filter>
+    <ClCompile Include="..\AdjSynth\adjSynthSettingsBlockCallbacksVoiceModulators.cpp">
+      <Filter>Source files\Synthesizer\AdjSynth\Settings Block Callbacks</Filter>
     </ClCompile>
     <ClCompile Include="..\AdjSynth\adjSynthSettingsCallbacksVoiceMSO.cpp">
-      <Filter>Source files\Synthesizer\AdjSynth\Settings Callbacks</Filter>
+      <Filter>Source files\Synthesizer\AdjSynth\Settings Block Callbacks</Filter>
     </ClCompile>
     <ClCompile Include="..\AdjSynth\adjSynthSettingsCallbacksVoiceNoise.cpp">
-      <Filter>Source files\Synthesizer\AdjSynth\Settings Callbacks</Filter>
+      <Filter>Source files\Synthesizer\AdjSynth\Settings Block Callbacks</Filter>
     </ClCompile>
     <ClCompile Include="..\AdjSynth\adjSynthSettingsCallbacksVoicePAD.cpp">
-      <Filter>Source files\Synthesizer\AdjSynth\Settings Callbacks</Filter>
+      <Filter>Source files\Synthesizer\AdjSynth\Settings Block Callbacks</Filter>
     </ClCompile>
     <ClCompile Include="..\AdjSynth\adjSynthDefaultSettingsReverb.cpp">
       <Filter>Source files\Synthesizer\AdjSynth\Default Settings</Filter>
@@ -644,6 +650,30 @@
     </ClCompile>
     <ClCompile Include="..\Audio\audioPolyMixer.cpp">
       <Filter>Source files\Audio</Filter>
+    </ClCompile>
+    <ClCompile Include="..\AdjSynth\adjSynthSettingsCallbacksProgramModulators.cpp">
+      <Filter>Source files\Synthesizer\AdjSynth\Settings Program Callbacks</Filter>
+    </ClCompile>
+    <ClCompile Include="..\AdjSynth\adjSynthSettingsCallbacksPrograoVCO.cpp">
+      <Filter>Source files\Synthesizer\AdjSynth\Settings Program Callbacks</Filter>
+    </ClCompile>
+    <ClCompile Include="..\AdjSynth\adjSynthSettingsCallbacksProgramNoise.cpp">
+      <Filter>Source files\Synthesizer\AdjSynth\Settings Program Callbacks</Filter>
+    </ClCompile>
+    <ClCompile Include="..\AdjSynth\adjSynthSettingsCallbacksProgramKPS.cpp">
+      <Filter>Source files\Synthesizer\AdjSynth\Settings Program Callbacks</Filter>
+    </ClCompile>
+    <ClCompile Include="adjSynthSettingsCallbacksProgramAmp.cpp">
+      <Filter>Source files\Synthesizer\AdjSynth\Settings Program Callbacks</Filter>
+    </ClCompile>
+    <ClCompile Include="..\AdjSynth\adjSynthDefaultPresetParamsOut.cpp">
+      <Filter>Source files\Synthesizer\AdjSynth\Default Settings</Filter>
+    </ClCompile>
+    <ClCompile Include="..\AdjSynth\adjSynthSettingsCallbacksProgramOutput.cpp">
+      <Filter>Source files\Synthesizer\AdjSynth\Settings Program Callbacks</Filter>
+    </ClCompile>
+    <ClCompile Include="..\AdjSynth\adjSynthSettingsCallbacksAmp.cpp">
+      <Filter>Source files\Synthesizer\AdjSynth\Settings Global Callbacks</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

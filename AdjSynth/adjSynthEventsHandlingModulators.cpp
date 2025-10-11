@@ -1,16 +1,17 @@
 /**
-*	@file		adjSynthEventsHandlingModulators.cpp
-*	@author		Nahum Budin
-*	@date		11-Oct-2024
-*	@version	1.1
-*					1. Code refactoring and notaion.
-*	
-*	@brief		AdjHeart Synthesizer Modulators Events Handling
-*
-*	History:\n
-*	
-*	version 1.0		15_Nov-2019:		
-*		First version
+ *	@file		adjSynthEventsHandlingModulators.cpp
+ *	@author		Nahum Budin
+ *	@date		7-Oct-2025
+ *	@version	1.2
+ *					1. Update callbacks are changed from block to only program
+ *						_EXEC_BLOCK_CALLBACK -> _EXEC_CALLBACK.						.
+ *
+ *	@brief		AdjHeart Synthesizer Modulators Events Handling
+ *
+ *	History:\n
+ *
+ *		version 1.1		11-Oct-2024: Code refactoring and notaion.
+*		version 1.0		15_Nov-2019: First version
 *		
 */
 
@@ -54,7 +55,7 @@ int AdjSynth::modulator_event_int(int modid, int eventid, int val, _settings_par
 				(params,
 				"adjsynth.env_1.attack",
 				val,
-				_EXEC_BLOCK_CALLBACK,
+				_EXEC_CALLBACK,
 				program);	
 		}
 		else if (modid == _ENV_2_EVENT)
@@ -63,7 +64,7 @@ int AdjSynth::modulator_event_int(int modid, int eventid, int val, _settings_par
 				(params,
 				"adjsynth.env_2.attack",
 				val,
-				_EXEC_BLOCK_CALLBACK,
+				_EXEC_CALLBACK,
 				program);
 		}
 		else if (modid == _ENV_3_EVENT)
@@ -72,7 +73,7 @@ int AdjSynth::modulator_event_int(int modid, int eventid, int val, _settings_par
 				(params,
 				"adjsynth.env_3.attack",
 				val,
-				_EXEC_BLOCK_CALLBACK,
+				_EXEC_CALLBACK,
 				program);
 		}
 		else if (modid == _ENV_4_EVENT)
@@ -81,7 +82,7 @@ int AdjSynth::modulator_event_int(int modid, int eventid, int val, _settings_par
 				(params,
 				"adjsynth.env_4.attack",
 				val,
-				_EXEC_BLOCK_CALLBACK,
+				_EXEC_CALLBACK,
 				program);
 		}
 		else if (modid == _ENV_5_EVENT)
@@ -90,7 +91,7 @@ int AdjSynth::modulator_event_int(int modid, int eventid, int val, _settings_par
 				(params,
 				"adjsynth.env_5.attack",
 				val,
-				_EXEC_BLOCK_CALLBACK,
+				_EXEC_CALLBACK,
 				program);
 		}
 		else if (modid == _ENV_6_EVENT)
@@ -99,7 +100,7 @@ int AdjSynth::modulator_event_int(int modid, int eventid, int val, _settings_par
 			(params,
 				"adjsynth.env_6.attack",
 				val,
-				_EXEC_BLOCK_CALLBACK,
+				_EXEC_CALLBACK,
 				program);
 		}
 		break;
@@ -111,7 +112,7 @@ int AdjSynth::modulator_event_int(int modid, int eventid, int val, _settings_par
 				(params,
 				"adjsynth.env_1.decay",
 				val,
-				_EXEC_BLOCK_CALLBACK,
+				_EXEC_CALLBACK,
 				program);
 		}
 		else if (modid == _ENV_2_EVENT)
@@ -120,7 +121,7 @@ int AdjSynth::modulator_event_int(int modid, int eventid, int val, _settings_par
 				(params,
 				"adjsynth.env_2.decay",
 				val,
-				_EXEC_BLOCK_CALLBACK,
+				_EXEC_CALLBACK,
 				program);
 		}
 		else if (modid == _ENV_3_EVENT)
@@ -129,7 +130,7 @@ int AdjSynth::modulator_event_int(int modid, int eventid, int val, _settings_par
 				(params,
 				"adjsynth.env_3.decay",
 				val,
-				_EXEC_BLOCK_CALLBACK,
+				_EXEC_CALLBACK,
 				program);
 		}
 		else if (modid == _ENV_4_EVENT)
@@ -138,7 +139,7 @@ int AdjSynth::modulator_event_int(int modid, int eventid, int val, _settings_par
 				(params,
 				"adjsynth.env_4.decay",
 				val,
-				_EXEC_BLOCK_CALLBACK,
+				_EXEC_CALLBACK,
 				program);
 		}
 		else if (modid == _ENV_5_EVENT)
@@ -147,7 +148,7 @@ int AdjSynth::modulator_event_int(int modid, int eventid, int val, _settings_par
 				(params,
 				"adjsynth.env_5.decay",
 				val,
-				_EXEC_BLOCK_CALLBACK,
+				_EXEC_CALLBACK,
 				program);
 		}
 		else if (modid == _ENV_6_EVENT)
@@ -156,7 +157,7 @@ int AdjSynth::modulator_event_int(int modid, int eventid, int val, _settings_par
 			(params,
 				"adjsynth.env_6.decay",
 				val,
-				_EXEC_BLOCK_CALLBACK,
+				_EXEC_CALLBACK,
 				program);
 		}
 		break;
@@ -168,7 +169,7 @@ int AdjSynth::modulator_event_int(int modid, int eventid, int val, _settings_par
 				(params,
 				"adjsynth.env_1.sustain",
 				val,
-				_EXEC_BLOCK_CALLBACK,
+				_EXEC_CALLBACK,
 				program);
 		}
 		else if (modid == _ENV_2_EVENT)
@@ -177,7 +178,7 @@ int AdjSynth::modulator_event_int(int modid, int eventid, int val, _settings_par
 				(params,
 				"adjsynth.env_2.sustain",
 				val,
-				_EXEC_BLOCK_CALLBACK,
+				_EXEC_CALLBACK,
 				program);
 		}
 		else if (modid == _ENV_3_EVENT)
@@ -186,7 +187,7 @@ int AdjSynth::modulator_event_int(int modid, int eventid, int val, _settings_par
 				(params,
 				"adjsynth.env_3.sustain",
 				val,
-				_EXEC_BLOCK_CALLBACK,
+				_EXEC_CALLBACK,
 				program);
 		}
 		else if (modid == _ENV_4_EVENT)
@@ -195,7 +196,7 @@ int AdjSynth::modulator_event_int(int modid, int eventid, int val, _settings_par
 				(params,
 				"adjsynth.env_4.sustain",
 				val,
-				_EXEC_BLOCK_CALLBACK,
+				_EXEC_CALLBACK,
 				program);
 		}
 		else if (modid == _ENV_5_EVENT)
@@ -204,7 +205,7 @@ int AdjSynth::modulator_event_int(int modid, int eventid, int val, _settings_par
 				(params,
 				"adjsynth.env_5.sustain",
 				val,
-				_EXEC_BLOCK_CALLBACK,
+				_EXEC_CALLBACK,
 				program);
 		}
 		else if (modid == _ENV_6_EVENT)
@@ -213,7 +214,7 @@ int AdjSynth::modulator_event_int(int modid, int eventid, int val, _settings_par
 			(params,
 				"adjsynth.env_6.sustain",
 				val,
-				_EXEC_BLOCK_CALLBACK,
+				_EXEC_CALLBACK,
 				program);
 		}
 		break;
@@ -225,7 +226,7 @@ int AdjSynth::modulator_event_int(int modid, int eventid, int val, _settings_par
 				(params,
 				"adjsynth.env_1.release",
 				val,
-				_EXEC_BLOCK_CALLBACK,
+				_EXEC_CALLBACK,
 				program);
 		}
 		else if (modid == _ENV_2_EVENT)
@@ -234,7 +235,7 @@ int AdjSynth::modulator_event_int(int modid, int eventid, int val, _settings_par
 				(params,
 				"adjsynth.env_2.release",
 				val,
-				_EXEC_BLOCK_CALLBACK,
+				_EXEC_CALLBACK,
 				program);
 		}
 		else if (modid == _ENV_3_EVENT)
@@ -243,7 +244,7 @@ int AdjSynth::modulator_event_int(int modid, int eventid, int val, _settings_par
 				(params,
 				"adjsynth.env_3.release",
 				val,
-				_EXEC_BLOCK_CALLBACK,
+				_EXEC_CALLBACK,
 				program);
 		}
 		else if (modid == _ENV_4_EVENT)
@@ -252,7 +253,7 @@ int AdjSynth::modulator_event_int(int modid, int eventid, int val, _settings_par
 				(params,
 				"adjsynth.env_4.release",
 				val,
-				_EXEC_BLOCK_CALLBACK,
+				_EXEC_CALLBACK,
 				program);
 		}
 		else if (modid == _ENV_5_EVENT)
@@ -261,7 +262,7 @@ int AdjSynth::modulator_event_int(int modid, int eventid, int val, _settings_par
 				(params,
 				"adjsynth.env_5.release",
 				val,
-				_EXEC_BLOCK_CALLBACK,
+				_EXEC_CALLBACK,
 				program);
 		}
 		else if (modid == _ENV_6_EVENT)
@@ -270,7 +271,7 @@ int AdjSynth::modulator_event_int(int modid, int eventid, int val, _settings_par
 			(params,
 				"adjsynth.env_6.release",
 				val,
-				_EXEC_BLOCK_CALLBACK,
+				_EXEC_CALLBACK,
 				program);
 		}
 		break;

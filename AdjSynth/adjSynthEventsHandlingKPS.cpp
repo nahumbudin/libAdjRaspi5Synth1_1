@@ -1,9 +1,11 @@
 /**
-*	@file		adjSynthEventsHandlingKPS.cpp
-*	@author		Nahum Budin
-*	@date		11-Oct-2024
-*	@version	1.1
-*					1. Code refactoring and notaion.
+ *	@file		adjSynthEventsHandlingKPS.cpp
+ *	@author		Nahum Budin
+ *	@date		11-Oct-2024
+ *	@version	1.1
+ *					1. Code refactoring and notaion.
+ *					2. Update callbacks are changed from block to only program
+ *						_EXEC_BLOCK_CALLBACK -> _EXEC_CALLBACK.
 *					
 *	@brief		AdjHeart Synthesizer Kurplus Strong String Generator Events Handling
 *
@@ -73,7 +75,7 @@ int AdjSynth::karplus_event_int(int karlplusid, int eventid, int val, _settings_
 				(params,
 				"adjsynth.karplus_synth.excitation_waveform_type",
 				val,
-				_EXEC_BLOCK_CALLBACK,
+				_EXEC_CALLBACK,
 				program);	
 		}
 		else if (eventid == _KARPLUS_STRONG_EXCITATION_WAVEFORM_VARIATIONS)
@@ -82,7 +84,7 @@ int AdjSynth::karplus_event_int(int karlplusid, int eventid, int val, _settings_
 				(params,
 				"adjsynth.karplus_synth.excitation_waveform_variations",
 				val,
-				_EXEC_BLOCK_CALLBACK,
+				_EXEC_CALLBACK,
 				program);
 		}
 		else if (eventid == _KARPLUS_STRONG_STRING_DUMP_CALC_MODE)
@@ -91,7 +93,7 @@ int AdjSynth::karplus_event_int(int karlplusid, int eventid, int val, _settings_
 				(params,
 				"adjsynth.karplus_synth.string_damping_calculation_mode",
 				val,
-				_EXEC_BLOCK_CALLBACK,
+				_EXEC_CALLBACK,
 				program);
 		}
 		else if (eventid == _KARPLUS_STRONG_STRING_DAMPING)
@@ -100,7 +102,7 @@ int AdjSynth::karplus_event_int(int karlplusid, int eventid, int val, _settings_
 				(params,
 				"adjsynth.karplus_synth.string_damping",
 				val,
-				_EXEC_BLOCK_CALLBACK,
+				_EXEC_CALLBACK,
 				program);
 		}
 		else if (eventid == _KARPLUS_STRONG_STRING_DAMPING_VARIATION)
@@ -109,7 +111,7 @@ int AdjSynth::karplus_event_int(int karlplusid, int eventid, int val, _settings_
 				(params,
 				"adjsynth.karplus_synth.string_damping_variations",
 				val,
-				_EXEC_BLOCK_CALLBACK,
+				_EXEC_CALLBACK,
 				program);
 		}
 		else if (eventid == _KARPLUS_STRONG_PLUCK_DAMPING)
@@ -118,7 +120,7 @@ int AdjSynth::karplus_event_int(int karlplusid, int eventid, int val, _settings_
 				(params,
 				"adjsynth.karplus_synth.pluck_damping",
 				val,
-				_EXEC_BLOCK_CALLBACK,
+				_EXEC_CALLBACK,
 				program);
 		}
 		else if (eventid == _KARPLUS_STRONG_PLUCK_DAMPING_VARIATION)
@@ -127,7 +129,7 @@ int AdjSynth::karplus_event_int(int karlplusid, int eventid, int val, _settings_
 				(params,
 				"adjsynth.karplus_synth.pluck_damping_variations",
 				val,
-				_EXEC_BLOCK_CALLBACK,
+				_EXEC_CALLBACK,
 				program);
 		}
 		else if (eventid == _KARPLUS_STRONG_ON_DECAY)
@@ -136,7 +138,7 @@ int AdjSynth::karplus_event_int(int karlplusid, int eventid, int val, _settings_
 				(params,
 				"adjsynth.karplus_synth.on_decay",
 				val,
-				_EXEC_BLOCK_CALLBACK,
+				_EXEC_CALLBACK,
 				program);
 		}
 		else if (eventid == _KARPLUS_STRONG_OFF_DECAY)
@@ -145,7 +147,7 @@ int AdjSynth::karplus_event_int(int karlplusid, int eventid, int val, _settings_
 				(params,
 				"adjsynth.karplus_synth.off_decay",
 				val,
-				_EXEC_BLOCK_CALLBACK,
+				_EXEC_CALLBACK,
 				program);
 		}
 		else if (eventid == _KARPLUS_STRONG_SEND_1)
@@ -154,7 +156,7 @@ int AdjSynth::karplus_event_int(int karlplusid, int eventid, int val, _settings_
 				(params,
 				"adjsynth.karplus_synth.send_filter_1",
 				val,
-				_EXEC_BLOCK_CALLBACK,
+				_EXEC_CALLBACK,
 				program);
 		}
 		else if (eventid == _KARPLUS_STRONG_SEND_2)
@@ -163,7 +165,7 @@ int AdjSynth::karplus_event_int(int karlplusid, int eventid, int val, _settings_
 				(params,
 				"adjsynth.karplus_synth.send_filter_2",
 				val,
-				_EXEC_BLOCK_CALLBACK,
+				_EXEC_CALLBACK,
 				program);
 		}
 		break;

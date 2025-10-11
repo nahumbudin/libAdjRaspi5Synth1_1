@@ -8,6 +8,10 @@
  *					3. Redfining the Programs concept Programs.h
  *					4. Adding support in both old and new MIDI program objects.
  *					5. Polyphony - Not manging cores loads - let the OS do it.
+ *					6. "Manua" copy of settings structure (mutx added)
+ *					7. Adding DSP Out setting parameters: gain, pan, send, lfo and lfo level
+ *					8. Adding voice send parameters
+ *					9. Changing main Amp gain and send update callbacks to non block callbacks.
 *					
 *	@brief		A collection of 4 synthesizers: Additive, Karplus String, PAD and Morphed Sine Oscilator (MSO)
 *					
@@ -968,7 +972,13 @@ int AdjSynth::set_settings_params(Settings *settings,
 	return_val_if_true(settings_params == NULL || settings == NULL, _SETTINGS_BAD_PARAMETERS);
 
 	adj_synth_settings_manager = settings;
-	active_adj_synth_settings_params = *settings_params;
+	
+	///active_adj_synth_settings_params = *settings_params;
+
+	active_adj_synth_settings_params.bool_parameters_map = settings_params->bool_parameters_map;
+	active_adj_synth_settings_params.float_parameters_map = settings_params->float_parameters_map;
+	active_adj_synth_settings_params.int_parameters_map = settings_params->int_parameters_map;
+	active_adj_synth_settings_params.string_parameters_map = settings_params->string_parameters_map;
 
 	active_adj_synth_settings_params.name = "default_settings";
 	active_adj_synth_settings_params.settings_type = "instrument_settings_param";
@@ -1058,7 +1068,9 @@ int AdjSynth::set_default_preset_parameters(_settings_params_t *params, int prog
 	res |= set_default_preset_parameters_modulators(params, prog);
 
 	res |= set_default_preset_parameters_filter(params, prog);
-	
+
+	res |= set_default_preset_parameters_output(params, prog);
+
 	return res;
 }
 

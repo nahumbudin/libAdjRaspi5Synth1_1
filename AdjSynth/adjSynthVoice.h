@@ -1,9 +1,12 @@
 /**
-*	@file		adjSynthVoice.h
-*	@author		Nahum Budin
-*	@date		3-Oct-2024
-*	@version	1.2 
-*					1. Code refactoring and notaion.
+ *	@file		adjSynthVoice.h
+ *	@author		Nahum Budin
+ *	@date		3-Oct-2024
+ *	@version	1.2
+ *					1. Code refactoring and notaion.
+ *					2. Add LFO6 and ADSR6 to set_voice_params()
+ *					3. Change ADR set_sec to set _sec_log in set_voice_params()
+ *					4. Adding voice gain, pan and send parameters
 *					
 *	@version	2-Feb--2021	1.1
 *					1. Code refactoring and notaion.
@@ -58,7 +61,18 @@ public:
 
 	void set_allocated_program(int prg);
 	int get_allocated_program();
-	
+
+	int set_gain_1(int gain);
+	int set_gain_2(int gain);
+	int set_send_1(int send);
+	int set_send_2(int send);
+	int set_pan_1(int pan);
+	int set_pan_2(int pan);
+	int set_pan_lfo_1(int lfo);
+	int set_pan_lfo_2(int lfo);
+	int set_pan_lfo_level_1(int lev);
+	int set_pan_lfo_level_2(int lev);
+
 	void update_all();
 
 	AudioVoiceFloat *audio_voice = NULL;
@@ -71,16 +85,16 @@ public:
 
 	DSP_MorphingSinusOscWTAB *mso_wtab = NULL;
 	Wavetable *pad_wavetable = NULL;
-	
-private:	
+
+	int out_gain_1, out_pan_1, out_send_1, out_pan_lfo_1, out_pan_lfo_level_1;
+	int out_gain_2, out_pan_2, out_send_2, out_pan_lfo_2, out_pan_lfo_level_2;
+
+  private:	
 	
 	// Play Mode: Poly, Solo, MIDI
 	int play_mode;	
 	bool update_in_progress;
 	bool update_enable;
-
-	int amp_1_pan_mod_lfo, amp_2_pan_mod_lfo;
-	int amp_1_pan_mod_lfo_level, amp_2_pan_mod_lfo_level;
 	
 	int sample_rate, audio_block_size;
 	

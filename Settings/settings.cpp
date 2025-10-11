@@ -1,10 +1,12 @@
 /**
-* @file		settings.h
-*	@author		Nahum Budin
-*	@date		23-Sep-2025
-*	@version	1.2
-*					1. Refactoring.
-*					2. Comments
+ * @file		settings.h
+ *	@author		Nahum Budin
+ *	@date		23-Sep-2025
+ *	@version	1.2
+ *					1. Refactoring.
+ *					2. Comments
+ *					3. Adding a mutex to each settings structure to be used instead
+ *						of the global mutex.
 *	
 *	@brief		Instruments and common settings.
 *
@@ -203,6 +205,7 @@ settings_res_t Settings::get_int_param(_settings_params_t *settings, string name
 		param->block_stop_index = iter->second.block_stop_index;
 		param->block_setup_callback = iter->second.block_setup_callback;
 		param->block_callback_set = iter->second.block_callback_set;
+		
 		res = _SETTINGS_KEY_FOUND;
 	}
 
@@ -360,7 +363,8 @@ settings_res_t Settings::set_string_param(_settings_params_t *settings,
 	return_val_if_true(settings == NULL && active_settings_params == NULL, _SETTINGS_BAD_PARAMETERS);
 	return_val_if_true(name == "", _SETTINGS_BAD_PARAMETERS);
 
-	settings_manage_mutex.lock();
+	//settings_manage_mutex.lock();
+	settings->params_mutex.lock();
 
 	_settings_params_t *_settings;
 
@@ -543,7 +547,8 @@ settings_res_t Settings::set_string_param(_settings_params_t *settings,
 		}
 	}
 
-	settings_manage_mutex.unlock();
+	//settings_manage_mutex.unlock();
+	settings->params_mutex.unlock();
 
 	return _SETTINGS_OK;
 }
@@ -588,7 +593,8 @@ settings_res_t Settings::set_int_param(_settings_params_t *settings, string name
 	return_val_if_true(settings == NULL && active_settings_params == NULL, _SETTINGS_BAD_PARAMETERS);
 	return_val_if_true(name == "", _SETTINGS_BAD_PARAMETERS);
 
-	settings_manage_mutex.lock();
+	//settings_manage_mutex.lock();
+	settings->params_mutex.lock();
 
 	_settings_params_t *_settings;
 
@@ -634,7 +640,8 @@ settings_res_t Settings::set_int_param(_settings_params_t *settings, string name
 					if ((value < param.min_val) || (value > param.max_val))
 					{
 						// out of rang - abbort
-						settings_manage_mutex.unlock();
+						//settings_manage_mutex.unlock();
+						settings->params_mutex.unlock();
 						return _SETTINGS_PARAM_OUT_OF_RANGE;
 					}
 					else
@@ -734,7 +741,8 @@ settings_res_t Settings::set_int_param(_settings_params_t *settings, string name
 			{
 				if (!param.limits_set)
 				{
-					new_param.value = value;
+					//new_param.value = value;
+					settings->params_mutex.unlock();
 				}
 				else
 				{
@@ -836,7 +844,8 @@ settings_res_t Settings::set_int_param(_settings_params_t *settings, string name
 		}
 	}
 
-	settings_manage_mutex.unlock();
+	//settings_manage_mutex.unlock();
+	settings->params_mutex.unlock();
 
 	return _SETTINGS_OK;
 }
@@ -881,7 +890,8 @@ settings_res_t Settings::set_float_param(_settings_params_t *settings, string na
 	return_val_if_true(settings == NULL && active_settings_params == NULL, _SETTINGS_BAD_PARAMETERS);
 	return_val_if_true(name == "", _SETTINGS_BAD_PARAMETERS);
 
-	settings_manage_mutex.lock();
+	//settings_manage_mutex.lock();
+	settings->params_mutex.lock();
 
 	_settings_params_t *_settings;
 
@@ -927,7 +937,9 @@ settings_res_t Settings::set_float_param(_settings_params_t *settings, string na
 					if ((value < param.min_val) || (value > param.max_val))
 					{
 						// out of rang - abbort
-						settings_manage_mutex.unlock();
+						//settings_manage_mutex.unlock();
+						settings->params_mutex.unlock();
+						
 						return _SETTINGS_PARAM_OUT_OF_RANGE;
 					}
 					else
@@ -1034,7 +1046,9 @@ settings_res_t Settings::set_float_param(_settings_params_t *settings, string na
 					if ((value < new_param.min_val) || (value > new_param.max_val))
 					{
 						// out of rang - abbort
-						settings_manage_mutex.unlock();
+						//settings_manage_mutex.unlock();
+						settings->params_mutex.unlock();
+						
 						return _SETTINGS_PARAM_OUT_OF_RANGE;
 					}
 					else
@@ -1129,7 +1143,8 @@ settings_res_t Settings::set_float_param(_settings_params_t *settings, string na
 		}
 	}
 
-	settings_manage_mutex.unlock();
+	//settings_manage_mutex.unlock();
+	settings->params_mutex.unlock();
 
 	return _SETTINGS_OK;
 }
@@ -1171,7 +1186,8 @@ settings_res_t Settings::set_bool_param(_settings_params_t *settings, string nam
 	return_val_if_true(settings == NULL && active_settings_params == NULL, _SETTINGS_BAD_PARAMETERS);
 	return_val_if_true(name == "", _SETTINGS_BAD_PARAMETERS);
 
-	settings_manage_mutex.lock();
+	//settings_manage_mutex.lock();
+	settings->params_mutex.lock();
 
 	_settings_params_t *_settings;
 
@@ -1353,7 +1369,8 @@ settings_res_t Settings::set_bool_param(_settings_params_t *settings, string nam
 		}
 	}
 
-	settings_manage_mutex.unlock();
+	//settings_manage_mutex.unlock();
+	settings->params_mutex.unlock();
 
 	return _SETTINGS_OK;
 }

@@ -100,11 +100,13 @@ class AdjSynthPrograms
 
 	/* Holds the program preset parameters */
 	_settings_params_t *active_preset_params;
+
+	Settings *program_settings_manager = NULL;
 	
 
   private:
 	/* Mange the program settings */
-	Settings *program_settings_manager = NULL;
+	
 
 	/* Holds the program number. */
 	int program_num;

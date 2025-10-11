@@ -19,7 +19,7 @@
 extern pthread_mutex_t voice_mem_blocks_allocation_control_mutex;
 
 /* Global used to set individual output level/pan/send for non program operation */
-float master_level1, master_level2, master_pan1, master_pan2, master_send1, master_send2;
+float master_level_1, master_level_2, master_pan_1, master_pan_2, master_send_1, master_send_2;
 
 AudioManager *poly_mixer_manager;
 
@@ -61,12 +61,12 @@ AudioPolyMixer::AudioPolyMixer(
 		send2[i] = 0.0f;
 	}
 
-	master_level1 = 0.5f;
-	master_level2 = 0.5f;
-	master_pan1 = 0.0f;
-	master_pan2 = 0.0f;
-	master_send1 = 0.0f;
-	master_send2 = 0.0f;
+	master_level_1 = 0.5f;
+	master_level_2 = 0.5f;
+	master_pan_1 = 0.0f;
+	master_pan_2 = 0.0f;
+	master_send_1 = 0.0f;
+	master_send_2 = 0.0f;
 
 	/*
 	programs = num_of_programs;
@@ -241,15 +241,15 @@ int AudioPolyMixer::get_midi_mapping_mode()
 
 void AudioPolyMixer::set_master_level_1(int lev)
 {
-	master_level1 = (float)lev / 100.f;
+	master_level_1 = (float)lev / 100.f;
 
-	if (master_level1 < 0)
+	if (master_level_1 < 0)
 	{
-		master_level1 = 0.f;
+		master_level_1 = 0.f;
 	}
-	else if (master_level1 > 1.f)
+	else if (master_level_1 > 1.f)
 	{
-		master_level1 = 1.f;
+		master_level_1 = 1.f;
 	}
 }
 
@@ -260,14 +260,14 @@ void AudioPolyMixer::set_master_level_1(int lev)
  */
 void AudioPolyMixer::set_master_level_2(int lev)
 {
-	master_level2 = (float)lev / 100.f;
-	if (master_level2 < 0)
+	master_level_2 = (float)lev / 100.f;
+	if (master_level_2 < 0)
 	{
-		master_level2 = 0.f;
+		master_level_2 = 0.f;
 	}
-	else if (master_level2 > 1.f)
+	else if (master_level_2 > 1.f)
 	{
-		master_level2 = 1.f;
+		master_level_2 = 1.f;
 	}
 }
 
@@ -279,13 +279,13 @@ void AudioPolyMixer::set_master_level_2(int lev)
 void AudioPolyMixer::set_master_pan_1(int pan)
 {
 	master_pan_1 = (float)(pan - 50) / 50.f;
-	if (master_pan1 < -1.f)
+	if (master_pan_1 < -1.f)
 	{
-		master_pan1 = -1.f;
+		master_pan_1 = -1.f;
 	}
-	else if (master_pan1 > 1.f)
+	else if (master_pan_1 > 1.f)
 	{
-		master_pan1 = 1.f;
+		master_pan_1 = 1.f;
 	}
 }
 
@@ -296,14 +296,14 @@ void AudioPolyMixer::set_master_pan_1(int pan)
  */
 void AudioPolyMixer::set_master_pan_2(int pan)
 {
-	master_pan2 = (float)(pan - 50) / 50.f;
-	if (master_pan2 < -1.f)
+	master_pan_2 = (float)(pan - 50) / 50.f;
+	if (master_pan_2 < -1.f)
 	{
-		master_pan2 = -1.f;
+		master_pan_2 = -1.f;
 	}
-	else if (master_pan2 > 1.f)
+	else if (master_pan_2 > 1.f)
 	{
-		master_pan2 = 1.f;
+		master_pan_2 = 1.f;
 	}
 }
 
@@ -314,14 +314,14 @@ void AudioPolyMixer::set_master_pan_2(int pan)
  */
 void AudioPolyMixer::set_master_send_1(int lev)
 {
-	master_send1 = (float)lev / 100.f;
-	if (master_send1 < 0)
+	master_send_1 = (float)lev / 100.f;
+	if (master_send_1 < 0)
 	{
-		master_send1 = 0.f;
+		master_send_1 = 0.f;
 	}
-	else if (master_send1 > 1.f)
+	else if (master_send_1 > 1.f)
 	{
-		master_send1 = 1.f;
+		master_send_1 = 1.f;
 	}
 }
 
@@ -332,14 +332,14 @@ void AudioPolyMixer::set_master_send_1(int lev)
  */
 void AudioPolyMixer::set_master_send_2(int lev)
 {
-	master_send2 = (float)lev / 100.f;
-	if (master_send2 < 0)
+	master_send_2 = (float)lev / 100.f;
+	if (master_send_2 < 0)
 	{
-		master_send2 = 0.f;
+		master_send_2 = 0.f;
 	}
-	else if (master_send2 > 1.f)
+	else if (master_send_2 > 1.f)
 	{
-		master_send2 = 1.f;
+		master_send_2 = 1.f;
 	}
 }
 
@@ -1023,26 +1023,26 @@ void AudioPolyMixer::update()
 				if ((samp % _CONTROL_SUB_SAMPLING) == 0)
 				{
 					// Update modulation factors at sub sampling rate.
-					left_gain_1 = gain1[0] * (1 - pan1[0]) * (1 - amp_1_pan_mod_samp[subsamp]) * master_level1 * 0.1f;
-					left_gain_2 = gain2[0] * (1 - pan2[0]) * (1 - amp_2_pan_mod_samp[subsamp]) * master_level2 * 0.1f;
-					right_gain_1 = gain1[0] * (1 + pan1[0]) * (1 + amp_1_pan_mod_samp[subsamp]) * master_level1 * 0.1f;
-					right_gain_2 = gain2[0] * (1 + pan2[0]) * (1 + amp_2_pan_mod_samp[subsamp]) * master_level2 * 0.1f;
+					left_gain_1 = gain1[0] * (1 - pan1[0]) * (1 - amp_1_pan_mod_samp[subsamp]) * master_level_1 * 0.1f;
+					left_gain_2 = gain2[0] * (1 - pan2[0]) * (1 - amp_2_pan_mod_samp[subsamp]) * master_level_2 * 0.1f;
+					right_gain_1 = gain1[0] * (1 + pan1[0]) * (1 + amp_1_pan_mod_samp[subsamp]) * master_level_1 * 0.1f;
+					right_gain_2 = gain2[0] * (1 + pan2[0]) * (1 + amp_2_pan_mod_samp[subsamp]) * master_level_2 * 0.1f;
 
 					if (midi_mapping_mode == _MIDI_MAPPING_MODE_MAPPING)
 					{
 						// In mapping mode use each voice send value for send calculation.
-						left_send_1 = send1[0] * (1 - pan1[0]) * (1 - amp_1_pan_mod) * master_level1 * 0.1f;
-						left_send_2 = send2[0] * (1 - pan2[0]) * (1 - amp_2_pan_mod) * master_level2 * 0.1f;
-						right_send_1 = send1[0] * (1 + pan1[0]) * (1 + amp_1_pan_mod) * master_send1 * 0.1f;
-						right_send_2 = send2[0] * (1 + pan2[0]) * (1 + amp_2_pan_mod) * master_send2 * 0.1f;
+						left_send_1 = send1[0] * (1 - pan1[0]) * (1 - amp_1_pan_mod) * master_level_1 * 0.1f;
+						left_send_2 = send2[0] * (1 - pan2[0]) * (1 - amp_2_pan_mod) * master_level_2 * 0.1f;
+						right_send_1 = send1[0] * (1 + pan1[0]) * (1 + amp_1_pan_mod) * master_send_1 * 0.1f;
+						right_send_2 = send2[0] * (1 + pan2[0]) * (1 + amp_2_pan_mod) * master_send_2 * 0.1f;
 					}
 					else
 					{
 						// In non-mapping mode use master send value for send calculation.
-						left_send_1 = master_send_1 * (1 - master_pan1) * (1 - amp_1_pan_mod) * 0.1f;
-						left_send_2 = master_send_2 * (1 - master_pan2) * (1 - amp_2_pan_mod) * 0.1f;
-						right_send_1 = master_send_1 * (1 + master_pan1) * (1 + amp_1_pan_mod) * 0.1f;
-						right_send_2 = master_send_2 * (1 + master_pan2) * (1 + amp_2_pan_mod) * 0.1f;
+						left_send_1 = master_send_1 * (1 - master_pan_1) * (1 - amp_1_pan_mod) * 0.1f;
+						left_send_2 = master_send_2 * (1 - master_pan_2) * (1 - amp_2_pan_mod) * 0.1f;
+						right_send_1 = master_send_1 * (1 + master_pan_1) * (1 + amp_1_pan_mod) * 0.1f;
+						right_send_2 = master_send_2 * (1 + master_pan_2) * (1 + amp_2_pan_mod) * 0.1f;
 					}
 
 					subsamp++;
@@ -1099,26 +1099,26 @@ void AudioPolyMixer::update()
 					if ((samp % _CONTROL_SUB_SAMPLING) == 0)
 					{
 						// Update modulation factors at sub sampling rate.
-						left_gain_1 = gain1[voice] * (1 - pan1[voice]) * (1 - amp_1_pan_mod_samp[subsamp]) * master_level1 * 0.1f;
-						left_gain_2 = gain2[voice] * (1 - pan2[voice]) * (1 - amp_2_pan_mod_samp[subsamp]) * master_level2 * 0.1f;
-						right_gain_1 = gain1[voice] * (1 + pan1[voice]) * (1 + amp_1_pan_mod_samp[subsamp]) * master_level1 * 0.1f;
-						right_gain_2 = gain2[0] * (1 + pan2[voice]) * (1 + amp_2_pan_mod_samp[subsamp]) * master_level2 * 0.1f;
+						left_gain_1 = gain1[voice] * (1 - pan1[voice]) * (1 - amp_1_pan_mod_samp[subsamp]) * master_level_1 * 0.1f;
+						left_gain_2 = gain2[voice] * (1 - pan2[voice]) * (1 - amp_2_pan_mod_samp[subsamp]) * master_level_2 * 0.1f;
+						right_gain_1 = gain1[voice] * (1 + pan1[voice]) * (1 + amp_1_pan_mod_samp[subsamp]) * master_level_1 * 0.1f;
+						right_gain_2 = gain2[voice] * (1 + pan2[voice]) * (1 + amp_2_pan_mod_samp[subsamp]) * master_level_2 * 0.1f;
 
 						if (midi_mapping_mode == _MIDI_MAPPING_MODE_MAPPING)
 						{
 							// In mapping mode use each voice send value for send calculation.
-							left_send_1 = send1[voice] * (1 - pan1[voice]) * (1 - amp_1_pan_mod) * master_level1 * 0.1f;
-							left_send_2 = send2[voice] * (1 - pan2[voice]) * (1 - amp_2_pan_mod) * master_level2 * 0.1f;
-							right_send_1 = send1[voice] * (1 + pan1[voice]) * (1 + amp_1_pan_mod) * master_send1 * 0.1f;
-							right_send_2 = send2[voice] * (1 + pan2[voice]) * (1 + amp_2_pan_mod) * master_send2 * 0.1f;
+							left_send_1 = send1[voice] * (1 - pan1[voice]) * (1 - amp_1_pan_mod) * master_level_1 * 0.1f;
+							left_send_2 = send2[voice] * (1 - pan2[voice]) * (1 - amp_2_pan_mod) * master_level_2 * 0.1f;
+							right_send_1 = send1[voice] * (1 + pan1[voice]) * (1 + amp_1_pan_mod) * master_send_1 * 0.1f;
+							right_send_2 = send2[voice] * (1 + pan2[voice]) * (1 + amp_2_pan_mod) * master_send_2 * 0.1f;
 						}
 						else
 						{
 							// In non-mapping mode use master send value for send calculation.
-							left_send_1 = master_send_1 * (1 - master_pan1) * (1 - amp_1_pan_mod) * 0.1f;
-							left_send_2 = master_send_2 * (1 - master_pan2) * (1 - amp_2_pan_mod) * 0.1f;
-							right_send_1 = master_send_1 * (1 + master_pan1) * (1 + amp_1_pan_mod) * 0.1f;
-							right_send_2 = master_send_2 * (1 + master_pan2) * (1 + amp_2_pan_mod) * 0.1f;
+							left_send_1 = master_send_1 * (1 - master_pan_1) * (1 - amp_1_pan_mod) * 0.1f;
+							left_send_2 = master_send_2 * (1 - master_pan_2) * (1 - amp_2_pan_mod) * 0.1f;
+							right_send_1 = master_send_1 * (1 + master_pan_1) * (1 + amp_1_pan_mod) * 0.1f;
+							right_send_2 = master_send_2 * (1 + master_pan_2) * (1 + amp_2_pan_mod) * 0.1f;
 						}
 
 						subsamp++;

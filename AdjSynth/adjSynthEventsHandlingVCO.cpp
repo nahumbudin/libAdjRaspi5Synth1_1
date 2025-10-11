@@ -1,9 +1,11 @@
 /**
-*	@file		adjSynthEventsHandlingVCO.cpp
-*	@author		Nahum Budin
-*	@date		11-Oct-2024
-*	@version	1.2	
-*					1. Code refactoring and notaion.
+ *	@file		adjSynthEventsHandlingVCO.cpp
+ *	@author		Nahum Budin
+ *	@date		11-Oct-2024
+ *	@version	1.2
+ *					1. Code refactoring and notaion.
+ *					2. Update callbacks are changed from block to only program
+ *						_EXEC_BLOCK_CALLBACK -> _EXEC_CALLBACK.
 *	
 *	@brief		AdjHeart Synthesizer VCOs Events Handling
 *
@@ -107,7 +109,7 @@ int AdjSynth::vco_event_int(int vcoid, int eventid, int val, _settings_params_t 
 				(params,
 				"adjsynth.osc1.waveform",
 				val,
-				_EXEC_BLOCK_CALLBACK,
+				_EXEC_CALLBACK,
 				program);					
 		}
 		else if (vcoid == _OSC_2_EVENT)
@@ -129,7 +131,7 @@ int AdjSynth::vco_event_int(int vcoid, int eventid, int val, _settings_params_t 
 				(params,
 				"adjsynth.osc1.symmetry",
 				val,
-				_EXEC_BLOCK_CALLBACK,
+				_EXEC_CALLBACK,
 				program);
 		}
 		else if (vcoid == _OSC_2_EVENT)
@@ -138,7 +140,7 @@ int AdjSynth::vco_event_int(int vcoid, int eventid, int val, _settings_params_t 
 				(params,
 				"adjsynth.osc2.symmetry",
 				val,
-				_EXEC_BLOCK_CALLBACK,
+				_EXEC_CALLBACK,
 				program);
 		}
 		break;
@@ -151,7 +153,7 @@ int AdjSynth::vco_event_int(int vcoid, int eventid, int val, _settings_params_t 
 				(params,
 				"adjsynth.osc1.tune_offset_oct",
 				val,
-				_EXEC_BLOCK_CALLBACK,
+				_EXEC_CALLBACK,
 				program);
 		}
 		else if (vcoid == _OSC_2_EVENT)
@@ -160,7 +162,7 @@ int AdjSynth::vco_event_int(int vcoid, int eventid, int val, _settings_params_t 
 				(params,
 				"adjsynth.osc2.tune_offset_oct",
 				val,
-				_EXEC_BLOCK_CALLBACK,
+				_EXEC_CALLBACK,
 				program);
 		}
 		break;
@@ -173,7 +175,7 @@ int AdjSynth::vco_event_int(int vcoid, int eventid, int val, _settings_params_t 
 				(params,
 				"adjsynth.osc1.tune_offset_semitones",
 				val,
-				_EXEC_BLOCK_CALLBACK,
+				_EXEC_CALLBACK,
 				program);
 		}
 		else if (vcoid == _OSC_2_EVENT)
@@ -182,7 +184,7 @@ int AdjSynth::vco_event_int(int vcoid, int eventid, int val, _settings_params_t 
 				(params,
 				"adjsynth.osc2.tune_offset_semitones",
 				val,
-				_EXEC_BLOCK_CALLBACK,
+				_EXEC_CALLBACK,
 				program);
 		}
 		break;
@@ -197,7 +199,7 @@ int AdjSynth::vco_event_int(int vcoid, int eventid, int val, _settings_params_t 
 				(params,
 				"adjsynth.osc1.tune_offset_cents",
 				val,
-				_EXEC_BLOCK_CALLBACK,
+				_EXEC_CALLBACK,
 				program);
 		}
 		else if (vcoid == _OSC_2_EVENT)
@@ -206,7 +208,7 @@ int AdjSynth::vco_event_int(int vcoid, int eventid, int val, _settings_params_t 
 				(params,
 				"adjsynth.osc2.tune_offset_cents",
 				val,
-				_EXEC_BLOCK_CALLBACK,
+				_EXEC_CALLBACK,
 				program);
 		}
 		break;
@@ -218,7 +220,7 @@ int AdjSynth::vco_event_int(int vcoid, int eventid, int val, _settings_params_t 
 				(params,
 				"adjsynth.osc1.send_filter_1",
 				val,
-				_EXEC_BLOCK_CALLBACK,
+				_EXEC_CALLBACK,
 				program);
 				
 			adj_synth_settings_manager->get_int_param(params, "adjsynth.osc1.hammond_percussion_mode", &_int_param);
@@ -239,7 +241,7 @@ int AdjSynth::vco_event_int(int vcoid, int eventid, int val, _settings_params_t 
 					(params,
 					"adjsynth.osc2.send_filter_1",
 					_tmp_val,
-					_EXEC_BLOCK_CALLBACK,
+					_EXEC_CALLBACK,
 					program);
 					
 				update_ui_callback();
@@ -251,7 +253,7 @@ int AdjSynth::vco_event_int(int vcoid, int eventid, int val, _settings_params_t 
 				(params,
 				"adjsynth.osc2.send_filter_1",
 				val,
-				_EXEC_BLOCK_CALLBACK,
+				_EXEC_CALLBACK,
 				program);
 		}
 		break;
@@ -263,7 +265,7 @@ int AdjSynth::vco_event_int(int vcoid, int eventid, int val, _settings_params_t 
 				(params,
 				"adjsynth.osc1.send_filter_2",
 				val,
-				_EXEC_BLOCK_CALLBACK,
+				_EXEC_CALLBACK,
 				program);
 				
 			adj_synth_settings_manager->get_int_param(params, "adjsynth.osc1.hammond_percussion_mode", &_int_param);
@@ -284,7 +286,7 @@ int AdjSynth::vco_event_int(int vcoid, int eventid, int val, _settings_params_t 
 					(params,
 					"adjsynth.osc2.send_filter_2",
 					_tmp_val,
-					_EXEC_BLOCK_CALLBACK,
+					_EXEC_CALLBACK,
 					program);
 					
 				update_ui_callback();
@@ -296,7 +298,7 @@ int AdjSynth::vco_event_int(int vcoid, int eventid, int val, _settings_params_t 
 				(params,
 				"adjsynth.osc2.send_filter_2",
 				val,
-				_EXEC_BLOCK_CALLBACK,
+				_EXEC_CALLBACK,
 				program);
 		}
 			
@@ -309,7 +311,7 @@ int AdjSynth::vco_event_int(int vcoid, int eventid, int val, _settings_params_t 
 				(params,
 				"adjsynth.osc1.unison_mode",
 				val,
-				_EXEC_BLOCK_CALLBACK,
+				_EXEC_CALLBACK,
 				program);
 		}
 		break;
@@ -336,7 +338,7 @@ int AdjSynth::vco_event_int(int vcoid, int eventid, int val, _settings_params_t 
 					(params,
 					"adjsynth.osc1.unison_level_1",
 					val,
-					_EXEC_BLOCK_CALLBACK,
+					_EXEC_CALLBACK,
 					program);
 			}
 		}
@@ -349,7 +351,7 @@ int AdjSynth::vco_event_int(int vcoid, int eventid, int val, _settings_params_t 
 					(params,
 				"adjsynth.osc1.unison_level_2",
 				val,
-				_EXEC_BLOCK_CALLBACK,
+				_EXEC_CALLBACK,
 				program);
 		}
 		break;
@@ -361,7 +363,7 @@ int AdjSynth::vco_event_int(int vcoid, int eventid, int val, _settings_params_t 
 				(params,
 				"adjsynth.osc1.unison_level_3",
 				val,
-				_EXEC_BLOCK_CALLBACK,
+				_EXEC_CALLBACK,
 				program);
 		}
 		break;
@@ -373,7 +375,7 @@ int AdjSynth::vco_event_int(int vcoid, int eventid, int val, _settings_params_t 
 				(params,
 				"adjsynth.osc1.unison_level_4",
 				val,
-				_EXEC_BLOCK_CALLBACK,
+				_EXEC_CALLBACK,
 				program);
 		}
 		break;
@@ -385,7 +387,7 @@ int AdjSynth::vco_event_int(int vcoid, int eventid, int val, _settings_params_t 
 				(params,
 				"adjsynth.osc1.unison_level_5",
 				val,
-				_EXEC_BLOCK_CALLBACK,
+				_EXEC_CALLBACK,
 				program);
 		}
 		break;
@@ -397,7 +399,7 @@ int AdjSynth::vco_event_int(int vcoid, int eventid, int val, _settings_params_t 
 				(params,
 				"adjsynth.osc1.unison_level_6",
 				val,
-				_EXEC_BLOCK_CALLBACK,
+				_EXEC_CALLBACK,
 				program);
 		}
 		break;
@@ -409,7 +411,7 @@ int AdjSynth::vco_event_int(int vcoid, int eventid, int val, _settings_params_t 
 				(params,
 				"adjsynth.osc1.unison_level_7",
 				val,
-				_EXEC_BLOCK_CALLBACK,
+				_EXEC_CALLBACK,
 				program);
 		}
 		break;
@@ -421,7 +423,7 @@ int AdjSynth::vco_event_int(int vcoid, int eventid, int val, _settings_params_t 
 				(params,
 				"adjsynth.osc1.unison_level_8",
 				val,
-				_EXEC_BLOCK_CALLBACK,
+				_EXEC_CALLBACK,
 				program);
 		}
 		break;
@@ -433,7 +435,7 @@ int AdjSynth::vco_event_int(int vcoid, int eventid, int val, _settings_params_t 
 				(params,
 				"adjsynth.osc1.unison_level_9",
 				val,
-				_EXEC_BLOCK_CALLBACK,
+				_EXEC_CALLBACK,
 				program);
 		}
 		break;
@@ -445,7 +447,7 @@ int AdjSynth::vco_event_int(int vcoid, int eventid, int val, _settings_params_t 
 				(params,
 				"adjsynth.osc1.unison_distortion",
 				val,
-				_EXEC_BLOCK_CALLBACK,
+				_EXEC_CALLBACK,
 				program);
 		}
 		break;
@@ -457,7 +459,7 @@ int AdjSynth::vco_event_int(int vcoid, int eventid, int val, _settings_params_t 
 				(params,
 				"adjsynth.osc1.unison_detune",
 				val,
-				_EXEC_BLOCK_CALLBACK,
+				_EXEC_CALLBACK,
 				program);
 		}
 		break;
@@ -470,7 +472,7 @@ int AdjSynth::vco_event_int(int vcoid, int eventid, int val, _settings_params_t 
 				(params,
 				"adjsynth.osc1.freq_modulation_lfo_num",
 				val,
-				_EXEC_BLOCK_CALLBACK,
+				_EXEC_CALLBACK,
 				program);
 		}
 		else if (vcoid == _OSC_2_EVENT)
@@ -479,7 +481,7 @@ int AdjSynth::vco_event_int(int vcoid, int eventid, int val, _settings_params_t 
 				(params,
 				"adjsynth.osc2.freq_modulation_lfo_num",
 				val,
-				_EXEC_BLOCK_CALLBACK,
+				_EXEC_CALLBACK,
 				program);
 		}
 		break;
@@ -491,7 +493,7 @@ int AdjSynth::vco_event_int(int vcoid, int eventid, int val, _settings_params_t 
 				(params,
 				"adjsynth.osc1.freq_modulation_lfo_level",
 				val,
-				_EXEC_BLOCK_CALLBACK,
+				_EXEC_CALLBACK,
 				program);
 		}
 		else if (vcoid == _OSC_2_EVENT)
@@ -500,7 +502,7 @@ int AdjSynth::vco_event_int(int vcoid, int eventid, int val, _settings_params_t 
 				(params,
 				"adjsynth.osc2.freq_modulation_lfo_level",
 				val,
-				_EXEC_BLOCK_CALLBACK,
+				_EXEC_CALLBACK,
 				program);
 		}
 		break;
@@ -512,7 +514,7 @@ int AdjSynth::vco_event_int(int vcoid, int eventid, int val, _settings_params_t 
 				(params,
 				"adjsynth.osc1.freq_modulation_env_num",
 				val,
-				_EXEC_BLOCK_CALLBACK,
+				_EXEC_CALLBACK,
 				program);
 		}
 		else if (vcoid == _OSC_2_EVENT)
@@ -521,7 +523,7 @@ int AdjSynth::vco_event_int(int vcoid, int eventid, int val, _settings_params_t 
 				(params,
 				"adjsynth.osc2.freq_modulation_env_num",
 				val,
-				_EXEC_BLOCK_CALLBACK,
+				_EXEC_CALLBACK,
 				program);
 		}
 		break;
@@ -533,7 +535,7 @@ int AdjSynth::vco_event_int(int vcoid, int eventid, int val, _settings_params_t 
 				(params,
 				"adjsynth.osc1.freq_modulation_env_level",
 				val,
-				_EXEC_BLOCK_CALLBACK,
+				_EXEC_CALLBACK,
 				program);
 		}
 		else if (vcoid == _OSC_2_EVENT)
@@ -542,7 +544,7 @@ int AdjSynth::vco_event_int(int vcoid, int eventid, int val, _settings_params_t 
 				(params,
 				"adjsynth.osc2.freq_modulation_env_level",
 				val,
-				_EXEC_BLOCK_CALLBACK,
+				_EXEC_CALLBACK,
 				program);
 		}
 		break;
@@ -554,7 +556,7 @@ int AdjSynth::vco_event_int(int vcoid, int eventid, int val, _settings_params_t 
 				(params,
 				"adjsynth.osc1.pwm_modulation_lfo_num",
 				val,
-				_EXEC_BLOCK_CALLBACK,
+				_EXEC_CALLBACK,
 				program);
 		}
 		else if (vcoid == _OSC_2_EVENT)
@@ -563,7 +565,7 @@ int AdjSynth::vco_event_int(int vcoid, int eventid, int val, _settings_params_t 
 				(params,
 				"adjsynth.osc2.pwm_modulation_lfo_num",
 				val,
-				_EXEC_BLOCK_CALLBACK,
+				_EXEC_CALLBACK,
 				program);
 		}
 		break;
@@ -575,7 +577,7 @@ int AdjSynth::vco_event_int(int vcoid, int eventid, int val, _settings_params_t 
 				(params,
 				"adjsynth.osc1.pwm_modulation_lfo_level",
 				val,
-				_EXEC_BLOCK_CALLBACK,
+				_EXEC_CALLBACK,
 				program);
 		}
 		else if (vcoid == _OSC_2_EVENT)
@@ -584,7 +586,7 @@ int AdjSynth::vco_event_int(int vcoid, int eventid, int val, _settings_params_t 
 				(params,
 				"adjsynth.osc2.pwm_modulation_lfo_level",
 				val,
-				_EXEC_BLOCK_CALLBACK,
+				_EXEC_CALLBACK,
 				program);
 		}
 		break;
@@ -596,7 +598,7 @@ int AdjSynth::vco_event_int(int vcoid, int eventid, int val, _settings_params_t 
 				(params,
 				"adjsynth.osc1.pwm_modulation_env_num",
 				val,
-				_EXEC_BLOCK_CALLBACK,
+				_EXEC_CALLBACK,
 				program);
 		}
 		else if (vcoid == _OSC_2_EVENT)
@@ -605,7 +607,7 @@ int AdjSynth::vco_event_int(int vcoid, int eventid, int val, _settings_params_t 
 				(params,
 				"adjsynth.osc2.pwm_modulation_env_num",
 				val,
-				_EXEC_BLOCK_CALLBACK,
+				_EXEC_CALLBACK,
 				program);
 		}
 		break;
@@ -617,7 +619,7 @@ int AdjSynth::vco_event_int(int vcoid, int eventid, int val, _settings_params_t 
 				(params,
 				"adjsynth.osc1.pwm_modulation_env_level",
 				val,
-				_EXEC_BLOCK_CALLBACK,
+				_EXEC_CALLBACK,
 				program);
 		}
 		else if (vcoid == _OSC_2_EVENT)
@@ -626,7 +628,7 @@ int AdjSynth::vco_event_int(int vcoid, int eventid, int val, _settings_params_t 
 				(params,
 				"adjsynth.osc2.pwm_modulation_env_level",
 				val,
-				_EXEC_BLOCK_CALLBACK,
+				_EXEC_CALLBACK,
 				program);
 		}
 		break;
@@ -638,7 +640,7 @@ int AdjSynth::vco_event_int(int vcoid, int eventid, int val, _settings_params_t 
 				(params,
 				"adjsynth.osc1.amp_modulation_lfo_num",
 				val,
-				_EXEC_BLOCK_CALLBACK,
+				_EXEC_CALLBACK,
 				program);
 		}
 		else if (vcoid == _OSC_2_EVENT)
@@ -647,7 +649,7 @@ int AdjSynth::vco_event_int(int vcoid, int eventid, int val, _settings_params_t 
 				(params,
 				"adjsynth.osc2.amp_modulation_lfo_num",
 				val,
-				_EXEC_BLOCK_CALLBACK,
+				_EXEC_CALLBACK,
 				program);
 		}
 		break;
@@ -659,7 +661,7 @@ int AdjSynth::vco_event_int(int vcoid, int eventid, int val, _settings_params_t 
 				(params,
 				"adjsynth.osc1.amp_modulation_lfo_level",
 				val,
-				_EXEC_BLOCK_CALLBACK,
+				_EXEC_CALLBACK,
 				program);
 		}
 		else if (vcoid == _OSC_2_EVENT)
@@ -668,7 +670,7 @@ int AdjSynth::vco_event_int(int vcoid, int eventid, int val, _settings_params_t 
 				(params,
 				"adjsynth.osc2.amp_modulation_lfo_level",
 				val,
-				_EXEC_BLOCK_CALLBACK,
+				_EXEC_CALLBACK,
 				program);
 		}
 		break;
@@ -680,7 +682,7 @@ int AdjSynth::vco_event_int(int vcoid, int eventid, int val, _settings_params_t 
 				(params,
 				"adjsynth.osc1.amp_modulation_env_num",
 				val,
-				_EXEC_BLOCK_CALLBACK,
+				_EXEC_CALLBACK,
 				program);
 		}
 		else if (vcoid == _OSC_2_EVENT)
@@ -689,7 +691,7 @@ int AdjSynth::vco_event_int(int vcoid, int eventid, int val, _settings_params_t 
 				(params,
 				"adjsynth.osc2.amp_modulation_env_num",
 				val,
-				_EXEC_BLOCK_CALLBACK,
+				_EXEC_CALLBACK,
 				program);
 		}
 		break;
@@ -701,7 +703,7 @@ int AdjSynth::vco_event_int(int vcoid, int eventid, int val, _settings_params_t 
 				(params,
 				"adjsynth.osc1.amp_modulation_env_level",
 				val,
-				_EXEC_BLOCK_CALLBACK,
+				_EXEC_CALLBACK,
 				program);
 		}
 		else if (vcoid == _OSC_2_EVENT)
@@ -710,7 +712,7 @@ int AdjSynth::vco_event_int(int vcoid, int eventid, int val, _settings_params_t 
 				(params,
 				"adjsynth.osc2.amp_modulation_env_level",
 				val,
-				_EXEC_BLOCK_CALLBACK,
+				_EXEC_CALLBACK,
 				program);
 		}
 		break;			
@@ -744,7 +746,7 @@ int AdjSynth::vco_event_bool(int vcoid, int eventid, bool val, _settings_params_
 				(params,
 				"adjsynth.osc1.enabled",
 				val,
-				_EXEC_BLOCK_CALLBACK,
+				_EXEC_CALLBACK,
 				program);
 		}
 		else if (vcoid == _OSC_2_EVENT)
@@ -753,7 +755,7 @@ int AdjSynth::vco_event_bool(int vcoid, int eventid, bool val, _settings_params_
 				(params,
 				"adjsynth.osc2.enabled",
 				val,
-				_EXEC_BLOCK_CALLBACK,
+				_EXEC_CALLBACK,
 				program);
 		}
 		break;	
@@ -765,7 +767,7 @@ int AdjSynth::vco_event_bool(int vcoid, int eventid, bool val, _settings_params_
 				(params,
 				"adjsynth.osc2.sync_on_osc_1",
 				val,
-				_EXEC_BLOCK_CALLBACK,
+				_EXEC_CALLBACK,
 				program);
 		}
 			
@@ -778,7 +780,7 @@ int AdjSynth::vco_event_bool(int vcoid, int eventid, bool val, _settings_params_
 				(params,
 				"adjsynth.osc1.unison_square_wave",
 				val,
-				_EXEC_BLOCK_CALLBACK,
+				_EXEC_CALLBACK,
 				program);
 		}
 			

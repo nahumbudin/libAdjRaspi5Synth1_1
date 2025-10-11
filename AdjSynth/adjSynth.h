@@ -8,6 +8,10 @@
  *					3. Redfining the Programs concept Programs.h
  *					4. Adding support in both old and new MIDI program objects.
  *					5. Polyphony - Not manging cores loads - let the OS do it.
+ *					6. Adding non-block callbacks setting parametrs of a single program
+ *					7. Adding DSP Out setting parameters: gain, pan, lfo and lfo level
+ *					8. Adding voice send parameters
+ *					9. Changing main Amp gain and send update callbacks to non block callbacks.
 *					
 *	@brief		A collection of 4 synthesizers: Additive, Karplus String, PAD and Morphed Sine Oscilator (MSO)
 *	
@@ -117,7 +121,8 @@ public:
 	int set_default_preset_parameters_filter(_settings_params_t *params, int prog);
 	int set_default_preset_parameters_amp(_settings_params_t *params, int prog);
 	int set_default_preset_parameters_distortion(_settings_params_t *params, int prog);
-	int set_default_preset_parameters_modulators(_settings_params_t *params, int prog);		
+	int set_default_preset_parameters_modulators(_settings_params_t *params, int prog);
+	int set_default_preset_parameters_output(_settings_params_t *params, int prog);
 	
 	int set_default_settings_parameters(_settings_params_t *params);
 	int set_default_settings_parameters_equalizer(_settings_params_t *params);
@@ -343,7 +348,170 @@ int set_mixer_channel_send_cb(int snd, int chan);
 
 int set_play_mode_cb(int pmod, int prog);
 
-// Callbacs to set a voice settings
+// Callbackes to set global settings
+
+int set_amp_gain_1_cb(int gain, int dummy_prog);
+int set_amp_gain_2_cb(int gain, int dummy_prog);
+int set_amp_send_1_cb(int send, int dummy_prog);
+int set_amp_send_2_cb(int send, int dummy_prog);
+
+// Program Callbacks to set program settingd
+
+int set_program_osc_1_enabled_cb(bool enable, int prog);
+int set_program_osc_1_waveform_cb(int wvf, int prog);
+int set_program_osc_1_pwm_symmetry_cb(int sym, int prog);
+int set_program_osc_1_send_filter_1_cb(int snd, int prog);
+int set_program_osc_1_send_filter_2_cb(int snd, int prog);
+int set_program_osc_1_tune_offset_oct_cb(int oct, int prog);
+int set_program_osc_1_tune_offset_semitones_cb(int smt, int prog);
+int set_program_osc_1_tune_offset_cents_cb(int cnt, int prog);
+int set_program_osc_1_freq_modulation_lfo_num_cb(int lfon, int prog);
+int set_program_osc_1_freq_modulation_lfo_level_cb(int lfolev, int prog);
+int set_program_osc_1_freq_modulation_env_num_cb(int envn, int prog);
+int set_program_osc_1_freq_modulation_env_level_cb(int envlev, int prog);
+int set_program_osc_1_pwm_modulation_lfo_num_cb(int lfon, int prog);
+int set_program_osc_1_pwm_modulation_lfo_level_cb(int lfolev, int prog);
+int set_program_osc_1_pwm_modulation_env_num_cb(int envn, int prog);
+int set_program_osc_1_pwm_modulation_env_level_cb(int envlev, int prog);
+int set_program_osc_1_amp_modulation_lfo_num_cb(int lfon, int prog);
+int set_program_osc_1_amp_modulation_lfo_level_cb(int lfolev, int prog);
+int set_program_osc_1_amp_modulation_env_num_cb(int envn, int prog);
+int set_program_osc_1_amp_modulation_env_level_cb(int envlev, int prog);
+int set_program_osc_1_unison_mod_cb(int unimod, int prog);
+int set_program_osc_1_hammond_percussion_mode_cb(int pmode, int prog);
+int set_program_osc_1_unison_level_1_cb(int level, int prog);
+int set_program_osc_1_unison_level_2_cb(int level, int prog);
+int set_program_osc_1_unison_level_3_cb(int level, int prog);
+int set_program_osc_1_unison_level_4_cb(int level, int prog);
+int set_program_osc_1_unison_level_5_cb(int level, int prog);
+int set_program_osc_1_unison_level_6_cb(int level, int prog);
+int set_program_osc_1_unison_level_7_cb(int level, int prog);
+int set_program_osc_1_unison_level_8_cb(int level, int prog);
+int set_program_osc_1_unison_level_9_cb(int level, int prog);
+int set_program_osc_1_unison_distortion_cb(int dist, int prog);
+int set_program_osc_1_unison_detune_cb(int det, int prog);
+int set_program_osc_1_unison_set_square_cb(bool sqr, int prog);
+
+int set_program_osc_2_enabled_cb(bool enable, int prog);
+int set_program_osc_2_waveform_cb(int wvf, int prog);
+int set_program_osc_2_pwm_symmetry_cb(int sym, int prog);
+int set_program_osc_2_send_filter_1_cb(int snd, int prog);
+int set_program_osc_2_send_filter_2_cb(int snd, int prog);
+int set_program_osc_2_tune_offset_oct_cb(int oct, int prog);
+int set_program_osc_2_tune_offset_semitones_cb(int smt, int prog);
+int set_program_osc_2_tune_offset_cents_cb(int cnt, int prog);
+int set_program_osc_2_freq_modulation_lfo_num_cb(int lfon, int prog);
+int set_program_osc_2_freq_modulation_lfo_level_cb(int lfolev, int prog);
+int set_program_osc_2_freq_modulation_env_num_cb(int envn, int prog);
+int set_program_osc_2_freq_modulation_env_level_cb(int envlev, int prog);
+int set_program_osc_2_pwm_modulation_lfo_num_cb(int lfon, int prog);
+int set_program_osc_2_pwm_modulation_lfo_level_cb(int lfolev, int prog);
+int set_program_osc_2_pwm_modulation_env_num_cb(int envn, int prog);
+int set_program_osc_2_pwm_modulation_env_level_cb(int envlev, int prog);
+int set_program_osc_2_amp_modulation_lfo_num_cb(int lfon, int prog);
+int set_program_osc_2_amp_modulation_lfo_level_cb(int lfolev, int prog);
+int set_program_osc_2_amp_modulation_env_num_cb(int envn, int prog);
+int set_program_osc_2_amp_modulation_env_level_cb(int envlev, int prog);
+int set_program_osc_2_sync_on_osc1_cb(bool sync, int prog);
+
+int set_program_noise_enabled_cb(bool enable, int prog);
+int set_program_noise_color_cb(int col, int prog);
+int set_program_noise_send_filter_1_cb(int snd, int prog);
+int set_program_noise_send_filter_2_cb(int snd, int prog);
+int set_program_noise_amp_modulation_lfo_num_cb(int lfon, int prog);
+int set_program_noise_amp_modulation_lfo_level_cb(int lfolev, int prog);
+int set_program_noise_amp_modulation_env_num_cb(int envn, int prog);
+int set_program_noise_amp_modulation_env_level_cb(int envlev, int prog);
+
+int set_program_karplus_synth_enabled_cb(bool enable, int prog);
+int set_program_karplus_synth_excitation_waveform_type_cb(int type, int prog);
+int set_program_karplus_synth_excitation_waveform_variations_cb(int var, int prog);
+int set_program_karplus_synth_decay_cb(int dec, int prog);
+int set_program_karplus_synth_pluck_damping_cb(int dump, int prog);
+int set_program_karplus_synth_pluck_damping_variations_cb(int dump, int prog);
+int set_program_karplus_synth_string_damping_cb(int dump, int prog);
+int set_program_karplus_synth_string_damping_variations_cb(int dump, int prog);
+int set_program_karplus_synth_string_damping_calculation_mode_cb(int mode, int prog);
+int set_program_karplus_synth_send_filter_1_cb(int snd, int prog);
+int set_program_karplus_synth_send_filter_2_cb(int snd, int prog);
+int set_program_karplus_synth_on_decay_cb(int dec, int prog);
+int set_program_karplus_synth_off_decay_cb(int dec, int prog);
+
+int set_program_amp_ch_1_level_cb(int lev, int prog);
+int set_program_amp_ch_1_pan_cb(int pan, int prog);
+int set_program_amp_ch_1_pan_modulation_lfo_num_cb(int num, int prog);
+int set_program_amp_ch_1_pan_modulation_lfo_level_cb(int lev, int prog);
+int set_program_amp_fixed_levels_state_cb(bool en, int prog);
+
+
+int set_program_lfo_1_waveform_cb(int wavf, int prog);
+int set_program_lfo_1_rate_cb(int rate, int prog);
+int set_program_lfo_1_symmetry_cb(int sym, int prog);
+
+int set_program_lfo_2_waveform_cb(int wavf, int prog);
+int set_program_lfo_2_rate_cb(int rate, int prog);
+int set_program_lfo_2_symmetry_cb(int sym, int prog);
+
+int set_program_lfo_3_waveform_cb(int wavf, int prog);
+int set_program_lfo_3_rate_cb(int rate, int prog);
+int set_program_lfo_3_symmetry_cb(int sym, int prog);
+
+int set_program_lfo_4_waveform_cb(int wavf, int prog);
+int set_program_lfo_4_rate_cb(int rate, int prog);
+int set_program_lfo_4_symmetry_cb(int sym, int prog);
+
+int set_program_lfo_5_waveform_cb(int wavf, int prog);
+int set_program_lfo_5_rate_cb(int rate, int prog);
+int set_program_lfo_5_symmetry_cb(int sym, int prog);
+
+int set_program_lfo_6_waveform_cb(int wavf, int prog);
+int set_program_lfo_6_rate_cb(int rate, int prog);
+int set_program_lfo_6_symmetry_cb(int sym, int prog);
+
+int set_program_env_1_attack_cb(int attck, int prog);
+int set_program_env_1_decay_cb(int dec, int prog);
+int set_program_env_1_sustain_cb(int sus, int prog);
+int set_program_env_1_release_cb(int rel, int prog);
+
+int set_program_env_2_attack_cb(int attck, int prog);
+int set_program_env_2_decay_cb(int dec, int prog);
+int set_program_env_2_sustain_cb(int sus, int prog);
+int set_program_env_2_release_cb(int rel, int prog);
+
+int set_program_env_3_attack_cb(int attck, int prog);
+int set_program_env_3_decay_cb(int dec, int prog);
+int set_program_env_3_sustain_cb(int sus, int prog);
+int set_program_env_3_release_cb(int rel, int prog);
+
+int set_program_env_4_attack_cb(int attck, int prog);
+int set_program_env_4_decay_cb(int dec, int prog);
+int set_program_env_4_sustain_cb(int sus, int prog);
+int set_program_env_4_release_cb(int rel, int prog);
+
+int set_program_env_5_attack_cb(int attck, int prog);
+int set_program_env_5_decay_cb(int dec, int prog);
+int set_program_env_5_sustain_cb(int sus, int prog);
+int set_program_env_5_release_cb(int rel, int prog);
+
+int set_program_env_6_attack_cb(int attck, int prog);
+int set_program_env_6_decay_cb(int dec, int prog);
+int set_program_env_6_sustain_cb(int sus, int prog);
+int set_program_env_6_release_cb(int rel, int prog);
+
+int set_program_out_gain_1_cb(int gain, int prog);
+int set_program_out_pan_1_cb(int pan, int prog);
+int set_program_out_send_1_cb(int send, int prog);
+int set_program_out_pan_lfo_1_cb(int lfo, int prog);
+int set_program_out_pan_lfo_level_1_cb(int lev, int prog);
+
+int set_program_out_gain_2_cb(int gain, int prog);
+int set_program_out_pan_2_cb(int pan, int prog);
+int set_program_out_send_2_cb(int send, int prog);
+int set_program_out_pan_lfo_2_cb(int lfo, int prog);
+int set_program_out_pan_lfo_level_2_cb(int lev, int prog);
+
+
+// Block Callbacs to set a voice settings
 int set_voice_block_osc_1_enabled_cb(bool enable, int voice, int prog);
 int set_voice_block_osc_1_waveform_cb(int wvf, int voice, int prog);
 int set_voice_block_osc_1_pwm_symmetry_cb(int sym, int voice, int prog);
