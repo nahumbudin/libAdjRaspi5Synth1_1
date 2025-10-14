@@ -65,13 +65,14 @@ public:
 	void set_magnitude(float mag);
 	float get_magnitde();
 
+	Wavetable_t *wavetable;
+
 private:
 
 	void init();
 	
 	int id;
 
-	Wavetable_t* wavetable;
 	// Table pointers
 	int pos_h1, pos_h2;
 	// Residual

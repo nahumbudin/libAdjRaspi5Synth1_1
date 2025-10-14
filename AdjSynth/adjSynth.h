@@ -7,7 +7,7 @@
  *					2. Rename Patch to Preset (Patch is to be used for full setup settings)
  *					3. Redfining the Programs concept Programs.h
  *					4. Adding support in both old and new MIDI program objects.
- *					5. Polyphony - Not manging cores loads - let the OS do it.
+ *					5. Polyphony - Not manging cores loads - let the OS do it TODO:.
  *					6. Adding non-block callbacks setting parametrs of a single program
  *					7. Adding DSP Out setting parameters: gain, pan, lfo and lfo level
  *					8. Adding voice send parameters
@@ -437,6 +437,69 @@ int set_program_karplus_synth_send_filter_2_cb(int snd, int prog);
 int set_program_karplus_synth_on_decay_cb(int dec, int prog);
 int set_program_karplus_synth_off_decay_cb(int dec, int prog);
 
+int set_program_mso_synth_enabled_cb(bool enable, int prog);
+int set_program_mso_synth_symmetry_cb(int sym, int prog);
+int set_program_mso_synth_tune_offset_oct_cb(int oct, int prog);
+int set_program_mso_synth_tune_offset_semitones_cb(int semi, int prog);
+int set_program_mso_synth_tune_offset_cents_cb(int cnt, int prog);
+int set_program_mso_synth_send_filter_1_cb(int send, int prog);
+int set_program_mso_synth_send_filter_2_cb(int send, int prog);
+int set_program_mso_synth_freq_modulation_lfo_num_cb(int lfon, int prog);
+int set_program_mso_synth_freq_modulation_lfo_level_cb(int lfolev, int prog);
+int set_program_mso_synth_freq_modulation_env_num_cb(int envn, int prog);
+int set_program_mso_synth_freq_modulation_env_level_cb(int envlev, int prog);
+int set_program_mso_synth_pwm_modulation_lfo_num_cb(int lfon, int prog);
+int set_program_mso_synth_pwm_modulation_lfo_level_cb(int lfolev, int prog);
+int set_program_mso_synth_pwm_modulation_env_num_cb(int envn, int prog);
+int set_program_mso_synth_pwm_modulation_env_level_cb(int envlev, int prog);
+int set_program_mso_synth_amp_modulation_lfo_num_cb(int lfon, int prog);
+int set_program_mso_synth_amp_modulation_lfo_level_cb(int lfolev, int prog);
+int set_program_mso_synth_amp_modulation_env_num_cb(int envn, int prog);
+int set_program_mso_synth_amp_modulation_env_level_cb(int envlev, int prog);
+
+
+int set_program_mso_synth_segment_position_a_cb(int pos, int prog);
+int set_program_mso_synth_segment_position_b_cb(int pos, int prog);
+int set_program_mso_synth_segment_position_c_cb(int pos, int prog);
+int set_program_mso_synth_segment_position_d_cb(int pos, int prog);
+int set_program_mso_synth_segment_position_e_cb(int pos, int prog);
+int set_program_mso_synth_segment_position_f_cb(int pos, int prog);
+
+
+int set_program_pad_synth_enabled_cb(bool enable, int prog);
+int set_program_pad_synth_detune_octave_cb(int oct, int prog);
+int set_program_pad_synth_detune_semitones_cb(int semt, int prog);
+int set_program_pad_synth_detune_cents_cb(int cnts, int prog);
+int set_program_pad_synth_send_filter_1_cb(int snd, int prog);
+int set_program_pad_synth_send_filter_2_cb(int snd, int prog);
+int set_program_pad_synth_freq_modulation_lfo_num_cb(int lfo, int prog);
+int set_program_pad_synth_freq_modulation_lfo_level_cb(int lev, int prog);
+int set_program_pad_synth_freq_modulation_env_num_cb(int env, int prog);
+int set_program_pad_synth_freq_modulation_env_level_cb(int lev, int prog);
+int set_program_pad_synth_amp_modulation_lfo_num_cb(int lfo, int prog);
+int set_program_pad_synth_amp_modulation_lfo_level_cb(int lev, int prog);
+int set_program_pad_synth_amp_modulation_env_num_cb(int env, int prog);
+int set_program_pad_synth_amp_modulation_env_level_cb(int lev, int prog);
+
+int set_program_pad_synth_quality_cb(int qlt, int prog);
+int set_program_pad_synth_base_note_cb(int bnot, int prog);
+int set_program_pad_synth_base_width_cb(int bwd, int prog);
+int set_program_pad_synth_shape_cb(int shp, int prog);
+int set_program_pad_synth_shape_cutoff_cb(int shcut, int prog);
+int set_program_pad_synth_harmonies_level_0_cb(int lev, int prog);
+int set_program_pad_synth_harmonies_level_1_cb(int lev, int prog);
+int set_program_pad_synth_harmonies_level_2_cb(int lev, int prog);
+int set_program_pad_synth_harmonies_level_3_cb(int lev, int prog);
+int set_program_pad_synth_harmonies_level_4_cb(int lev, int prog);
+int set_program_pad_synth_harmonies_level_5_cb(int lev, int prog);
+int set_program_pad_synth_harmonies_level_6_cb(int lev, int prog);
+int set_program_pad_synth_harmonies_level_7_cb(int lev, int prog);
+int set_program_pad_synth_harmonies_level_8_cb(int lev, int prog);
+int set_program_pad_synth_harmonies_level_9_cb(int lev, int prog);
+int set_program_pad_synth_harmonies_detune_cb(int hdet, int prog);
+
+
+
 int set_program_amp_ch_1_level_cb(int lev, int prog);
 int set_program_amp_ch_1_pan_cb(int pan, int prog);
 int set_program_amp_ch_1_pan_modulation_lfo_num_cb(int num, int prog);
@@ -611,6 +674,7 @@ int set_voice_block_mso_synth_amp_modulation_lfo_level_cb(int lfolev, int voice,
 int set_voice_block_mso_synth_amp_modulation_env_num_cb(int envn, int voice, int prog);
 int set_voice_block_mso_synth_amp_modulation_env_level_cb(int envlev, int voice, int prog);
 
+/*  Moved up to Program Callbacks 
 int set_mso_synth_symmetry_cb(int sym, int prog);
 int set_mso_synth_segment_position_a_cb(int pos, int prog);
 int set_mso_synth_segment_position_b_cb(int pos, int prog);
@@ -618,6 +682,7 @@ int set_mso_synth_segment_position_c_cb(int pos, int prog);
 int set_mso_synth_segment_position_d_cb(int pos, int prog);
 int set_mso_synth_segment_position_e_cb(int pos, int prog);
 int set_mso_synth_segment_position_f_cb(int pos, int prog);
+*/
 
 int set_voice_block_pad_synth_enabled_cb(bool enable, int voice, int prog);
 int set_voice_block_pad_synth_detune_octave_cb(int oct, int voice, int prog);
@@ -633,6 +698,7 @@ int set_voice_block_pad_synth_amp_modulation_lfo_num_cb(int lfo, int voice, int 
 int set_voice_block_pad_synth_amp_modulation_lfo_level_cb(int lev, int voice, int prog);
 int set_voice_block_pad_synth_amp_modulation_env_num_cb(int env, int voice, int prog);
 int set_voice_block_pad_synth_amp_modulation_env_level_cb(int lev, int voice, int prog);
+
 // Wavetable is common to all voices of a program
 int set_voice_block_pad_synth_quality_cb(int qlt, int prog);
 int set_voice_block_pad_synth_base_note_cb(int bnot, int prog);
@@ -650,6 +716,7 @@ int set_voice_block_pad_synth_harmonies_level_7_cb(int lev, int prog);
 int set_voice_block_pad_synth_harmonies_level_8_cb(int lev, int prog);
 int set_voice_block_pad_synth_harmonies_level_9_cb(int lev, int prog);
 int set_voice_block_pad_synth_harmonies_detune_cb(int hdet, int prog);
+
 
 
 int set_voice_block_filter_1_frequency_cb(int freq, int voice, int prog);

@@ -1,17 +1,18 @@
 /**
-*	@file		adjSynthEventsHandlingMSO.cpp
-*	@author		Nahum Budin
-*	@date		11-Oct-2024
-*	@version	1.2
-*					1. Code refactoring and notaion.
-*	
-*	@brief		AdjHeart Synthesizer Morphed Sinus Oscilator Events Handling
-*
-*	History:\n
-*	
-*		version	1.1	5-Feb-2021	5-Feb-2021	Code refactoring and notaion.	
-*		version 1.0	15_Nov-2019:		
-*		First version
+ *	@file		adjSynthEventsHandlingMSO.cpp
+ *	@author		Nahum Budin
+ *	@date		11-Oct-2025
+ *	@version	1.3
+ *					1. Update callbacks are changed from block to only program
+ *						_EXEC_BLOCK_CALLBACK -> _EXEC_CALLBACK.
+ *
+ *	@brief		AdjHeart Synthesizer Morphed Sinus Oscilator Events Handling
+ *
+ *	History:\n
+ *
+ *		version 1.2 11-Oct-2025	Code refactoring and notaion.
+*		version	1.1	5-Feb-2021	Code refactoring and notaion.	
+*		version 1.0	15_Nov-2019 First version
 *		
 */
 
@@ -131,14 +132,15 @@ int AdjSynth::mso_event_int(int msoid, int eventid, int val, _settings_params_t 
 				&synth_program[program]->mso_wtab->base_segment_lengths, 
 				&synth_program[program]->mso_wtab->base_segment_positions);
 
-			synth_program[0]->mso_wtab->calc_wtab(
+			synth_program[program]->mso_wtab->calc_wtab(  /* [0] ?*/
 				synth_program[program]->mso_wtab->base_waveform_tab, 
 				&synth_program[program]->mso_wtab->base_segment_lengths, 
 				&synth_program[program]->mso_wtab->base_segment_positions);
 		}
 		else if (eventid == _MSO_CALC_MORPHED_LUT)
-		{
+		{			
 			synth_program[program]->mso_wtab->set_morphing_symetry(synth_program[program]->mso_wtab->get_morphing_symetry());
+			
 			synth_program[program]->mso_wtab->calc_wtab(
 				synth_program[program]->mso_wtab->morphed_waveform_tab,
 				&synth_program[program]->mso_wtab->morphed_segment_lengths,
@@ -151,7 +153,7 @@ int AdjSynth::mso_event_int(int msoid, int eventid, int val, _settings_params_t 
 				(params,
 				"adjsynth.mso_synth.tune_offset_oct",
 				val,
-				_EXEC_BLOCK_CALLBACK,
+				_EXEC_CALLBACK,
 				program);
 		}
 		else if (eventid == _MSO_DETUNE_SEMITONES)
@@ -161,7 +163,7 @@ int AdjSynth::mso_event_int(int msoid, int eventid, int val, _settings_params_t 
 				(params,
 				"adjsynth.mso_synth.tune_offset_semitones",
 				val,
-				_EXEC_BLOCK_CALLBACK,
+				_EXEC_CALLBACK,
 				program);
 		}
 		else if (eventid == _MSO_DETUNE_CENTS)
@@ -172,7 +174,7 @@ int AdjSynth::mso_event_int(int msoid, int eventid, int val, _settings_params_t 
 				(params,
 				"adjsynth.mso_synth.tune_offset_cents",
 				val,
-				_EXEC_BLOCK_CALLBACK,
+				_EXEC_CALLBACK,
 				program);
 		}
 		else if (eventid == _MSO_FILTER_SEND_1)
@@ -181,7 +183,7 @@ int AdjSynth::mso_event_int(int msoid, int eventid, int val, _settings_params_t 
 				(params,
 				"adjsynth.mso_synth.send_filter_1",
 				val,
-				_EXEC_BLOCK_CALLBACK,
+				_EXEC_CALLBACK,
 				program);
 		}
 		else if (eventid == _MSO_FILTER_SEND_2)
@@ -190,7 +192,7 @@ int AdjSynth::mso_event_int(int msoid, int eventid, int val, _settings_params_t 
 				(params,
 				"adjsynth.mso_synth.send_filter_2",
 				val,
-				_EXEC_BLOCK_CALLBACK,
+				_EXEC_CALLBACK,
 				program);
 		}
 		else if (eventid == _MSO_FREQ_MOD_LFO)
@@ -199,7 +201,7 @@ int AdjSynth::mso_event_int(int msoid, int eventid, int val, _settings_params_t 
 				(params,
 				"adjsynth.mso_synth.freq_modulation_lfo_num",
 				val,
-				_EXEC_BLOCK_CALLBACK,
+				_EXEC_CALLBACK,
 				program);
 		}
 		else if (eventid == _MSO_FREQ_MOD_LFO_LEVEL)
@@ -208,7 +210,7 @@ int AdjSynth::mso_event_int(int msoid, int eventid, int val, _settings_params_t 
 				(params,
 				"adjsynth.mso_synth.freq_modulation_lfo_level",
 				val,
-				_EXEC_BLOCK_CALLBACK,
+				_EXEC_CALLBACK,
 				program);
 		}
 		else if (eventid == _MSO_FREQ_MOD_ENV)
@@ -217,7 +219,7 @@ int AdjSynth::mso_event_int(int msoid, int eventid, int val, _settings_params_t 
 				(params,
 				"adjsynth.mso_synth.freq_modulation_env_num",
 				val,
-				_EXEC_BLOCK_CALLBACK,
+				_EXEC_CALLBACK,
 				program);
 		}
 		else if (eventid == _MSO_FREQ_MOD_ENV_LEVEL)
@@ -226,7 +228,7 @@ int AdjSynth::mso_event_int(int msoid, int eventid, int val, _settings_params_t 
 				(params,
 				"adjsynth.mso_synth.freq_modulation_env_level",
 				val,
-				_EXEC_BLOCK_CALLBACK,
+				_EXEC_CALLBACK,
 				program);
 		}
 		else if (eventid == _MSO_PWM_MOD_LFO)
@@ -235,7 +237,7 @@ int AdjSynth::mso_event_int(int msoid, int eventid, int val, _settings_params_t 
 				(params,
 				"adjsynth.mso_synth.pwm_modulation_lfo_num",
 				val,
-				_EXEC_BLOCK_CALLBACK,
+				_EXEC_CALLBACK,
 				program);
 		}
 		else if (eventid == _MSO_PWM_MOD_LFO_LEVEL)
@@ -244,7 +246,7 @@ int AdjSynth::mso_event_int(int msoid, int eventid, int val, _settings_params_t 
 				(params,
 				"adjsynth.mso_synth.pwm_modulation_lfo_level",
 				val,
-				_EXEC_BLOCK_CALLBACK,
+				_EXEC_CALLBACK,
 				program);
 		}
 		else if (eventid == _MSO_PWM_MOD_ENV)
@@ -253,7 +255,7 @@ int AdjSynth::mso_event_int(int msoid, int eventid, int val, _settings_params_t 
 				(params,
 				"adjsynth.mso_synth.pwm_modulation_env_num",
 				val,
-				_EXEC_BLOCK_CALLBACK,
+				_EXEC_CALLBACK,
 				program);
 		}
 		else if (eventid == _MSO_PWM_MOD_ENV_LEVEL)
@@ -262,7 +264,7 @@ int AdjSynth::mso_event_int(int msoid, int eventid, int val, _settings_params_t 
 				(params,
 				"adjsynth.mso_synth.pwm_modulation_env_level",
 				val,
-				_EXEC_BLOCK_CALLBACK,
+				_EXEC_CALLBACK,
 				program);
 		}
 		else if (eventid == _MSO_AMP_MOD_LFO)
@@ -271,7 +273,7 @@ int AdjSynth::mso_event_int(int msoid, int eventid, int val, _settings_params_t 
 				(params,
 				"adjsynth.mso_synth.amp_modulation_lfo_num",
 				val,
-				_EXEC_BLOCK_CALLBACK,
+				_EXEC_CALLBACK,
 				program);
 		}
 		else if (eventid == _MSO_AMP_MOD_LFO_LEVEL)
@@ -280,7 +282,7 @@ int AdjSynth::mso_event_int(int msoid, int eventid, int val, _settings_params_t 
 				(params,
 				"adjsynth.mso_synth.amp_modulation_lfo_level",
 				val,
-				_EXEC_BLOCK_CALLBACK,
+				_EXEC_CALLBACK,
 				program);
 		}
 		else if (eventid == _MSO_AMP_MOD_ENV)
@@ -289,7 +291,7 @@ int AdjSynth::mso_event_int(int msoid, int eventid, int val, _settings_params_t 
 				(params,
 				"adjsynth.mso_synth.amp_modulation_env_num",
 				val,
-				_EXEC_BLOCK_CALLBACK,
+				_EXEC_CALLBACK,
 				program);
 		}
 		else if (eventid == _MSO_AMP_MOD_ENV_LEVEL)
@@ -298,7 +300,7 @@ int AdjSynth::mso_event_int(int msoid, int eventid, int val, _settings_params_t 
 				(params,
 				"adjsynth.mso_synth.amp_modulation_env_level",
 				val,
-				_EXEC_BLOCK_CALLBACK,
+				_EXEC_CALLBACK,
 				program);
 		}
 	}
@@ -328,7 +330,7 @@ int AdjSynth::mso_event_bool(int msoid, int eventid, bool val, _settings_params_
 					(params,
 				"adjsynth.mso_synth.enabled",
 				val,
-				_EXEC_BLOCK_CALLBACK,
+				_EXEC_CALLBACK,
 				program);
 			
 		}

@@ -42,7 +42,7 @@ int mod_synth_get_synthesizer_max_num_of_programs() { return _SYNTH_MAX_NUM_OF_P
 int mod_synth_get_mso_table_length() { return ModSynth::get_instance()->adj_synth->mso_wtab->get_wavetable_length(); }
 float *mod_synth_get_mso_morphed_lookup_table()
 {
-	return AdjSynth::get_instance()->synth_program[AdjSynth::get_instance()->get_active_sketch()]->mso_wtab->morphed_waveform_tab->get_wtab_ptr();
+	return AdjSynth::get_instance()->synth_program[AdjSynth::get_instance()->get_active_sketch()]->mso_wtab->morphed_waveform_tab->get_wtab_ptr(); 
 	//programsMsoLUT[0]->morphedWaveformLut->getLUTptr(); }
 }
 

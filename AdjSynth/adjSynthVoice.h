@@ -73,6 +73,8 @@ public:
 	int set_pan_lfo_level_1(int lev);
 	int set_pan_lfo_level_2(int lev);
 
+	void set_pad_wave_table(Wavetable *padwt);
+
 	void update_all();
 
 	AudioVoiceFloat *audio_voice = NULL;

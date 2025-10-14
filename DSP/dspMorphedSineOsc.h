@@ -1,12 +1,16 @@
 /**
-*	@file		dspMorphedSineOsc.h
-*	@author		Nahum Budin
-*	@date		23_Jan-2021
-*	@version	1.1 
-*					1. Code refactoring and notaion. 
-*					2. Adding sample-rate settings
-*					
-*	@History	31-Oct-2019	1.0 (dspWaveformLUT) (revised version from old libAdjHeartRaspiFlSynthMultiCore_3_1 19-Jul-2018)
+ *	@file		dspMorphedSineOsc.h
+ *	@author		Nahum Budin
+ *	@date		11-Oct-2025
+ *	@version	1.2
+ *					1. Removing singleton.
+ *					2. Adding set_wavetable() function to enable replacing with program wtab
+ *
+ *	@History
+ *				version 1.1 23-Jan-2021
+ *					1. Code refactoring and notaion.
+ *					2. Adding sample-rate settings
+*				version 1.0 31-Oct-2019	(dspWaveformLUT) (revised version from old libAdjHeartRaspiFlSynthMultiCore_3_1 19-Jul-2018)
 *
 *	@brief		An oscilator that uses waveform table to generate segmented sinusudial modulated waveforms.	
 */
@@ -88,7 +92,7 @@ public:
 
 	~DSP_MorphingSinusOscWTAB();
 
-	static DSP_MorphingSinusOscWTAB *get_morphing_sinus_osc_wtab_instance(int samp_rate);
+	// static DSP_MorphingSinusOscWTAB *get_morphing_sinus_osc_wtab_instance(int samp_rate);
 	
 	int set_sample_rate(int samp_rate);
 	int get_sample_rate();
@@ -117,7 +121,7 @@ public:
 
 private:
 
-	static DSP_MorphingSinusOscWTAB *dsp_morphing_sinus_osc_wtab;
+	//static DSP_MorphingSinusOscWTAB *dsp_morphing_sinus_osc_wtab;
 
 	int calc_segment_length(int start, int stop);
 	float get_sin_segment_value(int index, int seg_start, int seg_len, en_sin_quad quadrature);
@@ -181,8 +185,9 @@ public:
 	float get_send_level_2();
 	
 	DSP_MorphingSinusOscWTAB *get_wavetable();
+	void set_wavetable(DSP_MorphingSinusOscWTAB *new_wtab);
 
-private:
+  private:
 
 	int id;
 	

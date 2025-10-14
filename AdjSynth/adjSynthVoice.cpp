@@ -6,6 +6,7 @@
  *					1. Code refactoring and notaion.
  *					2. Add LFO6 and ADSR6 to set_voice_params()
  *					3. Change ADR set_sec to set _sec_log in set_voice_params()
+ *					4. Adding PAD wavetable parms to the set_voice_params()
 *					
 *	@version	2-Feb--2021	1.1
 *					1. Code refactoring and notaion.
@@ -361,6 +362,15 @@ int SynthVoice::set_pan_lfo_level_2(int lev)
 	}
 
 	return 0;
+}
+
+void SynthVoice::set_pad_wave_table(Wavetable *padwt)
+{
+	if (padwt)
+	{
+		pad_wavetable = padwt;
+		dsp_voice->wavetable_1->wavetable = padwt;
+	}
 }
 
 /**
@@ -986,7 +996,7 @@ void SynthVoice::set_voice_params(_settings_params_t *params)
 	res = settings_manager->get_int_param(params, "adjsynth.mso_synth.pwm_modulation_env_num", &int_param);
 	if (res == _SETTINGS_KEY_FOUND)
 	{
-		dsp_voice->set_mso_1_freq_mod_env(int_param.value);
+		dsp_voice->set_mso_1_pwm_mod_env(int_param.value);
 	}
 	
 	res = settings_manager->get_int_param(params, "adjsynth.mso_synth.pwm_modulation_env_level", &int_param);
@@ -1010,7 +1020,7 @@ void SynthVoice::set_voice_params(_settings_params_t *params)
 	res = settings_manager->get_int_param(params, "adjsynth.mso_synth.amp_modulation_env_num", &int_param);
 	if (res == _SETTINGS_KEY_FOUND)
 	{
-		dsp_voice->set_mso_1_freq_mod_env(int_param.value);
+		dsp_voice->set_mso_1_amp_mod_env(int_param.value);
 	}
 	
 	res = settings_manager->get_int_param(params, "adjsynth.mso_synth.amp_modulation_env_level", &int_param);
@@ -1144,6 +1154,120 @@ void SynthVoice::set_voice_params(_settings_params_t *params)
 	if (res == _SETTINGS_KEY_FOUND)
 	{
 		dsp_voice->set_pad_1_amp_mod_env_level(int_param.value);
+	}
+
+	res = settings_manager->get_int_param(params, "adjsynth.pad_synth.quality", &int_param);
+	if ((res == _SETTINGS_KEY_FOUND) && (allocated_to_program_num >= 0))
+	{
+		AdjSynth::get_instance()->synth_program[allocated_to_program_num]->synth_pad_creator->set_wavetable_length(
+			AdjSynth::get_instance()->synth_program[allocated_to_program_num]->program_wavetable,
+			int_param.value);
+	}
+
+	res = settings_manager->get_int_param(params, "adjsynth.pad_synth.base_note", &int_param);
+	if ((res == _SETTINGS_KEY_FOUND) && (allocated_to_program_num >= 0))
+	{
+		AdjSynth::get_instance()->synth_program[allocated_to_program_num]->synth_pad_creator->set_base_note(
+			AdjSynth::get_instance()->synth_program[allocated_to_program_num]->program_wavetable,
+			int_param.value);
+	}
+
+	res = settings_manager->get_int_param(params, "adjsynth.pad_synth.base_width", &int_param);
+	if ((res == _SETTINGS_KEY_FOUND) && (allocated_to_program_num >= 0))
+	{
+		AdjSynth::get_instance()->synth_program[allocated_to_program_num]->synth_pad_creator->set_base_harmony_width(
+			int_param.value);
+	}
+
+	res = settings_manager->get_int_param(params, "adjsynth.pad_synth.shape", &int_param);
+	if ((res == _SETTINGS_KEY_FOUND) && (allocated_to_program_num >= 0))
+	{
+		AdjSynth::get_instance()->synth_program[allocated_to_program_num]->synth_pad_creator->set_harmony_shape(
+			int_param.value);
+	}
+
+	res = settings_manager->get_int_param(params, "adjsynth.pad_synth.shape_cutoff", &int_param);
+	if ((res == _SETTINGS_KEY_FOUND) && (allocated_to_program_num >= 0))
+	{
+		AdjSynth::get_instance()->synth_program[allocated_to_program_num]->synth_pad_creator->set_harmony_shape_cutoff(
+			int_param.value);
+	}
+
+	res = settings_manager->get_int_param(params, "adjsynth.pad_synth.harmonies_level_0", &int_param);
+	if ((res == _SETTINGS_KEY_FOUND) && (allocated_to_program_num >= 0))
+	{
+		AdjSynth::get_instance()->synth_program[allocated_to_program_num]->synth_pad_creator->set_harmony_level(
+				0, (float)int_param.value / 100.f);
+	}
+
+	res = settings_manager->get_int_param(params, "adjsynth.pad_synth.harmonies_level_1", &int_param);
+	if ((res == _SETTINGS_KEY_FOUND) && (allocated_to_program_num >= 0))
+	{
+		AdjSynth::get_instance()->synth_program[allocated_to_program_num]->synth_pad_creator->set_harmony_level(
+			1, (float)int_param.value / 100.f);
+	}
+
+	res = settings_manager->get_int_param(params, "adjsynth.pad_synth.harmonies_level_2", &int_param);
+	if ((res == _SETTINGS_KEY_FOUND) && (allocated_to_program_num >= 0))
+	{
+		AdjSynth::get_instance()->synth_program[allocated_to_program_num]->synth_pad_creator->set_harmony_level(
+			2, (float)int_param.value / 100.f);
+	}
+
+	res = settings_manager->get_int_param(params, "adjsynth.pad_synth.harmonies_level_3", &int_param);
+	if ((res == _SETTINGS_KEY_FOUND) && (allocated_to_program_num >= 0))
+	{
+		AdjSynth::get_instance()->synth_program[allocated_to_program_num]->synth_pad_creator->set_harmony_level(
+			3, (float)int_param.value / 100.f);
+	}
+
+	res = settings_manager->get_int_param(params, "adjsynth.pad_synth.harmonies_level_4", &int_param);
+	if ((res == _SETTINGS_KEY_FOUND) && (allocated_to_program_num >= 0))
+	{
+		AdjSynth::get_instance()->synth_program[allocated_to_program_num]->synth_pad_creator->set_harmony_level(
+			4, (float)int_param.value / 100.f);
+	}
+
+	res = settings_manager->get_int_param(params, "adjsynth.pad_synth.harmonies_level_5", &int_param);
+	if ((res == _SETTINGS_KEY_FOUND) && (allocated_to_program_num >= 0))
+	{
+		AdjSynth::get_instance()->synth_program[allocated_to_program_num]->synth_pad_creator->set_harmony_level(
+			5, (float)int_param.value / 100.f);
+	}
+
+	res = settings_manager->get_int_param(params, "adjsynth.pad_synth.harmonies_level_6", &int_param);
+	if ((res == _SETTINGS_KEY_FOUND) && (allocated_to_program_num >= 0))
+	{
+		AdjSynth::get_instance()->synth_program[allocated_to_program_num]->synth_pad_creator->set_harmony_level(
+			6, (float)int_param.value / 100.f);
+	}
+
+	res = settings_manager->get_int_param(params, "adjsynth.pad_synth.harmonies_level_7", &int_param);
+	if ((res == _SETTINGS_KEY_FOUND) && (allocated_to_program_num >= 0))
+	{
+		AdjSynth::get_instance()->synth_program[allocated_to_program_num]->synth_pad_creator->set_harmony_level(
+			7, (float)int_param.value / 100.f);
+	}
+
+	res = settings_manager->get_int_param(params, "adjsynth.pad_synth.harmonies_level_8", &int_param);
+	if ((res == _SETTINGS_KEY_FOUND) && (allocated_to_program_num >= 0))
+	{
+		AdjSynth::get_instance()->synth_program[allocated_to_program_num]->synth_pad_creator->set_harmony_level(
+			8, (float)int_param.value / 100.f);
+	}
+
+	res = settings_manager->get_int_param(params, "adjsynth.pad_synth.harmonies_level_9", &int_param);
+	if ((res == _SETTINGS_KEY_FOUND) && (allocated_to_program_num >= 0))
+	{
+		AdjSynth::get_instance()->synth_program[allocated_to_program_num]->synth_pad_creator->set_harmony_level(
+			9, (float)int_param.value / 100.f);
+	}
+
+	res = settings_manager->get_int_param(params, "adjsynth.pad_synth.harmonies_detune", &int_param);
+	if ((res == _SETTINGS_KEY_FOUND) && (allocated_to_program_num >= 0))
+	{
+		AdjSynth::get_instance()->synth_program[allocated_to_program_num]->synth_pad_creator->set_harmonies_detune(
+			(float)int_param.value / 100.f);;
 	}
 
 	

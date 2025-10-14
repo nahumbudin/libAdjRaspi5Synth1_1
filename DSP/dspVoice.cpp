@@ -1617,9 +1617,11 @@ void DSP_Voice::update_voice_modulation(int voice)
 
 		AdjSynth::get_instance()->synth_voice[voice]->audio_voice->set_inactive();
 		AdjSynth::get_instance()->synth_voice[voice]->audio_voice->reset_wait_for_not_active();
-		AdjSynth::get_instance()->synth_voice[voice]->assign_dsp_voice(AdjSynth::get_instance()->get_original_main_dsp_voices(voice));
-		AdjSynth::get_instance()->synth_voice[voice]->mso_wtab = original_mso_wtab_1;	
-		AdjSynth::get_instance()->synth_voice[voice]->pad_wavetable = original_pad_wavetable_1;
+		
+		// TODO: remarked at 13-Oct-2025
+		//AdjSynth::get_instance()->synth_voice[voice]->assign_dsp_voice(AdjSynth::get_instance()->get_original_main_dsp_voices(voice));
+		//AdjSynth::get_instance()->synth_voice[voice]->mso_wtab = original_mso_wtab_1;	
+		//AdjSynth::get_instance()->synth_voice[voice]->pad_wavetable = original_pad_wavetable_1;
 
 #ifdef _USE_NEW_POLY_MIXER_
 		

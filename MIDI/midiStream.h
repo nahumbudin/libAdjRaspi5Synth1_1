@@ -1,24 +1,22 @@
 /**
-*	@file		midiStream.h
-*	@author		Nahum Budin
-*	@date		11-May-2024
-*	@version	1.2
-*					1. Code refactoring and notaion.
-*					2. Adding more AUX controls SYSEX messages
-*
-*	@brief		Handle midi streams and definitions
-*
-*  Based on Music Open Lab Library.
-*	Copyright AdjHeart Nahum Budin May 2017 and
-*	Teensyduino Core Library AudioStream Audio-blocks concept
-*
-*	History:\n
-*
-*	version 1.0		13-Oct-2019:
-*		First version
-*		1. Added mutex to control blocks allocation operations.
-*	version 1.1		3-Feb-2021
-*		1. Code refactoring and notaion.
+ *	@file		midiStream.h
+ *	@author		Nahum Budin
+ *	@date		13-Oct-2025
+ *	@version	1.3
+ *					1. Add all notes/sounds off commands.
+ *
+ *	@brief		Handle midi streams and definitions
+ *
+ *  Based on Music Open Lab Library.
+ *	Copyright AdjHeart Nahum Budin May 2017 and
+ *	Teensyduino Core Library AudioStream Audio-blocks concept
+ *
+ *	History:\n
+ *
+ *
+ *		1. Added mutex to control blocks allocation operations.
+ *	version 1.1		3-Feb-2021	 Code refactoring and notaion.
+ *	version 1.0		13-Oct-2019: First version
 *
 */
 
@@ -96,6 +94,9 @@ Error : Must be no more than 8
 #define _MIDI_SYSEX_START						0xF0
 #define _MIDI_SYSEX_END							0xF7
 #define _MIDI_RESET								0xFF
+																
+#define _MIDI_ALL_SOUNDS_OFF					120
+#define _MIDI_ALL_NOTES_OFF						123
 
 // TODO: temp
 #define _MIDI_TILTUNE_SYSEX_VENDOR_ID_0			0

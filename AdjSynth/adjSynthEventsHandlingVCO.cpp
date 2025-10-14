@@ -118,7 +118,7 @@ int AdjSynth::vco_event_int(int vcoid, int eventid, int val, _settings_params_t 
 				(params,
 				"adjsynth.osc2.waveform",
 				val,
-				_EXEC_BLOCK_CALLBACK,
+				_EXEC_CALLBACK,
 				program);
 		}
 		break;

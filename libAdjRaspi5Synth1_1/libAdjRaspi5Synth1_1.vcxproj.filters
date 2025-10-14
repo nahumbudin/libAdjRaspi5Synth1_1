@@ -675,6 +675,12 @@
     <ClCompile Include="..\AdjSynth\adjSynthSettingsCallbacksAmp.cpp">
       <Filter>Source files\Synthesizer\AdjSynth\Settings Global Callbacks</Filter>
     </ClCompile>
+    <ClCompile Include="..\AdjSynth\adjSynthSettingsCallbacksProgramMSO.cpp">
+      <Filter>Source files\Synthesizer\AdjSynth\Settings Program Callbacks</Filter>
+    </ClCompile>
+    <ClCompile Include="..\AdjSynth\adjSynthSettingsCallbacksProgramPAD.cpp">
+      <Filter>Source files\Synthesizer\AdjSynth\Settings Program Callbacks</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\libAdjRaspi5Synth_1_1.h">

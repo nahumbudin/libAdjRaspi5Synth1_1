@@ -546,7 +546,7 @@ void AdjSynth::init_synth_voices()
 		synth_voice[voice]->assign_dsp_voice(synth_program[active_sketch]->synth_voices[voice]->dsp_voice);
 #endif
 		
-		// Assingn LUTs
+		// Assingn LUTs  TODO: 13-Oct-2025 needed?
 		synth_voice[voice]->mso_wtab = synth_program[active_sketch]->mso_wtab;
 		synth_voice[voice]->pad_wavetable = synth_program[active_sketch]->program_wavetable;
 	}
@@ -1211,9 +1211,9 @@ void  AdjSynth::midi_play_note_on(uint8_t channel, uint8_t byte2, uint8_t byte3,
 	// Asign the voice to the program
 	synth_program[prog]->assign_voice_with_preset_program_params(synth_voice[voice], voice);
 
-	// Assingn LUTs
-	synth_voice[voice]->mso_wtab = synth_program[prog]->mso_wtab;
-	synth_voice[voice]->pad_wavetable = synth_program[prog]->program_wavetable;
+	// Assingn LUTs - done in program assignment 13-Oct-2025
+	//synth_voice[voice]->mso_wtab = synth_program[prog]->mso_wtab;
+	//synth_voice[voice]->pad_wavetable = synth_program[prog]->program_wavetable;
 
 	synth_polyphony_manager->activate_resource(voice, (int)byte2, prog);
 	//		kbd1->voices[voice].note = byte2;

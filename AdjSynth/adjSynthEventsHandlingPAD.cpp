@@ -1,14 +1,16 @@
 /**
-*	@file		adjSynthEventsHandlingPAD.cpp
-*	@author		Nahum Budin
-*	@date		11-Oct-2024
-*	@version	1.2
-*					1. Code refactoring and notaion.
-*	
-*	@brief		AdjHeart Synthesizer PAD Synthesizer Events Handling
-*
-*	History:\n
-*	
+ *	@file		adjSynthEventsHandlingPAD.cpp
+ *	@author		Nahum Budin
+ *	@date		12-Oct-2025
+ *	@version	1.3
+ *					1. Update callbacks are changed from block to only program
+ *						_EXEC_BLOCK_CALLBACK -> _EXEC_CALLBACK..
+ *
+ *	@brief		AdjHeart Synthesizer PAD Synthesizer Events Handling
+ *
+ *	History:\n
+ *
+ *		version 1.2 11-Oct-2024 Code refactoring and notaion.
 *		version	1.1	5-Feb-2021	Code refactoring and notaion.
 *		version 1.0	15_Nov-2019:		
 *		First version
@@ -89,7 +91,7 @@ int AdjSynth::pad_event_int(int padid, int eventid, int val, _settings_params_t 
 			(params,
 			"adjsynth.pad_synth.tune_offset_octave",
 			val,
-			_EXEC_BLOCK_CALLBACK,
+			_EXEC_CALLBACK,
 			program);	
 	}
 	else if (eventid == _PAD_DETUNE_SEMITONES)
@@ -99,7 +101,7 @@ int AdjSynth::pad_event_int(int padid, int eventid, int val, _settings_params_t 
 			(params,
 			"adjsynth.pad_synth.tune_offset_semitones",
 			val,
-			_EXEC_BLOCK_CALLBACK,
+			_EXEC_CALLBACK,
 			program);
 	}
 	else if (eventid == _PAD_DETUNE_CENTS)
@@ -110,7 +112,7 @@ int AdjSynth::pad_event_int(int padid, int eventid, int val, _settings_params_t 
 			(params,
 			"adjsynth.pad_synth.tune_offset_cent",
 			val,
-			_EXEC_BLOCK_CALLBACK,
+			_EXEC_CALLBACK,
 			program);
 	}
 	else if (eventid == _PAD_FILTER_SEND_1)
@@ -119,7 +121,7 @@ int AdjSynth::pad_event_int(int padid, int eventid, int val, _settings_params_t 
 			(params,
 			"adjsynth.pad_synth.send_filter_1",
 			val,
-			_EXEC_BLOCK_CALLBACK,
+			_EXEC_CALLBACK,
 			program);
 	}
 	else if (eventid == _PAD_FILTER_SEND_2)
@@ -137,7 +139,7 @@ int AdjSynth::pad_event_int(int padid, int eventid, int val, _settings_params_t 
 			(params,
 			"adjsynth.pad_synth.freq_modulation_lfo_num",
 			val,
-			_EXEC_BLOCK_CALLBACK,
+			_EXEC_CALLBACK,
 			program);
 	}
 	else if (eventid == _PAD_FREQ_MOD_LFO_LEVEL)
@@ -146,7 +148,7 @@ int AdjSynth::pad_event_int(int padid, int eventid, int val, _settings_params_t 
 			(params,
 			"adjsynth.pad_synth.freq_modulation_lfo_level",
 			val,
-			_EXEC_BLOCK_CALLBACK,
+			_EXEC_CALLBACK,
 			program);
 	}
 	else if (eventid == _PAD_FREQ_MOD_ENV)
@@ -155,7 +157,7 @@ int AdjSynth::pad_event_int(int padid, int eventid, int val, _settings_params_t 
 			(params,
 			"adjsynth.pad_synth.freq_modulation_env_num",
 			val,
-			_EXEC_BLOCK_CALLBACK,
+			_EXEC_CALLBACK,
 			program);
 	}
 	else if (eventid == _PAD_FREQ_MOD_ENV_LEVEL)
@@ -164,7 +166,7 @@ int AdjSynth::pad_event_int(int padid, int eventid, int val, _settings_params_t 
 			(params,
 			"adjsynth.pad_synth.freq_modulation_env_level",
 			val,
-			_EXEC_BLOCK_CALLBACK,
+			_EXEC_CALLBACK,
 			program);
 	}
 	else if (eventid == _PAD_AMP_MOD_LFO)
@@ -173,7 +175,7 @@ int AdjSynth::pad_event_int(int padid, int eventid, int val, _settings_params_t 
 			(params,
 			"adjsynth.pad_synth.amp_modulation_lfo_num",
 			val,
-			_EXEC_BLOCK_CALLBACK,
+			_EXEC_CALLBACK,
 			program);
 	}
 	else if (eventid == _PAD_AMP_MOD_LFO_LEVEL)
@@ -182,7 +184,7 @@ int AdjSynth::pad_event_int(int padid, int eventid, int val, _settings_params_t 
 			(params,
 			"adjsynth.pad_synth.amp_modulation_lfo_level",
 			val,
-			_EXEC_BLOCK_CALLBACK,
+			_EXEC_CALLBACK,
 			program);
 	}
 	else if (eventid == _PAD_AMP_MOD_ENV)
@@ -191,7 +193,7 @@ int AdjSynth::pad_event_int(int padid, int eventid, int val, _settings_params_t 
 			(params,
 			"adjsynth.pad_synth.amp_modulation_env_num",
 			val,
-			_EXEC_BLOCK_CALLBACK,
+			_EXEC_CALLBACK,
 			program);
 	}
 	else if (eventid == _PAD_AMP_MOD_ENV_LEVEL)
@@ -200,7 +202,7 @@ int AdjSynth::pad_event_int(int padid, int eventid, int val, _settings_params_t 
 			(params,
 			"adjsynth.pad_synth.amp_modulation_env_level",
 			val,
-			_EXEC_BLOCK_CALLBACK,
+			_EXEC_CALLBACK,
 			program);
 	}
 	else if (eventid == _PAD_HARMONY_LEVEL_1)
@@ -376,7 +378,7 @@ int AdjSynth::pad_event_bool(int padid, int eventid, bool val, _settings_params_
 			(params,
 			"adjsynth.pad_synth.enabled",
 			val,
-			_EXEC_BLOCK_CALLBACK,
+			_EXEC_CALLBACK,
 			program);
 	}	
 	

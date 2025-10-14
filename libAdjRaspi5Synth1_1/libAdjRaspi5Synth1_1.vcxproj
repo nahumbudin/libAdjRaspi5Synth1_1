@@ -212,8 +212,10 @@
     <ClCompile Include="..\AdjSynth\adjSynthSettingsCallbacksMixer.cpp" />
     <ClCompile Include="..\AdjSynth\adjSynthSettingsCallbacksProgramKPS.cpp" />
     <ClCompile Include="..\AdjSynth\adjSynthSettingsCallbacksProgramModulators.cpp" />
+    <ClCompile Include="..\AdjSynth\adjSynthSettingsCallbacksProgramMSO.cpp" />
     <ClCompile Include="..\AdjSynth\adjSynthSettingsCallbacksProgramNoise.cpp" />
     <ClCompile Include="..\AdjSynth\adjSynthSettingsCallbacksProgramOutput.cpp" />
+    <ClCompile Include="..\AdjSynth\adjSynthSettingsCallbacksProgramPAD.cpp" />
     <ClCompile Include="..\AdjSynth\adjSynthSettingsCallbacksPrograoVCO.cpp" />
     <ClCompile Include="..\AdjSynth\adjSynthSettingsCallbacksReverb.cpp" />
     <ClCompile Include="..\AdjSynth\adjSynthSettingsCallbacksVoiceAmp.cpp" />

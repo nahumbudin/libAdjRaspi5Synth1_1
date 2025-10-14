@@ -53,6 +53,15 @@ void InstrumentAnalogSynth::channel_pressure_handler(uint8_t channel, uint8_t va
 
 void InstrumentAnalogSynth::controller_event_handler(uint8_t channel, uint8_t num, uint8_t val)
 {
+	// All Notes/Sounds Off handler (ignore channel) TODO: channel
+	if ((num == _MIDI_ALL_SOUNDS_OFF) || (num == _MIDI_ALL_NOTES_OFF))
+	{
+		for (int v = 0; v < _SYNTH_MAX_NUM_OF_VOICES; v++)
+		{
+			AdjSynth::get_instance()->synth_voice[v]->audio_voice->set_inactive();
+			AdjSynth::get_instance()->synth_voice[v]->audio_voice->reset_wait_for_not_active();
+		}
+	}
 }
 
 void InstrumentAnalogSynth::pitch_bend_handler(uint8_t channel, int pitch)

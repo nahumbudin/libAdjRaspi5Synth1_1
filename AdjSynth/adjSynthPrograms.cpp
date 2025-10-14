@@ -77,6 +77,7 @@ AdjSynthPrograms::AdjSynthPrograms(
 	synth_pad_creator = new SynthPADcreator(program_wavetable, program_wavetable->size);
 	program_wavetable->base_freq =
 		synth_pad_creator->set_base_frequency(program_wavetable, _PAD_DEFAULT_BASE_NOTE);
+	synth_pad_creator->generate_wavetable(program_wavetable);
 
 	mso_wtab = new DSP_MorphingSinusOscWTAB();
 	mso_wtab->calc_segments_lengths(&mso_wtab->base_segment_lengths, &mso_wtab->base_segment_positions);
@@ -155,6 +156,8 @@ void AdjSynthPrograms::set_program_preset_params(_settings_params_t *preset_para
 /* Assign a voice with the program preset parameters */
 int AdjSynthPrograms::assign_voice_with_preset_program_params(SynthVoice *voice, int voice_num)
 {
+	static bool first_time_done = false;
+	
 	if (voice == nullptr)
 	{
 		return -1;
@@ -164,10 +167,17 @@ int AdjSynthPrograms::assign_voice_with_preset_program_params(SynthVoice *voice,
 	{
 		return -2;
 	}
-	
+
+	voice->set_allocated_program(program_num);
+
 	// Set the voice with the program preset parameters values
 	voice->set_voice_params(active_preset_params);
 	
+	// Set the MSO wavetable
+	voice->dsp_voice->mso_1->set_wavetable(mso_wtab);
+	// Set the PAD wavetable
+	voice->set_pad_wave_table(program_wavetable);
+
 	// Add the voice to the assigned voices list
 	int *vnum = new int;
 	*vnum = voice_num;

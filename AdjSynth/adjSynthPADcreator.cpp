@@ -1,13 +1,13 @@
 /**
 *	@file		adjSynthPADcreator.cpp
 *	@author		Nahum Budin
-*	@date		5-Oct-2024
-*	@version	1.2 
-*					1. Code refactoring and notaion.
+*	@date		14-Oct-2025
+*	@version	1.3 
+*					1. Bug fixing.
 				
 *	@History
-*	version	1.1 3-Feb-2021
-*					1. Code refactoring and notaion.
+*	version 1.2 5-Oct-2024	Code refactoring and notaion
+*	version	1.1 3-Feb-2021	Code refactoring and notaion.
 *	version	1.0	15-Nov-2019 (revised version from old libAdjHeartRaspiFlSynthMultiCore_3_1 October, 2018)
 *
 *	@brief		PAD waveform table synthesis
@@ -291,7 +291,8 @@ int SynthPADcreator::set_wavetable_length(Wavetable *wt, int len)
 		return -1;
 	}
 	
-	if ((len >= _PAD_QUALITY_32K) && (len <= _PAD_QUALITY_1024K))
+	if ((len >= _PAD_QUALITY_32K) && (len <= _PAD_QUALITY_1024K) &&
+		(1 << (15 + len) != wt->size)) // No need to change
 	{
 		delete[] wt->samples;
 		//	delete(wt);

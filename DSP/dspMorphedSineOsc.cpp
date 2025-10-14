@@ -1,22 +1,26 @@
 /**
-*	@file		dspMorphedSineOsc.cpp
-*	@author		Nahum Budin
-*	@date		23_Jan-2021
-*	@version	1.1 
-*					1. Code refactoring and notaion. 
-*					2. Adding sample-rate settings
-*					
-*	@History	31-Oct-2019	1.0 (dspWaveformLUT) (revised version from old libAdjHeartRaspiFlSynthMultiCore_3_1 19-Jul-2018)
-*
-*	@brief		An oscilator that uses waveform table to generate segmented sinusudial modulated waveforms.	
-*/
+ *	@file		dspMorphedSineOsc.h
+ *	@author		Nahum Budin
+ *	@date		11-Oct-2025
+ *	@version	1.2
+ *					1. Removing singleton.
+ *					2. Adding set_wavetable() function to enable replacing with program wtab
+ *
+ *	@History
+ *				version 1.1 23-Jan-2021
+ *					1. Code refactoring and notaion.
+ *					2. Adding sample-rate settings
+ *				version 1.0 31-Oct-2019	(dspWaveformLUT) (revised version from old libAdjHeartRaspiFlSynthMultiCore_3_1 19-Jul-2018)
+ *
+ *	@brief		An oscilator that uses waveform table to generate segmented sinusudial modulated waveforms.
+ */
 
 #include "dspMorphedSineOsc.h"
 #include "../Audio/audioCommons.h"
 #include "../utils/utils.h"
 #include "../LibAPI/synthesizer.h"
 
-DSP_MorphingSinusOscWTAB *DSP_MorphingSinusOscWTAB::dsp_morphing_sinus_osc_wtab = NULL;
+// DSP_MorphingSinusOscWTAB *DSP_MorphingSinusOscWTAB::dsp_morphing_sinus_osc_wtab = NULL;
 
 DSP_MorphingSinusOscWTAB::DSP_MorphingSinusOscWTAB(int samp_rate)
 {
@@ -48,6 +52,8 @@ DSP_MorphingSinusOscWTAB::~DSP_MorphingSinusOscWTAB()
 *	@param	none
 *	@return a singlton WTAB instance
 */
+
+/*
 DSP_MorphingSinusOscWTAB *DSP_MorphingSinusOscWTAB::get_morphing_sinus_osc_wtab_instance(int samp_rate)
 {
 	//TODO: different sample rate.
@@ -58,6 +64,7 @@ DSP_MorphingSinusOscWTAB *DSP_MorphingSinusOscWTAB::get_morphing_sinus_osc_wtab_
 
 	return dsp_morphing_sinus_osc_wtab;
 }
+*/
 
 /**
 *	@brief	Sets WTAB sample-rate
@@ -536,14 +543,28 @@ DSP_MorphingSinusOsc::DSP_MorphingSinusOsc(
 	wtab = lutptr;
 }
 
+
 /**
-*	@brief	Returns a pointer to the DSP_MorphingSinusOscWTAB wavetable object.
-*	@param	none
-*	@return a pointer to the DSP_MorphingSinusOscWTAB wavetable object
-*/
+ *	@brief	Returns a pointer to the DSP_MorphingSinusOscWTAB wavetable object.
+ *	@param	none
+ *	@return a pointer to the DSP_MorphingSinusOscWTAB wavetable object
+ */
 DSP_MorphingSinusOscWTAB *DSP_MorphingSinusOsc::get_wavetable()
 {
 	return wtab;
+}
+
+/**
+ *	@brief	Set a pointer to a DSP_MorphingSinusOscWTAB wavetable object.
+ *	@param	a pointer to the table
+ *	@return void
+ */
+void DSP_MorphingSinusOsc::set_wavetable(DSP_MorphingSinusOscWTAB *new_wtab)
+{
+	if (new_wtab)
+	{
+		wtab = new_wtab;
+	}
 }
 
 /**
