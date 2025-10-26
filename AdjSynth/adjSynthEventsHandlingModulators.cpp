@@ -283,7 +283,7 @@ int AdjSynth::modulator_event_int(int modid, int eventid, int val, _settings_par
 				(params,
 				"adjsynth.lfo_1.waveform",
 				val,
-				_EXEC_CALLBACK | _EXEC_BLOCK_CALLBACK,
+				_EXEC_CALLBACK,
 				program);
 		}
 		else if (modid == _LFO_2_EVENT)
@@ -292,7 +292,7 @@ int AdjSynth::modulator_event_int(int modid, int eventid, int val, _settings_par
 				(params,
 				"adjsynth.lfo_2.waveform",
 				val,
-				_EXEC_CALLBACK | _EXEC_BLOCK_CALLBACK,
+				_EXEC_CALLBACK,
 				program);
 		}
 		else if (modid == _LFO_3_EVENT)
@@ -301,7 +301,7 @@ int AdjSynth::modulator_event_int(int modid, int eventid, int val, _settings_par
 				(params,
 				"adjsynth.lfo_3.waveform",
 				val,
-				_EXEC_CALLBACK | _EXEC_BLOCK_CALLBACK,
+				_EXEC_CALLBACK,
 				program);
 		}
 		else if (modid == _LFO_4_EVENT)
@@ -310,7 +310,7 @@ int AdjSynth::modulator_event_int(int modid, int eventid, int val, _settings_par
 				(params,
 				"adjsynth.lfo_4.waveform",
 				val,
-				_EXEC_CALLBACK | _EXEC_BLOCK_CALLBACK,
+				_EXEC_CALLBACK,
 				program);
 		}
 		else if (modid == _LFO_5_EVENT)
@@ -319,7 +319,7 @@ int AdjSynth::modulator_event_int(int modid, int eventid, int val, _settings_par
 				(params,
 				"adjsynth.lfo_5.waveform",
 				val,
-				_EXEC_CALLBACK | _EXEC_BLOCK_CALLBACK,
+				_EXEC_CALLBACK ,
 				program);
 		}
 		else if (modid == _LFO_6_EVENT)
@@ -328,7 +328,7 @@ int AdjSynth::modulator_event_int(int modid, int eventid, int val, _settings_par
 			(params,
 				"adjsynth.lfo_6.waveform",
 				val,
-				_EXEC_CALLBACK | _EXEC_BLOCK_CALLBACK,
+				_EXEC_CALLBACK,
 				program);
 		}
 		break;
@@ -340,7 +340,7 @@ int AdjSynth::modulator_event_int(int modid, int eventid, int val, _settings_par
 				(params,
 				"adjsynth.lfo_1.rate",
 				val,
-				_EXEC_CALLBACK | _EXEC_BLOCK_CALLBACK,
+				_EXEC_CALLBACK,
 				program);
 					
 		}
@@ -350,7 +350,7 @@ int AdjSynth::modulator_event_int(int modid, int eventid, int val, _settings_par
 				(params,
 				"adjsynth.lfo_2.rate",
 				val,
-				_EXEC_CALLBACK | _EXEC_BLOCK_CALLBACK,
+				_EXEC_CALLBACK,
 				program);
 		}
 		else if (modid == _LFO_3_EVENT)
@@ -359,7 +359,7 @@ int AdjSynth::modulator_event_int(int modid, int eventid, int val, _settings_par
 				(params,
 				"adjsynth.lfo_3.rate",
 				val,
-				_EXEC_CALLBACK | _EXEC_BLOCK_CALLBACK,
+				_EXEC_CALLBACK,
 				program);
 		}
 		else if (modid == _LFO_4_EVENT)
@@ -368,7 +368,7 @@ int AdjSynth::modulator_event_int(int modid, int eventid, int val, _settings_par
 				(params,
 				"adjsynth.lfo_4.rate",
 				val,
-				_EXEC_CALLBACK | _EXEC_BLOCK_CALLBACK,
+				_EXEC_CALLBACK,
 				program);
 		}
 		else if (modid == _LFO_5_EVENT)
@@ -377,7 +377,7 @@ int AdjSynth::modulator_event_int(int modid, int eventid, int val, _settings_par
 				(params,
 				"adjsynth.lfo_5.rate",
 				val,
-				_EXEC_CALLBACK | _EXEC_BLOCK_CALLBACK,
+				_EXEC_CALLBACK,
 				program);
 		}
 		else if (modid == _LFO_6_EVENT)
@@ -386,7 +386,7 @@ int AdjSynth::modulator_event_int(int modid, int eventid, int val, _settings_par
 			(params,
 				"adjsynth.lfo_6.rate",
 				val,
-				_EXEC_CALLBACK | _EXEC_BLOCK_CALLBACK,
+				_EXEC_CALLBACK,
 				program);
 		}
 		break;
@@ -398,7 +398,7 @@ int AdjSynth::modulator_event_int(int modid, int eventid, int val, _settings_par
 				(params,
 				"adjsynth.lfo_1.symmetry",
 				val,
-				_EXEC_CALLBACK | _EXEC_BLOCK_CALLBACK,
+				_EXEC_CALLBACK,
 				program);
 		}
 		else if (modid == _LFO_2_EVENT)
@@ -407,7 +407,7 @@ int AdjSynth::modulator_event_int(int modid, int eventid, int val, _settings_par
 				(params,
 				"adjsynth.lfo_2.symmetry",
 				val,
-				_EXEC_CALLBACK | _EXEC_BLOCK_CALLBACK,
+				_EXEC_CALLBACK,
 				program);
 		}
 		else if (modid == _LFO_3_EVENT)
@@ -416,7 +416,7 @@ int AdjSynth::modulator_event_int(int modid, int eventid, int val, _settings_par
 				(params,
 				"adjsynth.lfo_3.symmetry",
 				val,
-				_EXEC_CALLBACK | _EXEC_BLOCK_CALLBACK,
+				_EXEC_CALLBACK,
 				program);
 		}
 		else if (modid == _LFO_4_EVENT)
@@ -425,7 +425,7 @@ int AdjSynth::modulator_event_int(int modid, int eventid, int val, _settings_par
 				(params,
 				"adjsynth.lfo_4.symmetry",
 				val,
-				_EXEC_CALLBACK | _EXEC_BLOCK_CALLBACK,
+				_EXEC_CALLBACK,
 				program);
 		}
 		else if (modid == _LFO_5_EVENT)
@@ -434,7 +434,7 @@ int AdjSynth::modulator_event_int(int modid, int eventid, int val, _settings_par
 				(params,
 				"adjsynth.lfo_5.symmetry",
 				val,
-				_EXEC_CALLBACK | _EXEC_BLOCK_CALLBACK,
+				_EXEC_CALLBACK,
 				program);
 		}
 		else if (modid == _LFO_6_EVENT)
@@ -443,7 +443,7 @@ int AdjSynth::modulator_event_int(int modid, int eventid, int val, _settings_par
 			(params,
 				"adjsynth.lfo_6.symmetry",
 				val,
-				_EXEC_CALLBACK | _EXEC_BLOCK_CALLBACK,
+				_EXEC_CALLBACK,
 				program);
 		}
 		break;

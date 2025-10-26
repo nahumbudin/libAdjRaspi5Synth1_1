@@ -97,7 +97,7 @@ void DSP_Voice::set_noise_1_amp_mod_lfo(int lfo)
 	if ((lfo >= _LFO_NONE) && (lfo <= _LFO_6_DELAYED_2000MS))
 	{
 		noise_1_amp_mod_lfo = ((lfo - 1) % _NUM_OF_LFOS) + 1;
-		noise_1_amp_mod_lfo_delay = lfo_delays[lfo];
+		noise_1_amp_mod_lfo_delay = AdjSynth::lfo_delays[lfo];
 	}
 }
 

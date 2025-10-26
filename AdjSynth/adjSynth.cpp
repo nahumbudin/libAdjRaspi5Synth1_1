@@ -12,6 +12,8 @@
  *					7. Adding DSP Out setting parameters: gain, pan, send, lfo and lfo level
  *					8. Adding voice send parameters
  *					9. Changing main Amp gain and send update callbacks to non block callbacks.
+ *					10. Adding Panic action
+ *					11. Refactoring lfo_delays[] -> global array in adjSynth.
 *					
 *	@brief		A collection of 4 synthesizers: Additive, Karplus String, PAD and Morphed Sine Oscilator (MSO)
 *					
@@ -42,8 +44,12 @@
 #include "../MIDI/midiStream.h"
 #include "../Settings/settings.h"
 #include "../DSP/dspVoice.h"
+#include "../Instrument/instrumentMidiPlayer.h"
 
 class DSP_Voice;
+
+/* Holds the delay values of all LFO index selection */
+uint32_t AdjSynth::lfo_delays[_NUM_OF_LFOS * _NUM_OF_LFO_DELAY_OPTIONS + 1]; // 5 LFOs, 5 states; 1 None
 
 /* This is the top most object of the synthesizer - a singltone. */
 AdjSynth *AdjSynth::adj_synth = NULL;
@@ -146,7 +152,7 @@ AdjSynth::AdjSynth()
 	allocate_midi_stream_messages_memory_pool(_MAX_MIDI_STREAM_MESSAGES_POOL_SIZE);
 	allocate_raw_data_mssgs_memory_pool(_MAX_RAWDATA_MSSGS_POOL_SIZE);
 
-	
+	init_lfo_delays();
 
 	// Get the number of cpu cores.
 	num_of_cores = std::thread::hardware_concurrency();
@@ -260,7 +266,8 @@ AdjSynth::AdjSynth()
 	audio_out = new AudioOutputFloat(_AUDIO_STAGE_0,
 		audio_block_size,
 		audio_manager->audio_block_stereo_float_shared_memory_outputs,
-		&audio_common_first_update);
+		&audio_common_first_update,
+		100); // Main output id
 
 	/* An audio connections for the mixer output. */
 	connection_mixer_out_L = audio_manager->connections_manager->get_audio_connection();
@@ -306,7 +313,10 @@ AdjSynth::AdjSynth()
 	// Set audio parameters.
 	set_audio_driver_type(_DEFAULT_AUDIO_DRIVER);
 	set_sample_rate(_DEFAULT_SAMPLE_RATE);
-	set_audio_block_size(_DEFAULT_BLOCK_SIZE);	
+	set_audio_block_size(_DEFAULT_BLOCK_SIZE);
+	
+	// Call only after sample rate is set.
+	init_lfo_delays();
 }
 
 AdjSynth::~AdjSynth()
@@ -584,6 +594,30 @@ void AdjSynth::init_synth_programs()
 #endif 
 	
 }
+
+/**
+*   @brief  initialize lfo delay times (0, 500, 1000, 1500, 2000ms) sub sampling count   
+*   @param  none
+*   @return 0;
+*/
+int AdjSynth::init_lfo_delays()
+{
+	int lfo_num, state;
+	uint32_t lfo_500_ms_delay_cont = sample_rate / _CONTROL_SUB_SAMPLING / 2;       
+	
+	lfo_delays[0] = 0; // None LFO
+	
+	for (state = 0; state < _NUM_OF_LFO_DELAY_OPTIONS; state++)
+	{
+		for (lfo_num = 0; lfo_num < _NUM_OF_LFOS; lfo_num++)
+		{
+			lfo_delays[state * _NUM_OF_LFOS + lfo_num + 1] = lfo_500_ms_delay_cont * state;
+		}
+	}
+	
+	return 0;
+}
+
 
 /**
 *   @brief   set the adj synth master volume
@@ -897,6 +931,17 @@ void AdjSynth::init_jack()
 }
 
 /**
+ *   @brief  Turn all active voices and notes off
+ *   @param	none
+ *   @return void
+ */
+void AdjSynth::synth_panic_ection()
+{
+	InstrumentMidiPlayer::get_instrument_midi_player_instance()->send_all_notes_off_command();
+	InstrumentMidiPlayer::get_instrument_midi_player_instance()->send_all_sounds_off_command();
+}
+
+/**
 *   @brief  Start the audio update process. - Implemented above.
 *   @param	none
 *   @return void
@@ -1161,6 +1206,14 @@ void  AdjSynth::midi_play_note_on(uint8_t channel, uint8_t byte2, uint8_t byte3,
 	int voice, core, scaledMagnitude, prog = 0;
 	bool reused = false;
 	SynthVoice *prog_voice = NULL;
+
+	if (byte3 == 0)
+	// Note off
+	{
+		midi_play_note_off(channel, byte2, byte3);
+
+		return;
+	}
 	
 	if (midi_mapping_mode == _MIDI_MAPPING_MODE_MAPPING) // TODO:
 	{
@@ -1169,14 +1222,6 @@ void  AdjSynth::midi_play_note_on(uint8_t channel, uint8_t byte2, uint8_t byte3,
 	else
 	{
 		prog = active_sketch;
-	}
-
-	if (byte3 == 0)
-		// Note off
-	{
-		midi_play_note_off(channel, byte2, byte3);
-		
-		return;
 	}
 
 	if (kbd1->portamento_is_enabled()) // TODO mobe portamento to programs?
@@ -1200,6 +1245,7 @@ void  AdjSynth::midi_play_note_on(uint8_t channel, uint8_t byte2, uint8_t byte3,
 		// No free voice found!
 		pthread_mutex_unlock(&voice_manage_mutex);
 		fprintf(stderr, "midi_play_note_on: No free voice found!\n");
+		
 		return;
 	}
 
@@ -1218,7 +1264,7 @@ void  AdjSynth::midi_play_note_on(uint8_t channel, uint8_t byte2, uint8_t byte3,
 	synth_polyphony_manager->activate_resource(voice, (int)byte2, prog);
 	//		kbd1->voices[voice].note = byte2;
 	synth_voice[voice]->audio_voice->set_note(byte2);
-	fprintf(stderr, "On voice %i\n", voice);
+	fprintf(stderr, "Voice %i on\n", voice);
 
 	// Calculate and set the note frequency
 	kbd1->midi_play_note_on(channel, byte2, byte3);
@@ -1444,10 +1490,11 @@ void  AdjSynth::midi_play_note_off(uint8_t channel, uint8_t byte2, uint8_t byte3
 
 	pthread_mutex_lock(&voice_manage_mutex);
 
+	// Look for the voice that plays this note
 #ifdef _USE_NEW_MIDI_PROGRAM
 	voice = synth_program[program]->get_voice_num_playing_note(byte2);
 #else
-	voice = synth_polyphony_manager->get_reused_note(byte2, program); // ???
+	voice = synth_polyphony_manager->get_reused_note(byte2, program);
 #endif
 
 	if (voice != -1)

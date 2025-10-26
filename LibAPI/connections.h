@@ -1,5 +1,5 @@
 /**
-* @file		gui.h
+* @file		connections.h
 *	@author		Nahum Budin
 *	@date		6-Jul-2024
 *	@version	1.0

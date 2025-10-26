@@ -3,7 +3,8 @@
 *	@author		Nahum Budin
 *	@date		22-Sep-2025
 *	@version	1.1
-*					Refactoring rename modules to instruments
+*					1. Refactoring rename modules to instruments
+*					2. Add AdjSynrh panic function
 *	
 *	@brief		Provides the synthesizer high level API
 *	
@@ -819,6 +820,13 @@ void mod_synth_disable_pad_synth();
 *   @return none
 */
 void mod_synth_panic_action();
+
+/**
+ *   @brief  Activate AdjSynth panic cleanup
+ *   @param  none
+ *   @return none
+ */
+void mod_synth_adj_synt_panic_action();
 
 
 

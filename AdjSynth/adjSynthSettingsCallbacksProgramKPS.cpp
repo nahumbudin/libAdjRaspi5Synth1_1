@@ -22,7 +22,7 @@ int set_program_karplus_synth_enabled_cb(bool enable, int prog)
 
 	if (synth_program != NULL)
 	{
-		synth_program->get_active_program_preset_params()->params_mutex.unlock();
+		ModSynth::settings_handler_mutex.unlock();
 
 		res = synth_program->program_settings_manager->set_bool_param_value(
 			synth_program->get_active_program_preset_params(),
@@ -31,7 +31,7 @@ int set_program_karplus_synth_enabled_cb(bool enable, int prog)
 			_SET_VALUE,
 			prog);
 
-		synth_program->get_active_program_preset_params()->params_mutex.lock();
+		ModSynth::settings_handler_mutex.lock();
 	}
 
 	return res;
@@ -44,7 +44,7 @@ int set_program_karplus_synth_excitation_waveform_type_cb(int type, int prog)
 
 	if (synth_program != NULL)
 	{
-		synth_program->get_active_program_preset_params()->params_mutex.unlock();
+		ModSynth::settings_handler_mutex.unlock();
 
 		res = synth_program->program_settings_manager->set_int_param_value(
 			synth_program->get_active_program_preset_params(),
@@ -53,7 +53,7 @@ int set_program_karplus_synth_excitation_waveform_type_cb(int type, int prog)
 			_SET_VALUE,
 			prog);
 
-		synth_program->get_active_program_preset_params()->params_mutex.lock();
+		ModSynth::settings_handler_mutex.lock();
 	}
 
 	return res;
@@ -66,7 +66,7 @@ int set_program_karplus_synth_excitation_waveform_variations_cb(int var, int pro
 
 	if (synth_program != NULL)
 	{
-		synth_program->get_active_program_preset_params()->params_mutex.unlock();
+		ModSynth::settings_handler_mutex.unlock();
 
 		res = synth_program->program_settings_manager->set_int_param_value(
 			synth_program->get_active_program_preset_params(),
@@ -75,7 +75,7 @@ int set_program_karplus_synth_excitation_waveform_variations_cb(int var, int pro
 			_SET_VALUE,
 			prog);
 
-		synth_program->get_active_program_preset_params()->params_mutex.lock();
+		ModSynth::settings_handler_mutex.lock();
 	}
 
 	return res;
@@ -88,7 +88,7 @@ int set_program_karplus_synth_decay_cb(int dec, int prog)
 
 	if (synth_program != NULL)
 	{
-		synth_program->get_active_program_preset_params()->params_mutex.unlock();
+		ModSynth::settings_handler_mutex.unlock();
 
 		res = synth_program->program_settings_manager->set_int_param_value(
 			synth_program->get_active_program_preset_params(),
@@ -97,7 +97,7 @@ int set_program_karplus_synth_decay_cb(int dec, int prog)
 			_SET_VALUE,
 			prog);
 
-		synth_program->get_active_program_preset_params()->params_mutex.lock();
+		ModSynth::settings_handler_mutex.lock();
 	}
 
 	return res;
@@ -110,7 +110,7 @@ int set_program_karplus_synth_pluck_damping_cb(int dump, int prog)
 
 	if (synth_program != NULL)
 	{
-		synth_program->get_active_program_preset_params()->params_mutex.unlock();
+		ModSynth::settings_handler_mutex.unlock();
 
 		res = synth_program->program_settings_manager->set_int_param_value(
 			synth_program->get_active_program_preset_params(),
@@ -119,7 +119,7 @@ int set_program_karplus_synth_pluck_damping_cb(int dump, int prog)
 			_SET_VALUE,
 			prog);
 
-		synth_program->get_active_program_preset_params()->params_mutex.lock();
+		ModSynth::settings_handler_mutex.lock();
 	}
 
 	return res;
@@ -132,7 +132,7 @@ int set_program_karplus_synth_pluck_damping_variations_cb(int dump, int prog)
 
 	if (synth_program != NULL)
 	{
-		synth_program->get_active_program_preset_params()->params_mutex.unlock();
+		ModSynth::settings_handler_mutex.unlock();
 
 		res = synth_program->program_settings_manager->set_int_param_value(
 			synth_program->get_active_program_preset_params(),
@@ -141,7 +141,7 @@ int set_program_karplus_synth_pluck_damping_variations_cb(int dump, int prog)
 			_SET_VALUE,
 			prog);
 
-		synth_program->get_active_program_preset_params()->params_mutex.lock();
+		ModSynth::settings_handler_mutex.lock();
 	}
 
 	return res;
@@ -154,7 +154,7 @@ int set_program_karplus_synth_string_damping_cb(int dump, int prog)
 
 	if (synth_program != NULL)
 	{
-		synth_program->get_active_program_preset_params()->params_mutex.unlock();
+		ModSynth::settings_handler_mutex.unlock();
 
 		res = synth_program->program_settings_manager->set_int_param_value(
 			synth_program->get_active_program_preset_params(),
@@ -163,7 +163,7 @@ int set_program_karplus_synth_string_damping_cb(int dump, int prog)
 			_SET_VALUE,
 			prog);
 
-		synth_program->get_active_program_preset_params()->params_mutex.lock();
+		ModSynth::settings_handler_mutex.lock();
 	}
 
 	return res;
@@ -176,7 +176,7 @@ int set_program_karplus_synth_string_damping_variations_cb(int dump, int prog)
 
 	if (synth_program != NULL)
 	{
-		synth_program->get_active_program_preset_params()->params_mutex.unlock();
+		ModSynth::settings_handler_mutex.unlock();
 
 		res = synth_program->program_settings_manager->set_int_param_value(
 			synth_program->get_active_program_preset_params(),
@@ -185,7 +185,7 @@ int set_program_karplus_synth_string_damping_variations_cb(int dump, int prog)
 			_SET_VALUE,
 			prog);
 
-		synth_program->get_active_program_preset_params()->params_mutex.lock();
+		ModSynth::settings_handler_mutex.lock();
 	}
 
 	return res;
@@ -198,7 +198,7 @@ int set_program_karplus_synth_string_damping_calculation_mode_cb(int mode, int p
 
 	if (synth_program != NULL)
 	{
-		synth_program->get_active_program_preset_params()->params_mutex.unlock();
+		ModSynth::settings_handler_mutex.unlock();
 
 		res = synth_program->program_settings_manager->set_int_param_value(
 			synth_program->get_active_program_preset_params(),
@@ -207,7 +207,7 @@ int set_program_karplus_synth_string_damping_calculation_mode_cb(int mode, int p
 			_SET_VALUE,
 			prog);
 
-		synth_program->get_active_program_preset_params()->params_mutex.lock();
+		ModSynth::settings_handler_mutex.lock();
 	}
 
 	return res;
@@ -220,7 +220,7 @@ int set_program_karplus_synth_send_filter_1_cb(int snd, int prog)
 
 	if (synth_program != NULL)
 	{
-		synth_program->get_active_program_preset_params()->params_mutex.unlock();
+		ModSynth::settings_handler_mutex.unlock();
 
 		res = synth_program->program_settings_manager->set_int_param_value(
 			synth_program->get_active_program_preset_params(),
@@ -229,7 +229,7 @@ int set_program_karplus_synth_send_filter_1_cb(int snd, int prog)
 			_SET_VALUE,
 			prog);
 
-		synth_program->get_active_program_preset_params()->params_mutex.lock();
+		ModSynth::settings_handler_mutex.lock();
 	}
 
 	return res;
@@ -242,7 +242,7 @@ int set_program_karplus_synth_send_filter_2_cb(int snd, int prog)
 
 	if (synth_program != NULL)
 	{
-		synth_program->get_active_program_preset_params()->params_mutex.unlock();
+		ModSynth::settings_handler_mutex.unlock();
 
 		res = synth_program->program_settings_manager->set_int_param_value(
 			synth_program->get_active_program_preset_params(),
@@ -251,7 +251,7 @@ int set_program_karplus_synth_send_filter_2_cb(int snd, int prog)
 			_SET_VALUE,
 			prog);
 
-		synth_program->get_active_program_preset_params()->params_mutex.lock();
+		ModSynth::settings_handler_mutex.lock();
 	}
 
 	return res;
@@ -264,7 +264,7 @@ int set_program_karplus_synth_on_decay_cb(int dec, int prog)
 
 	if (synth_program != NULL)
 	{
-		synth_program->get_active_program_preset_params()->params_mutex.unlock();
+		ModSynth::settings_handler_mutex.unlock();
 
 		res = synth_program->program_settings_manager->set_int_param_value(
 			synth_program->get_active_program_preset_params(),
@@ -273,7 +273,7 @@ int set_program_karplus_synth_on_decay_cb(int dec, int prog)
 			_SET_VALUE,
 			prog);
 
-		synth_program->get_active_program_preset_params()->params_mutex.lock();
+		ModSynth::settings_handler_mutex.lock();
 	}
 
 	return res;
@@ -286,7 +286,7 @@ int set_program_karplus_synth_off_decay_cb(int dec, int prog)
 
 	if (synth_program != NULL)
 	{
-		synth_program->get_active_program_preset_params()->params_mutex.unlock();
+		ModSynth::settings_handler_mutex.unlock();
 
 		res = synth_program->program_settings_manager->set_int_param_value(
 			synth_program->get_active_program_preset_params(),
@@ -295,7 +295,7 @@ int set_program_karplus_synth_off_decay_cb(int dec, int prog)
 			_SET_VALUE,
 			prog);
 
-		synth_program->get_active_program_preset_params()->params_mutex.lock();
+		ModSynth::settings_handler_mutex.lock();
 	}
 
 	return res;

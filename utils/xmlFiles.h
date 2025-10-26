@@ -1,20 +1,21 @@
 /**
-* @file		XMLfiles.h
-*	@author		Nahum Budin
-*	@date		29-Jun-2024
-*	@version	1.0
-*					1. Code refactoring
-*
-*	@brief	XML files handling (for settings and configuration files).
-*
-*  Based on Music Open Lab Library.
-*	Copyright AdjHeart Nahum Budin Octobe 1, 2018
-*
-*	History:\n
-*
-*	version 1.0		17-Oct-2019:
-*		First version
-*/
+ * @file		XMLfiles.h
+ *	@author		Nahum Budin
+ *	@date		24-Oct-2025
+ *	@version	1.2
+ *					1. Adding function get_xml_file_path to extract path from full path
+ *
+ *	@brief	XML files handling (for settings and configuration files).
+ *
+ *  Based on Music Open Lab Library.
+ *	Copyright AdjHeart Nahum Budin Octobe 1, 2018
+ *
+ *	History:\n
+ *
+ *	version 1.1		29-Jun-2024: Code refactoring
+ *	version 1.0		17-Oct-2019:
+ *		First version
+ */
 
 #pragma once
 
@@ -117,6 +118,10 @@ class XML_files
 	* Extract file name from full path 
 	*/
 	std::string get_xml_file_name(std::string fullpath);
+	/**
+	 * Extract file path without name and extenssion from full path
+	 */
+	std::string get_xml_file_path(std::string fullpath);
 	/**
 	* Extract file name without the extension
 	*/

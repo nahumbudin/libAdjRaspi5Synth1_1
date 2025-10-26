@@ -4,6 +4,7 @@
 *	@date		24-Sep-2025
 *	@version	1.3 
 *					1. Code refactoring and notaion.
+*					2. Add id number (for debug).
 *					
 *	@version	Ver1.2	Code refactoring and notaion.
 *				29-Jan-2021	1.1 
@@ -35,7 +36,7 @@ AudioOutputFloat::AudioOutputFloat(
 				uint8_t stage,
 	int block_size,
 	shared_memory_audio_block_float_stereo_struct_t *shared_memory,
-	AudioBlockFloat **audio_first_update_ptr)
+	AudioBlockFloat **audio_first_update_ptr, int vid)
 	: AudioBlockFloat(
 			2, // 2 audio inputs
 			input_queue_array, // audio block input queue
@@ -45,6 +46,7 @@ AudioOutputFloat::AudioOutputFloat(
 	audio_block_stereo_float_shared_memory = shared_memory;
 	master_gain = 0.5f;   // 0.2 TODO: <<<<<<<<<<<<<<<<<<<<<<<<< 
 	set_audio_block_size(block_size);
+	voice_id = vid;
 }
 
 /**
@@ -112,7 +114,7 @@ void AudioOutputFloat::update(void) {
 	
 	audio_block_float_mono_t *in[2];
 	volatile  unsigned int i;
-	static unsigned int id = 0;
+	static unsigned int block_id = 0;
 
 	//	fprintf(stderr, "Update Output\n");
 	
@@ -127,6 +129,7 @@ void AudioOutputFloat::update(void) {
 	}
 	else 
 	{
+		printf("Audio Output L %i no input\n", voice_id);
 		for (i = 0; i < audio_block_size; i++) 
 		{
 			// No input - fill with silence.
@@ -144,7 +147,7 @@ void AudioOutputFloat::update(void) {
 	}
 	else 
 	{
-		printf("Audio Output no input");
+		printf("Audio Output R %i no input\n", voice_id);
 		for (i = 0; i < audio_block_size; i++) 
 		{
 			// No input - fill with silence.
@@ -153,9 +156,9 @@ void AudioOutputFloat::update(void) {
 	}
 
 	// printf("audio out  %x %x\n", (long)audio_block_stereo_float_shared_memory, id); // <<<<<
-	
-	audio_block_stereo_float_shared_memory->id = id;
-	id++;
+
+	audio_block_stereo_float_shared_memory->id = block_id;
+	block_id++;
 	//	if ((id % (int)(10000000/_PERIOD_TIME_USEC)) == 0)
 	//		printf("#transfers: %u  %i sec \n\r", id, (id / (1000000/_PERIOD_TIME_USEC)));
 

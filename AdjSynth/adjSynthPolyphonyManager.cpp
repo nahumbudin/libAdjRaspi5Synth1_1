@@ -1,8 +1,10 @@
 /**
-*	@file		adjSynthPolyphonyManager.cpp
-*	@author		Nahum Budin
-*	@date		6-Feb-2025
-*	@version	1.0 1st version	
+ *	@file		adjSynthPolyphonyManager.cpp
+ *	@author		Nahum Budin
+ *	@date		6-Feb-2025
+ *	@version	1.0 1st version
+ *					1. Not manging cores loads - let the OS do it.TODO:
+*					2. Adding mutex
 *	
 *	Based on adjSynthPolyphony.cpp version 1.1 3-Feb-2021
 *
@@ -49,6 +51,8 @@ AdjPolyphonyManager::AdjPolyphonyManager(int num_of_voices)
 	}
 
 	gettimeofday(&start_time, NULL);
+
+	pthread_mutex_init(&voice_allocations_mutex, NULL);
 }
 
 AdjPolyphonyManager *AdjPolyphonyManager::get_poly_manger_instance(int num_of_voices)
@@ -85,9 +89,10 @@ int AdjPolyphonyManager::get_voice(int note, int program)
 {
 	int voice;
 
-	if (mod_synth_get_cpu_utilization() > 90)
+	if (mod_synth_get_cpu_utilization() > 70)
 	// CPU is too loaded
 	{
+		fprintf(stderr, "Get note: CPU is too loaded!\n");
 		return -2;
 	}
 
@@ -98,11 +103,15 @@ int AdjPolyphonyManager::get_voice(int note, int program)
 		return -3;
 	}
 
+	pthread_mutex_lock(&voice_allocations_mutex);
+
 	// Look for a program voice note that is already playing
 	voice = get_reused_note(note, program);
 
 	if (voice >= 0)
 	{
+		pthread_mutex_unlock(&voice_allocations_mutex);
+		
 		return voice;
 	}
 
@@ -117,6 +126,8 @@ int AdjPolyphonyManager::get_voice(int note, int program)
 			{
 				// A free voice
 				AdjSynth::get_instance()->synth_voice[voice]->audio_voice->set_active();
+
+				pthread_mutex_unlock(&voice_allocations_mutex);
 				
 				return voice;
 			}
@@ -127,8 +138,12 @@ int AdjPolyphonyManager::get_voice(int note, int program)
 	voice = get_oldest_voice();
 	if (voice >= 0)
 	{
+		pthread_mutex_unlock(&voice_allocations_mutex);
+		
 		return voice;
 	}
+
+	pthread_mutex_unlock(&voice_allocations_mutex);
 
 	return -1;
 }
@@ -141,6 +156,8 @@ int AdjPolyphonyManager::get_voice(int note, int program)
  */
 void AdjPolyphonyManager::free_voice(int voice, int program, bool pend)
 {
+	pthread_mutex_lock(&voice_allocations_mutex);
+	
 	if ((voice >= 0) && (voice < mod_synth_get_synthesizer_num_of_polyphonic_voices()) &&
 		(program >= 0) && (program < mod_synth_get_synthesizer_num_of_programs()))
 	{
@@ -170,6 +187,8 @@ void AdjPolyphonyManager::free_voice(int voice, int program, bool pend)
 			}
 		}
 	}
+
+	pthread_mutex_unlock(&voice_allocations_mutex);
 }
 
 /**
@@ -183,6 +202,8 @@ int AdjPolyphonyManager::get_oldest_voice()
 	int minvoice = -1;
 	uint64_t mintime = UINT64_MAX;
 
+	//pthread_mutex_lock(&voice_allocations_mutex);
+
 	// Alocate first to be allocated in the past (oldest)
 	for (v = 0; v < mod_synth_get_synthesizer_num_of_polyphonic_voices(); v++)
 	{
@@ -195,6 +216,8 @@ int AdjPolyphonyManager::get_oldest_voice()
 			}
 		}
 	}
+
+	//pthread_mutex_unlock(&voice_allocations_mutex);
 
 	return minvoice;
 }
@@ -213,7 +236,7 @@ int AdjPolyphonyManager::get_reused_note(int note, int program)
 	int v, result = -1;
 	SynthVoice *voice = NULL;
 
-	if (mod_synth_get_cpu_utilization() > 90)
+	if (mod_synth_get_cpu_utilization() > 70)
 	// CPU is too loaded
 	{
 		return -2;
@@ -226,25 +249,35 @@ int AdjPolyphonyManager::get_reused_note(int note, int program)
 		return -3;
 	}
 
-	// Look for a voice that is already assigned to this note and program
+	//pthread_mutex_lock(&voice_allocations_mutex);
+	
+	// Look for an active voice that is already assigned to this note and program
 	for (v = 0; v < mod_synth_get_synthesizer_num_of_polyphonic_voices(); v++)
 	{
 		voice = AdjSynth::get_instance()->synth_program[program]->get_voice(v);
 
 		if (voice != NULL)
 		{
-			if ((voice->audio_voice->is_voice_active()) &&
-				(voice->audio_voice->is_voice_wait_for_not_active()) &&
-				// Voice is active or in release phase
-				(voice->audio_voice->get_note() == note) &&
-				(voice->get_allocated_program() == program))
-			// Voice is assigned to this note and program
-			{
-				result = v;
-				break;
-			}
+			// if (voice->get_allocated_program() == program)
+			//{
+			//  Voice is assigned to this program - 
+			//	no need to check: synth_program[program]->get_voice(v)
+				if (voice->audio_voice->get_note() == note)
+				{
+					// Voice is assigned to this note					
+					if ((voice->audio_voice->is_voice_active()) ||  /* && */
+						(voice->audio_voice->is_voice_wait_for_not_active()))
+					{
+						// Voice is currentlly active
+						result = v;
+						break;
+					}
+				}
+			//}
 		}
 	}
+
+	//pthread_mutex_unlock(&voice_allocations_mutex);
 
 	return result;
 }
@@ -357,6 +390,8 @@ int AdjPolyphonyManager::get_a_free_voice(int core)
 	int min_voice = -1, min_core = -1;
 	bool reused = false;
 
+	//pthread_mutex_lock(&voice_allocations_mutex);
+	
 	result = -1;
 	// Look for a free voice on selected core
 	// Voices are distributed to cores as follows: (for example: 48 voices and 4 cores)
@@ -384,6 +419,8 @@ int AdjPolyphonyManager::get_a_free_voice(int core)
 		result = voice;
 		//	printf("Min Core %i Free voice %i", core, voice);
 	}
+
+	//pthread_mutex_unlock(&voice_allocations_mutex);
 
 	return result;
 }

@@ -32,11 +32,12 @@
 
 #include <cstring>
 
+#include "../modSynth.h"
 #include "settings.h"
 //#include "../utils/utils.h"
 
 /* A nutex to control asynchronous settings operation request execution */
-std::mutex Settings::settings_manage_mutex;
+//std::mutex Settings::settings_manage_mutex;
 
 /* Settings version */
 uint32_t Settings::settings_version = 250923; // 2025-09-23
@@ -364,7 +365,7 @@ settings_res_t Settings::set_string_param(_settings_params_t *settings,
 	return_val_if_true(name == "", _SETTINGS_BAD_PARAMETERS);
 
 	//settings_manage_mutex.lock();
-	settings->params_mutex.lock();
+	ModSynth::settings_handler_mutex.lock();
 
 	_settings_params_t *_settings;
 
@@ -548,7 +549,7 @@ settings_res_t Settings::set_string_param(_settings_params_t *settings,
 	}
 
 	//settings_manage_mutex.unlock();
-	settings->params_mutex.unlock();
+	ModSynth::settings_handler_mutex.unlock();
 
 	return _SETTINGS_OK;
 }
@@ -594,7 +595,7 @@ settings_res_t Settings::set_int_param(_settings_params_t *settings, string name
 	return_val_if_true(name == "", _SETTINGS_BAD_PARAMETERS);
 
 	//settings_manage_mutex.lock();
-	settings->params_mutex.lock();
+	ModSynth::settings_handler_mutex.lock();
 
 	_settings_params_t *_settings;
 
@@ -641,7 +642,7 @@ settings_res_t Settings::set_int_param(_settings_params_t *settings, string name
 					{
 						// out of rang - abbort
 						//settings_manage_mutex.unlock();
-						settings->params_mutex.unlock();
+						ModSynth::settings_handler_mutex.unlock();
 						return _SETTINGS_PARAM_OUT_OF_RANGE;
 					}
 					else
@@ -741,15 +742,15 @@ settings_res_t Settings::set_int_param(_settings_params_t *settings, string name
 			{
 				if (!param.limits_set)
 				{
-					//new_param.value = value;
-					settings->params_mutex.unlock();
+					new_param.value = value;
+					//settings->params_mutex.unlock();
 				}
 				else
 				{
 					if ((value < new_param.min_val) || (value > new_param.max_val))
 					{
 						// out of rang - abbort
-						settings_manage_mutex.unlock();
+						ModSynth::settings_handler_mutex.unlock();
 						return _SETTINGS_PARAM_OUT_OF_RANGE;
 					}
 					else
@@ -845,7 +846,7 @@ settings_res_t Settings::set_int_param(_settings_params_t *settings, string name
 	}
 
 	//settings_manage_mutex.unlock();
-	settings->params_mutex.unlock();
+	ModSynth::settings_handler_mutex.unlock();
 
 	return _SETTINGS_OK;
 }
@@ -891,7 +892,7 @@ settings_res_t Settings::set_float_param(_settings_params_t *settings, string na
 	return_val_if_true(name == "", _SETTINGS_BAD_PARAMETERS);
 
 	//settings_manage_mutex.lock();
-	settings->params_mutex.lock();
+	ModSynth::settings_handler_mutex.lock();
 
 	_settings_params_t *_settings;
 
@@ -938,7 +939,7 @@ settings_res_t Settings::set_float_param(_settings_params_t *settings, string na
 					{
 						// out of rang - abbort
 						//settings_manage_mutex.unlock();
-						settings->params_mutex.unlock();
+						ModSynth::settings_handler_mutex.unlock();
 						
 						return _SETTINGS_PARAM_OUT_OF_RANGE;
 					}
@@ -1047,7 +1048,7 @@ settings_res_t Settings::set_float_param(_settings_params_t *settings, string na
 					{
 						// out of rang - abbort
 						//settings_manage_mutex.unlock();
-						settings->params_mutex.unlock();
+						ModSynth::settings_handler_mutex.unlock();
 						
 						return _SETTINGS_PARAM_OUT_OF_RANGE;
 					}
@@ -1144,7 +1145,7 @@ settings_res_t Settings::set_float_param(_settings_params_t *settings, string na
 	}
 
 	//settings_manage_mutex.unlock();
-	settings->params_mutex.unlock();
+	ModSynth::settings_handler_mutex.unlock();
 
 	return _SETTINGS_OK;
 }
@@ -1187,7 +1188,7 @@ settings_res_t Settings::set_bool_param(_settings_params_t *settings, string nam
 	return_val_if_true(name == "", _SETTINGS_BAD_PARAMETERS);
 
 	//settings_manage_mutex.lock();
-	settings->params_mutex.lock();
+	ModSynth::settings_handler_mutex.lock();
 
 	_settings_params_t *_settings;
 
@@ -1370,7 +1371,7 @@ settings_res_t Settings::set_bool_param(_settings_params_t *settings, string nam
 	}
 
 	//settings_manage_mutex.unlock();
-	settings->params_mutex.unlock();
+	ModSynth::settings_handler_mutex.unlock();
 
 	return _SETTINGS_OK;
 }

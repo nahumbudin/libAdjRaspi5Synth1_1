@@ -1,3 +1,8 @@
 mso
 get_
 get_mso
+spe
+pan
+save
+patch
+jack

@@ -12,6 +12,8 @@
  *					7. Adding DSP Out setting parameters: gain, pan, lfo and lfo level
  *					8. Adding voice send parameters
  *					9. Changing main Amp gain and send update callbacks to non block callbacks.
+ *					10 . Adding Panic action
+ *					11. Refactoring lfo_delays[] -> global array in adjSynth.
 *					
 *	@brief		A collection of 4 synthesizers: Additive, Karplus String, PAD and Morphed Sine Oscilator (MSO)
 *	
@@ -86,7 +88,9 @@ public:
 	
 	void init_synth_voices();
 
-	void init_synth_programs();	
+	void init_synth_programs();
+
+	int init_lfo_delays();
 
 	void set_master_volume(int vol);
 	int get_master_volume();
@@ -108,7 +112,9 @@ public:
 
 	void init_poly();
 	void init_jack();
-	
+
+	void synth_panic_ection();
+
 	void set_midi_mapping_mode(int mod);
 	int get_midi_mapping_mode();
 	
@@ -195,8 +201,9 @@ public:
 	AudioReverb *audio_reverb = NULL;
 	AudioBandEqualizer *audio_equalizer = NULL;
 	AudioOutputFloat *audio_out = NULL;
-	
-	
+
+	/* Holds the delay values of all LFO index selection*/
+	static uint32_t lfo_delays[_NUM_OF_LFOS * _NUM_OF_LFO_DELAY_OPTIONS + 1]; // 5 LFOs, 5 states; 1 None
 
 	
 	/** This pool of SynthVoice objects is run and controlled by the synthesizer.

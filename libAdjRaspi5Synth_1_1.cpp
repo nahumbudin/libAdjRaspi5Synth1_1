@@ -6,6 +6,7 @@
 *					1. Code refactoring rename modules to instruments and patches to preset parameters.
 *					2. Replacing all analog synthgesizers instruments Jack output ports
 *						name and port names with AdjSynth names.
+*					3. Add AdjSynth panic pushbutton
 *
 *	History:
 *			Ver1.0  8-May-2024 Initial
@@ -46,6 +47,9 @@
 #include "./Instrument/instrumentFluidSynth.h"
 #include "./Instrument/instrumentMidiPlayer.h"
 #include "./Instrument/instrumentMidiMapper.h"
+#include "./Instrument/instrumentAnalogSynth.h"
+
+#include "./utils/xmlFiles.h"
 
 #include "libAdjRaspi5Synth_1_1.h"
 
@@ -361,7 +365,8 @@ int mod_synth_connect_jack_connection(
 	bool connect)
 {
 	int res;
-	
+	s_jack_connection_t jack_connection;
+
 	// All analog based instruments uses the AdjHeartSynth output
 	std::string client_out_name = out_client_name;
 	std:string client_port_out_name = out_client_port_name;
@@ -392,6 +397,25 @@ int mod_synth_connect_jack_connection(
 			in_client_port_name, 
 			client_out_name, 
 			client_port_out_name);
+
+		if (res == 0)
+		{
+			jack_connection.in_client_name = in_client_name;
+			jack_connection.in_client_port_name = in_client_port_name;
+			jack_connection.out_client_name = client_out_name;
+			jack_connection.out_client_port_name = client_port_out_name;
+			
+			if (out_client_port_name == "left")
+			{
+				mod_synthesizer->get_analog_synth()->set_analog_synth_left_jack_output_connection(
+					jack_connection);
+			}
+			else if (out_client_port_name == "right")
+			{
+				mod_synthesizer->get_analog_synth()->set_analog_synth_right_jack_output_connection(
+					jack_connection);
+			}
+		}
 	}
 	else
 	{
@@ -400,6 +424,25 @@ int mod_synth_connect_jack_connection(
 			in_client_port_name,
 			client_out_name,
 			client_port_out_name);
+
+		if (res == 0)
+		{
+			jack_connection.in_client_name = "";
+			jack_connection.in_client_port_name = "";
+			jack_connection.out_client_name = "";
+			jack_connection.out_client_port_name = "";
+
+			if (out_client_port_name == "left")
+			{
+				mod_synthesizer->get_analog_synth()->set_analog_synth_left_jack_output_connection(
+					jack_connection);
+			}
+			else if (out_client_port_name == "right")
+			{
+				mod_synthesizer->get_analog_synth()->set_analog_synth_right_jack_output_connection(
+					jack_connection);
+			}
+		}
 	}
 	
 	return res;
@@ -861,7 +904,10 @@ void mod_synth_panic_action()
 	mod_synthesizer->adj_synth->init_poly();
 }
 
-
+void mod_synth_adj_synt_panic_action()
+{
+	AdjSynth::get_instance()->synth_panic_ection();
+}
 
 void mod_synth_register_set_osc_1_unison_mode_callback(func_ptr_void_int_t ptr)
 {
@@ -1355,7 +1401,7 @@ int mod_synth_open_fluid_synth_settings_file(string path)
 
 int mod_synth_save_adj_synth_patch_file(string path)
 {
-	
+	return mod_synthesizer->save_adj_synth_patch_file(path);
 }
 
 int mod_synth_open_adj_synth_patch_file(std::string path, int channel)
@@ -1601,9 +1647,24 @@ int mod_synth_save_patch_file(std::string file_path)
 
 int mod_synth_load_patch_file(std::string file_path)
 {
+	int res = 0;
+
+	XML_files *xml_files = new XML_files();
+
 	mod_synthesizer->patches_handler->disconnect_current_oppened_instruments_midi_in_connections();
 	mod_synthesizer->patches_handler->close_current_oppened_instruments();
-	return mod_synthesizer->patches_handler->load_patch_file(file_path);
+	res = mod_synthesizer->patches_handler->load_patch_file(file_path);
+
+	// TODO: selcte file name base on patch name or instrument names
+	file_path = xml_files->get_xml_file_path(file_path) + "Adj-Analog-Synth-settings.xml";
+
+	
+	res |= mod_synthesizer->get_analog_synth()->instrument_settings->read_settings_file(
+		mod_synthesizer->get_analog_synth()->active_settings_params,
+		file_path,
+		_ADJ_SYNTH_PRESET_PARAMS, _SKETCH_PROGRAM_1); // TODO: fix sketch number
+
+	return res;
 }
 
 

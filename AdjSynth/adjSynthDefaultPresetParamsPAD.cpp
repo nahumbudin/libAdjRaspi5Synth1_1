@@ -81,7 +81,7 @@ int AdjSynth::set_default_preset_parameters_pad(_settings_params_t *params, int 
 	res |= adj_synth_settings_manager->set_int_param(
 		params,
 		"adjsynth.pad_synth.send_filter_1",
-		0,
+		50,
 		100,
 		0,
 		_ADJ_SYNTH_PRESET_PARAMS,
@@ -96,7 +96,7 @@ int AdjSynth::set_default_preset_parameters_pad(_settings_params_t *params, int 
 	res |= adj_synth_settings_manager->set_int_param(
 		params,
 		"adjsynth.pad_synth.send_filter_2",
-		0,
+		50,
 		100,
 		0,
 		_ADJ_SYNTH_PRESET_PARAMS,
@@ -201,7 +201,7 @@ int AdjSynth::set_default_preset_parameters_pad(_settings_params_t *params, int 
 	res |= adj_synth_settings_manager->set_int_param(
 		params,
 		"adjsynth.pad_synth.amp_modulation_env_num",
-		_ENV_NONE,
+		_ENV_1,
 		_ENV_6,
 		_ENV_NONE,
 		_ADJ_SYNTH_PRESET_PARAMS,
@@ -216,7 +216,7 @@ int AdjSynth::set_default_preset_parameters_pad(_settings_params_t *params, int 
 	res |= adj_synth_settings_manager->set_int_param(
 		params,
 		"adjsynth.pad_synth.amp_modulation_env_level",
-		0,
+		100,
 		100,
 		0,
 		_ADJ_SYNTH_PRESET_PARAMS,
@@ -246,7 +246,7 @@ int AdjSynth::set_default_preset_parameters_pad(_settings_params_t *params, int 
 	res |= adj_synth_settings_manager->set_int_param(
 		params,
 		"adjsynth.pad_synth.base_note",
-		_PAD_BASE_NOTE_C4,
+		_PAD_BASE_NOTE_C3,
 		_PAD_BASE_NOTE_G6,
 		_PAD_BASE_NOTE_C2,
 		_ADJ_SYNTH_PRESET_PARAMS,

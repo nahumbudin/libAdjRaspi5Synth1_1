@@ -491,7 +491,7 @@ void InstrumentFluidSynth::set_active_preset(int preset_num)
 
 int InstrumentFluidSynth::get_fluid_synth_channel_bank(int chan)
 {
-	fluid_synth_int_instance->get_fluid_synth_channel_bank(chan);
+	return fluid_synth_int_instance->get_fluid_synth_channel_bank(chan);
 }
 
 int InstrumentFluidSynth::events_handler(int moduleid, int paramid, int val, _settings_params_t *params, int program)

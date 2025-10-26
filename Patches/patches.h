@@ -59,6 +59,7 @@
 #pragma once
 
 #include "../rapidjson/document.h"
+#include "../Jack/jackConnections.h"
 
 #include "../LibAPI/types.h"
 
@@ -85,6 +86,8 @@ class PatchsHandler
 
 	int implement_patch(vector<string> active_instruments, vector<string> settings_files,
 						vector<vector<string>> midi_in_connections,
+						vector<s_jack_connection_t> jack_right_out_connections_vector,
+						vector<s_jack_connection_t> jack_left_out_connections_vector,
 						string file_path);
 
 	static PatchsHandler *patch_handler_instance;

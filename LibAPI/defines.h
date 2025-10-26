@@ -11,6 +11,8 @@
 
 #pragma once
 
+#define _MAX_NUM_OF_INSTRUMENTS									256
+
 #define _INSTRUMENT_NAME_FLUID_SYNTH_STR_KEY					"Adj-Fluid-Synth"
 #define _INSTRUMENT_NAME_HAMMON_ORGAN_STR_KEY					"Adj-Hammond-Organ"
 #define _INSTRUMENT_NAME_ANALOG_SYNTH_STR_KEY					"Adj-Analog-Synth"
@@ -53,3 +55,5 @@
 #define _MIDI_PLAYER_STATE_INIT_STOP					3
 #define _MIDI_PLAYER_STATE_INIT_PAUSE					4
 #define _MIDI_PLAYER_STATE_PLAYNG_SYNC					6
+
+#define _MAX_NUM_OF_MIDI_CLIENTS						128

@@ -2,10 +2,11 @@
 *	@file		dspVoice.cpp
 *	@author		Nahum Budin
 *	@date		3-Oct-2025
-*	@version	1.3 
-*					1. Fixing bug - added the ADSR6 and LFO6. 
+*	@version	1.3
+*					1. Fixing bug - added the ADSR6 and LFO6.
 *					2. Set ADR values: use the _log functions
 *					3. Adding LFO/ADSR 6 settings
+*					4. Refactoring lfo_delays[] -> global array in adjSynth.
 
 *					
 *	@History	
@@ -698,23 +699,25 @@ void DSP_Voice::register_voice_end_event_callback(func_ptr_void_int_t func_ptr)
 *   @param  none
 *   @return 0;
 */	
+/*
 int DSP_Voice::init_lfo_delays()
 {
 	int lfo_num, state;
 	uint32_t lfo_500_ms_delay_cont = sample_rate / _CONTROL_SUB_SAMPLING / 2;       
 	
-	lfo_delays[0] = 0;	
+	lfo_delays[0] = 0; // None LFO
 	
 	for (state = 0; state < _NUM_OF_LFO_DELAY_OPTIONS; state++)
 	{
 		for (lfo_num = 0; lfo_num < _NUM_OF_LFOS; lfo_num++)
 		{
-			lfo_delays[state * _NUM_OF_LFO_DELAY_OPTIONS + state] = lfo_500_ms_delay_cont * state;
+			lfo_delays[state * _NUM_OF_LFOS + lfo_num + 1] = lfo_500_ms_delay_cont * state;
 		}
 	}
 	
 	return 0;
 }
+*/
 
 /**
 *   @brief  Copy the state to a target DSP_Voice object.

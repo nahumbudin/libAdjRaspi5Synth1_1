@@ -25,6 +25,8 @@
 #include "../modSynth.h"
 #include "../commonDefs.h"
 
+//#define _ALSA_MIDI_HANDLER_PRINTS_ON
+
 /**
 void alsa_seq_sysex(uint8_t* message, int len)
 {
@@ -163,6 +165,8 @@ void AlsaMidiSeqencerEventsHandler::update()
 				instrument->note_on_handler(qev->data.control.channel, qev->data.note.note, qev->data.note.velocity);
 
 				gettimeofday(&time_val, NULL);
+
+				#ifdef _ALSA_MIDI_HANDLER_PRINTS_ON
 				
 				fprintf(stderr,
 						"ALSA: Note On  event on Channel %2d: %5d   %6d.%6d      \n",
@@ -170,6 +174,7 @@ void AlsaMidiSeqencerEventsHandler::update()
 						qev->data.note.note,
 						time_val.tv_sec,
 						time_val.tv_usec);
+				#endif
 
 				break;
 
@@ -179,12 +184,14 @@ void AlsaMidiSeqencerEventsHandler::update()
 
 				gettimeofday(&time_val, NULL);
 
+				#ifdef _ALSA_MIDI_HANDLER_PRINTS_ON
 				fprintf(stderr,
 						"ALSA: Note Off event on Channel %2d: %5d   %6d.%6d      \n",
 						qev->data.control.channel,
 						qev->data.note.note,
 						time_val.tv_sec,
 						time_val.tv_usec);
+				#endif
 
 				break;
 
@@ -193,19 +200,23 @@ void AlsaMidiSeqencerEventsHandler::update()
 				instrument->change_program_handler(qev->data.control.channel, qev->data.control.value);
 
 				/** TODO: callback_midi_program_change_event(qev->data.control.channel, qev->data.control.value); */
+				#ifdef _ALSA_MIDI_HANDLER_PRINTS_ON
 				fprintf(stderr,
 						"ALSA: Change program event on Channel %2d: %5d      \n",
 						qev->data.control.channel,
 						qev->data.control.value);
+				#endif
+				
 				break;
 
 			case SND_SEQ_EVENT_CHANPRESS:
 				instrument->channel_pressure_handler(qev->data.control.channel, qev->data.control.value);
-
+				#ifdef _ALSA_MIDI_HANDLER_PRINTS_ON
 				fprintf(stderr,
 						"ALSA: Channel pressure event on Channel %2d: %5d\n",
 						qev->data.control.channel,
 						qev->data.control.value);
+				#endif
 
 				break;
 
@@ -213,21 +224,25 @@ void AlsaMidiSeqencerEventsHandler::update()
 
 				instrument->controller_event_handler(qev->data.control.channel, qev->data.control.param, qev->data.control.value);
 
+				#ifdef _ALSA_MIDI_HANDLER_PRINTS_ON
 				fprintf(stderr,
 					"ALSA: Control event on Channel %2d: %5d  %5d\n",
 						qev->data.control.channel,
 						qev->data.control.param,
 						qev->data.control.value);
+				#endif
 
 				break;
 
 			case SND_SEQ_EVENT_PITCHBEND:
 				instrument->pitch_bend_handler(qev->data.control.channel, qev->data.control.value);
 
+				#ifdef _ALSA_MIDI_HANDLER_PRINTS_ON
 				fprintf(stderr,
 						"ALSA: Pitchbender event on Channel %2d: %5d   \n",
 						qev->data.control.channel,
 						qev->data.control.value);
+				#endif
 
 				break;
 

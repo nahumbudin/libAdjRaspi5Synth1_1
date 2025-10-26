@@ -5,6 +5,7 @@
  *	@version	1.1
  *					1. Code refactoring rename patches to preset parameters.
  *					2. Adding support in both old and new MIDI program objects.
+ *					3. Definning a global settings handling mutex
  *
  *	@brief		This is the main modular synthesizer libraray object.
  *
@@ -163,7 +164,9 @@ public:
 	Settings *fluid_synth_settings_manager;
 	
 	static int cpu_utilization;
-	
+
+	static std::mutex settings_handler_mutex;
+
 	_settings_params_t preset_temp;
 	std::string preset_temp_summary_text;
 

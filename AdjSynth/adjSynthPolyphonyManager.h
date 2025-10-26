@@ -4,6 +4,7 @@
 *	@date		6-Feb-2025
 *	@version	1.0 1st version
 *					1. Not manging cores loads - let the OS do it.
+*					2. Adding mutex
 *
 *	Based on adjSynthPolyphony.cpp version 1.1 3-Feb-2021
 *
@@ -76,7 +77,7 @@ class AdjPolyphonyManager
 
 	int get_voice(int note = -1, int program = 0);
 	void free_voice(int voice = -1, int program = 0, bool pend = true);
-	
+	int get_reused_note(int note = -1, int program = 0);
 	
 	
 
@@ -104,7 +105,6 @@ class AdjPolyphonyManager
 	AdjPolyphonyManager(int num_of_voic = 4);
 
 	int get_oldest_voice();
-	int get_reused_note(int note = -1, int program = 0);
 
 	static AdjPolyphonyManager *poly_manager_instance;
 
@@ -120,6 +120,9 @@ class AdjPolyphonyManager
 	 *  by the process wight, and every time a process is terminated and removed from
 	 *  a core, the process wheight is decreasd by the process wight. */
 	int cores_load[_SYNTH_MAX_NUM_OF_CORES];
+
+	/* A mutex to handle voice allocations */
+	pthread_mutex_t voice_allocations_mutex;
 
 	struct timeval start_time;
 };

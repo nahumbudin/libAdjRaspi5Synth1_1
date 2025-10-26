@@ -22,9 +22,9 @@ int set_program_amp_ch_1_level_cb(int lev, int prog)
 
 	if (synth_program != NULL)
 	{
-		synth_program->get_active_program_preset_params()->params_mutex.unlock();
+		ModSynth::settings_handler_mutex.unlock();
 
-		synth_program->get_active_program_preset_params()->params_mutex.lock();
+		ModSynth::settings_handler_mutex.lock();
 	}
 
 	return res;
@@ -37,9 +37,9 @@ int set_program_amp_ch_1_pan_cb(int pan, int prog)
 
 	if (synth_program != NULL)
 	{
-		synth_program->get_active_program_preset_params()->params_mutex.unlock();
+		ModSynth::settings_handler_mutex.unlock();
 
-		synth_program->get_active_program_preset_params()->params_mutex.lock();
+		ModSynth::settings_handler_mutex.lock();
 	}
 
 	return res;
@@ -52,9 +52,9 @@ int set_program_amp_ch_1_pan_modulation_lfo_num_cb(int num, int prog)
 
 	if (synth_program != NULL)
 	{
-		synth_program->get_active_program_preset_params()->params_mutex.unlock();
+		ModSynth::settings_handler_mutex.unlock();
 
-		synth_program->get_active_program_preset_params()->params_mutex.lock();
+		ModSynth::settings_handler_mutex.lock();
 	}
 
 	return res;
@@ -67,9 +67,9 @@ int set_program_amp_ch_1_pan_modulation_lfo_level_cb(int lev, int prog)
 
 	if (synth_program != NULL)
 	{
-		synth_program->get_active_program_preset_params()->params_mutex.unlock();
+		ModSynth::settings_handler_mutex.unlock();
 
-		synth_program->get_active_program_preset_params()->params_mutex.lock();
+		ModSynth::settings_handler_mutex.lock();
 	}
 
 	return res;
@@ -82,9 +82,9 @@ int set_program_amp_fixed_levels_state_cb(bool en, int prog)
 
 	if (synth_program != NULL)
 	{
-		synth_program->get_active_program_preset_params()->params_mutex.unlock();
+		ModSynth::settings_handler_mutex.unlock();
 
-		synth_program->get_active_program_preset_params()->params_mutex.lock();
+		ModSynth::settings_handler_mutex.lock();
 	}
 
 	return res;

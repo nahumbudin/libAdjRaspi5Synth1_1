@@ -175,4 +175,5 @@ class JackConnections
 
 	s_jack_clients_data_t input_clients_data;
 	s_jack_clients_data_t output_clients_data;
+
 };

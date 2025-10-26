@@ -1,16 +1,18 @@
 /**
-*	@file		audioOutput.h
-*	@author		Nahum Budin
-*	@date		2-Oct-2024
-*	@version	1.2 
-*					1. Code refactoring and notaion.
-*					
-*	@version	29-Jan-2021	1.1 
-*					1. Code refactoring and notaion.
-*					2. Adding bloc-size settings
-*				11-Nov-2019	1.0 revised version from old libAdjHeartRaspiFlSynthMultiCore_3_1 May 17, 2017.
-*
-*	@brief		Audio system output block
+ *	@file		audioOutput.cpp
+ *	@author		Nahum Budin
+ *	@date		24-Sep-2025
+ *	@version	1.3
+ *					1. Code refactoring and notaion.
+ *					2. Add id number (for debug).
+ *
+ *	@version	Ver1.2	Code refactoring and notaion.
+ *				29-Jan-2021	1.1
+ *					1. Code refactoring and notaion.
+ *					2. Adding bloc-size settings
+ *				11-Nov-2019	1.0 revised version from old libAdjHeartRaspiFlSynthMultiCore_3_1 May 17, 2017.
+ *
+ *	@brief		Audio system output block
 */
 
 #pragma once
@@ -25,7 +27,8 @@ public:
 		uint8_t stage = 0,
 		int block_size = _DEFAULT_BLOCK_SIZE,	
 		shared_memory_audio_block_float_stereo_struct_t *shared_memory = NULL,
-		AudioBlockFloat **audio_first_update_ptr = NULL);
+		AudioBlockFloat **audio_first_update_ptr = NULL, 
+		int vid = -1);
 
 	int set_audio_block_size(int size);
 	int get_audio_block_size();
@@ -44,5 +47,6 @@ private:
 	float master_gain;
 	
 	int audio_block_size;
-		
+
+	int voice_id;
 };

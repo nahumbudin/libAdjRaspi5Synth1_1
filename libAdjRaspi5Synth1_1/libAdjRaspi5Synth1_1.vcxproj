@@ -41,6 +41,7 @@
       <AdditionalIncludeDirectories>C:\SysGCC\raspberry64\aarch64-linux-gnu\sysroot\usr\include\c++\12;C:\SysGCC\raspberry64\aarch64-linux-gnu\sysroot\usr\include;C:\SysGCC\raspberry64\aarch64-linux-gnu\sysroot\usr\include\aarch64-linux-gnu\bits\types;audio;ALSA;MIDI;=/home/pi/bluez-5.43;=/usr/include/bluetooth;=/usr/include/fluidsynth;=/usr/include;;C:\SysGCC\raspberry64\aarch64-linux-gnu\sysroot\usr\local\include;%(ClCompile.AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <CPPLanguageStandard>GNUPP2A</CPPLanguageStandard>
       <PreprocessorDefinitions>DEBUG=1;%(ClCompile.PreprocessorDefinitions)</PreprocessorDefinitions>
+      <Optimization>O0</Optimization>
     </ClCompile>
     <Link>
       <AdditionalLinkerInputs>;%(Link.AdditionalLinkerInputs)</AdditionalLinkerInputs>

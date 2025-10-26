@@ -22,7 +22,7 @@ int set_program_pad_synth_enabled_cb(bool enable, int prog)
 
 	if (synth_program != NULL)
 	{
-		synth_program->get_active_program_preset_params()->params_mutex.unlock();
+		ModSynth::settings_handler_mutex.unlock();
 
 		res = synth_program->program_settings_manager->set_bool_param_value(
 			synth_program->get_active_program_preset_params(),
@@ -31,7 +31,7 @@ int set_program_pad_synth_enabled_cb(bool enable, int prog)
 			_SET_VALUE,
 			prog);
 
-		synth_program->get_active_program_preset_params()->params_mutex.lock();
+		ModSynth::settings_handler_mutex.lock();
 	}
 
 	return res;
@@ -44,7 +44,7 @@ int set_program_pad_synth_detune_octave_cb(int oct, int prog)
 
 	if (synth_program != NULL)
 	{
-		synth_program->get_active_program_preset_params()->params_mutex.unlock();
+		ModSynth::settings_handler_mutex.unlock();
 
 		res = synth_program->program_settings_manager->set_int_param_value(
 			synth_program->get_active_program_preset_params(),
@@ -53,7 +53,7 @@ int set_program_pad_synth_detune_octave_cb(int oct, int prog)
 			_SET_VALUE,
 			prog);
 
-		synth_program->get_active_program_preset_params()->params_mutex.lock();
+		ModSynth::settings_handler_mutex.lock();
 	}
 
 	return res;
@@ -66,7 +66,7 @@ int set_program_pad_synth_detune_semitones_cb(int semt, int prog)
 
 	if (synth_program != NULL)
 	{
-		synth_program->get_active_program_preset_params()->params_mutex.unlock();
+		ModSynth::settings_handler_mutex.unlock();
 
 		res = synth_program->program_settings_manager->set_int_param_value(
 			synth_program->get_active_program_preset_params(),
@@ -75,7 +75,7 @@ int set_program_pad_synth_detune_semitones_cb(int semt, int prog)
 			_SET_VALUE,
 			prog);
 
-		synth_program->get_active_program_preset_params()->params_mutex.lock();
+		ModSynth::settings_handler_mutex.lock();
 	}
 
 	return res;
@@ -88,7 +88,7 @@ int set_program_pad_synth_detune_cents_cb(int cnts, int prog)
 
 	if (synth_program != NULL)
 	{
-		synth_program->get_active_program_preset_params()->params_mutex.unlock();
+		ModSynth::settings_handler_mutex.unlock();
 
 		res = synth_program->program_settings_manager->set_int_param_value(
 			synth_program->get_active_program_preset_params(),
@@ -97,7 +97,7 @@ int set_program_pad_synth_detune_cents_cb(int cnts, int prog)
 			_SET_VALUE,
 			prog);
 
-		synth_program->get_active_program_preset_params()->params_mutex.lock();
+		ModSynth::settings_handler_mutex.lock();
 	}
 
 	return res;
@@ -110,7 +110,7 @@ int set_program_pad_synth_send_filter_1_cb(int snd, int prog)
 
 	if (synth_program != NULL)
 	{
-		synth_program->get_active_program_preset_params()->params_mutex.unlock();
+		ModSynth::settings_handler_mutex.unlock();
 
 		res = synth_program->program_settings_manager->set_int_param_value(
 			synth_program->get_active_program_preset_params(),
@@ -119,7 +119,7 @@ int set_program_pad_synth_send_filter_1_cb(int snd, int prog)
 			_SET_VALUE,
 			prog);
 
-		synth_program->get_active_program_preset_params()->params_mutex.lock();
+		ModSynth::settings_handler_mutex.lock();
 	}
 
 	return res;
@@ -132,7 +132,7 @@ int set_program_pad_synth_send_filter_2_cb(int snd, int prog)
 
 	if (synth_program != NULL)
 	{
-		synth_program->get_active_program_preset_params()->params_mutex.unlock();
+		ModSynth::settings_handler_mutex.unlock();
 
 		res = synth_program->program_settings_manager->set_int_param_value(
 			synth_program->get_active_program_preset_params(),
@@ -141,7 +141,7 @@ int set_program_pad_synth_send_filter_2_cb(int snd, int prog)
 			_SET_VALUE,
 			prog);
 
-		synth_program->get_active_program_preset_params()->params_mutex.lock();
+		ModSynth::settings_handler_mutex.lock();
 	}
 
 	return res;
@@ -154,7 +154,7 @@ int set_program_pad_synth_freq_modulation_lfo_num_cb(int lfo, int prog)
 
 	if (synth_program != NULL)
 	{
-		synth_program->get_active_program_preset_params()->params_mutex.unlock();
+		ModSynth::settings_handler_mutex.unlock();
 
 		res = synth_program->program_settings_manager->set_int_param_value(
 			synth_program->get_active_program_preset_params(),
@@ -163,7 +163,7 @@ int set_program_pad_synth_freq_modulation_lfo_num_cb(int lfo, int prog)
 			_SET_VALUE,
 			prog);
 
-		synth_program->get_active_program_preset_params()->params_mutex.lock();
+		ModSynth::settings_handler_mutex.lock();
 	}
 
 	return res;
@@ -176,7 +176,7 @@ int set_program_pad_synth_freq_modulation_lfo_level_cb(int lev, int prog)
 
 	if (synth_program != NULL)
 	{
-		synth_program->get_active_program_preset_params()->params_mutex.unlock();
+		ModSynth::settings_handler_mutex.unlock();
 
 		res = synth_program->program_settings_manager->set_int_param_value(
 			synth_program->get_active_program_preset_params(),
@@ -185,7 +185,7 @@ int set_program_pad_synth_freq_modulation_lfo_level_cb(int lev, int prog)
 			_SET_VALUE,
 			prog);
 
-		synth_program->get_active_program_preset_params()->params_mutex.lock();
+		ModSynth::settings_handler_mutex.lock();
 	}
 
 	return res;
@@ -198,7 +198,7 @@ int set_program_pad_synth_freq_modulation_env_num_cb(int env, int prog)
 
 	if (synth_program != NULL)
 	{
-		synth_program->get_active_program_preset_params()->params_mutex.unlock();
+		ModSynth::settings_handler_mutex.unlock();
 
 		res = synth_program->program_settings_manager->set_int_param_value(
 			synth_program->get_active_program_preset_params(),
@@ -207,7 +207,7 @@ int set_program_pad_synth_freq_modulation_env_num_cb(int env, int prog)
 			_SET_VALUE,
 			prog);
 
-		synth_program->get_active_program_preset_params()->params_mutex.lock();
+		ModSynth::settings_handler_mutex.lock();
 	}
 
 	return res;
@@ -220,7 +220,7 @@ int set_program_pad_synth_freq_modulation_env_level_cb(int lev, int prog)
 
 	if (synth_program != NULL)
 	{
-		synth_program->get_active_program_preset_params()->params_mutex.unlock();
+		ModSynth::settings_handler_mutex.unlock();
 
 		res = synth_program->program_settings_manager->set_int_param_value(
 			synth_program->get_active_program_preset_params(),
@@ -229,7 +229,7 @@ int set_program_pad_synth_freq_modulation_env_level_cb(int lev, int prog)
 			_SET_VALUE,
 			prog);
 
-		synth_program->get_active_program_preset_params()->params_mutex.lock();
+		ModSynth::settings_handler_mutex.lock();
 	}
 
 	return res;
@@ -242,7 +242,7 @@ int set_program_pad_synth_amp_modulation_lfo_num_cb(int lfo, int prog)
 
 	if (synth_program != NULL)
 	{
-		synth_program->get_active_program_preset_params()->params_mutex.unlock();
+		ModSynth::settings_handler_mutex.unlock();
 
 		res = synth_program->program_settings_manager->set_int_param_value(
 			synth_program->get_active_program_preset_params(),
@@ -251,7 +251,7 @@ int set_program_pad_synth_amp_modulation_lfo_num_cb(int lfo, int prog)
 			_SET_VALUE,
 			prog);
 
-		synth_program->get_active_program_preset_params()->params_mutex.lock();
+		ModSynth::settings_handler_mutex.lock();
 	}
 
 	return res;
@@ -264,7 +264,7 @@ int set_program_pad_synth_amp_modulation_lfo_level_cb(int lev, int prog)
 
 	if (synth_program != NULL)
 	{
-		synth_program->get_active_program_preset_params()->params_mutex.unlock();
+		ModSynth::settings_handler_mutex.unlock();
 
 		res = synth_program->program_settings_manager->set_int_param_value(
 			synth_program->get_active_program_preset_params(),
@@ -273,7 +273,7 @@ int set_program_pad_synth_amp_modulation_lfo_level_cb(int lev, int prog)
 			_SET_VALUE,
 			prog);
 
-		synth_program->get_active_program_preset_params()->params_mutex.lock();
+		ModSynth::settings_handler_mutex.lock();
 	}
 
 	return res;
@@ -286,7 +286,7 @@ int set_program_pad_synth_amp_modulation_env_num_cb(int env, int prog)
 
 	if (synth_program != NULL)
 	{
-		synth_program->get_active_program_preset_params()->params_mutex.unlock();
+		ModSynth::settings_handler_mutex.unlock();
 
 		res = synth_program->program_settings_manager->set_int_param_value(
 			synth_program->get_active_program_preset_params(),
@@ -295,7 +295,7 @@ int set_program_pad_synth_amp_modulation_env_num_cb(int env, int prog)
 			_SET_VALUE,
 			prog);
 
-		synth_program->get_active_program_preset_params()->params_mutex.lock();
+		ModSynth::settings_handler_mutex.lock();
 	}
 
 	return res;
@@ -308,7 +308,7 @@ int set_program_pad_synth_amp_modulation_env_level_cb(int lev, int prog)
 
 	if (synth_program != NULL)
 	{
-		synth_program->get_active_program_preset_params()->params_mutex.unlock();
+		ModSynth::settings_handler_mutex.unlock();
 
 		res = synth_program->program_settings_manager->set_int_param_value(
 			synth_program->get_active_program_preset_params(),
@@ -317,7 +317,7 @@ int set_program_pad_synth_amp_modulation_env_level_cb(int lev, int prog)
 			_SET_VALUE,
 			prog);
 
-		synth_program->get_active_program_preset_params()->params_mutex.lock();
+		ModSynth::settings_handler_mutex.lock();
 	}
 
 	return res;
@@ -330,7 +330,7 @@ int set_program_pad_synth_quality_cb(int qlt, int prog)
 
 	if (synth_program != NULL)
 	{
-		synth_program->get_active_program_preset_params()->params_mutex.unlock();
+		ModSynth::settings_handler_mutex.unlock();
 
 		res = synth_program->program_settings_manager->set_int_param_value(
 			synth_program->get_active_program_preset_params(),
@@ -339,7 +339,7 @@ int set_program_pad_synth_quality_cb(int qlt, int prog)
 			_SET_VALUE,
 			prog);
 
-		synth_program->get_active_program_preset_params()->params_mutex.lock();
+		ModSynth::settings_handler_mutex.lock();
 
 		// Don't just set the params that will be assign to new voices.
 		AdjSynth::get_instance()->synth_program[prog]->synth_pad_creator->set_wavetable_length(
@@ -357,7 +357,7 @@ int set_program_pad_synth_base_note_cb(int bnot, int prog)
 
 	if (synth_program != NULL)
 	{
-		synth_program->get_active_program_preset_params()->params_mutex.unlock();
+		ModSynth::settings_handler_mutex.unlock();
 
 		res = synth_program->program_settings_manager->set_int_param_value(
 			synth_program->get_active_program_preset_params(),
@@ -366,7 +366,7 @@ int set_program_pad_synth_base_note_cb(int bnot, int prog)
 			_SET_VALUE,
 			prog);
 
-		synth_program->get_active_program_preset_params()->params_mutex.lock();
+		ModSynth::settings_handler_mutex.lock();
 
 		AdjSynth::get_instance()->synth_program[prog]->synth_pad_creator->set_base_note(
 			AdjSynth::get_instance()->synth_program[prog]->program_wavetable,
@@ -383,7 +383,7 @@ int set_program_pad_synth_base_width_cb(int bwd, int prog)
 
 	if (synth_program != NULL)
 	{
-		synth_program->get_active_program_preset_params()->params_mutex.unlock();
+		ModSynth::settings_handler_mutex.unlock();
 
 		res = synth_program->program_settings_manager->set_int_param_value(
 			synth_program->get_active_program_preset_params(),
@@ -392,7 +392,7 @@ int set_program_pad_synth_base_width_cb(int bwd, int prog)
 			_SET_VALUE,
 			prog);
 
-		synth_program->get_active_program_preset_params()->params_mutex.lock();
+		ModSynth::settings_handler_mutex.lock();
 
 		AdjSynth::get_instance()->synth_program[prog]->synth_pad_creator->set_base_harmony_width(bwd);
 	}
@@ -407,7 +407,7 @@ int set_program_pad_synth_shape_cb(int shp, int prog)
 
 	if (synth_program != NULL)
 	{
-		synth_program->get_active_program_preset_params()->params_mutex.unlock();
+		ModSynth::settings_handler_mutex.unlock();
 
 		res = synth_program->program_settings_manager->set_int_param_value(
 			synth_program->get_active_program_preset_params(),
@@ -416,7 +416,7 @@ int set_program_pad_synth_shape_cb(int shp, int prog)
 			_SET_VALUE,
 			prog);
 
-		synth_program->get_active_program_preset_params()->params_mutex.lock();
+		ModSynth::settings_handler_mutex.lock();
 
 		AdjSynth::get_instance()->synth_program[prog]->synth_pad_creator->set_harmony_shape(shp);
 	}
@@ -431,7 +431,7 @@ int set_program_pad_synth_shape_cutoff_cb(int shcut, int prog)
 
 	if (synth_program != NULL)
 	{
-		synth_program->get_active_program_preset_params()->params_mutex.unlock();
+		ModSynth::settings_handler_mutex.unlock();
 
 		res = synth_program->program_settings_manager->set_int_param_value(
 			synth_program->get_active_program_preset_params(),
@@ -440,7 +440,7 @@ int set_program_pad_synth_shape_cutoff_cb(int shcut, int prog)
 			_SET_VALUE,
 			prog);
 
-		synth_program->get_active_program_preset_params()->params_mutex.lock();
+		ModSynth::settings_handler_mutex.lock();
 
 		AdjSynth::get_instance()->synth_program[prog]->synth_pad_creator->set_harmony_shape_cutoff(shcut);
 	}
@@ -455,7 +455,7 @@ int set_program_pad_synth_harmonies_level_0_cb(int lev, int prog)
 
 	if (synth_program != NULL)
 	{
-		synth_program->get_active_program_preset_params()->params_mutex.unlock();
+		ModSynth::settings_handler_mutex.unlock();
 
 		res = synth_program->program_settings_manager->set_int_param_value(
 			synth_program->get_active_program_preset_params(),
@@ -464,7 +464,7 @@ int set_program_pad_synth_harmonies_level_0_cb(int lev, int prog)
 			_SET_VALUE,
 			prog);
 
-		synth_program->get_active_program_preset_params()->params_mutex.lock();
+		ModSynth::settings_handler_mutex.lock();
 
 		AdjSynth::get_instance()->synth_program[prog]->synth_pad_creator->set_harmony_level(
 			0, (float)lev / 100.f);
@@ -480,7 +480,7 @@ int set_program_pad_synth_harmonies_level_1_cb(int lev, int prog)
 
 	if (synth_program != NULL)
 	{
-		synth_program->get_active_program_preset_params()->params_mutex.unlock();
+		ModSynth::settings_handler_mutex.unlock();
 
 		res = synth_program->program_settings_manager->set_int_param_value(
 			synth_program->get_active_program_preset_params(),
@@ -489,7 +489,7 @@ int set_program_pad_synth_harmonies_level_1_cb(int lev, int prog)
 			_SET_VALUE,
 			prog);
 
-		synth_program->get_active_program_preset_params()->params_mutex.lock();
+		ModSynth::settings_handler_mutex.lock();
 
 		AdjSynth::get_instance()->synth_program[prog]->synth_pad_creator->set_harmony_level(
 			1, (float)lev / 100.f);
@@ -505,7 +505,7 @@ int set_program_pad_synth_harmonies_level_2_cb(int lev, int prog)
 
 	if (synth_program != NULL)
 	{
-		synth_program->get_active_program_preset_params()->params_mutex.unlock();
+		ModSynth::settings_handler_mutex.unlock();
 
 		res = synth_program->program_settings_manager->set_int_param_value(
 			synth_program->get_active_program_preset_params(),
@@ -514,7 +514,7 @@ int set_program_pad_synth_harmonies_level_2_cb(int lev, int prog)
 			_SET_VALUE,
 			prog);
 
-		synth_program->get_active_program_preset_params()->params_mutex.lock();
+		ModSynth::settings_handler_mutex.lock();
 
 		AdjSynth::get_instance()->synth_program[prog]->synth_pad_creator->set_harmony_level(
 			2, (float)lev / 100.f);
@@ -530,7 +530,7 @@ int set_program_pad_synth_harmonies_level_3_cb(int lev, int prog)
 
 	if (synth_program != NULL)
 	{
-		synth_program->get_active_program_preset_params()->params_mutex.unlock();
+		ModSynth::settings_handler_mutex.unlock();
 
 		res = synth_program->program_settings_manager->set_int_param_value(
 			synth_program->get_active_program_preset_params(),
@@ -539,7 +539,7 @@ int set_program_pad_synth_harmonies_level_3_cb(int lev, int prog)
 			_SET_VALUE,
 			prog);
 
-		synth_program->get_active_program_preset_params()->params_mutex.lock();
+		ModSynth::settings_handler_mutex.lock();
 
 		AdjSynth::get_instance()->synth_program[prog]->synth_pad_creator->set_harmony_level(
 			3, (float)lev / 100.f);
@@ -555,7 +555,7 @@ int set_program_pad_synth_harmonies_level_4_cb(int lev, int prog)
 
 	if (synth_program != NULL)
 	{
-		synth_program->get_active_program_preset_params()->params_mutex.unlock();
+		ModSynth::settings_handler_mutex.unlock();
 
 		res = synth_program->program_settings_manager->set_int_param_value(
 			synth_program->get_active_program_preset_params(),
@@ -564,7 +564,7 @@ int set_program_pad_synth_harmonies_level_4_cb(int lev, int prog)
 			_SET_VALUE,
 			prog);
 
-		synth_program->get_active_program_preset_params()->params_mutex.lock();
+		ModSynth::settings_handler_mutex.lock();
 
 		AdjSynth::get_instance()->synth_program[prog]->synth_pad_creator->set_harmony_level(
 			4, (float)lev / 100.f);
@@ -580,7 +580,7 @@ int set_program_pad_synth_harmonies_level_5_cb(int lev, int prog)
 
 	if (synth_program != NULL)
 	{
-		synth_program->get_active_program_preset_params()->params_mutex.unlock();
+		ModSynth::settings_handler_mutex.unlock();
 
 		res = synth_program->program_settings_manager->set_int_param_value(
 			synth_program->get_active_program_preset_params(),
@@ -589,7 +589,7 @@ int set_program_pad_synth_harmonies_level_5_cb(int lev, int prog)
 			_SET_VALUE,
 			prog);
 
-		synth_program->get_active_program_preset_params()->params_mutex.lock();
+		ModSynth::settings_handler_mutex.lock();
 
 		AdjSynth::get_instance()->synth_program[prog]->synth_pad_creator->set_harmony_level(
 			5, (float)lev / 100.f);
@@ -605,7 +605,7 @@ int set_program_pad_synth_harmonies_level_6_cb(int lev, int prog)
 
 	if (synth_program != NULL)
 	{
-		synth_program->get_active_program_preset_params()->params_mutex.unlock();
+		ModSynth::settings_handler_mutex.unlock();
 
 		res = synth_program->program_settings_manager->set_int_param_value(
 			synth_program->get_active_program_preset_params(),
@@ -614,7 +614,7 @@ int set_program_pad_synth_harmonies_level_6_cb(int lev, int prog)
 			_SET_VALUE,
 			prog);
 
-		synth_program->get_active_program_preset_params()->params_mutex.lock();
+		ModSynth::settings_handler_mutex.lock();
 
 		AdjSynth::get_instance()->synth_program[prog]->synth_pad_creator->set_harmony_level(
 			6, (float)lev / 100.f);
@@ -630,7 +630,7 @@ int set_program_pad_synth_harmonies_level_7_cb(int lev, int prog)
 
 	if (synth_program != NULL)
 	{
-		synth_program->get_active_program_preset_params()->params_mutex.unlock();
+		ModSynth::settings_handler_mutex.unlock();
 
 		res = synth_program->program_settings_manager->set_int_param_value(
 			synth_program->get_active_program_preset_params(),
@@ -639,7 +639,7 @@ int set_program_pad_synth_harmonies_level_7_cb(int lev, int prog)
 			_SET_VALUE,
 			prog);
 
-		synth_program->get_active_program_preset_params()->params_mutex.lock();
+		ModSynth::settings_handler_mutex.lock();
 
 		AdjSynth::get_instance()->synth_program[prog]->synth_pad_creator->set_harmony_level(
 			7, (float)lev / 100.f);
@@ -655,7 +655,7 @@ int set_program_pad_synth_harmonies_level_8_cb(int lev, int prog)
 
 	if (synth_program != NULL)
 	{
-		synth_program->get_active_program_preset_params()->params_mutex.unlock();
+		ModSynth::settings_handler_mutex.unlock();
 
 		res = synth_program->program_settings_manager->set_int_param_value(
 			synth_program->get_active_program_preset_params(),
@@ -664,7 +664,7 @@ int set_program_pad_synth_harmonies_level_8_cb(int lev, int prog)
 			_SET_VALUE,
 			prog);
 
-		synth_program->get_active_program_preset_params()->params_mutex.lock();
+		ModSynth::settings_handler_mutex.lock();
 
 		AdjSynth::get_instance()->synth_program[prog]->synth_pad_creator->set_harmony_level(
 			8, (float)lev / 100.f);
@@ -680,7 +680,7 @@ int set_program_pad_synth_harmonies_level_9_cb(int lev, int prog)
 
 	if (synth_program != NULL)
 	{
-		synth_program->get_active_program_preset_params()->params_mutex.unlock();
+		ModSynth::settings_handler_mutex.unlock();
 
 		res = synth_program->program_settings_manager->set_int_param_value(
 			synth_program->get_active_program_preset_params(),
@@ -689,7 +689,7 @@ int set_program_pad_synth_harmonies_level_9_cb(int lev, int prog)
 			_SET_VALUE,
 			prog);
 
-		synth_program->get_active_program_preset_params()->params_mutex.lock();
+		ModSynth::settings_handler_mutex.lock();
 
 		AdjSynth::get_instance()->synth_program[prog]->synth_pad_creator->set_harmony_level(
 			9, (float)lev / 100.f);
@@ -705,7 +705,7 @@ int set_program_pad_synth_harmonies_detune_cb(int hdet, int prog)
 
 	if (synth_program != NULL)
 	{
-		synth_program->get_active_program_preset_params()->params_mutex.unlock();
+		ModSynth::settings_handler_mutex.unlock();
 
 		res = synth_program->program_settings_manager->set_int_param_value(
 			synth_program->get_active_program_preset_params(),
@@ -714,7 +714,7 @@ int set_program_pad_synth_harmonies_detune_cb(int hdet, int prog)
 			_SET_VALUE,
 			prog);
 
-		synth_program->get_active_program_preset_params()->params_mutex.lock();
+		ModSynth::settings_handler_mutex.lock();
 
 		AdjSynth::get_instance()->synth_program[prog]->synth_pad_creator->set_harmonies_detune(
 			(float)hdet / 100.f);

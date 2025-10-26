@@ -5,6 +5,7 @@
  *	@version	1.1
  *					1. Code refactoring rename patches to preset parameters.
  *					2. Adding support in both old and new MIDI program objects.
+ *					3. Definning a global settings handling mutex
 *
 *	@brief		This is the main modular synthesizer libraray object.
 *
@@ -96,7 +97,7 @@ void callback_audio_update_cycle_start_tasks_wrapper(int param)
 /* modSynth instance */
 ModSynth* ModSynth::mod_synth = NULL;
 
-
+std::mutex ModSynth::settings_handler_mutex;
 
 ModSynth::ModSynth()
 {

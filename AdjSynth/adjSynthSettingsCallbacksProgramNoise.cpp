@@ -27,7 +27,7 @@ int set_program_noise_enabled_cb(bool enable, int prog)
 
 		if (synth_program != NULL)
 		{
-			synth_program->get_active_program_preset_params()->params_mutex.unlock();
+			ModSynth::settings_handler_mutex.unlock();
 
 			res = synth_program->program_settings_manager->set_bool_param_value(
 				synth_program->get_active_program_preset_params(),
@@ -36,7 +36,7 @@ int set_program_noise_enabled_cb(bool enable, int prog)
 				_SET_VALUE,
 				prog);
 
-			synth_program->get_active_program_preset_params()->params_mutex.lock();
+			ModSynth::settings_handler_mutex.lock();
 		}		
 	}
 
@@ -50,7 +50,7 @@ int set_program_noise_color_cb(int col, int prog)
 
 	if (synth_program != NULL)
 	{
-		synth_program->get_active_program_preset_params()->params_mutex.unlock();
+		ModSynth::settings_handler_mutex.unlock();
 
 		res = synth_program->program_settings_manager->set_int_param_value(
 			synth_program->get_active_program_preset_params(),
@@ -59,7 +59,7 @@ int set_program_noise_color_cb(int col, int prog)
 			_SET_VALUE,
 			prog);
 
-		synth_program->get_active_program_preset_params()->params_mutex.lock();		
+		ModSynth::settings_handler_mutex.lock();		
 	}
 
 	return res;
@@ -72,7 +72,7 @@ int set_program_noise_send_filter_1_cb(int snd, int prog)
 
 	if (synth_program != NULL)
 	{
-		synth_program->get_active_program_preset_params()->params_mutex.unlock();
+		ModSynth::settings_handler_mutex.unlock();
 
 		res = synth_program->program_settings_manager->set_int_param_value(
 			synth_program->get_active_program_preset_params(),
@@ -81,7 +81,7 @@ int set_program_noise_send_filter_1_cb(int snd, int prog)
 			_SET_VALUE,
 			prog);
 
-		synth_program->get_active_program_preset_params()->params_mutex.lock();
+		ModSynth::settings_handler_mutex.lock();
 	}
 
 	return res;
@@ -94,7 +94,7 @@ int set_program_noise_send_filter_2_cb(int snd, int prog)
 
 	if (synth_program != NULL)
 	{
-		synth_program->get_active_program_preset_params()->params_mutex.unlock();
+		ModSynth::settings_handler_mutex.unlock();
 
 		res = synth_program->program_settings_manager->set_int_param_value(
 			synth_program->get_active_program_preset_params(),
@@ -103,7 +103,7 @@ int set_program_noise_send_filter_2_cb(int snd, int prog)
 			_SET_VALUE,
 			prog);
 
-		synth_program->get_active_program_preset_params()->params_mutex.lock();
+		ModSynth::settings_handler_mutex.lock();
 	}
 
 	return res;
@@ -116,7 +116,7 @@ int set_program_noise_amp_modulation_lfo_num_cb(int lfon, int prog)
 
 	if (synth_program != NULL)
 	{
-		synth_program->get_active_program_preset_params()->params_mutex.unlock();
+		ModSynth::settings_handler_mutex.unlock();
 
 		res = synth_program->program_settings_manager->set_int_param_value(
 			synth_program->get_active_program_preset_params(),
@@ -125,7 +125,7 @@ int set_program_noise_amp_modulation_lfo_num_cb(int lfon, int prog)
 			_SET_VALUE,
 			prog);
 
-		synth_program->get_active_program_preset_params()->params_mutex.lock();
+		ModSynth::settings_handler_mutex.lock();
 	}
 
 	return res;
@@ -138,7 +138,7 @@ int set_program_noise_amp_modulation_lfo_level_cb(int lfolev, int prog)
 
 	if (synth_program != NULL)
 	{
-		synth_program->get_active_program_preset_params()->params_mutex.unlock();
+		ModSynth::settings_handler_mutex.unlock();
 
 		res = synth_program->program_settings_manager->set_int_param_value(
 			synth_program->get_active_program_preset_params(),
@@ -147,7 +147,7 @@ int set_program_noise_amp_modulation_lfo_level_cb(int lfolev, int prog)
 			_SET_VALUE,
 			prog);
 
-		synth_program->get_active_program_preset_params()->params_mutex.lock();
+		ModSynth::settings_handler_mutex.lock();
 	}
 
 	return res;
@@ -160,7 +160,7 @@ int set_program_noise_amp_modulation_env_num_cb(int envn, int prog)
 
 	if (synth_program != NULL)
 	{
-		synth_program->get_active_program_preset_params()->params_mutex.unlock();
+		ModSynth::settings_handler_mutex.unlock();
 
 		res = synth_program->program_settings_manager->set_int_param_value(
 			synth_program->get_active_program_preset_params(),
@@ -169,7 +169,7 @@ int set_program_noise_amp_modulation_env_num_cb(int envn, int prog)
 			_SET_VALUE,
 			prog);
 
-		synth_program->get_active_program_preset_params()->params_mutex.lock();
+		ModSynth::settings_handler_mutex.lock();
 	}
 
 	return res;
@@ -182,7 +182,7 @@ int set_program_noise_amp_modulation_env_level_cb(int envlev, int prog)
 
 	if (synth_program != NULL)
 	{
-		synth_program->get_active_program_preset_params()->params_mutex.unlock();
+		ModSynth::settings_handler_mutex.unlock();
 
 		res = synth_program->program_settings_manager->set_int_param_value(
 			synth_program->get_active_program_preset_params(),
@@ -191,7 +191,7 @@ int set_program_noise_amp_modulation_env_level_cb(int envlev, int prog)
 			_SET_VALUE,
 			prog);
 
-		synth_program->get_active_program_preset_params()->params_mutex.lock();
+		ModSynth::settings_handler_mutex.lock();
 	}
 
 	return res;

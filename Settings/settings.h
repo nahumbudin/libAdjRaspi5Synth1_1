@@ -245,7 +245,7 @@ typedef struct _params
 	std::map<std::string, _settings_float_param_t> float_parameters_map;
 	/* Boolean parameters map */
 	std::map<std::string, _settings_bool_param_t> bool_parameters_map;
-	std::mutex params_mutex;
+	//std::mutex params_mutex;
 } _settings_params_t;
 
 typedef int(*func_ptr_int_settings_parms_ptr_int_t)(_settings_params_t*, int);

@@ -20,6 +20,7 @@
 #include "../modSynth.h"
 #include "../Instrument/instrumentsManager.h"
 #include "../Instrument/instrumentFluidSynth.h"
+#include "../Instrument/instrumentAnalogSynth.h"
 #include "../utils/utils.h"
 #include "../LibAPI/connections.h"
 #include "../LibAPI/defines.h"
@@ -102,11 +103,17 @@ PatchsHandler *PatchsHandler::get_patchs_handler_instance()
 int PatchsHandler::save_patch_file(std::string file_path)
 {
 	vector<string> instruments_names;
+	instruments_names.reserve(_MAX_NUM_OF_INSTRUMENTS);
+	instruments_names.resize(_MAX_NUM_OF_INSTRUMENTS);
+
 	list<std::string> connected_to_midi_clients_names_list;
+	
 	int instrument_num = 1;
 	int client_number;
 	string json_str;
 	list<string>::iterator names_it;
+
+	s_jack_connection_t jack_connection;
 
 	mod_synth_refresh_alsa_clients_data();
 	mod_synth_refresh_jack_clients_data();
@@ -122,9 +129,6 @@ int PatchsHandler::save_patch_file(std::string file_path)
 	filesystem::path fullpath(file_path);
 	// `remove_filename()` does not alter `fullpath`
 	string path_without_filename = fullpath.remove_filename();
-	
-	// Create and store all active instrument settings files
-	create_active_instruments_settings_files(instruments_names, path_without_filename);
 
 	if (instruments_names.size() > 0)
 	{
@@ -132,8 +136,11 @@ int PatchsHandler::save_patch_file(std::string file_path)
 		/* JSON writer */
 		Writer<StringBuffer> writer(s);
 
+		// Create and store all active instrument settings files
+		create_active_instruments_settings_files(instruments_names, path_without_filename);
+
 		// Between StartObject()/EndObject(),
-		writer.StartObject(); 
+		writer.StartObject();
 
 		writer.Key("patch_name");
 		writer.String(filesystem::path(file_path).stem().c_str());
@@ -143,13 +150,12 @@ int PatchsHandler::save_patch_file(std::string file_path)
 
 		for (string instrument_name : instruments_names)
 		{
-
 			// Get instrument Midi Input connections
-			client_number = mod_synth_get_midi_client_connection_num(instrument_name);	
+			client_number = mod_synth_get_midi_client_connection_num(instrument_name);
 			connected_to_midi_clients_names_list.clear();
-			mod_synth_get_midi_client_connected_to_clients_names_list(client_number, true, 
+			mod_synth_get_midi_client_connected_to_clients_names_list(client_number, true,
 																	  &connected_to_midi_clients_names_list);
-			
+
 			writer.StartObject();
 
 			writer.Key("instrument_name");
@@ -183,24 +189,45 @@ int PatchsHandler::save_patch_file(std::string file_path)
 			writer.StartArray();
 
 			// TODO:
-			
+
 			writer.EndArray(); // midi_output_connections
 			writer.EndObject();
 
 			writer.StartObject();
 			writer.Key("jack_audio_input_connections");
 			writer.StartArray();
-			
+
 			// TODO:
 
 			writer.EndArray(); // jack_audio_input_connections
 			writer.EndObject();
 
 			writer.StartObject();
-			writer.Key("jack_audio_output_connections");
+			writer.Key("jack_audio_right_output_connections");
 			writer.StartArray();
-			
-			// TODO:
+
+			jack_connection =
+				ModSynth::get_instance()->get_analog_synth()->get_analog_synth_right_jack_output_connection();
+
+			writer.String(jack_connection.in_client_name.c_str());
+			writer.String(jack_connection.in_client_port_name.c_str());
+			writer.String(jack_connection.out_client_name.c_str());
+			writer.String(jack_connection.out_client_port_name.c_str());
+
+			writer.EndArray(); // Jack Out Right
+			writer.EndObject();
+
+			writer.StartObject();
+			writer.Key("jack_audio_left_output_connections");
+			writer.StartArray();
+
+			jack_connection =
+				ModSynth::get_instance()->get_analog_synth()->get_analog_synth_left_jack_output_connection();
+
+			writer.String(jack_connection.in_client_name.c_str());
+			writer.String(jack_connection.in_client_port_name.c_str());
+			writer.String(jack_connection.out_client_name.c_str());
+			writer.String(jack_connection.out_client_port_name.c_str());
 
 			writer.EndArray(); // Jack Out
 			writer.EndObject();
@@ -249,7 +276,11 @@ int PatchsHandler::load_patch_file(std::string file_path)
 	vector<vector<string>> midi_input_connections; 
 
 	string interface;
-	vector<string> midi_input_interfaces;		
+	vector<string> midi_input_interfaces;
+
+	s_jack_connection_t jack_connection;
+	vector<s_jack_connection_t> jack_right_output_connections_vector;
+	vector<s_jack_connection_t> jack_left_output_connections_vector;
 
 	res = read_text_file(file_path, &file_data);
 	if ((res == 0) && (file_data.size() > 0))
@@ -293,6 +324,9 @@ int PatchsHandler::load_patch_file(std::string file_path)
 					{
 						midi_input_interfaces.clear();
 
+						jack_right_output_connections_vector.clear();
+						jack_left_output_connections_vector.clear();
+						
 						const Value &m = itr->value[i];
 						for (auto &v : m.GetObject())
 						{ 
@@ -337,9 +371,45 @@ int PatchsHandler::load_patch_file(std::string file_path)
 													{
 														; // TODO:
 													}
-													else if (name == "jack_audio_output_connections")
+													else if (name == "jack_audio_right_output_connections")
 													{
-														; // TODO
+														switch (t)
+														{
+															case 0:
+																jack_connection.in_client_name = k[t].GetString();
+																break;
+															case 1:
+																jack_connection.in_client_port_name = k[t].GetString();
+																break;
+															case 2:
+																jack_connection.out_client_name = k[t].GetString();
+																break;
+															case 3:
+																jack_connection.out_client_port_name = k[t].GetString();
+																jack_right_output_connections_vector.push_back(jack_connection);	
+															break;
+														}
+														
+														
+													}
+													else if (name == "jack_audio_left_output_connections")
+													{
+														switch (t)
+														{
+															case 0:
+																jack_connection.in_client_name = k[t].GetString();
+																break;
+															case 1:
+																jack_connection.in_client_port_name = k[t].GetString();
+																break;
+															case 2:
+																jack_connection.out_client_name = k[t].GetString();
+																break;
+															case 3:
+																jack_connection.out_client_port_name = k[t].GetString();
+																jack_left_output_connections_vector.push_back(jack_connection);	
+																break;
+														}
 													}
 												} 
 											}
@@ -360,7 +430,13 @@ int PatchsHandler::load_patch_file(std::string file_path)
 		if (active_instruments_names.size() > 0)
 		{
 			// Open and activate the instruments and set the connections
-			implement_patch(active_instruments_names, settings_files, midi_input_connections, file_path);
+			implement_patch(
+				active_instruments_names, 
+				settings_files, 
+				midi_input_connections, 
+				jack_right_output_connections_vector,
+				jack_left_output_connections_vector,
+				file_path);
 		}
 
 		return active_instruments_names.size();
@@ -399,8 +475,8 @@ int PatchsHandler::disconnect_current_oppened_instruments_midi_in_connections()
 	vector<string> instruments_names;
 	list<int> connected_to_midi_clients_numbers_list;
 	int module_num = 1;
-	int client_number, client_id;
-	int client_numberclient_number;
+	int client_id;
+	int client_number;
 
 	// Refresh all connections data.
 	mod_synth_refresh_alsa_clients_data();
@@ -414,18 +490,21 @@ int PatchsHandler::disconnect_current_oppened_instruments_midi_in_connections()
 
 	if (instruments_names.size() > 0)
 	{
-		for (string instrument_name : instruments_names)
+		for (const string& instrument_name : instruments_names)
 		{
 			// Get module Midi Input connections
-			client_number = mod_synth_get_midi_client_connection_num(instrument_name);
+			int client_number = mod_synth_get_midi_client_connection_num(instrument_name);
 			connected_to_midi_clients_numbers_list.clear();
 			mod_synth_get_midi_client_connected_to_clients_numbers_list(client_number,
 																	  &connected_to_midi_clients_numbers_list);
 
-			for (int client_num : connected_to_midi_clients_numbers_list)
+			if (connected_to_midi_clients_numbers_list.size() > 0)
 			{
-				// disconnect, use client num
-				mod_synth_connect_midi_clients(instrument_name, client_num, 0, false, false); 
+				for (int client_num : connected_to_midi_clients_numbers_list)
+				{
+					// disconnect, use client num
+					mod_synth_connect_midi_clients(instrument_name, client_num, 0, false, false); 
+				}
 			}
 
 			// Midi outputs
@@ -458,7 +537,8 @@ int PatchsHandler::create_active_instruments_settings_files(vector<string> inst_
 		}
 		else if (instrument_name == _INSTRUMENT_NAME_ANALOG_SYNTH_STR_KEY)
 		{
-			// TODO:
+			settings_file_path = patch_file_path + instrument_name + "-settings.html";
+			mod_synth_save_adj_synth_patch_file(settings_file_path);
 		}
 		else if (instrument_name == _INSTRUMENT_NAME_KARPLUS_STRONG_STRING_SYNTH_STR_KEY)
 		{
@@ -525,6 +605,8 @@ int PatchsHandler::create_active_instruments_settings_files(vector<string> inst_
 */
 int PatchsHandler::implement_patch(vector<string> active_instruments, vector<string> settings_files,
 								   vector<vector<string>> midi_in_connections,
+								   vector<s_jack_connection_t> jack_right_out_connections_vector,
+								   vector<s_jack_connection_t> jack_left_out_connections_vector,
 								   string file_path)
 {
 	string settings_file_path;
@@ -572,8 +654,33 @@ int PatchsHandler::implement_patch(vector<string> active_instruments, vector<str
 				mod_synth_connect_midi_clients(active_instruments.at(m), client_num, 0, true, true); 
 			}
 		}
-		
-		// TODO: add other connections
+
+		// Jack Audio Out Connections
+		if (jack_right_out_connections_vector.size() > 0)
+		{
+			for (s_jack_connection_t jack_connection : jack_right_out_connections_vector)
+			{
+				mod_synth_connect_jack_connection(
+					jack_connection.in_client_name,
+					jack_connection.in_client_port_name,
+					jack_connection.out_client_name,
+					jack_connection.out_client_port_name,
+					true); // Conect
+			}
+		}
+
+		if (jack_left_out_connections_vector.size() > 0)
+		{
+			for (s_jack_connection_t jack_connection : jack_left_out_connections_vector)
+			{
+				mod_synth_connect_jack_connection(
+					jack_connection.in_client_name,
+					jack_connection.in_client_port_name,
+					jack_connection.out_client_name,
+					jack_connection.out_client_port_name,
+					true); // Conect
+			}
+		}
 	}
 	
 	return 0;

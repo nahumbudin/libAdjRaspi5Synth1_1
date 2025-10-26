@@ -48,6 +48,16 @@ int InstrumentAnalogSynth::set_default_settings_parameters(_settings_params_t *p
 	res |= adjheart_synth->set_default_settings_parameters_mixer(params);
 	res |= adjheart_synth->set_default_settings_parameters_reverb(params);
 
+	jack_out_connection_left.in_client_name = "";
+	jack_out_connection_left.in_client_port_name = "";
+	jack_out_connection_left.out_client_name = "";
+	jack_out_connection_left.out_client_port_name = "";
+	
+	jack_out_connection_right.in_client_name = "";
+	jack_out_connection_right.in_client_port_name = "";
+	jack_out_connection_right.out_client_name = "";
+	jack_out_connection_right.out_client_port_name = "";
+
 	return res;
 }
 
@@ -104,3 +114,5 @@ int InstrumentAnalogSynth::save_analog_synth_preset_file(string path)
 
 	return 0;
 }
+
+

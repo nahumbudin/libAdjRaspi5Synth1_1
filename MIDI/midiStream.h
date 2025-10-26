@@ -94,9 +94,6 @@ Error : Must be no more than 8
 #define _MIDI_SYSEX_START						0xF0
 #define _MIDI_SYSEX_END							0xF7
 #define _MIDI_RESET								0xFF
-																
-#define _MIDI_ALL_SOUNDS_OFF					120
-#define _MIDI_ALL_NOTES_OFF						123
 
 // TODO: temp
 #define _MIDI_TILTUNE_SYSEX_VENDOR_ID_0			0

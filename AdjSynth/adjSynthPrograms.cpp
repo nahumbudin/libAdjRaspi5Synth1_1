@@ -84,20 +84,14 @@ AdjSynthPrograms::AdjSynthPrograms(
 	mso_wtab->calc_wtab(mso_wtab->base_waveform_tab, &mso_wtab->base_segment_lengths, &mso_wtab->base_segment_positions);
 	mso_wtab->calc_segments_lengths(&mso_wtab->morphed_segment_lengths, &mso_wtab->morphed_segment_positions);
 	mso_wtab->calc_wtab(mso_wtab->morphed_waveform_tab, &mso_wtab->morphed_segment_lengths, &mso_wtab->morphed_segment_positions);
-	
+
+	for (int v = 0; v < _SYNTH_MAX_NUM_OF_VOICES; v++)
+	{
+		assigned_voices[v] = _VOICE_NOT_ASSIGNED;
+	}
 }
 AdjSynthPrograms::~AdjSynthPrograms()
 {
-	// Deallocate all assigned voices
-	for (int i = 0; i < assigned_voices.size(); i++)
-	{
-		if (assigned_voices[i] != NULL)
-		{
-			deallocate_voice_from_program(*assigned_voices[i]);
-		}
-	}
-	assigned_voices.clear();
-
 	delete[] program_wavetable->samples;
 	delete program_wavetable;
 
@@ -132,6 +126,8 @@ int AdjSynthPrograms::set_active_program_preset_params_no_update(_settings_param
 /* Set the active preset parameters and update all the currentlly assigned voices */
 void AdjSynthPrograms::set_program_preset_params(_settings_params_t *preset_params)
 {
+	int v;
+
 	if (preset_params == nullptr)
 	{
 		return;
@@ -139,16 +135,13 @@ void AdjSynthPrograms::set_program_preset_params(_settings_params_t *preset_para
 	
 	active_preset_params = preset_params;
 	// Update all assigned voices with the new preset parameters
-	for (int i = 0; i < assigned_voices.size(); i++)
+	for (v = 0; v < _SYNTH_MAX_NUM_OF_VOICES; v++)
 	{
-		if (assigned_voices[i] != NULL)
-		{
-			SynthVoice *voice = AdjSynth::get_instance()->synth_voice[*assigned_voices[i]];
+		SynthVoice *voice = AdjSynth::get_instance()->synth_voice[v];
 			
-			if (voice != NULL)
-			{
-				voice->set_voice_params(active_preset_params);
-			}
+		if (voice)
+		{
+			voice->set_voice_params(active_preset_params);
 		}
 	}
 }
@@ -179,78 +172,95 @@ int AdjSynthPrograms::assign_voice_with_preset_program_params(SynthVoice *voice,
 	voice->set_pad_wave_table(program_wavetable);
 
 	// Add the voice to the assigned voices list
-	int *vnum = new int;
-	*vnum = voice_num;
-	assigned_voices.push_back(vnum);
-	
+	assigned_voices[voice_num] = _VOICE_ASSIGNED;
+
 	return 0;
 }
 
 /* Deallocate a voice */
-int AdjSynthPrograms::deallocate_voice_from_program(int voice_num)
+int AdjSynthPrograms::	deallocate_voice_from_program(int voice_num)
 {
+	int res = -2; // voice not found
+	int v;
+
 	if ((voice_num < 0) || (voice_num >= _SYNTH_MAX_NUM_OF_VOICES))
 	{
 		return -1;
 	}
-	
-	// Remove the voice from the assigned voices list
-	for (int i = 0; i < assigned_voices.size(); i++)
+
+	if (assigned_voices[voice_num] == _VOICE_ASSIGNED)
 	{
-		if (assigned_voices[i] != NULL)
+		// Remove assigned_voice;
+		assigned_voices[voice_num] = _VOICE_NOT_ASSIGNED;
+		res = 0;
+	}
+
+	// Clean up all residual notes that were waiting for not active state
+	for (v = 0; v < _SYNTH_MAX_NUM_OF_VOICES; v++)
+	{
+		if ((assigned_voices[voice_num] == _VOICE_ASSIGNED) &&
+			!AdjSynth::get_instance()->synth_voice[voice_num]->audio_voice->is_voice_wait_for_not_active() &&
+			!AdjSynth::get_instance()->synth_voice[voice_num]->audio_voice->is_voice_active())
 		{
-			if (*assigned_voices[i] == voice_num)
-			{
-				delete assigned_voices[i];
-				assigned_voices.erase(assigned_voices.begin() + i);
-				return 0;
-			}
+			assigned_voices[v] = _VOICE_NOT_ASSIGNED;
 		}
 	}
 
-	// Voice not found
-	return -2;
+	return res;
 }
 
-/* Get the voice number that plays a given not. */
+/* Get the voice number that plays a given note (assuming only one exists! TODO: */
 int AdjSynthPrograms::get_voice_num_playing_note(int note)
 {
 	SynthVoice *voice;
+	int res = -1;
+	int v;
 
-	for (int i = 0; i < assigned_voices.size(); i++)
+	for (v = 0; v < _SYNTH_MAX_NUM_OF_VOICES; v++)
 	{
-		if (assigned_voices[i] != NULL)
+		if (assigned_voices[v] == _VOICE_ASSIGNED)
 		{
-			voice = AdjSynth::get_instance()->synth_voice[*assigned_voices[i]];
-			if (voice != NULL)
+			voice = AdjSynth::get_instance()->synth_voice[v];
+
+			if (voice)
 			{
 				if (voice->audio_voice->get_note() == note)
 				{
-					return *assigned_voices[i];
+					res = v;
+				}
+				else if (!AdjSynth::get_instance()->synth_voice[v]->audio_voice->is_voice_wait_for_not_active() &&
+						 !AdjSynth::get_instance()->synth_voice[v]->audio_voice->is_voice_active())
+				{
+					// Clean up all residual notes that were waiting for not active state
+					assigned_voices[v] = _VOICE_NOT_ASSIGNED;
 				}
 			}
 		}
 	}
 
-	return -1;
+	return res;
 }
 
 /* Refresh all program assigned voices with a new preset params */
 int AdjSynthPrograms::refresh_all_program_voices_with_preset_params(_settings_params_t *preset_params)
 {
+	int v;
+	SynthVoice *voice;
+
 	active_preset_params = preset_params;
 	// Update all assigned voices with the new preset parameters
-	for (int i = 0; i < assigned_voices.size(); i++)
+	for (v = 0; v < _SYNTH_MAX_NUM_OF_VOICES; v++)
 	{
-		if (assigned_voices[i] != NULL)
+		if (assigned_voices[v] == _VOICE_ASSIGNED)
 		{
-			SynthVoice *voice = AdjSynth::get_instance()->synth_voice[*assigned_voices[i]];
-			if (voice != NULL)
+			voice = AdjSynth::get_instance()->synth_voice[v];
+			if (voice)
 			{
 				voice->set_voice_params(active_preset_params);
 			}
 		}
 	}
+	
 	return 0;
 }
 
@@ -273,6 +283,8 @@ int AdjSynthPrograms::read_program_preset_file(string path, string type)
 /* Set all the program voices polly mixer gain1 level */
 int AdjSynthPrograms::set_program_voices_poly_mixer_gain_1_level_int(int level)
 {
+	int v;
+
 	if ((level < 0) || (level > 100))
 	{
 		return -1;
@@ -282,12 +294,11 @@ int AdjSynthPrograms::set_program_voices_poly_mixer_gain_1_level_int(int level)
 	program_voices_output_gain1 = (float)level / 100.0f;
 	
 	// Update all assigned voices with the new gain level
-	for (int i = 0; i < assigned_voices.size(); i++)
+	for (v = 0; v < _SYNTH_MAX_NUM_OF_VOICES; v++)
 	{
-		if (assigned_voices[i] != NULL)
+		if (assigned_voices[v] == _VOICE_ASSIGNED)
 		{
-			parent_audio_poly_mixer->set_voice_gain1_level(*assigned_voices[i], // voice num
-														   program_voices_output_gain1);
+			parent_audio_poly_mixer->set_voice_gain1_level(v, program_voices_output_gain1);
 		}
 	}
 	
@@ -296,6 +307,8 @@ int AdjSynthPrograms::set_program_voices_poly_mixer_gain_1_level_int(int level)
 
 int AdjSynthPrograms::set_program_voices_poly_mixer_gain_1_level_float(float level)
 {
+	int v;
+
 	if ((level < 0.0f) || (level > 1.0f))
 	{
 		return -1;
@@ -305,12 +318,11 @@ int AdjSynthPrograms::set_program_voices_poly_mixer_gain_1_level_float(float lev
 	program_voices_output_gain1 = level;
 	
 	// Update all assigned voices with the new gain level
-	for (int i = 0; i < assigned_voices.size(); i++)
+	for (v = 0; v < _SYNTH_MAX_NUM_OF_VOICES; v++)
 	{
-		if (assigned_voices[i] != NULL)
+		if (assigned_voices[v] == _VOICE_ASSIGNED)
 		{
-			parent_audio_poly_mixer->set_voice_gain1_level(*assigned_voices[i], // voice num
-														   program_voices_output_gain1);
+			parent_audio_poly_mixer->set_voice_gain1_level(v, program_voices_output_gain1);
 		}
 	}
 
@@ -320,6 +332,8 @@ int AdjSynthPrograms::set_program_voices_poly_mixer_gain_1_level_float(float lev
 /* Set all the program voices polly mixer gain2 level */
 int AdjSynthPrograms::set_program_voices_poly_mixer_gain_2_level_int(int level)
 {
+	int v;
+
 	if ((level < 0) || (level > 100))
 	{
 		return -1;
@@ -329,12 +343,11 @@ int AdjSynthPrograms::set_program_voices_poly_mixer_gain_2_level_int(int level)
 	program_voices_output_gain2 = (float)level / 100.0f;
 	
 	// Update all assigned voices with the new gain level
-	for (int i = 0; i < assigned_voices.size(); i++)
+	for (v = 0; v < _SYNTH_MAX_NUM_OF_VOICES; v++)
 	{
-		if (assigned_voices[i] != NULL)
+		if (assigned_voices[v] == _VOICE_ASSIGNED)
 		{
-			parent_audio_poly_mixer->set_voice_gain2_level(*assigned_voices[i], // voice num
-														   program_voices_output_gain2);
+			parent_audio_poly_mixer->set_voice_gain2_level(v, program_voices_output_gain2);
 		}
 	}
 
@@ -342,6 +355,8 @@ int AdjSynthPrograms::set_program_voices_poly_mixer_gain_2_level_int(int level)
 }
 int AdjSynthPrograms::set_program_voices_poly_mixer_gain_2_level_float(float level)
 {
+	int v;
+	
 	if ((level < 0.0f) || (level > 1.0f))
 	{
 		return -1;
@@ -351,12 +366,11 @@ int AdjSynthPrograms::set_program_voices_poly_mixer_gain_2_level_float(float lev
 	program_voices_output_gain2 = level;
 	
 	// Update all assigned voices with the new gain level
-	for (int i = 0; i < assigned_voices.size(); i++)
+	for (v = 0; v < _SYNTH_MAX_NUM_OF_VOICES; v++)
 	{
-		if (assigned_voices[i] != NULL)
+		if (assigned_voices[v] == _VOICE_ASSIGNED)
 		{
-			parent_audio_poly_mixer->set_voice_gain2_level(*assigned_voices[i], // voice num
-														   program_voices_output_gain2);
+			parent_audio_poly_mixer->set_voice_gain2_level(v, program_voices_output_gain2);
 		}
 	}
 	return 0;
@@ -365,6 +379,8 @@ int AdjSynthPrograms::set_program_voices_poly_mixer_gain_2_level_float(float lev
 /* Set all the program voices polly mixer pan1 level */
 int AdjSynthPrograms::set_program_voices_poly_mixer_pan_1_int(int pan)
 {
+	int v;
+	
 	if ((pan < -100) || (pan > 100))
 	{
 		return -1;
@@ -374,12 +390,11 @@ int AdjSynthPrograms::set_program_voices_poly_mixer_pan_1_int(int pan)
 	program_voices_output_pan1 = (float)pan / 100.0f;
 	
 	// Update all assigned voices with the new pan level
-	for (int i = 0; i < assigned_voices.size(); i++)
+	for (v = 0; v < _SYNTH_MAX_NUM_OF_VOICES; v++)
 	{
-		if (assigned_voices[i] != NULL)
+		if (assigned_voices[v] == _VOICE_ASSIGNED)
 		{
-			parent_audio_poly_mixer->set_voice_pan1(*assigned_voices[i], // voice num
-												   program_voices_output_pan1);
+			parent_audio_poly_mixer->set_voice_pan1(v, program_voices_output_pan1);
 		}
 	}
 
@@ -387,6 +402,8 @@ int AdjSynthPrograms::set_program_voices_poly_mixer_pan_1_int(int pan)
 }
 int AdjSynthPrograms::set_program_voices_poly_mixer_pan_1_float(float pan)
 {
+	int v;
+
 	if ((pan < -1.0f) || (pan > 1.0f))
 	{
 		return -1;
@@ -396,12 +413,11 @@ int AdjSynthPrograms::set_program_voices_poly_mixer_pan_1_float(float pan)
 	program_voices_output_pan1 = pan;
 	
 	// Update all assigned voices with the new pan level
-	for (int i = 0; i < assigned_voices.size(); i++)
+	for (v = 0; v < _SYNTH_MAX_NUM_OF_VOICES; v++)
 	{
-		if (assigned_voices[i] != NULL)
+		if (assigned_voices[v] == _VOICE_ASSIGNED)
 		{
-			parent_audio_poly_mixer->set_voice_pan1(*assigned_voices[i], // voice num
-												   program_voices_output_pan1);
+			parent_audio_poly_mixer->set_voice_pan1(v, program_voices_output_pan1);
 		}
 	}
 	return 0;
@@ -410,6 +426,8 @@ int AdjSynthPrograms::set_program_voices_poly_mixer_pan_1_float(float pan)
 /* Set all the program voices polly mixer pan2 level */
 int AdjSynthPrograms::set_program_voices_poly_mixer_pan_2_int(int pan)
 {
+	int v;
+
 	if ((pan < -100) || (pan > 100))
 	{
 		return -1;
@@ -419,18 +437,19 @@ int AdjSynthPrograms::set_program_voices_poly_mixer_pan_2_int(int pan)
 	program_voices_output_pan2 = (float)pan / 100.0f;
 	
 	// Update all assigned voices with the new pan level
-	for (int i = 0; i < assigned_voices.size(); i++)
+	for (v = 0; v < _SYNTH_MAX_NUM_OF_VOICES; v++)
 	{
-		if (assigned_voices[i] != NULL)
+		if (assigned_voices[v] == _VOICE_ASSIGNED)
 		{
-			parent_audio_poly_mixer->set_voice_pan2(*assigned_voices[i], // voice num
-												   program_voices_output_pan2);
+			parent_audio_poly_mixer->set_voice_pan2(v, program_voices_output_pan2);
 		}
 	}
 	return 0;
 }
 int AdjSynthPrograms::set_program_voices_poly_mixer_pan_2_float(int pan)
 {
+	int v;
+	
 	if ((pan < -1.0f) || (pan > 1.0f))
 	{
 		return -1;
@@ -440,12 +459,11 @@ int AdjSynthPrograms::set_program_voices_poly_mixer_pan_2_float(int pan)
 	program_voices_output_pan2 = pan;
 	
 	// Update all assigned voices with the new pan level
-	for (int i = 0; i < assigned_voices.size(); i++)
+	for (v = 0; v < _SYNTH_MAX_NUM_OF_VOICES; v++)
 	{
-		if (assigned_voices[i] != NULL)
+		if (assigned_voices[v] == _VOICE_ASSIGNED)
 		{
-			parent_audio_poly_mixer->set_voice_pan2(*assigned_voices[i], // voice num
-												   program_voices_output_pan2);
+			parent_audio_poly_mixer->set_voice_pan2(v, program_voices_output_pan2);
 		}
 	}
 	return 0;
@@ -454,6 +472,8 @@ int AdjSynthPrograms::set_program_voices_poly_mixer_pan_2_float(int pan)
 /* Set all the program voices polly mixer send1 level */
 int AdjSynthPrograms::set_program_voices_poly_mixer_send_1_int(int send)
 {
+	int v;
+
 	if ((send < 0) || (send > 100))
 	{
 		return -1;
@@ -463,18 +483,20 @@ int AdjSynthPrograms::set_program_voices_poly_mixer_send_1_int(int send)
 	program_voices_output_send1 = (float)send / 100.0f;
 	
 	// Update all assigned voices with the new send level
-	for (int i = 0; i < assigned_voices.size(); i++)
+	for (v = 0; v < _SYNTH_MAX_NUM_OF_VOICES; v++)
 	{
-		if (assigned_voices[i] != NULL)
+		if (assigned_voices[v] == _VOICE_ASSIGNED)
 		{
-			parent_audio_poly_mixer->set_voice_send1_level(*assigned_voices[i], // voice num
-														   program_voices_output_send1);
+			parent_audio_poly_mixer->set_voice_send1_level(v, program_voices_output_send1);
 		}
 	}
+	
 	return 0;
 }
 int AdjSynthPrograms::set_program_voices_poly_mixer_send_1_float(float send)
 {
+	int v;
+
 	if ((send < 0.0f) || (send > 1.0f))
 	{
 		return -1;
@@ -484,20 +506,22 @@ int AdjSynthPrograms::set_program_voices_poly_mixer_send_1_float(float send)
 	program_voices_output_send1 = send;
 	
 	// Update all assigned voices with the new send level
-	for (int i = 0; i < assigned_voices.size(); i++)
+	for (v = 0; v < _SYNTH_MAX_NUM_OF_VOICES; v++)
 	{
-		if (assigned_voices[i] != NULL)
+		if (assigned_voices[v] == _VOICE_ASSIGNED)
 		{
-			parent_audio_poly_mixer->set_voice_send1_level(*assigned_voices[i], // voice num
-														   program_voices_output_send1);
+			parent_audio_poly_mixer->set_voice_send1_level(v, program_voices_output_send1);
 		}
 	}
+	
 	return 0;
 }
 
 /* Set all the program voices polly mixer send2 level */
 int AdjSynthPrograms::set_program_voices_poly_mixer_send_2_int(int send)
 {
+	int v;
+	
 	if ((send < 0) || (send > 100))
 	{
 		return -1;
@@ -507,18 +531,20 @@ int AdjSynthPrograms::set_program_voices_poly_mixer_send_2_int(int send)
 	program_voices_output_send2 = (float)send / 100.0f;
 	
 	// Update all assigned voices with the new send level
-	for (int i = 0; i < assigned_voices.size(); i++)
+	for (v = 0; v < _SYNTH_MAX_NUM_OF_VOICES; v++)
 	{
-		if (assigned_voices[i] != NULL)
+		if (assigned_voices[v] == _VOICE_ASSIGNED)
 		{
-			parent_audio_poly_mixer->set_voice_send2_level(*assigned_voices[i], // voice num
-														   program_voices_output_send2);
+			parent_audio_poly_mixer->set_voice_send2_level(v, program_voices_output_send2);
 		}
 	}
+	
 	return 0;
 }
 int AdjSynthPrograms::set_program_voices_poly_mixer_send_2_float(float send)
 {
+	int v;
+	
 	if ((send < 0.0f) || (send > 1.0f))
 	{
 		return -1;
@@ -528,12 +554,11 @@ int AdjSynthPrograms::set_program_voices_poly_mixer_send_2_float(float send)
 	program_voices_output_send2 = send;
 	
 	// Update all assigned voices with the new send level
-	for (int i = 0; i < assigned_voices.size(); i++)
+	for (v = 0; v < _SYNTH_MAX_NUM_OF_VOICES; v++)
 	{
-		if (assigned_voices[i] != NULL)
+		if (assigned_voices[v] == _VOICE_ASSIGNED)
 		{
-			parent_audio_poly_mixer->set_voice_send2_level(*assigned_voices[i], // voice num
-														   program_voices_output_send2);
+			parent_audio_poly_mixer->set_voice_send2_level(v, program_voices_output_send2);
 		}
 	}
 	return 0;
@@ -542,22 +567,29 @@ int AdjSynthPrograms::set_program_voices_poly_mixer_send_2_float(float send)
 /* Get a voice object. Rtuens NULL if the voice is not assigned to the program. */
 SynthVoice *AdjSynthPrograms::get_voice(int voice_num)
 {
+	SynthVoice *voice = NULL;
+	int v;
+
 	if ((voice_num < 0) || (voice_num >= _SYNTH_MAX_NUM_OF_VOICES))
 	{
 		return NULL;
 	}
 
 	// Check if the voice is assigned to this program
-	for (int v = 0; v < assigned_voices.size(); v++)
+	for (v = 0; v < _SYNTH_MAX_NUM_OF_VOICES; v++)
 	{
-		if (assigned_voices[v] != NULL)
+		// Clean up all residual notes that were waiting for not active state
+		if (!AdjSynth::get_instance()->synth_voice[v]->audio_voice->is_voice_wait_for_not_active() &&
+			!AdjSynth::get_instance()->synth_voice[v]->audio_voice->is_voice_active())
 		{
-			if (*assigned_voices[v] == voice_num)
-			{
-				return AdjSynth::get_instance()->synth_voice[voice_num];
-			}
+			assigned_voices[v] = _VOICE_NOT_ASSIGNED;
+		}
+
+		if (assigned_voices[v] == _VOICE_ASSIGNED)
+		{
+			voice = AdjSynth::get_instance()->synth_voice[voice_num];
 		}
 	}
 
-	return NULL;
+	return voice;
 }

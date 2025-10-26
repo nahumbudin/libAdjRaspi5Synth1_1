@@ -68,13 +68,14 @@ SynthVoice::SynthVoice(
 		voice_num, 
 		2,						// number of outputs
 		dsp_voice, 
-		&audio_first_update[_AUDIO_STAGE_2]); 
+		&audio_first_update[_AUDIO_STAGE_2]);
 
 	audio_out = new AudioOutputFloat(
-			_AUDIO_STAGE_7, 
+		_AUDIO_STAGE_7,
 		audio_block_size,
 		audio_manager->audio_block_stereo_float_shared_memory_voices_output[voice_num], // Output sample shared momory page
-		&audio_first_update[_AUDIO_STAGE_7]);
+		&audio_first_update[_AUDIO_STAGE_7],
+		voice_num); // id
 	
 	// Audio connections - Synth Voice -> Audio Output
 	connection_voice_out_ch1 = audio_manager->connections_manager->get_audio_connection();

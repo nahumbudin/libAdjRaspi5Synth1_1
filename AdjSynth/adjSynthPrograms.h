@@ -23,9 +23,15 @@
 
 #pragma once
 
+#include <vector>
+#include <memory>
+
 #include "../Settings/settings.h"
 #include "adjSynthVoice.h"
 #include "../Audio/audioPolyMixer.h"
+
+#define	_VOICE_NOT_ASSIGNED		0
+#define	_VOICE_ASSIGNED			1
 
 class AudioPolyMixer;
 
@@ -112,8 +118,9 @@ class AdjSynthPrograms
 	int program_num;
 	
 	/* Holds the indexes of the assigned voices. */
-	std::vector<int *> assigned_voices;
-	
+	//std::vector<std::unique_ptr<int>> assigned_voices_vector;
+	int assigned_voices[_SYNTH_MAX_NUM_OF_VOICES];
+
 	/* Holds the program voices polly mixer gain1 level */
 	float program_voices_output_gain1;
 	/* Holds the program voices polly mixer gain2 level */

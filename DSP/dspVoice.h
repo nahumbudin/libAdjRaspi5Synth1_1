@@ -1,20 +1,22 @@
 /**
 *	@file		dspVoice.h
 *	@author		Nahum Budin
-*	@date		16-Oct-2024
-*	@version	1.2 
-*					1. Code refactoring and notaion. 
+*	@date		3-Oct-2025
+*	@version	1.3
+*					1. Fixing bug - added the ADSR6 and LFO6.
+*					2. Set ADR values: use the _log functions
+*					3. Adding LFO/ADSR 6 settings
+*					4.  Refactoring lfo_delays[] -> global array in adjSynth.
 
-*					
-*	@History	
+*
+*	@History
+*				version 1.2	16-Oct-2024
 *				version 1.1	25_Jan-2021
-*					1. Code refactoring and notaion. 
+*					1. Code refactoring and notaion.
 *					2. Adding sample-rate and bloc-size settings
 *					3. Adding wait for not active state (wait until voice energy goes low and then go to not active)
 *						and voice-end callback.
 *				version 1.0	9-Jun-2018 (modulators part of voice; no control blocks and connections.)
-*
-*	@brief		Synthesizer voice dsp processing.
 *				
 */
 
@@ -406,14 +408,14 @@ public:
 	uint32_t amp_1_pan_mod_lfo_delay, amp_2_pan_mod_lfo_delay;
 		
 private:
-	int init_lfo_delays();
+	//int init_lfo_delays();
 	
 	bool used;
 	
 	int sample_rate;
 	int audio_block_size;
 	
-	uint32_t lfo_delays[_NUM_OF_LFOS * _NUM_OF_LFO_DELAY_OPTIONS + 1]; // 5 LFOs, 5 states; 1 None
+	//uint32_t lfo_delays[_NUM_OF_LFOS * _NUM_OF_LFO_DELAY_OPTIONS + 1]; // 5 LFOs, 5 states; 1 None
 	
 	int voice;
 	bool voice_active;

@@ -72,6 +72,50 @@ void InstrumentAnalogSynth::sysex_handler(uint8_t *message, int len)
 {
 }
 
+int InstrumentAnalogSynth::set_analog_synth_left_jack_output_connection(s_jack_connection_t connection)
+{
+	jack_out_connection_left.in_client_name = connection.in_client_name;
+	jack_out_connection_left.in_client_port_name = connection.in_client_port_name;
+	jack_out_connection_left.out_client_name = connection.out_client_name;
+	jack_out_connection_left.out_client_port_name = connection.out_client_port_name;
+
+	return 0;
+}
+
+int InstrumentAnalogSynth::set_analog_synth_right_jack_output_connection(s_jack_connection_t connection)
+{
+	jack_out_connection_right.in_client_name = connection.in_client_name;
+	jack_out_connection_right.in_client_port_name = connection.in_client_port_name;
+	jack_out_connection_right.out_client_name = connection.out_client_name;
+	jack_out_connection_right.out_client_port_name = connection.out_client_port_name;
+
+	return 0;
+}
+
+s_jack_connection_t InstrumentAnalogSynth::get_analog_synth_left_jack_output_connection()
+{
+
+	s_jack_connection_t connection;
+	connection.in_client_name = jack_out_connection_left.in_client_name;
+	connection.in_client_port_name = jack_out_connection_left.in_client_port_name;
+	connection.out_client_name = jack_out_connection_left.out_client_name;
+	connection.out_client_port_name = jack_out_connection_left.out_client_port_name;
+
+	return connection;
+}
+
+s_jack_connection_t InstrumentAnalogSynth::get_analog_synth_right_jack_output_connection()
+{
+	s_jack_connection_t connection;
+
+	connection.in_client_name = jack_out_connection_right.in_client_name;
+	connection.in_client_port_name = jack_out_connection_right.in_client_port_name;
+	connection.out_client_name = jack_out_connection_right.out_client_name;
+	connection.out_client_port_name = jack_out_connection_right.out_client_port_name;
+
+	return connection;
+}
+
 
 
 

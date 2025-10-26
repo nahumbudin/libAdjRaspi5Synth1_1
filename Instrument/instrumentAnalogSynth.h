@@ -15,6 +15,7 @@
 #pragma once
 
 #include "instrument.h"
+#include "../Jack/jackConnections.h"
 
 
 class InstrumentAnalogSynth : public Instrument
@@ -51,5 +52,16 @@ public:
 	int collect_analog_synth_preset_parms(_settings_params_t *params);
 
 	int save_analog_synth_preset_file(string path);
+
+	int set_analog_synth_left_jack_output_connection(s_jack_connection_t connection);
+	int set_analog_synth_right_jack_output_connection(s_jack_connection_t connection);
+
+	s_jack_connection_t get_analog_synth_left_jack_output_connection();
+	s_jack_connection_t get_analog_synth_right_jack_output_connection();
+
+  private:
+	/* Holds the stereo L and R Jack outputs connections */
+	s_jack_connection_t jack_out_connection_left, jack_out_connection_right;
+	  
 	
 };
